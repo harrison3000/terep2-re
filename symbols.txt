@@ -1,0 +1,8 @@
+func setup_interrupts 1000:5430
+
+func timer_handler    1000:5680 
+func div0_handler     1000:553f 
+func kbd_handler      1000:56df
+func f1_handler       1000:579e
+
+byte[128] keys 1000:571e

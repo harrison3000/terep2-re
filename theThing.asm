@@ -66,13 +66,3 @@ segment data
 segment stack class=stack
     times 128 dd 'TheStack'
 
-
-;other things
-;BYTE_ARRAY_1000_571e 128 bytes, related to keyboard interrupt, stores keys
-
-;interrupts
-;func @ 0x5430 seems to be related to setting up interrupts
-;0x5680 is the timer interrupt handler I think
-;0x553f  irq 00 div by zero
-;0x56df  irq 09 keyboard
-;0x579e  irq f1 
