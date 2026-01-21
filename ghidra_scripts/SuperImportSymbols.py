@@ -4,8 +4,11 @@
 #@author 
  
 import re
+from ghidra.util.data import DataTypeParser
 
 f = askFile("Give me a file to open", "Go baby go!")
+
+dtp = ghidra.util.data.DataTypeParser(None, DataTypeParser.AllowedDataTypes.ALL)
 
 for line in file(f.absolutePath):  # note, cannot use open(), since that is in GhidraScript
     line = line.strip()
@@ -19,6 +22,6 @@ for line in file(f.absolutePath):  # note, cannot use open(), since that is in G
     if ts == "func":
         createFunction(address, name)
     else:
-        dtt = getDataTypes(ts)
-        createData(address, dtt[0])
+        t = dtp.parse(ts)
+        createData(address, t)
         createLabel(address, name, False)
