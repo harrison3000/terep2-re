@@ -14,6 +14,10 @@ for line in file(f.absolutePath):  # note, cannot use open(), since that is in G
     line = line.strip()
     if line == "":
         continue
+    if line[0] == "#":
+        #ignore comments
+        continue
+
     pieces = re.split(r"\s+", line)
     name = pieces[1]
     address = toAddr(pieces[2])

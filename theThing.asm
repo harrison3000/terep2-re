@@ -35,6 +35,7 @@ segment code
     patchPoint 0x590d
     push ecx
     mov ecx, 28
+    ;originally unrolled, but ghidra didnt like it
     eita:
     in al, dx
     loop eita
@@ -46,6 +47,8 @@ segment code
 
     ;includes the rest of the file
     incbin "memdumps/code.bin", ($ - $$)
+
+    ;use func pointers intead of patching the call instruction directly like was done before
 
     trampolineADest:
         dw 0x5430
