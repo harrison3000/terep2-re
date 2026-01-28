@@ -11,11 +11,23 @@ bits 16
 segment code
     ..start:
 
+    patchPoint 0x1e
+    ;there was a bunch of cleanup here.... but who cares? it will run a a emulator anyway
+    mov ax, 0x4c00
+    int 0x21
+    ud2
+
     patchPoint 0x46
     mov bx, 0x3000 ;not the best way, but good enough
 
     patchPoint 0x52
     mov ax, data
+
+    patchPoint 0x57
+    jmp afterThings
+
+    patchPoint 0xdc
+    afterThings:
 
     patchPoint 0x236
     mov word [CS:trampolineADest], 0x48d0
