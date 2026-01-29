@@ -9,5 +9,12 @@ func something_a 1000:48d0
 func something_b 1000:500b
 func something_d 1000:54ec
 
+#these pointers are originally at 0x73 at the data segment
+func fcamera_a  1000:0693
+func fcamera_b  1000:073f
+func fcamera_c  1000:0828
+func fcamera_d  1000:0893
+func fcamera_e  1000:0948
+
 byte[128] keys 1000:571e
 pointer16[21]  jmp_table_14 1000:1413
