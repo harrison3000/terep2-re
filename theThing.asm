@@ -30,19 +30,25 @@ segment code
     afterThings:
 
     patchPoint 0x236
-    mov word [CS:trampolineADest], 0x48d0
-    mov word [CS:trampolineBDest], 0x500b
+    jmp afterThings2
 
     padUntil 0x252
+    afterThings2:
+
+    patchPoint 0x48d0
+    somefuncc_a:
+
+    patchPoint 0x500b
+    somefuncc_b:
 
     patchPoint 0x5689
     mov ax, data
 
     patchPoint 0x56ba
-    call trampolineA
+    call somefuncc_a
 
     patchPoint 0x56c8
-    call trampolineB
+    call somefuncc_b
 
     patchPoint 0x590d
     push ecx
@@ -59,21 +65,6 @@ segment code
 
     ;includes the rest of the file
     incbin "memdumps/code.bin", ($ - $$)
-
-    ;use func pointers intead of patching the call instruction directly like was done before
-
-    trampolineADest:
-        dw 0x5430
-    trampolineBDest:
-        dw 0x54ec
-
-    trampolineA:
-        call [CS:trampolineADest]
-        ret
-
-    trampolineB:
-        call [CS:trampolineBDest]
-        ret
 
 segment data
     incbin "memdumps/data.bin"
