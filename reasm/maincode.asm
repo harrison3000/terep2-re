@@ -1,11 +1,11 @@
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined entry()
+entry:
                               ;XREF[1]:     Entry Point(*)
     CLI
     IN          AL,0x21
-    PUSH        AX=>CODE_1:DAT_15cd_f70e                ;= 6B63h
+    PUSH        AX=>0xf70e                ;= 6B63h
     MOV         AL,0xff
     OUT         0x21,AL
     MOV         CX,SS
@@ -15,12 +15,12 @@
     MOV         SP,0x1e
     MOV         SS,CX
     MOV         SP,DX
-    POP         AX=>CODE_1:DAT_15cd_f70e                ;= 6B63h
+    POP         AX=>0xf70e                ;= 6B63h
     OUT         0x21,AL
     STI
     JMP         LAB_1000_0046
 
-000:001d [UNDEFINED BYTES REMOVED]
+ ; 1000:001d [UNDEFINED BYTES REMOVED]
 
 LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(j),1000:0177(j),
                               ;             1000:021f(j),1000:0654(j)
@@ -28,7 +28,7 @@ LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(
     INT         0x21
     UD2
 
-000:0045 [UNDEFINED BYTES REMOVED]
+ ; 1000:0045 [UNDEFINED BYTES REMOVED]
 
 LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
     MOV         BX,0x3000
@@ -41,19 +41,19 @@ LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
     MOV         DS,AX
     JMP         LAB_1000_00dc
 
-000:00db [UNDEFINED BYTES REMOVED]
+ ; 1000:00db [UNDEFINED BYTES REMOVED]
 
 LAB_1000_00dc:                ;XREF[1]:     1000:0057(j)
-    MOV         word ptr [CODE_1:DAT_15cd_ec50],0x78    ;= 00C8h
-    MOV         dword ptr [CODE_1:DAT_15cd_006a],0x1800 ;= 00000C00h
-    MOV         word ptr [CODE_1:DAT_15cd_e9e2],0x800   ;= 0320h
-    MOV         word ptr [CODE_1:DAT_15cd_e9e4],0xf000  ;= F000h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc0],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbb8],0xa0    ;= 00A0h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc2],0x13f   ;= 013Fh
-    MOV         word ptr [CODE_1:DAT_15cd_dbbc],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbba],0x50    ;= 0064h
-    MOV         word ptr [CODE_1:DAT_15cd_dbbe],0xc7    ;= 00C7h
+    MOV         word ptr [0xec50],0x78    ;= 00C8h
+    MOV         dword ptr [0x006a],0x1800 ;= 00000C00h
+    MOV         word ptr [0xe9e2],0x800   ;= 0320h
+    MOV         word ptr [0xe9e4],0xf000  ;= F000h
+    MOV         word ptr [0xdbc0],0x0
+    MOV         word ptr [0xdbb8],0xa0    ;= 00A0h
+    MOV         word ptr [0xdbc2],0x13f   ;= 013Fh
+    MOV         word ptr [0xdbbc],0x0
+    MOV         word ptr [0xdbba],0x50    ;= 0064h
+    MOV         word ptr [0xdbbe],0xc7    ;= 00C7h
     MOV         DX,0x1a3d
     MOV         AL,0x0
     MOV         AH,0x3d
@@ -77,38 +77,38 @@ LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
     MOV         BX,0x1000
     INT         0x21
     JC          LAB_1000_001e
-    MOV         [CODE_1:DAT_15cd_1a45],AX
+    MOV         [0x1a45],AX
     MOV         GS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     INT         0x21
     JC          LAB_1000_001e
-    MOV         [CODE_1:DAT_15cd_1a47],AX
+    MOV         [0x1a47],AX
     MOV         FS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     INT         0x21
     JC          LAB_1000_001e
-    MOV         [CODE_1:DAT_15cd_1a49],AX
+    MOV         [0x1a49],AX
     MOV         AH,0x48
     MOV         BX,0x1000
     INT         0x21
     JC          LAB_1000_001e
-    MOV         [CODE_1:DAT_15cd_1a4b],AX
+    MOV         [0x1a4b],AX
     CALL        FUN_1000_24c0                           ;undefined FUN_1000_24c0()
     CALL        FUN_1000_255c                           ;undefined FUN_1000_255c()
-    MOV         word ptr [CODE_1:DAT_15cd_5bba],0x0     ;= 0001h
+    MOV         word ptr [0x5bba],0x0     ;= 0001h
     MOV         DI,0x5bd0
-    MOV         word ptr [CODE_1:DAT_15cd_5bbc],DI
+    MOV         word ptr [0x5bbc],DI
     XOR         SI,SI
 LAB_1000_0193:                ;XREF[1]:     1000:0219(j)
-    MOV         DI,word ptr [SI + CODE_1:DAT_15cd_5bbc]
+    MOV         DI,word ptr [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
     SHL         AX,0x7
     ADD         AX,0x8000
     MOV         BX,0x7a00
-    MOV         DX,word ptr [SI + CODE_1:DAT_15cd_5af7] ;= 5B01h
+    MOV         DX,word ptr [SI + 0x5af7] ;= 5B01h
     PUSH        SI
     CALL        FUN_1000_2454                           ;undefined FUN_1000_2454()
     POP         SI
@@ -167,7 +167,7 @@ LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
     POP         SI
     POP         DI
     POP         AX
-    INC         word ptr [CODE_1:DAT_15cd_5bba]         ;= 0001h
+    INC         word ptr [0x5bba]         ;= 0001h
     MOV         DI,word ptr [SI + 0x5bbc]
     ADD         DI,AX
     INC         SI
@@ -181,41 +181,41 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     CALL        FUN_1000_2bc1                           ;undefined FUN_1000_2bc1()
     CALL        FUN_1000_5430                           ;undefined FUN_1000_5430()
     CALL        FUN_1000_57e0                           ;undefined FUN_1000_57e0()
-    MOV         word ptr [CODE_1:DAT_15cd_006f],DX
-    MOV         [CODE_1:DAT_15cd_0071],AX
+    MOV         word ptr [0x006f],DX
+    MOV         [0x0071],AX
     JMP         LAB_1000_0252
 
-000:0251 [UNDEFINED BYTES REMOVED]
+ ; 1000:0251 [UNDEFINED BYTES REMOVED]
 
 LAB_1000_0252:                ;XREF[1]:     1000:0236(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_006e],0x1
+    MOV         byte ptr [0x006e],0x1
     NOP
 LAB_1000_0258:                ;XREF[2]:     1000:05a9(j),1000:05b2(j)
-    TEST        byte ptr [CODE_1:DAT_15cd_007d],0xff
+    TEST        byte ptr [0x007d],0xff
     NOP
     JNZ         LAB_1000_032e
-    MOV         word ptr [CODE_1:DAT_15cd_dbc0],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbb8],0xa0    ;= 00A0h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc2],0x13f   ;= 013Fh
-    MOV         word ptr [CODE_1:DAT_15cd_dbbc],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbba],0x50    ;= 0064h
-    MOV         word ptr [CODE_1:DAT_15cd_dbbe],0xc7    ;= 00C7h
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a4]
+    MOV         word ptr [0xdbc0],0x0
+    MOV         word ptr [0xdbb8],0xa0    ;= 00A0h
+    MOV         word ptr [0xdbc2],0x13f   ;= 013Fh
+    MOV         word ptr [0xdbbc],0x0
+    MOV         word ptr [0xdbba],0x50    ;= 0064h
+    MOV         word ptr [0xdbbe],0xc7    ;= 00C7h
+    MOV         SI,word ptr [0x00a4]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
-    MOVZX       BX,byte ptr [CODE_1:DAT_15cd_007e]      ;= 03h
+    MOVZX       BX,byte ptr [0x007e]      ;= 03h
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
     CALL        word ptr [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_1000_0893()
                                                         ;= 0893h
-    MOV         BX,word ptr [CODE_1:DAT_15cd_00c6]
+    MOV         BX,word ptr [0x00c6]
     CALL        FUN_1000_2aad                           ;undefined FUN_1000_2aad()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f7],AX
+    MOV         [0x05f7],AX
     CALL        FUN_1000_2ad8                           ;undefined FUN_1000_2ad8()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f9],AX
+    MOV         [0x05f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989                           ;undefined FUN_1000_2989()
@@ -224,7 +224,7 @@ LAB_1000_0258:                ;XREF[2]:     1000:05a9(j),1000:05b2(j)
     CALL        FUN_1000_2b98                           ;undefined FUN_1000_2b98()
     CALL        FUN_1000_1965                           ;undefined FUN_1000_1965()
     CALL        FUN_1000_0b25                           ;undefined FUN_1000_0b25()
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a4]
+    MOV         SI,word ptr [0x00a4]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
     MOV         CX,word ptr [SI + 0x8]
@@ -265,31 +265,31 @@ LAB_1000_0322:                ;XREF[1]:     1000:031c(j)
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word ptr [CODE_1:DAT_15cd_006f]         ;undefined FUN_1000_5b01()
+    CALL        word ptr [0x006f]         ;undefined FUN_1000_5b01()
     JMP         LAB_1000_04b7
 LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
-    MOV         word ptr [CODE_1:DAT_15cd_dbc0],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbb8],0xa0    ;= 00A0h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc2],0x13f   ;= 013Fh
-    MOV         word ptr [CODE_1:DAT_15cd_dbbc],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbba],0x32    ;= 0064h
-    MOV         word ptr [CODE_1:DAT_15cd_dbbe],0x62    ;= 00C7h
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a4]
+    MOV         word ptr [0xdbc0],0x0
+    MOV         word ptr [0xdbb8],0xa0    ;= 00A0h
+    MOV         word ptr [0xdbc2],0x13f   ;= 013Fh
+    MOV         word ptr [0xdbbc],0x0
+    MOV         word ptr [0xdbba],0x32    ;= 0064h
+    MOV         word ptr [0xdbbe],0x62    ;= 00C7h
+    MOV         SI,word ptr [0x00a4]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
-    MOVZX       BX,byte ptr [CODE_1:DAT_15cd_007e]      ;= 03h
+    MOVZX       BX,byte ptr [0x007e]      ;= 03h
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
     CALL        word ptr [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_1000_0893()
                                                         ;= 0893h
-    MOV         BX,word ptr [CODE_1:DAT_15cd_00c6]
+    MOV         BX,word ptr [0x00c6]
     CALL        FUN_1000_2aad                           ;undefined FUN_1000_2aad()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f7],AX
+    MOV         [0x05f7],AX
     CALL        FUN_1000_2ad8                           ;undefined FUN_1000_2ad8()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f9],AX
+    MOV         [0x05f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989                           ;undefined FUN_1000_2989()
@@ -298,7 +298,7 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     CALL        FUN_1000_2b98                           ;undefined FUN_1000_2b98()
     CALL        FUN_1000_1965                           ;undefined FUN_1000_1965()
     CALL        FUN_1000_0b25                           ;undefined FUN_1000_0b25()
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a4]
+    MOV         SI,word ptr [0x00a4]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
     MOV         CX,word ptr [SI + 0x8]
@@ -339,36 +339,36 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word ptr [CODE_1:DAT_15cd_006f]         ;undefined FUN_1000_5b01()
-    MOV         word ptr [CODE_1:DAT_15cd_dbc0],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbb8],0xa0    ;= 00A0h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc2],0x13f   ;= 013Fh
-    MOV         word ptr [CODE_1:DAT_15cd_dbbc],0x64
-    MOV         word ptr [CODE_1:DAT_15cd_dbba],0x96    ;= 0064h
-    MOV         word ptr [CODE_1:DAT_15cd_dbbe],0xc7    ;= 00C7h
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a6]
+    CALL        word ptr [0x006f]         ;undefined FUN_1000_5b01()
+    MOV         word ptr [0xdbc0],0x0
+    MOV         word ptr [0xdbb8],0xa0    ;= 00A0h
+    MOV         word ptr [0xdbc2],0x13f   ;= 013Fh
+    MOV         word ptr [0xdbbc],0x64
+    MOV         word ptr [0xdbba],0x96    ;= 0064h
+    MOV         word ptr [0xdbbe],0xc7    ;= 00C7h
+    MOV         SI,word ptr [0x00a6]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
-    MOVZX       BX,byte ptr [CODE_1:DAT_15cd_007f]      ;= 03h
+    MOVZX       BX,byte ptr [0x007f]      ;= 03h
     SHL         BX,0x1
     MOV         DI,0x92
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
     CALL        word ptr [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_1000_0893()
                                                         ;= 0893h
-    MOV         BX,word ptr [CODE_1:DAT_15cd_00c6]
+    MOV         BX,word ptr [0x00c6]
     CALL        FUN_1000_2aad                           ;undefined FUN_1000_2aad()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f7],AX
+    MOV         [0x05f7],AX
     CALL        FUN_1000_2ad8                           ;undefined FUN_1000_2ad8()
     SAR         AX,0x7
-    MOV         [CODE_1:DAT_15cd_05f9],AX
+    MOV         [0x05f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989                           ;undefined FUN_1000_2989()
     CALL        FUN_1000_27f1                           ;undefined FUN_1000_27f1()
     CALL        FUN_1000_1965                           ;undefined FUN_1000_1965()
     CALL        FUN_1000_0b25                           ;undefined FUN_1000_0b25()
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a6]
+    MOV         SI,word ptr [0x00a6]
     SHL         SI,0x1
     MOV         SI,word ptr [SI + 0x5bbc]
     MOV         CX,word ptr [SI + 0x8]
@@ -409,14 +409,14 @@ LAB_1000_04ae:                ;XREF[1]:     1000:04a8(j)
     ADD         CX,0x2c
     MOV         AL,0x1
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word ptr [CODE_1:DAT_15cd_006f]         ;undefined FUN_1000_5b01()
+    CALL        word ptr [0x006f]         ;undefined FUN_1000_5b01()
 LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
-    MOV         word ptr [CODE_1:DAT_15cd_dbc0],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbb8],0xa0    ;= 00A0h
-    MOV         word ptr [CODE_1:DAT_15cd_dbc2],0x13f   ;= 013Fh
-    MOV         word ptr [CODE_1:DAT_15cd_dbbc],0x0
-    MOV         word ptr [CODE_1:DAT_15cd_dbba],0x50    ;= 0064h
-    MOV         word ptr [CODE_1:DAT_15cd_dbbe],0xc7    ;= 00C7h
+    MOV         word ptr [0xdbc0],0x0
+    MOV         word ptr [0xdbb8],0xa0    ;= 00A0h
+    MOV         word ptr [0xdbc2],0x13f   ;= 013Fh
+    MOV         word ptr [0xdbbc],0x0
+    MOV         word ptr [0xdbba],0x50    ;= 0064h
+    MOV         word ptr [0xdbbe],0xc7    ;= 00C7h
     MOV         SI,0x0
     MOV         AX,0xa
     MOV         BX,0xa
@@ -432,41 +432,41 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     JS          LAB_1000_0513
     NOP
     NOP
-    CMP         word ptr [CODE_1:DAT_15cd_011c],0x3e8   ;= 0100h
+    CMP         word ptr [0x011c],0x3e8   ;= 0100h
     JG          LAB_1000_0513
     NOP
     NOP
-    ADD         word ptr [CODE_1:DAT_15cd_011c],0x14    ;= 0100h
+    ADD         word ptr [0x011c],0x14    ;= 0100h
 LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
     TEST        byte ptr CS:[DAT_1000_5768],0x80        ;= FFh
     JS          LAB_1000_052b
     NOP
     NOP
-    CMP         word ptr [CODE_1:DAT_15cd_011c],0x32    ;= 0100h
+    CMP         word ptr [0x011c],0x32    ;= 0100h
     JL          LAB_1000_052b
     NOP
     NOP
-    SUB         word ptr [CODE_1:DAT_15cd_011c],0x14    ;= 0100h
+    SUB         word ptr [0x011c],0x14    ;= 0100h
 LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
     TEST        byte ptr CS:[DAT_1000_5753],0x80        ;= FFh
     JS          LAB_1000_0544
     NOP
     NOP
-    CMP         word ptr [CODE_1:DAT_15cd_011e],0x1000  ;= 0400h
+    CMP         word ptr [0x011e],0x1000  ;= 0400h
     JG          LAB_1000_0544
     NOP
     NOP
-    ADD         word ptr [CODE_1:DAT_15cd_011e],0x28    ;= 0400h
+    ADD         word ptr [0x011e],0x28    ;= 0400h
 LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
     TEST        byte ptr CS:[DAT_1000_5755],0x80        ;= FFh
     JS          LAB_1000_055d
     NOP
     NOP
-    CMP         word ptr [CODE_1:DAT_15cd_011e],0x100   ;= 0400h
+    CMP         word ptr [0x011e],0x100   ;= 0400h
     JL          LAB_1000_055d
     NOP
     NOP
-    SUB         word ptr [CODE_1:DAT_15cd_011e],0x28    ;= 0400h
+    SUB         word ptr [0x011e],0x28    ;= 0400h
 LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
     MOV         AL,CS:[DAT_1000_571e]                   ;= FFh
     CMP         AL,0x1
@@ -518,71 +518,71 @@ LAB_1000_05ac:                ;XREF[11]:    1000:05bb(j),1000:05c3(j),1000:05cb(
     MOV         byte ptr CS:[DAT_1000_571e],0x0         ;= FFh
     JMP         LAB_1000_0258
 LAB_1000_05b5:                ;XREF[1]:     1000:0575(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_007e],0x0     ;= 03h
+    MOV         byte ptr [0x007e],0x0     ;= 03h
     NOP
     JMP         LAB_1000_05ac
 LAB_1000_05bd:                ;XREF[1]:     1000:057b(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_007e],0x1     ;= 03h
+    MOV         byte ptr [0x007e],0x1     ;= 03h
     NOP
     JMP         LAB_1000_05ac
 LAB_1000_05c5:                ;XREF[1]:     1000:0581(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_007e],0x2     ;= 03h
+    MOV         byte ptr [0x007e],0x2     ;= 03h
     NOP
     JMP         LAB_1000_05ac
 LAB_1000_05cd:                ;XREF[1]:     1000:0587(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_007e],0x3     ;= 03h
+    MOV         byte ptr [0x007e],0x3     ;= 03h
     NOP
     JMP         LAB_1000_05ac
 LAB_1000_05d5:                ;XREF[1]:     1000:058d(j)
-    MOV         byte ptr [CODE_1:DAT_15cd_007e],0x4     ;= 03h
+    MOV         byte ptr [0x007e],0x4     ;= 03h
     NOP
     JMP         LAB_1000_05ac
 LAB_1000_05dd:                ;XREF[1]:     1000:05a5(j)
-    XOR         byte ptr [CODE_1:DAT_15cd_007d],0x1
+    XOR         byte ptr [0x007d],0x1
     JMP         LAB_1000_05ac
 LAB_1000_05e4:                ;XREF[1]:     1000:0593(j)
-    ADD         dword ptr [CODE_1:DAT_15cd_006a],0x32   ;= 00000C00h
+    ADD         dword ptr [0x006a],0x32   ;= 00000C00h
     JMP         LAB_1000_05ac
 LAB_1000_05ec:                ;XREF[1]:     1000:0599(j)
-    SUB         dword ptr [CODE_1:DAT_15cd_006a],0x32   ;= 00000C00h
+    SUB         dword ptr [0x006a],0x32   ;= 00000C00h
     JMP         LAB_1000_05ac
 LAB_1000_05f4:                ;XREF[1]:     1000:0569(j)
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a4]
+    MOV         SI,word ptr [0x00a4]
     INC         SI
-    CMP         SI,word ptr [CODE_1:DAT_15cd_5bba]      ;= 0001h
+    CMP         SI,word ptr [0x5bba]      ;= 0001h
     JC          LAB_1000_0603
     NOP
     NOP
     XOR         SI,SI
 LAB_1000_0603:                ;XREF[1]:     1000:05fd(j)
-    MOV         word ptr [CODE_1:DAT_15cd_00a4],SI
+    MOV         word ptr [0x00a4],SI
     JMP         LAB_1000_05ac
 LAB_1000_0609:                ;XREF[1]:     1000:056f(j)
-    MOV         SI,word ptr [CODE_1:DAT_15cd_00a6]
+    MOV         SI,word ptr [0x00a6]
     INC         SI
-    CMP         SI,word ptr [CODE_1:DAT_15cd_5bba]      ;= 0001h
+    CMP         SI,word ptr [0x5bba]      ;= 0001h
     JC          LAB_1000_0618
     NOP
     NOP
     XOR         SI,SI
 LAB_1000_0618:                ;XREF[1]:     1000:0612(j)
-    MOV         word ptr [CODE_1:DAT_15cd_00a6],SI
+    MOV         word ptr [0x00a6],SI
     JMP         LAB_1000_05ac
 LAB_1000_061e:                ;XREF[1]:     1000:059f(j)
-    XOR         word ptr [CODE_1:DAT_15cd_05f5],0x600   ;= 0600h
+    XOR         word ptr [0x05f5],0x600   ;= 0600h
     JMP         LAB_1000_05ac
 
-000:0653 [UNDEFINED BYTES REMOVED]
+ ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
 LAB_1000_0654:                ;XREF[1]:     1000:0563(j)
     JMP         LAB_1000_001e
 
-000:0892 [UNDEFINED BYTES REMOVED]
+ ; 1000:0892 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_0893()
+FUN_1000_0893:
                               ;XREF[3]:     1000:029a(c),1000:0366(c),1000:042f(c)
     PUSH        SI
     ADD         SI,word ptr [SI + 0x20]
@@ -653,12 +653,12 @@ LAB_1000_0943:                ;XREF[1]:     1000:08f9(j)
     MOV         word ptr [DI + 0xa],BX
     JMP         LAB_1000_08fd
 
-000:0b24 [UNDEFINED BYTES REMOVED]
+ ; 1000:0b24 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_0b25()
+FUN_1000_0b25:
                               ;XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
     PUSH        FS
     MOV         FS,word ptr [0x1a49]
@@ -728,12 +728,12 @@ LAB_1000_0bb1:                ;XREF[4]:     1000:0b54(j),1000:0b5c(j),1000:0b67(
     POP         AX
     JMP         LAB_1000_0ba5
 
-000:0cd2 [UNDEFINED BYTES REMOVED]
+ ; 1000:0cd2 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_0cd3()
+FUN_1000_0cd3:
                               ;XREF[1]:     1000:0ba2(c)
     CMP         CX,word ptr [0x120]
     JL          LAB_1000_0d29
@@ -785,12 +785,12 @@ LAB_1000_0bb1:                ;XREF[4]:     1000:0b54(j),1000:0b5c(j),1000:0b67(
 LAB_1000_0d29:                ;XREF[1]:     1000:0cd7(j)
     RET
 
-000:1090 [UNDEFINED BYTES REMOVED]
+ ; 1000:1090 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1091()
+FUN_1000_1091:
                               ;XREF[1]:     1000:11f6(c)
     MOV         EDX,dword ptr [SI + 0xc4]
     SUB         EDX,dword ptr [SI + 0xa8]
@@ -804,7 +804,7 @@ LAB_1000_0d29:                ;XREF[1]:     1000:0cd7(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_10b6()
+FUN_1000_10b6:
                               ;XREF[1]:     1000:120a(c)
     MOV         EDX,dword ptr [SI + 0x70]
     SUB         EDX,dword ptr [SI + 0xa8]
@@ -822,12 +822,12 @@ LAB_1000_0d29:                ;XREF[1]:     1000:0cd7(j)
     CALL        FUN_1000_2726                           ;undefined FUN_1000_2726()
     RET
 
-000:11ef [UNDEFINED BYTES REMOVED]
+ ; 1000:11ef [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_11f0()
+FUN_1000_11f0:
                               ;XREF[1]:     1000:138f(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -877,7 +877,7 @@ DAT_1000_129f:                ;XREF[4]:     1000:1229(W),1000:123f(R),1000:1261(
 DAT_1000_12a3:                ;XREF[4]:     1000:1235(W),1000:124d(R),1000:126f(R),1000:128f(R)
     undefined4  7FFF0000h
 
-000:12b2 [UNDEFINED BYTES REMOVED]
+ ; 1000:12b2 [UNDEFINED BYTES REMOVED]
 
 DAT_1000_12b3:                ;XREF[2]:     1000:11f9(W),1000:1248(R)
     undefined4  00000000h
@@ -892,12 +892,12 @@ DAT_1000_12c3:                ;XREF[2]:     1000:1212(W),1000:125c(R)
 DAT_1000_12c7:                ;XREF[2]:     1000:1218(W),1000:127c(R)
     undefined4  00000000h
 
-000:1322 [UNDEFINED BYTES REMOVED]
+ ; 1000:1322 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1323()
+FUN_1000_1323:
                               ;XREF[1]:     1000:195c(c)
     PUSHA
     MOV         AX,word ptr [SI + 0x1e]
@@ -922,7 +922,7 @@ LAB_1000_1330:                ;XREF[1]:     1000:1329(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1347()
+FUN_1000_1347:
                               ;XREF[1]:     1000:1335(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -978,7 +978,7 @@ LAB_1000_1352:                ;XREF[1]:     1000:138c(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_13cc()
+FUN_1000_13cc:
                               ;XREF[4]:     1000:135e(c),1000:1385(c),1000:13a8(c),1000:13c8(c)
     SUB         EAX,dword ptr [0xaa]
     SUB         EBX,dword ptr [0xae]
@@ -1004,19 +1004,19 @@ LAB_1000_1404:                ;XREF[1]:     1000:13fa(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1408()
+FUN_1000_1408:
                               ;XREF[1]:     1000:1340(c)
     LODSB       SI
     MOVZX       BX,AL
     ADD         BX,BX
     JMP         word ptr CS:[BX + 0x1413]
 
-000:194b [UNDEFINED BYTES REMOVED]
+ ; 1000:194b [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_194c()
+FUN_1000_194c:
                               ;XREF[8]:     1000:1a50(c),1000:1b06(c),1000:1bfa(c),1000:1caa(c),
                               ;             1000:2063(c),1000:2117(c),1000:220c(c),1000:22bc(c)
     MOV         DI,0x5bbc
@@ -1035,7 +1035,7 @@ LAB_1000_195f:                ;XREF[1]:     1000:1958(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1965()
+FUN_1000_1965:
                               ;XREF[3]:     1000:02c9(c),1000:0395(c),1000:0455(c)
     MOV         word ptr [0x19ff],0x0
     MOV         word ptr [0x1a01],0xa00
@@ -1413,7 +1413,7 @@ LAB_1000_1cdd:                ;XREF[1]:     1000:1cc5(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1cde()
+FUN_1000_1cde:
                               ;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
     MOV         AL,[0x5fc]
     MOV         BX,0x1d51
@@ -1551,7 +1551,7 @@ LAB_1000_1e37:                ;XREF[2]:     1000:1e26(j),1000:1e30(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_1e3a()
+FUN_1000_1e3a:
                               ;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
     MOV         AL,[0x5fc]
     MOV         BX,0x1d51
@@ -2056,7 +2056,7 @@ LAB_1000_22ef:                ;XREF[1]:     1000:22d7(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_22f0()
+FUN_1000_22f0:
                               ;XREF[1]:     1000:1998(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -2104,7 +2104,7 @@ LAB_1000_2335:                ;XREF[1]:     1000:2320(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_233b()
+FUN_1000_233b:
                               ;XREF[1]:     1000:1b44(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -2151,7 +2151,7 @@ LAB_1000_237e:                ;XREF[1]:     1000:2369(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2384()
+FUN_1000_2384:
                               ;XREF[1]:     1000:1fab(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -2199,7 +2199,7 @@ LAB_1000_23c9:                ;XREF[1]:     1000:23b4(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_23cf()
+FUN_1000_23cf:
                               ;XREF[1]:     1000:2155(c)
     PUSH        SI
     ADD         SI,word ptr [SI]
@@ -2246,7 +2246,7 @@ LAB_1000_2412:                ;XREF[1]:     1000:23fd(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2418()
+FUN_1000_2418:
                               ;XREF[2]:     1000:0b8d(c),1000:13f7(c)
     CMP         BX,word ptr [0x120]
     JL          LAB_1000_242f
@@ -2264,7 +2264,7 @@ LAB_1000_242f:                ;XREF[1]:     1000:241c(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2431()
+FUN_1000_2431:
                               ;XREF[1]:     1000:01b8(c)
     MOV         DI,SI
     MOV         CX,word ptr [SI]
@@ -2289,7 +2289,7 @@ LAB_1000_244e:                ;XREF[1]:     1000:2444(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2454()
+FUN_1000_2454:
                               ;XREF[1]:     1000:01a9(c)
     CLI
     PUSH        AX
@@ -2353,7 +2353,7 @@ LAB_1000_24bc:                ;XREF[1]:     1000:246f(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_24c0()
+FUN_1000_24c0:
                               ;XREF[1]:     1000:017e(c)
     PUSH        ES
     MOV         DX,0x1a03
@@ -2429,7 +2429,7 @@ LAB_1000_255a:                ;XREF[5]:     1000:24cd(j),1000:24dd(j),1000:24ef(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_255c()
+FUN_1000_255c:
                               ;XREF[1]:     1000:0181(c)
     PUSH        ES
     MOV         DX,0x1a13
@@ -2441,7 +2441,7 @@ LAB_1000_255a:                ;XREF[5]:     1000:24cd(j),1000:24dd(j),1000:24ef(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_256b()
+FUN_1000_256b:
                               ;XREF[2]:     1000:261a(c),1000:265b(c)
     MOV         AX,[0x5ac1]
     IMUL        word ptr [0x5ac9]
@@ -2474,7 +2474,7 @@ LAB_1000_255a:                ;XREF[5]:     1000:24cd(j),1000:24dd(j),1000:24ef(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_25c5()
+FUN_1000_25c5:
                               ;XREF[3]:     1000:08e1(c),1000:1372(c),1000:2486(c)
     MOV         word ptr [0x5ac1],0x80
     MOV         word ptr [0x5ac3],0x0
@@ -2535,7 +2535,7 @@ LAB_1000_2661:                ;XREF[1]:     1000:2620(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2662()
+FUN_1000_2662:
                               ;XREF[8]:     1000:1d20(c),1000:1d4c(c),1000:1dd4(c),1000:1e2d(c),
                               ;             1000:1e7c(c),1000:1ea5(c),1000:1f28(c),1000:1f81(c)
     MOV         AX,word ptr [SI]
@@ -2554,12 +2554,12 @@ LAB_1000_2661:                ;XREF[1]:     1000:2620(j)
     SBB         DX,BX
     RET
 
-000:26dc [UNDEFINED BYTES REMOVED]
+ ; 1000:26dc [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_26dd()
+FUN_1000_26dd:
                               ;XREF[2]:     1000:271d(c),1000:2722(c)
     PUSH        AX
     PUSH        BX
@@ -2592,7 +2592,7 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_271d()
+FUN_1000_271d:
                               ;XREF[1]:     1000:2738(c)
     CALL        FUN_1000_26dd                           ;undefined FUN_1000_26dd()
     MOV         BX,CX
@@ -2601,7 +2601,7 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2726()
+FUN_1000_2726:
                               ;XREF[2]:     1000:10b2(c),1000:10f2(c)
     PUSH        EAX
     PUSH        EBX
@@ -2629,7 +2629,7 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2760()
+FUN_1000_2760:
                               ;XREF[13]:    1000:1a03(c),1000:1abb(c),1000:1bae(c),1000:1c63(c),
                               ;             1000:2016(c),1000:20cd(c),1000:21c0(c),1000:2275(c),
                               ;             1000:2420(c),1000:4739(c),1000:47a6(c),1000:4836(c),
@@ -2653,12 +2653,12 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
     XCHG        AX,BX
     RET
 
-000:277d [UNDEFINED BYTES REMOVED]
+ ; 1000:277d [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_277e()
+FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
@@ -2724,7 +2724,7 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_27f1()
+FUN_1000_27f1:
                               ;XREF[3]:     1000:02bd(c),1000:0389(c),1000:0452(c)
     MOV         AX,word ptr [DI + 0x2]
     XCHG        word ptr [DI + 0x6],AX
@@ -2737,12 +2737,12 @@ LAB_1000_2703:                ;XREF[1]:     1000:26e5(j)
     MOV         word ptr [DI + 0xa],AX
     RET
 
-000:2988 [UNDEFINED BYTES REMOVED]
+ ; 1000:2988 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2989()
+FUN_1000_2989:
                               ;XREF[3]:     1000:02ba(c),1000:0386(c),1000:044f(c)
     MOV         BX,word ptr [SI]
     CALL        FUN_1000_2aad                           ;undefined FUN_1000_2aad()
@@ -2872,7 +2872,7 @@ LAB_1000_2a97:                ;XREF[1]:     1000:2a92(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2aad()
+FUN_1000_2aad:
                               ;XREF[9]:     1000:02a2(c),1000:036e(c),1000:0437(c),1000:08b2(c),
                               ;             1000:1222(c),1000:26eb(c),1000:298b(c),1000:299a(c),
                               ;             1000:29a9(c)
@@ -2903,7 +2903,7 @@ LAB_1000_2ad7:                ;XREF[1]:     1000:2ad1(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2ad8()
+FUN_1000_2ad8:
                               ;XREF[9]:     1000:02ab(c),1000:0377(c),1000:0440(c),1000:08ad(c),
                               ;             1000:122e(c),1000:2705(c),1000:2991(c),1000:29a0(c),
                               ;             1000:29b1(c)
@@ -2937,7 +2937,7 @@ LAB_1000_2b07:                ;XREF[1]:     1000:2b01(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b08()
+FUN_1000_2b08:
                               ;XREF[3]:     1000:08a5(c),1000:0907(c),1000:26df(c)
     AND         AX,AX
     JS          LAB_1000_2b61
@@ -2957,7 +2957,7 @@ LAB_1000_2b1e:                ;XREF[1]:     1000:2b17(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b1f()
+FUN_1000_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
     AND         BX,BX
     JS          LAB_1000_2b56
@@ -2971,7 +2971,7 @@ LAB_1000_2b1e:                ;XREF[1]:     1000:2b17(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b2d()
+FUN_1000_2b2d:
                               ;XREF[2]:     1000:2b25(j),1000:2b58(c)
     CMP         AX,BX
     JG          LAB_1000_2b4c
@@ -2985,7 +2985,7 @@ LAB_1000_2b1e:                ;XREF[1]:     1000:2b17(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b3b()
+FUN_1000_2b3b:
                               ;XREF[2]:     1000:2b33(j),1000:2b4d(c)
     MOV         DX,AX
     XOR         AX,AX
@@ -3013,12 +3013,12 @@ LAB_1000_2b61:                ;XREF[1]:     1000:2b0a(j)
     NEG         AX
     RET
 
-000:2b6f [UNDEFINED BYTES REMOVED]
+ ; 1000:2b6f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b70()
+FUN_1000_2b70:
                               ;XREF[1]:     1000:021c(c)
     MOV         AH,0x48
     MOV         BX,0xfa0
@@ -3035,12 +3035,12 @@ LAB_1000_2b61:                ;XREF[1]:     1000:2b0a(j)
 LAB_1000_2b89:                ;XREF[1]:     1000:2b77(j)
     RET
 
-000:2b97 [UNDEFINED BYTES REMOVED]
+ ; 1000:2b97 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2b98()
+FUN_1000_2b98:
                               ;XREF[2]:     1000:02c6(c),1000:0392(c)
     PUSH        ES
     PUSH        DI
@@ -3055,7 +3055,7 @@ LAB_1000_2b89:                ;XREF[1]:     1000:2b77(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2baa()
+FUN_1000_2baa:
                               ;XREF[1]:     1000:04f7(c)
     PUSH        DS
     MOV         DS,word ptr [0xdb10]
@@ -3071,7 +3071,7 @@ LAB_1000_2b89:                ;XREF[1]:     1000:2b77(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2bc1()
+FUN_1000_2bc1:
                               ;XREF[1]:     1000:0226(c)
     MOV         CX,0x100
     MOV         DX,0x3c8
@@ -3106,7 +3106,7 @@ LAB_1000_2be5:                ;XREF[1]:     1000:2be3(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2bec()
+FUN_1000_2bec:
                               ;XREF[4]:     1000:1d27(c),1000:1d62(c),1000:1e83(c),1000:1ebb(c)
     PUSH        SI
     PUSH        DI
@@ -3157,7 +3157,7 @@ LAB_1000_2c48:                ;XREF[1]:     1000:2c0e(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2c4b()
+FUN_1000_2c4b:
                               ;XREF[4]:     1000:2c2d(c),1000:2c42(c),1000:373f(c),1000:3754(c)
     XCHG        DX,CX
     CMP         BX,CX
@@ -3222,12 +3222,12 @@ LAB_1000_2cb6:                ;XREF[1]:     1000:2cc6(j)
 LAB_1000_2cce:                ;XREF[1]:     1000:2c9a(j)
     RET
 
-000:2d60 [UNDEFINED BYTES REMOVED]
+ ; 1000:2d60 [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2d61()
+FUN_1000_2d61:
                               ;XREF[1]:     1000:2c45(c)
     MOV         BX,word ptr [0xdbc4]
     MOV         DX,word ptr [0xdbc6]
@@ -3309,7 +3309,7 @@ LAB_1000_2de0:                ;XREF[1]:     1000:2de8(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2df2()
+FUN_1000_2df2:
                               ;XREF[1]:     1000:2bf4(c)
     PUSH        SI
     PUSH        DI
@@ -3416,7 +3416,7 @@ LAB_1000_2e93:                ;XREF[3]:     1000:2e15(j),1000:2e62(j),1000:2ea7(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2eaf()
+FUN_1000_2eaf:
                               ;XREF[1]:     1000:2bf9(c)
     PUSH        SI
     PUSH        DI
@@ -3523,7 +3523,7 @@ LAB_1000_2f50:                ;XREF[3]:     1000:2ed2(j),1000:2f22(j),1000:2f64(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_2f6c()
+FUN_1000_2f6c:
                               ;XREF[1]:     1000:2bfe(c)
     PUSH        SI
     PUSH        DI
@@ -3630,7 +3630,7 @@ LAB_1000_3011:                ;XREF[3]:     1000:2f8f(j),1000:2fde(j),1000:3025(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_302d()
+FUN_1000_302d:
                               ;XREF[1]:     1000:2c03(c)
     PUSH        SI
     PUSH        DI
@@ -3735,12 +3735,12 @@ LAB_1000_30d2:                ;XREF[3]:     1000:3050(j),1000:30a2(j),1000:30e6(
     MOV         word ptr [DI + -0x2],BP
     RET
 
-000:36fd [UNDEFINED BYTES REMOVED]
+ ; 1000:36fd [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_36fe()
+FUN_1000_36fe:
                               ;XREF[5]:     1000:0d24(c),1000:1ddb(c),1000:1e34(c),1000:1f2f(c),
                               ;             1000:1f88(c)
     PUSH        SI
@@ -3819,7 +3819,7 @@ LAB_1000_3798:                ;XREF[1]:     1000:3720(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_379b()
+FUN_1000_379b:
                               ;XREF[2]:     1000:3773(c),1000:3792(c)
     PUSH        SI
     PUSH        DI
@@ -3886,7 +3886,7 @@ LAB_1000_3824:                ;XREF[1]:     1000:37be(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3827()
+FUN_1000_3827:
                               ;XREF[1]:     1000:3795(c)
     MOV         SI,word ptr [0xdbc4]
     MOV         DI,word ptr [0xdbc6]
@@ -3987,7 +3987,7 @@ LAB_1000_38f8:                ;XREF[1]:     1000:38cf(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_390a()
+FUN_1000_390a:
                               ;XREF[1]:     1000:3706(c)
     PUSH        SI
     PUSH        DI
@@ -4168,7 +4168,7 @@ LAB_1000_3a6e:                ;XREF[3]:     1000:3945(j),1000:3a69(j),1000:3a9e(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3aa3()
+FUN_1000_3aa3:
                               ;XREF[1]:     1000:370b(c)
     PUSH        SI
     PUSH        DI
@@ -4349,7 +4349,7 @@ LAB_1000_3c07:                ;XREF[3]:     1000:3ade(j),1000:3c02(j),1000:3c37(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3c3c()
+FUN_1000_3c3c:
                               ;XREF[1]:     1000:3710(c)
     PUSH        SI
     PUSH        DI
@@ -4534,7 +4534,7 @@ LAB_1000_3da6:                ;XREF[3]:     1000:3c77(j),1000:3da1(j),1000:3dd6(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3ddb()
+FUN_1000_3ddb:
                               ;XREF[1]:     1000:3715(c)
     PUSH        SI
     PUSH        DI
@@ -4717,7 +4717,7 @@ LAB_1000_3f45:                ;XREF[3]:     1000:3e16(j),1000:3f40(j),1000:3f75(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3f7a()
+FUN_1000_3f7a:
                               ;XREF[21]:    1000:2e4e(c),1000:2e77(c),1000:2f0e(c),1000:2f34(c),
                               ;             1000:2fcb(c),1000:2ff6(c),1000:308f(c),1000:30b7(c),
                               ;             1000:39b0(c),1000:39cc(c),1000:39e2(c),1000:3a23(c),
@@ -4748,7 +4748,7 @@ LAB_1000_3f96:                ;XREF[1]:     1000:3f7c(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3f98()
+FUN_1000_3f98:
                               ;XREF[1]:     1000:59ad(c)
     CMP         AX,word ptr [0xdbc0]
     JL          LAB_1000_3fce
@@ -4780,12 +4780,12 @@ LAB_1000_3f96:                ;XREF[1]:     1000:3f7c(j)
 LAB_1000_3fce:                ;XREF[4]:     1000:3f9c(j),1000:3fa4(j),1000:3fac(j),1000:3fb4(j)
     RET
 
-000:3fcf [UNDEFINED BYTES REMOVED]
+ ; 1000:3fcf [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_3fd0()
+FUN_1000_3fd0:
                               ;XREF[1]:     1000:1981(c)
     MOV         word ptr [0xe530],0x6
     MOV         BX,word ptr [0x5f9]
@@ -4877,7 +4877,7 @@ LAB_1000_3fce:                ;XREF[4]:     1000:3f9c(j),1000:3fa4(j),1000:3fac(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_40c8()
+FUN_1000_40c8:
                               ;XREF[1]:     1000:40c4(c)
     MOV         SI,0xe532
     MOV         DI,0xe55c
@@ -4923,7 +4923,7 @@ LAB_1000_411f:                ;XREF[1]:     1000:40e8(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_4120()
+FUN_1000_4120:
                               ;XREF[2]:     1000:4107(c),1000:411c(c)
     XCHG        DX,CX
     CMP         BX,CX
@@ -5013,7 +5013,7 @@ LAB_1000_41b1:                ;XREF[1]:     1000:416a(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_41b2()
+FUN_1000_41b2:
                               ;XREF[1]:     1000:1f94(c)
     MOV         word ptr [0xe530],0x6
     MOV         BX,word ptr [0x5f9]
@@ -5105,7 +5105,7 @@ LAB_1000_41b1:                ;XREF[1]:     1000:416a(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_42aa()
+FUN_1000_42aa:
                               ;XREF[1]:     1000:42a6(c)
     MOV         SI,0xe532
     MOV         DI,0xe55c
@@ -5151,7 +5151,7 @@ LAB_1000_4301:                ;XREF[1]:     1000:42ca(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_4302()
+FUN_1000_4302:
                               ;XREF[2]:     1000:42e9(c),1000:42fe(c)
     XCHG        DX,CX
     CMP         BX,CX
@@ -5241,7 +5241,7 @@ LAB_1000_4393:                ;XREF[1]:     1000:434c(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_4394()
+FUN_1000_4394:
                               ;XREF[2]:     1000:40ce(c),1000:42b0(c)
     PUSH        SI
     PUSH        DI
@@ -5344,7 +5344,7 @@ LAB_1000_4431:                ;XREF[3]:     1000:43b7(j),1000:4400(j),1000:4445(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_444d()
+FUN_1000_444d:
                               ;XREF[2]:     1000:40d3(c),1000:42b5(c)
     PUSH        SI
     PUSH        DI
@@ -5447,7 +5447,7 @@ LAB_1000_44ea:                ;XREF[3]:     1000:4470(j),1000:44bc(j),1000:44fe(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_4506()
+FUN_1000_4506:
                               ;XREF[2]:     1000:40d8(c),1000:42ba(c)
     PUSH        SI
     PUSH        DI
@@ -5552,7 +5552,7 @@ LAB_1000_45a7:                ;XREF[3]:     1000:4529(j),1000:4574(j),1000:45bb(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_45c3()
+FUN_1000_45c3:
                               ;XREF[2]:     1000:40dd(c),1000:42bf(c)
     PUSH        SI
     PUSH        DI
@@ -5657,7 +5657,7 @@ LAB_1000_4664:                ;XREF[3]:     1000:45e6(j),1000:4634(j),1000:4678(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_4680()
+FUN_1000_4680:
                               ;XREF[8]:     1000:43ec(c),1000:4415(c),1000:44a8(c),1000:44ce(c),
                               ;             1000:4561(c),1000:458c(c),1000:4621(c),1000:4649(c)
     CMP         BX,DX
@@ -5682,12 +5682,12 @@ LAB_1000_469c:                ;XREF[1]:     1000:4682(j)
     XCHG        AX,BX
     RET
 
-000:469f [UNDEFINED BYTES REMOVED]
+ ; 1000:469f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_46a0()
+FUN_1000_46a0:
                               ;XREF[8]:     1000:1d04(c),1000:1d30(c),1000:1d97(c),1000:1ded(c),
                               ;             1000:1e60(c),1000:1e89(c),1000:1eeb(c),1000:1f41(c)
     PUSH        DI
@@ -5713,7 +5713,7 @@ LAB_1000_46c2:                ;XREF[1]:     1000:46ad(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_46d3()
+FUN_1000_46d3:
                               ;XREF[16]:    1000:1d09(c),1000:1d0d(c),1000:1d34(c),1000:1d3a(c),
                               ;             1000:1da5(c),1000:1db5(c),1000:1dfd(c),1000:1e0f(c),
                               ;             1000:1e65(c),1000:1e69(c),1000:1e8d(c),1000:1e93(c),
@@ -5831,7 +5831,7 @@ LAB_1000_4783:                ;XREF[1]:     1000:4770(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_47ec()
+FUN_1000_47ec:
                               ;XREF[8]:     1000:1d14(c),1000:1d40(c),1000:1dc8(c),1000:1e21(c),
                               ;             1000:1e70(c),1000:1e99(c),1000:1f1c(c),1000:1f75(c)
     MOV         EBP,EBX
@@ -5927,12 +5927,12 @@ LAB_1000_4875:                ;XREF[1]:     1000:4867(j)
     MOV         [0xdb14],AX
     RET
 
-000:542f [UNDEFINED BYTES REMOVED]
+ ; 1000:542f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5430()
+FUN_1000_5430:
                               ;XREF[1]:     1000:0229(c)
     PUSH        ES
     MOV         AX,CS
@@ -6007,12 +6007,12 @@ LAB_1000_4875:                ;XREF[1]:     1000:4867(j)
     STI
     RET
 
-000:551e [UNDEFINED BYTES REMOVED]
+ ; 1000:551e [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_551f()
+FUN_1000_551f:
                               ;XREF[1]:     1000:54e1(c)
     MOV         BX,AX
     MOV         AL,0x36
@@ -6041,59 +6041,59 @@ DAT_1000_553c:                ;XREF[1]:     1000:54c2(W)
 DAT_1000_553e:                ;XREF[2]:     1000:5443(W),1000:54e4(R)
     undefined1  00h
 
-000:55f2 [UNDEFINED BYTES REMOVED]
+ ; 1000:55f2 [UNDEFINED BYTES REMOVED]
 
     ds          "\r\nDivide overflow at segment="
 
-000:5611 [UNDEFINED BYTES REMOVED]
+ ; 1000:5611 [UNDEFINED BYTES REMOVED]
 
     ds          ", offset="
 
-000:561c [UNDEFINED BYTES REMOVED]
+ ; 1000:561c [UNDEFINED BYTES REMOVED]
 
     ds          ", flags="
 
-000:5626 [UNDEFINED BYTES REMOVED]
+ ; 1000:5626 [UNDEFINED BYTES REMOVED]
 
     ds          ", registers="
 
-000:564e [UNDEFINED BYTES REMOVED]
+ ; 1000:564e [UNDEFINED BYTES REMOVED]
 
     ds          ", memory="
 
-000:571d [UNDEFINED BYTES REMOVED]
+ ; 1000:571d [UNDEFINED BYTES REMOVED]
 
 DAT_1000_571e:                ;XREF[3]:     1000:055d(R),1000:05ac(W),1000:543d(W)
     undefined1  FFh
 DAT_1000_571f:                ;XREF[1]:     1000:543d(W)
     undefined1  FFh
 
-000:5752 [UNDEFINED BYTES REMOVED]
+ ; 1000:5752 [UNDEFINED BYTES REMOVED]
 
 DAT_1000_5753:                ;XREF[1]:     1000:052b(R)
     undefined1  FFh
 
-000:5754 [UNDEFINED BYTES REMOVED]
+ ; 1000:5754 [UNDEFINED BYTES REMOVED]
 
 DAT_1000_5755:                ;XREF[1]:     1000:0544(R)
     undefined1  FFh
 
-000:5767 [UNDEFINED BYTES REMOVED]
+ ; 1000:5767 [UNDEFINED BYTES REMOVED]
 
 DAT_1000_5768:                ;XREF[1]:     1000:0513(R)
     undefined1  FFh
 
-000:576b [UNDEFINED BYTES REMOVED]
+ ; 1000:576b [UNDEFINED BYTES REMOVED]
 
 DAT_1000_576c:                ;XREF[1]:     1000:04fa(R)
     undefined1  FFh
 
-000:57df [UNDEFINED BYTES REMOVED]
+ ; 1000:57df [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_57e0()
+FUN_1000_57e0:
                               ;XREF[1]:     1000:022c(c)
     MOV         AX,0x120
     CALL        FUN_1000_58fc                           ;undefined FUN_1000_58fc()
@@ -6129,12 +6129,12 @@ LAB_1000_57f5:                ;XREF[1]:     1000:57ff(j)
     MOV         AX,0x588b
     RET
 
-000:589a [UNDEFINED BYTES REMOVED]
+ ; 1000:589a [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_589b()
+FUN_1000_589b:
                               ;XREF[2]:     1000:5806(c),1000:580e(c)
     MOVZX       BX,AL
     MOV         BL,byte ptr CS:[BX + 0x592c]
@@ -6186,7 +6186,7 @@ LAB_1000_57f5:                ;XREF[1]:     1000:57ff(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_58fc()
+FUN_1000_58fc:
                               ;XREF[18]:    1000:57e3(c),1000:57e9(c),1000:57ef(c),1000:57f6(c),
                               ;             1000:5814(c),1000:581e(c),1000:5827(c),1000:58a8(c),
                               ;             1000:58b0(c),1000:58b8(c),1000:58c0(c),1000:58c8(c),
@@ -6215,12 +6215,12 @@ LAB_1000_5915:                ;XREF[1]:     1000:5916(j)
     POP         AX
     RET
 
-000:593f [UNDEFINED BYTES REMOVED]
+ ; 1000:593f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5940()
+FUN_1000_5940:
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
     MOV         byte ptr CS:[DAT_1000_59c1],CL          ;= 0Fh
     MOV         CX,AX
@@ -6311,12 +6311,12 @@ LAB_1000_59ba:                ;XREF[1]:     1000:5995(j)
 DAT_1000_59c1:                ;XREF[3]:     1000:5940(W),1000:5969(W),1000:59a8(R)
     undefined1  0Fh
 
-000:5a5f [UNDEFINED BYTES REMOVED]
+ ; 1000:5a5f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5a60()
+FUN_1000_5a60:
                               ;XREF[3]:     1000:24ca(c),1000:24da(c),1000:2566(c)
     MOV         DX,DX
     MOV         AL,0x0
@@ -6353,7 +6353,7 @@ LAB_1000_5a94:                ;XREF[5]:     1000:5a6a(j),1000:5a71(j),1000:5a80(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5a95()
+FUN_1000_5a95:
                               ;XREF[3]:     1000:01d3(c),1000:24ec(c),1000:5a6e(c)
     MOV         DX,0xef88
     MOV         CX,0x80
@@ -6384,7 +6384,7 @@ LAB_1000_5ace:                ;XREF[3]:     1000:5a9f(j),1000:5ac0(j),1000:5ac9(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5acf()
+FUN_1000_5acf:
                               ;XREF[3]:     1000:01ff(c),1000:251d(c),1000:5a84(c)
     CLD
     MOV         DX,0xf008
@@ -6407,7 +6407,7 @@ LAB_1000_5aeb:                ;XREF[1]:     1000:5b1f(j)
     DEC         AH
     JMP         LAB_1000_5b11
 
-000:5af5 [UNDEFINED BYTES REMOVED]
+ ; 1000:5af5 [UNDEFINED BYTES REMOVED]
 
 LAB_1000_5af6:                ;XREF[1]:     1000:5aed(j)
     CALL        FUN_1000_5b26                           ;undefined FUN_1000_5b26()
@@ -6417,7 +6417,7 @@ LAB_1000_5af6:                ;XREF[1]:     1000:5aed(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5b01()
+FUN_1000_5b01:
                               ;XREF[3]:     1000:0327(c),1000:03f3(c),1000:04b3(c)
     MOV         AH,0x0
     JNZ         LAB_1000_5b11
@@ -6444,7 +6444,7 @@ LAB_1000_5b1a:                ;XREF[1]:     1000:5b15(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-;undefined FUN_1000_5b26()
+FUN_1000_5b26:
                               ;XREF[2]:     1000:5af6(c),1000:5b0c(c)
     CMP         SI,0xf308
     JNZ         LAB_1000_5b41
@@ -6464,6 +6464,6 @@ LAB_1000_5b41:                ;XREF[1]:     1000:5b2a(j)
     LODSB       SI
     RET
 
-000:5ccf [UNDEFINED BYTES REMOVED]
+ ; 1000:5ccf [UNDEFINED BYTES REMOVED]
 
     ds          "-DEFORMERS-  ATOMIC VEHICLE SIMULATI...
