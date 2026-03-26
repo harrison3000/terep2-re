@@ -433,7 +433,7 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         CL,0xf
     CALL        FUN_1000_5940
     CALL        FUN_1000_2baa
-    TEST        byte CS:[BYT...,0x80
+    TEST        byte CS:[DAT_keys_571e[78]],0x80
     JS          LAB_1000_0513
     NOP
     NOP
@@ -443,7 +443,7 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     NOP
     ADD         word [0x011c],0x14    ;= 0100h
 LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
-    TEST        byte CS:[BYT...,0x80
+    TEST        byte CS:[DAT_keys_571e[74]],0x80
     JS          LAB_1000_052b
     NOP
     NOP
@@ -453,7 +453,7 @@ LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
     NOP
     SUB         word [0x011c],0x14    ;= 0100h
 LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
-    TEST        byte CS:[BYT...,0x80
+    TEST        byte CS:[DAT_keys_571e[53]],0x80
     JS          LAB_1000_0544
     NOP
     NOP
@@ -463,7 +463,7 @@ LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
     NOP
     ADD         word [0x011e],0x28    ;= 0400h
 LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
-    TEST        byte CS:[BYT...,0x80
+    TEST        byte CS:[DAT_keys_571e[55]],0x80
     JS          LAB_1000_055d
     NOP
     NOP
@@ -473,7 +473,7 @@ LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
     NOP
     SUB         word [0x011e],0x28    ;= 0400h
 LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
-    MOV         AL,CS:[BYTE_ARRAY_1000_571e]
+    MOV         AL,CS:[DAT_keys_571e]
     CMP         AL,0x1
     JZ          LAB_1000_0654
     CMP         AL,0xf
@@ -520,7 +520,7 @@ LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
 LAB_1000_05ac:                ;XREF[11]:    1000:05bb(j),1000:05c3(j),1000:05cb(j),1000:05d3(j),
                               ;             1000:05db(j),1000:05e2(j),1000:05ea(j),1000:05f2(j),
                               ;             1000:0607(j),1000:061c(j),1000:0624(j)
-    MOV         byte CS:[BYTE_ARRAY_1000_571e],0x0
+    MOV         byte CS:[DAT_keys_571e],0x0
     JMP         LAB_1000_0258
 LAB_1000_05b5:                ;XREF[1]:     1000:0575(j)
     MOV         byte [0x007e],0x0     ;= 03h
@@ -937,12 +937,12 @@ FUN_1000_0a3b:
                               ;XREF[1]:     1000:56ce(c)
     PUSH        SI
     PUSH        DI
-    TEST        byte CS:[BYT...,0xc0
+    TEST        byte CS:[DAT_keys_571e[2]],0xc0
     JNS         LAB_1000_0a54
     NOP
     NOP
 LAB_1000_0a47:                ;XREF[1]:     1000:0a69(j)
-    TEST        byte CS:[BYT...,0xc0
+    TEST        byte CS:[DAT_keys_571e[3]],0xc0
     JNS         LAB_1000_0a6b
     NOP
     NOP
@@ -952,7 +952,7 @@ LAB_1000_0a51:                ;XREF[1]:     1000:0a80(j)
     RET
 LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     PUSHF
-    AND         byte CS:[BYT...,0x3f
+    AND         byte CS:[DAT_keys_571e[2]],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -961,7 +961,7 @@ LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     JMP         LAB_1000_0a47
 LAB_1000_0a6b:                ;XREF[1]:     1000:0a4d(j)
     PUSHF
-    AND         byte CS:[BYT...,0x3f
+    AND         byte CS:[DAT_keys_571e[3]],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -1246,9 +1246,9 @@ LAB_1000_0d29:                ;XREF[1]:     1000:0cd7(j)
 FUN_1000_0d2a:
                               ;XREF[1]:     1000:56b4(c)
     MOVZX       BX,byte [DI]
-    MOV         AL,byte CS:[BX + 0x571e]
+    MOV         AL,byte CS:[BX + DAT_keys_571e]
     MOVZX       BX,byte [DI + 0x1]
-    MOV         AH,byte CS:[BX + 0x571e]
+    MOV         AH,byte CS:[BX + DAT_keys_571e]
     MOV         BX,word [SI + 0xc]
     MOV         CX,0x32
     TEST        AL,0x80
@@ -1302,9 +1302,9 @@ LAB_1000_0d8d:                ;XREF[1]:     1000:0d87(j)
 LAB_1000_0d8f:                ;XREF[2]:     1000:0d7a(j),1000:0d83(j)
     MOV         word [SI + 0xc],BX
     MOVZX       BX,byte [DI + 0x2]
-    MOV         AL,byte CS:[BX + 0x571e]
+    MOV         AL,byte CS:[BX + DAT_keys_571e]
     MOVZX       BX,byte [DI + 0x3]
-    MOV         AH,byte CS:[BX + 0x571e]
+    MOV         AH,byte CS:[BX + DAT_keys_571e]
     MOV         BX,word [SI + 0xa]
     MOV         ECX,dword [SI + 0x42]
     ADD         ECX,dword [SI + 0x46]
@@ -1369,7 +1369,7 @@ LAB_1000_0e0e:                ;XREF[2]:     1000:0df9(j),1000:0e02(j)
     MOV         word [SI + 0xa],BX
     XOR         AX,AX
     MOVZX       BX,byte [DI + 0x4]
-    TEST        byte CS:[BX + 0x571e],0x80
+    TEST        byte CS:[BX + DAT_keys_571e],0x80
     JNZ         LAB_1000_0e24
     NOP
     NOP
@@ -1928,7 +1928,7 @@ FUN_1000_1408:
     LODSB       SI
     MOVZX       BX,AL
     ADD         BX,BX
-    JMP         word CS:[BX + 0x1413]
+    JMP         word CS:[BX + JMP_TABLE_1413]
 JMP_TABLE_1413:
     addr[21]
          addr        LAB_1000_143d
@@ -9256,7 +9256,7 @@ fun_setup_interrupts:
     CLD
     MOV         CL,0x80
                               ; FWD[2]:     1000:571e(W),1000:571f(W)
-    STOSB.REP   ES:DI=>BYTE_ARRAY_1000_571e
+    STOSB.REP   ES:DI=>DAT_keys_571e
     POP         ES
     CLI
     IN          AL,0x21
@@ -9380,7 +9380,7 @@ DAT_1000_553e:                ;XREF[2]:     1000:5443(W),1000:54e4(R)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_timer_5680:
+iFUN_timer_5680:
     CLI
     PUSHAD
     PUSH        DS
@@ -9433,7 +9433,7 @@ LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_keyboard_56df:
+iFUN_keyboard_56df:
     CLI
     PUSH        AX
     PUSH        BX
@@ -9444,14 +9444,14 @@ FUN_keyboard_56df:
     JNS         LAB_1000_56ff
     NOP
     NOP
-    MOV         byte CS:[BX + 0x571e],0xff
+    MOV         byte CS:[BX + DAT_keys_571e],0xff
     NOP
-    MOV         byte CS:[BYTE_ARRAY_1000_571e],0x0
+    MOV         byte CS:[DAT_keys_571e],0x0
     NOP
     JMP         LAB_1000_570a
 LAB_1000_56ff:                ;XREF[1]:     1000:56eb(j)
-    AND         byte CS:[BX + 0x571e],0x7f
-    MOV         byte CS:[BYTE_ARRAY_1000_571e],BL
+    AND         byte CS:[BX + DAT_keys_571e],0x7f
+    MOV         byte CS:[DAT_keys_571e],BL
 LAB_1000_570a:                ;XREF[1]:     1000:56fd(j)
     IN          AL,0x61
     MOV         AH,AL
@@ -9465,7 +9465,7 @@ LAB_1000_570a:                ;XREF[1]:     1000:56fd(j)
     POP         AX
     STI
     IRET
-BYTE_ARRAY_1000_571e:         ;XREF[14,9]:  1000:04fa(R),1000:0513(R),1000:052b(R),1000:0544(R),
+DAT_keys_571e:                ;XREF[14,9]:  1000:04fa(R),1000:0513(R),1000:052b(R),1000:0544(R),
                               ;             1000:055d(R),1000:05ac(W),1000:0a3d(R),1000:0a47(R),
                               ;             1000:0a55(RW),1000:0a6c(RW),1000:543d(W),1000:543d(W),
                               ;             1000:56f6(W),1000:5705(W),1000:04fa(R),1000:0513(R),
@@ -9603,7 +9603,7 @@ BYTE_ARRAY_1000_571e:         ;XREF[14,9]:  1000:04fa(R),1000:0513(R),1000:052b(
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_int_f1_579e:
+iFUN_int_f1_579e:
     CMP         AL,0x0
     JZ          LAB_1000_57bd
     NOP
@@ -9720,7 +9720,7 @@ FUN_1000_5864:
 FUN_1000_589b:
                               ;XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
     MOVZX       BX,AL
-    MOV         BL,byte CS:[BX + 0x592c]
+    MOV         BL,byte CS:[BX + DAT_unk_592c]
     MOV         AH,0x20
     ADD         AH,BL
     LODSB       SI
@@ -9799,8 +9799,30 @@ LAB_1000_5915:                ;XREF[1]:     1000:5916(j)
     POP         AX
     RET
 
- ; 1000:593f [UNDEFINED BYTES REMOVED]
+ ; 1000:592b [UNDEFINED BYTES REMOVED]
 
+DAT_unk_592c:
+    db[20]
+         db          0h
+         db          1h
+         db          2h
+         db          8h
+         db          9h
+         db          Ah
+         db          10h
+         db          11h
+         db          12h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
+         db          0h
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
