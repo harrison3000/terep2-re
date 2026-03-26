@@ -12,6 +12,7 @@ segment code
     ..start:
 
     patchPoint 0x1e
+    the_end:
     ;there was a bunch of cleanup here.... but who cares? it will run a a emulator anyway
     mov ax, 0x4c00
     int 0x21
@@ -24,9 +25,15 @@ segment code
     mov ax, data
 
     patchPoint 0x57
+    ;the camera functions, to help relocate them later
+    MOV word [0x73 + 0], 0693h
+    MOV word [0x73 + 2], 073fh
+    MOV word [0x73 + 4], 0828h
+    MOV word [0x73 + 6], 0893h
+    MOV word [0x73 + 8], 0948h
     jmp afterThings
 
-    patchPoint 0xdc
+    padUntil 0xdc
     afterThings:
 
     patchPoint 0x236
@@ -34,6 +41,9 @@ segment code
 
     padUntil 0x252
     afterThings2:
+
+    patchPoint 0x654
+    jmp the_end
 
     patchPoint 0x48d0
     somefuncc_a:
@@ -66,7 +76,7 @@ segment code
     ;includes the rest of the file
     incbin "memdumps/code.bin", ($ - $$)
 
-segment data
+segment data align=16
     incbin "memdumps/data.bin"
 
 segment stack class=stack
