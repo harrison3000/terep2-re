@@ -39,11 +39,11 @@ LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
     INT         0x21
     MOV         AX,0x15cd
     MOV         DS,AX
-    MOV         word [0x0073],0x693   ;= 0693h
-    MOV         word [0x0075],0x73f   ;= 073Fh
-    MOV         word [0x0077],0x828   ;= 0828h
-    MOV         word [0x0079],0x893   ;= 0893h
-    MOV         word [0x007b],0x948   ;= 0948h
+    MOV         word [0x0073],F_0693  ;= 0693h
+    MOV         word [0x0075],F_073f  ;= 073Fh
+    MOV         word [0x0077],F_0828  ;= 0828h
+    MOV         word [0x0079],F_0893  ;= 0893h
+    MOV         word [0x007b],F_0948  ;= 0948h
     JMP         LAB_1000_00dc
 
  ; 1000:00db [UNDEFINED BYTES REMOVED]
@@ -212,7 +212,7 @@ LAB_1000_0258:                ;XREF[2]:     1000:05a9(j),1000:05b2(j)
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_CAM_1000_0893()
+    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -286,7 +286,7 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_CAM_1000_0893()
+    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -358,7 +358,7 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     SHL         BX,0x1
     MOV         DI,0x92
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined FUN_CAM_1000_0893()
+    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -587,7 +587,7 @@ LAB_1000_0654:                ;XREF[1]:     1000:0563(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_CAM_1000_0693:
+F_0693:
     PUSH        SI
     ADD         SI,word [SI + 0x20]
     MOV         EAX,dword [SI]
@@ -652,7 +652,7 @@ LAB_1000_070f:                ;XREF[1]:     1000:0709(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_CAM_1000_073f:
+F_073f:
     PUSH        SI
     ADD         SI,word [SI + 0x20]
     MOV         EAX,dword [SI]
@@ -734,7 +734,7 @@ FUN_CAM_1000_073f:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_CAM_1000_0828:
+F_0828:
     MOV         EAX,dword [DI]
     MOV         [0xaa],EAX
     MOV         EAX,dword [DI + 0x4]
@@ -774,7 +774,7 @@ FUN_CAM_1000_0828:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_CAM_1000_0893:
+F_0893:
                               ;XREF[3]:     1000:029a(c),1000:0366(c),1000:042f(c)
     PUSH        SI
     ADD         SI,word [SI + 0x20]
@@ -847,7 +847,7 @@ LAB_1000_0943:                ;XREF[1]:     1000:08f9(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_CAM_1000_0948:
+F_0948:
     XOR         EAX,EAX
     XOR         EBX,EBX
     XOR         EDX,EDX
@@ -1403,12 +1403,12 @@ FUN_1000_0e28:
     SHR         BX,0x1
     ADD         AX,BX
     MOV         word [SI + 0x14],AX
-    MOV         word CS:[DAT_1000_0e67],0x0
+    MOV         word CS:[WORD_1000_0e67],0x0
     RET
-DAT_1000_0e67:                ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),
+WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),
                               ;             1000:0ec7(RW),1000:0ee3(R),1000:0f09(RW),1000:0f25(R),
                               ;             1000:0f4b(RW)
-    undefined2  0000h
+    dw          0h
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -1433,33 +1433,33 @@ FUN_1000_0e69:
     XOR         ECX,ECX
     RET
 LAB_1000_0e8f:                ;XREF[1]:     1000:0e6c(j)
-    TEST        word CS:[DAT_1000_0e67],0x1
+    TEST        word CS:[WORD_1000_0e67],0x1
     JNZ         LAB_1000_0ea3
     NOP
     NOP
     CALL        FUN_1000_1136
-    OR          word CS:[DAT_1000_0e67],0x1
+    OR          word CS:[WORD_1000_0e67],0x1
 LAB_1000_0ea3:                ;XREF[1]:     1000:0e96(j)
-    MOV         EAX,CS:[DAT_1000_12a7]
-    MOV         EBX,dword CS:[DAT_1000_12ab]
-    MOV         ECX,dword CS:[DAT_1000_12af]
+    MOV         EAX,CS:[DWORD_1000_12a7]
+    MOV         EBX,dword CS:[DWORD_1000_12ab]
+    MOV         ECX,dword CS:[DWORD_1000_12af]
     MOV         EDX,dword [SI + 0x42]
     RET
 LAB_1000_0eb9:                ;XREF[1]:     1000:0e73(j)
-    TEST        word CS:[DAT_1000_0e67],0x1
+    TEST        word CS:[WORD_1000_0e67],0x1
     JNZ         LAB_1000_0ecd
     NOP
     NOP
     CALL        FUN_1000_1136
-    OR          word CS:[DAT_1000_0e67],0x1
+    OR          word CS:[WORD_1000_0e67],0x1
 LAB_1000_0ecd:                ;XREF[1]:     1000:0ec0(j)
-    MOV         EAX,CS:[DAT_1000_12a7]
-    MOV         EBX,dword CS:[DAT_1000_12ab]
-    MOV         ECX,dword CS:[DAT_1000_12af]
+    MOV         EAX,CS:[DWORD_1000_12a7]
+    MOV         EBX,dword CS:[DWORD_1000_12ab]
+    MOV         ECX,dword CS:[DWORD_1000_12af]
     MOV         EDX,dword [SI + 0x46]
     RET
 LAB_1000_0ee3:                ;XREF[1]:     1000:0e7a(j)
-    TEST        word CS:[DAT_1000_0e67],0x2
+    TEST        word CS:[WORD_1000_0e67],0x2
     JNZ         LAB_1000_0f0f
     NOP
     NOP
@@ -1467,19 +1467,19 @@ LAB_1000_0ee3:                ;XREF[1]:     1000:0e7a(j)
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
-    MOV         CS:[DAT_1000_12bf],EAX
-    MOV         dword CS:[DAT_1000_12c3],EBX
-    MOV         dword CS:[DAT_1000_12c7],ECX
+    MOV         CS:[DWORD_1000_12bf],EAX
+    MOV         dword CS:[DWORD_1000_12c3],EBX
+    MOV         dword CS:[DWORD_1000_12c7],ECX
     POP         SI
-    OR          word CS:[DAT_1000_0e67],0x2
+    OR          word CS:[WORD_1000_0e67],0x2
 LAB_1000_0f0f:                ;XREF[1]:     1000:0eea(j)
-    MOV         EAX,CS:[DAT_1000_12bf]
-    MOV         EBX,dword CS:[DAT_1000_12c3]
-    MOV         ECX,dword CS:[DAT_1000_12c7]
+    MOV         EAX,CS:[DWORD_1000_12bf]
+    MOV         EBX,dword CS:[DWORD_1000_12c3]
+    MOV         ECX,dword CS:[DWORD_1000_12c7]
     MOV         EDX,dword [SI + 0x4a]
     RET
 LAB_1000_0f25:                ;XREF[1]:     1000:0e81(j)
-    TEST        word CS:[DAT_1000_0e67],0x2
+    TEST        word CS:[WORD_1000_0e67],0x2
     JNZ         LAB_1000_0f51
     NOP
     NOP
@@ -1487,15 +1487,15 @@ LAB_1000_0f25:                ;XREF[1]:     1000:0e81(j)
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
-    MOV         CS:[DAT_1000_12bf],EAX
-    MOV         dword CS:[DAT_1000_12c3],EBX
-    MOV         dword CS:[DAT_1000_12c7],ECX
+    MOV         CS:[DWORD_1000_12bf],EAX
+    MOV         dword CS:[DWORD_1000_12c3],EBX
+    MOV         dword CS:[DWORD_1000_12c7],ECX
     POP         SI
-    OR          word CS:[DAT_1000_0e67],0x2
+    OR          word CS:[WORD_1000_0e67],0x2
 LAB_1000_0f51:                ;XREF[1]:     1000:0f2c(j)
-    MOV         EAX,CS:[DAT_1000_12bf]
-    MOV         EBX,dword CS:[DAT_1000_12c3]
-    MOV         ECX,dword CS:[DAT_1000_12c7]
+    MOV         EAX,CS:[DWORD_1000_12bf]
+    MOV         EBX,dword CS:[DWORD_1000_12c3]
+    MOV         ECX,dword CS:[DWORD_1000_12c7]
     MOV         EDX,dword [SI + 0x4e]
     RET
 ;************************************************************************************************
@@ -1690,45 +1690,45 @@ FUN_1000_1136:
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         CS:[DAT_1000_12b3],EAX
-    MOV         dword CS:[DAT_1000_12b7],EBX
-    MOV         dword CS:[DAT_1000_12bb],ECX
+    MOV         CS:[DWORD_1000_12b3],EAX
+    MOV         dword CS:[DWORD_1000_12b7],EBX
+    MOV         dword CS:[DWORD_1000_12bb],ECX
     CALL        FUN_1000_10b6
-    MOV         CS:[DAT_1000_12bf],EAX
-    MOV         dword CS:[DAT_1000_12c3],EBX
-    MOV         dword CS:[DAT_1000_12c7],ECX
+    MOV         CS:[DWORD_1000_12bf],EAX
+    MOV         dword CS:[DWORD_1000_12c3],EBX
+    MOV         dword CS:[DWORD_1000_12c7],ECX
     POP         SI
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         CS:[DAT_1000_129f],EAX
+    MOV         CS:[DWORD_1000_129f],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         CS:[DAT_1000_12a3],EAX                  ;= 7FFF0000h
-    MOV         EAX,CS:[DAT_1000_12bf]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         CS:[DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         EAX,CS:[DWORD_1000_12bf]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DAT_1000_12b3]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         EAX,CS:[DWORD_1000_12b3]
+    IMUL        dword CS:[DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DAT_1000_12a7],EBX
-    MOV         EAX,CS:[DAT_1000_12c3]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         dword CS:[DWORD_1000_12a7],EBX
+    MOV         EAX,CS:[DWORD_1000_12c3]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DAT_1000_12b7]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         EAX,CS:[DWORD_1000_12b7]
+    IMUL        dword CS:[DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DAT_1000_12ab],EBX
-    MOV         EAX,CS:[DAT_1000_12c7]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         dword CS:[DWORD_1000_12ab],EBX
+    MOV         EAX,CS:[DWORD_1000_12c7]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DAT_1000_12bb]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         EAX,CS:[DWORD_1000_12bb]
+    IMUL        dword CS:[DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DAT_1000_12af],EBX
+    MOV         dword CS:[DWORD_1000_12af],EBX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -1739,72 +1739,72 @@ FUN_1000_11f0:
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         CS:[DAT_1000_12b3],EAX
-    MOV         dword CS:[DAT_1000_12b7],EBX
-    MOV         dword CS:[DAT_1000_12bb],ECX
+    MOV         CS:[DWORD_1000_12b3],EAX
+    MOV         dword CS:[DWORD_1000_12b7],EBX
+    MOV         dword CS:[DWORD_1000_12bb],ECX
     CALL        FUN_1000_10b6
-    MOV         CS:[DAT_1000_12bf],EAX
-    MOV         dword CS:[DAT_1000_12c3],EBX
-    MOV         dword CS:[DAT_1000_12c7],ECX
+    MOV         CS:[DWORD_1000_12bf],EAX
+    MOV         dword CS:[DWORD_1000_12c3],EBX
+    MOV         dword CS:[DWORD_1000_12c7],ECX
     POP         SI
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         CS:[DAT_1000_129f],EAX
+    MOV         CS:[DWORD_1000_129f],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         CS:[DAT_1000_12a3],EAX                  ;= 7FFF0000h
-    MOV         EAX,CS:[DAT_1000_12bf]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         CS:[DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         EAX,CS:[DWORD_1000_12bf]
+    IMUL        dword CS:[DWORD_1000_129f]
     MOV         EBX,EDX
-    MOV         EAX,CS:[DAT_1000_12b3]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         EAX,CS:[DWORD_1000_12b3]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
     PUSH        EBX
-    MOV         EAX,CS:[DAT_1000_12c3]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         EAX,CS:[DWORD_1000_12c3]
+    IMUL        dword CS:[DWORD_1000_129f]
     MOV         EBX,EDX
-    MOV         EAX,CS:[DAT_1000_12b7]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         EAX,CS:[DWORD_1000_12b7]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
-    MOV         EAX,CS:[DAT_1000_12c7]
-    IMUL        dword CS:[DAT_1000_129f]
+    MOV         EAX,CS:[DWORD_1000_12c7]
+    IMUL        dword CS:[DWORD_1000_129f]
     MOV         ECX,EDX
-    MOV         EAX,CS:[DAT_1000_12bb]
-    IMUL        dword CS:[DAT_1000_12a3]            ;= 7FFF0000h
+    MOV         EAX,CS:[DWORD_1000_12bb]
+    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         ECX,EDX
     SHL         ECX,0x7
     POP         EAX
     RET
-DAT_1000_129f:                ;XREF[8]:     1000:116f(W),1000:1193(R),1000:11b8(R),1000:11dd(R),
+DWORD_1000_129f:              ;XREF[8]:     1000:116f(W),1000:1193(R),1000:11b8(R),1000:11dd(R),
                               ;             1000:1229(W),1000:123f(R),1000:1261(R),1000:1281(R)
-    undefined4  00000000h
-DAT_1000_12a3:                ;XREF[8]:     1000:117b(W),1000:1185(R),1000:11aa(R),1000:11cf(R),
+    dd         0h
+DWORD_1000_12a3:              ;XREF[8]:     1000:117b(W),1000:1185(R),1000:11aa(R),1000:11cf(R),
                               ;             1000:1235(W),1000:124d(R),1000:126f(R),1000:128f(R)
-    undefined4  7FFF0000h
-DAT_1000_12a7:                ;XREF[3]:     1000:0ea3(R),1000:0ecd(R),1000:119f(W)
-    undefined4  00000000h
-DAT_1000_12ab:                ;XREF[3]:     1000:0ea8(R),1000:0ed2(R),1000:11c4(W)
-    undefined4  00000000h
-DAT_1000_12af:                ;XREF[3]:     1000:0eae(R),1000:0ed8(R),1000:11e9(W)
-    undefined4  00000000h
-DAT_1000_12b3:                ;XREF[4]:     1000:113f(W),1000:118e(R),1000:11f9(W),1000:1248(R)
-    undefined4  00000000h
-DAT_1000_12b7:                ;XREF[4]:     1000:1144(W),1000:11b3(R),1000:11fe(W),1000:126a(R)
-    undefined4  00000000h
-DAT_1000_12bb:                ;XREF[4]:     1000:114a(W),1000:11d8(R),1000:1204(W),1000:128a(R)
-    undefined4  00000000h
-DAT_1000_12bf:                ;XREF[8]:     1000:0ef7(W),1000:0f0f(R),1000:0f39(W),1000:0f51(R),
+    dd         7FFF0000h
+DWORD_1000_12a7:              ;XREF[3]:     1000:0ea3(R),1000:0ecd(R),1000:119f(W)
+    dd         0h
+DWORD_1000_12ab:              ;XREF[3]:     1000:0ea8(R),1000:0ed2(R),1000:11c4(W)
+    dd         0h
+DWORD_1000_12af:              ;XREF[3]:     1000:0eae(R),1000:0ed8(R),1000:11e9(W)
+    dd         0h
+DWORD_1000_12b3:              ;XREF[4]:     1000:113f(W),1000:118e(R),1000:11f9(W),1000:1248(R)
+    dd         0h
+DWORD_1000_12b7:              ;XREF[4]:     1000:1144(W),1000:11b3(R),1000:11fe(W),1000:126a(R)
+    dd         0h
+DWORD_1000_12bb:              ;XREF[4]:     1000:114a(W),1000:11d8(R),1000:1204(W),1000:128a(R)
+    dd         0h
+DWORD_1000_12bf:              ;XREF[8]:     1000:0ef7(W),1000:0f0f(R),1000:0f39(W),1000:0f51(R),
                               ;             1000:1153(W),1000:1180(R),1000:120d(W),1000:123a(R)
-    undefined4  00000000h
-DAT_1000_12c3:                ;XREF[8]:     1000:0efc(W),1000:0f14(R),1000:0f3e(W),1000:0f56(R),
+    dd         0h
+DWORD_1000_12c3:              ;XREF[8]:     1000:0efc(W),1000:0f14(R),1000:0f3e(W),1000:0f56(R),
                               ;             1000:1158(W),1000:11a5(R),1000:1212(W),1000:125c(R)
-    undefined4  00000000h
-DAT_1000_12c7:                ;XREF[8]:     1000:0f02(W),1000:0f1a(R),1000:0f44(W),1000:0f5c(R),
+    dd         0h
+DWORD_1000_12c7:              ;XREF[8]:     1000:0f02(W),1000:0f1a(R),1000:0f44(W),1000:0f5c(R),
                               ;             1000:115e(W),1000:11ca(R),1000:1218(W),1000:127c(R)
-    undefined4  00000000h
+    dd         0h
 
  ; 1000:1322 [UNDEFINED BYTES REMOVED]
 
@@ -9251,7 +9251,7 @@ fun_setup_interrupts:
     PUSH        ES
     MOV         AX,CS
     MOV         ES,AX
-    MOV         DI,0x571e
+    MOV         DI,DAT_keys_571e
     MOV         AL,0xff
     CLD
     MOV         CL,0x80
@@ -9260,7 +9260,7 @@ fun_setup_interrupts:
     POP         ES
     CLI
     IN          AL,0x21
-    MOV         CS:[DAT_1000_553e],AL
+    MOV         CS:[BYTE_1000_553e],AL
     MOV         AL,0xff
     OUT         0x21,AL
     PUSH        DS
@@ -9271,11 +9271,11 @@ fun_setup_interrupts:
     MOV         ES,word FS:[0x22]
     MOV         BX,word FS:[0x20]
     POP         FS
-    MOV         word CS:[DAT_1000_5532],BX
-    MOV         word CS:[DAT_1000_5534],ES
+    MOV         word CS:[WORD_1000_5532],BX
+    MOV         word CS:[WORD_1000_5534],ES
     MOV         AX,CS
     MOV         DS,AX
-    MOV         DX,0x5680
+    MOV         DX,iFUN_timer_5680
     PUSH        FS
     XOR         AX,AX
     MOV         FS,AX
@@ -9284,17 +9284,17 @@ fun_setup_interrupts:
     POP         FS
     MOV         AX,0x3509
     INT         0x21
-    MOV         word CS:[DAT_1000_5536],BX
-    MOV         word CS:[DAT_1000_5538],ES
+    MOV         word CS:[WORD_1000_5536],BX
+    MOV         word CS:[WORD_1000_5538],ES
     MOV         AX,CS
     MOV         DS,AX
-    MOV         DX,0x56df
+    MOV         DX,iFUN_keyboard_56df
     MOV         AX,0x2509
     INT         0x21
     MOV         AX,0x3500
     INT         0x21
-    MOV         word CS:[DAT_1000_552e],BX
-    MOV         word CS:[DAT_1000_5530],ES
+    MOV         word CS:[WORD_1000_552e],BX
+    MOV         word CS:[WORD_1000_5530],ES
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,0x553f
@@ -9302,11 +9302,11 @@ fun_setup_interrupts:
     INT         0x21
     MOV         AX,0x35f1
     INT         0x21
-    MOV         word CS:[DAT_1000_553a],BX
-    MOV         word CS:[DAT_1000_553c],ES
+    MOV         word CS:[WORD_1000_553a],BX
+    MOV         word CS:[WORD_1000_553c],ES
     MOV         AX,CS
     MOV         DS,AX
-    MOV         DX,0x579e
+    MOV         DX,iFUN_int_f1_579e
     MOV         AX,0x25f1
     INT         0x21
     POP         ES
@@ -9316,7 +9316,7 @@ fun_setup_interrupts:
     MOV         DX,0x12
     DIV         CX
     CALL        FUN_1000_551f
-    MOV         AL,CS:[DAT_1000_553e]
+    MOV         AL,CS:[BYTE_1000_553e]
     OUT         0x21,AL
     STI
     RET
@@ -9336,44 +9336,45 @@ FUN_1000_551f:
     MOV         AL,AH
     OUT         0x40,AL
     RET
-DAT_1000_552e:                ;XREF[1]:     1000:54a2(W)
-    undefined2  0000h
-DAT_1000_5530:                ;XREF[1]:     1000:54a7(W)
-    undefined2  0000h
-DAT_1000_5532:                ;XREF[1]:     1000:545f(W)
-    undefined2  0000h
-DAT_1000_5534:                ;XREF[1]:     1000:5464(W)
-    undefined2  0000h
-DAT_1000_5536:                ;XREF[1]:     1000:5487(W)
-    undefined2  0000h
-DAT_1000_5538:                ;XREF[1]:     1000:548c(W)
-    undefined2  0000h
-DAT_1000_553a:                ;XREF[1]:     1000:54bd(W)
-    undefined2  0000h
-DAT_1000_553c:                ;XREF[1]:     1000:54c2(W)
-    undefined2  0000h
-DAT_1000_553e:                ;XREF[2]:     1000:5443(W),1000:54e4(R)
-    undefined1  00h
+WORD_1000_552e:               ;XREF[1]:     1000:54a2(W)
+    dw          0h
+WORD_1000_5530:               ;XREF[1]:     1000:54a7(W)
+    dw          0h
+WORD_1000_5532:               ;XREF[1]:     1000:545f(W)
+    dw          0h
+WORD_1000_5534:               ;XREF[1]:     1000:5464(W)
+    dw          0h
+WORD_1000_5536:               ;XREF[1]:     1000:5487(W)
+    dw          0h
+WORD_1000_5538:               ;XREF[1]:     1000:548c(W)
+    dw          0h
+WORD_1000_553a:               ;XREF[1]:     1000:54bd(W)
+    dw          0h
+WORD_1000_553c:               ;XREF[1]:     1000:54c2(W)
+    dw          0h
+BYTE_1000_553e:               ;XREF[2]:     1000:5443(W),1000:54e4(R)
+    db          0h
 
- ; 1000:55f2 [UNDEFINED BYTES REMOVED]
+ ; 1000:55ec [UNDEFINED BYTES REMOVED]
 
-    ds          "\r\nDivide overflow at segment="
+; ds          "!core"
+; ds          "\r\nDivide overflow at segment="
 
  ; 1000:5611 [UNDEFINED BYTES REMOVED]
 
-    ds          ", offset="
+; ds          ", offset="
 
  ; 1000:561c [UNDEFINED BYTES REMOVED]
 
-    ds          ", flags="
+; ds          ", flags="
 
  ; 1000:5626 [UNDEFINED BYTES REMOVED]
 
-    ds          ", registers="
+; ds          ", registers="
 
  ; 1000:564e [UNDEFINED BYTES REMOVED]
 
-    ds          ", memory="
+; ds          ", memory="
 
  ; 1000:567f [UNDEFINED BYTES REMOVED]
 
@@ -9828,7 +9829,7 @@ DAT_unk_592c:
 ;************************************************************************************************
 FUN_1000_5940:
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
-    MOV         byte CS:[DAT_1000_59c1],CL          ;= 0Fh
+    MOV         byte CS:[BYTE_1000_59c1],CL         ;= Fh
     MOV         CX,AX
     CLD
 LAB_1000_5948:                ;XREF[4]:     1000:5959(j),1000:596d(j),1000:5978(j),1000:59bf(j)
@@ -9857,7 +9858,7 @@ LAB_1000_5962:                ;XREF[1]:     1000:595d(j)
     NOP
     NOP
     LODSB       SI
-    MOV         CS:[DAT_1000_59c1],AL                   ;= 0Fh
+    MOV         CS:[BYTE_1000_59c1],AL                  ;= Fh
     JMP         LAB_1000_5948
 LAB_1000_596f:                ;XREF[1]:     1000:5964(j)
     CMP         AL,0x20
@@ -9897,7 +9898,7 @@ LAB_1000_5999:                ;XREF[2]:     1000:59a4(j),1000:59b3(j)
 LAB_1000_59a6:                ;XREF[1]:     1000:599b(j)
     PUSH        AX
     PUSH        BX
-    MOV         CL,byte CS:[DAT_1000_59c1]          ;= 0Fh
+    MOV         CL,byte CS:[BYTE_1000_59c1]         ;= Fh
     CALL        FUN_1000_3f98
     POP         BX
     POP         AX
@@ -9914,8 +9915,8 @@ LAB_1000_59ba:                ;XREF[1]:     1000:5995(j)
     MOV         CX,AX
     INC         CX
     JMP         LAB_1000_5948
-DAT_1000_59c1:                ;XREF[3]:     1000:5940(W),1000:5969(W),1000:59a8(R)
-    undefined1  0Fh
+BYTE_1000_59c1:               ;XREF[3]:     1000:5940(W),1000:5969(W),1000:59a8(R)
+    db          Fh
 
  ; 1000:5a5f [UNDEFINED BYTES REMOVED]
 
@@ -10070,6 +10071,6 @@ LAB_1000_5b41:                ;XREF[1]:     1000:5b2a(j)
     LODSB       SI
     RET
 
- ; 1000:5ccf [UNDEFINED BYTES REMOVED]
+ ; 1000:5cce [UNDEFINED BYTES REMOVED]
 
-    ds          "-DEFORMERS-  ATOMIC VEHICLE SIMULATI...
+;FIM:
