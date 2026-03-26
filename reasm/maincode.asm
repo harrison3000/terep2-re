@@ -433,7 +433,7 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         CL,0xf
     CALL        FUN_1000_5940
     CALL        FUN_1000_2baa
-    TEST        byte CS:[DAT_keys_571e[78]],0x80
+    TEST        byte CS:[DAT_keys_571e + 78],0x80
     JS          LAB_1000_0513
     NOP
     NOP
@@ -443,7 +443,7 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     NOP
     ADD         word [0x011c],0x14    ;= 0100h
 LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
-    TEST        byte CS:[DAT_keys_571e[74]],0x80
+    TEST        byte CS:[DAT_keys_571e + 74],0x80
     JS          LAB_1000_052b
     NOP
     NOP
@@ -453,7 +453,7 @@ LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
     NOP
     SUB         word [0x011c],0x14    ;= 0100h
 LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
-    TEST        byte CS:[DAT_keys_571e[53]],0x80
+    TEST        byte CS:[DAT_keys_571e + 53],0x80
     JS          LAB_1000_0544
     NOP
     NOP
@@ -463,7 +463,7 @@ LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
     NOP
     ADD         word [0x011e],0x28    ;= 0400h
 LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
-    TEST        byte CS:[DAT_keys_571e[55]],0x80
+    TEST        byte CS:[DAT_keys_571e + 55],0x80
     JS          LAB_1000_055d
     NOP
     NOP
@@ -937,12 +937,12 @@ FUN_1000_0a3b:
                               ;XREF[1]:     1000:56ce(c)
     PUSH        SI
     PUSH        DI
-    TEST        byte CS:[DAT_keys_571e[2]],0xc0
+    TEST        byte CS:[DAT_keys_571e + 2],0xc0
     JNS         LAB_1000_0a54
     NOP
     NOP
 LAB_1000_0a47:                ;XREF[1]:     1000:0a69(j)
-    TEST        byte CS:[DAT_keys_571e[3]],0xc0
+    TEST        byte CS:[DAT_keys_571e + 3],0xc0
     JNS         LAB_1000_0a6b
     NOP
     NOP
@@ -952,7 +952,7 @@ LAB_1000_0a51:                ;XREF[1]:     1000:0a80(j)
     RET
 LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     PUSHF
-    AND         byte CS:[DAT_keys_571e[2]],0x3f
+    AND         byte CS:[DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -961,7 +961,7 @@ LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     JMP         LAB_1000_0a47
 LAB_1000_0a6b:                ;XREF[1]:     1000:0a4d(j)
     PUSHF
-    AND         byte CS:[DAT_keys_571e[3]],0x3f
+    AND         byte CS:[DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -1931,27 +1931,27 @@ FUN_1000_1408:
     JMP         word CS:[BX + JMP_TABLE_1413]
 JMP_TABLE_1413:
     addr[21]
-         addr        LAB_1000_143d
-         addr        LAB_1000_1463
-         addr        LAB_1000_1487
-         addr        LAB_1000_14ad
-         addr        LAB_1000_1514
-         addr        LAB_1000_1581
-         addr        LAB_1000_1584
-         addr        LAB_1000_15f4
-         addr        LAB_1000_1680
-         addr        LAB_1000_16f6
-         addr        LAB_1000_1766
-         addr        LAB_1000_143d
-         addr        LAB_1000_143d
-         addr        LAB_1000_143d
-         addr        LAB_1000_143d
-         addr        LAB_1000_143d
-         addr        LAB_1000_1912
-         addr        LAB_1000_143e
-         addr        LAB_1000_1443
-         addr        LAB_1000_144d
-         addr        LAB_1000_1458
+         dw  LAB_1000_143d
+         dw  LAB_1000_1463
+         dw  LAB_1000_1487
+         dw  LAB_1000_14ad
+         dw  LAB_1000_1514
+         dw  LAB_1000_1581
+         dw  LAB_1000_1584
+         dw  LAB_1000_15f4
+         dw  LAB_1000_1680
+         dw  LAB_1000_16f6
+         dw  LAB_1000_1766
+         dw  LAB_1000_143d
+         dw  LAB_1000_143d
+         dw  LAB_1000_143d
+         dw  LAB_1000_143d
+         dw  LAB_1000_143d
+         dw  LAB_1000_1912
+         dw  LAB_1000_143e
+         dw  LAB_1000_1443
+         dw  LAB_1000_144d
+         dw  LAB_1000_1458
 LAB_1000_143d:                ;XREF[6]:     1000:1413(*),1000:1429(*),1000:142b(*),1000:142d(*),
                               ;             1000:142f(*),1000:1431(*)
     RET
@@ -3827,7 +3827,7 @@ FUN_1000_2454:
     MOV         CX,0x82
     XOR         AL,AL
     CLD
-    STOSB.REP   ES:DI
+    REP STOSB ;   ES:DI
     POP         DI
     POP         ES
     MOV         DX,DX
@@ -4587,7 +4587,7 @@ FUN_1000_2b98:
     XOR         DI,DI
     MOV         CX,0x3e80
     CLD
-    STOSD.REP   ES:DI
+    REP STOSD ;   ES:DI
     POP         DI
     POP         ES
     RET
@@ -4604,7 +4604,7 @@ FUN_1000_2baa:
     XOR         DI,DI
     MOV         CX,0x3e80
     CLD
-    MOVSD.REP   ES:DI,SI
+    REP MOVSD ;   ES:DI,SI
     POP         DS
     RET
 ;************************************************************************************************
@@ -4805,7 +4805,7 @@ LAB_1000_2da1:                ;XREF[1]:     1000:2d99(j)
     CLD
     MOV         AX,[0xdb12]
     SHR         CX,0x1
-    STOSW.REP   ES:DI
+    REP STOSW ;   ES:DI
     JNC         LAB_1000_2db1
     NOP
     NOP
@@ -9256,7 +9256,7 @@ fun_setup_interrupts:
     CLD
     MOV         CL,0x80
                               ; FWD[2]:     1000:571e(W),1000:571f(W)
-    STOSB.REP   ES:DI=>DAT_keys_571e
+    REP STOSB ;   ES:DI=>DAT_keys_571e
     POP         ES
     CLI
     IN          AL,0x21
