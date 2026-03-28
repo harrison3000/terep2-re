@@ -1197,7 +1197,7 @@ FUN_1000_0cd3:
     NOP
     MOV         BP,BX
     MOV         BX,AX
-    LODSW       SI
+    LODSW ;       SI
     CWD
     IDIV        CX
     MOV         DX,AX
@@ -1208,31 +1208,31 @@ FUN_1000_0cd3:
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
@@ -1925,7 +1925,7 @@ FUN_1000_1408:
                               ;             1000:15ea(j),1000:1666(j),1000:1676(j),1000:16dc(j),
                               ;             1000:16ec(j),1000:191f(c),1000:1929(c),1000:1939(c),
                               ;             1000:1942(c)
-    LODSB       SI
+    LODSB ;       SI
     MOVZX       BX,AL
     ADD         BX,BX
     JMP         word CS:[BX + JMP_TABLE_1413]
@@ -1956,11 +1956,11 @@ LAB_1000_143d:                ;XREF[6]:     1000:1413(*),1000:1429(*),1000:142b(
                               ;             1000:142f(*),1000:1431(*)
     RET
 LAB_1000_143e:                ;XREF[1]:     1000:1435(*)
-    LODSW       SI
+    LODSW ;       SI
     ADD         SI,AX
     JMP         FUN_1000_1408
 LAB_1000_1443:                ;XREF[1]:     1000:1437(*)
-    LODSW       SI
+    LODSW ;       SI
     PUSH        SI
     ADD         SI,AX
     CALL        FUN_1000_1408
@@ -1969,19 +1969,19 @@ LAB_1000_1443:                ;XREF[1]:     1000:1437(*)
 LAB_1000_144d:                ;XREF[1]:     1000:1439(*)
     MOV         AL,[0x5ee]
     SAHF
-    LODSW       SI
+    LODSW ;       SI
     JS          FUN_1000_1408
     ADD         SI,AX
     JMP         FUN_1000_1408
 LAB_1000_1458:                ;XREF[1]:     1000:143b(*)
     MOV         AL,[0x5ee]
     SAHF
-    LODSW       SI
+    LODSW ;       SI
     JNS         FUN_1000_1408
     ADD         SI,AX
     JMP         FUN_1000_1408
 LAB_1000_1463:                ;XREF[1]:     1000:1415(*)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1989,7 +1989,7 @@ LAB_1000_1463:                ;XREF[1]:     1000:1415(*)
     ADD         DI,0x126
     MOV         AX,[0x120]
     CMP         word [DI + 0x2],AX
-    LODSW       SI
+    LODSW ;       SI
     MOV         CL,AL
     JL          FUN_1000_1408
     MOV         AX,word [DI + 0x6]
@@ -1997,26 +1997,26 @@ LAB_1000_1463:                ;XREF[1]:     1000:1415(*)
     CALL        FUN_1000_3f98
     JMP         FUN_1000_1408
 LAB_1000_1487:                ;XREF[1]:     1000:1417(*)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     MOV         BX,word [DI + 0x128]
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     MOV         AX,word [DI + 0x128]
-    LODSW       SI
+    LODSW ;       SI
     CMP         BX,AX
     LAHF
     MOV         [0x5ee],AL
     JMP         FUN_1000_1408
 LAB_1000_14ad:                ;XREF[1]:     1000:1419(*)
     XOR         BX,BX
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2025,7 +2025,7 @@ LAB_1000_14ad:                ;XREF[1]:     1000:1419(*)
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2034,7 +2034,7 @@ LAB_1000_14ad:                ;XREF[1]:     1000:1419(*)
     XCHG        DI,SI
     CALL        FUN_1000_46d3
     XCHG        DI,SI
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2060,10 +2060,10 @@ LAB_1000_14ad:                ;XREF[1]:     1000:1419(*)
     POP         SI
     JMP         FUN_1000_1408
 LAB_1000_1514:                ;XREF[1]:     1000:141b(*)
-    LODSB       SI
+    LODSB ;       SI
     MOVZX       CX,AL
     XOR         BX,BX
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2074,7 +2074,7 @@ LAB_1000_1514:                ;XREF[1]:     1000:141b(*)
     XCHG        DI,SI
     DEC         CX
 LAB_1000_1530:                ;XREF[1]:     1000:1547(j)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2086,7 +2086,7 @@ LAB_1000_1530:                ;XREF[1]:     1000:1547(j)
     XCHG        DI,SI
     POP         CX
     LOOP        LAB_1000_1530
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2096,7 +2096,7 @@ LAB_1000_1530:                ;XREF[1]:     1000:1547(j)
     CALL        FUN_1000_47ec
     XCHG        DI,SI
     MOV         BL,AL
-    LODSW       SI
+    LODSW ;       SI
     MOV         [0xdb12],AX
     CMP         BL,0x3
     JL          FUN_1000_1408
@@ -2112,28 +2112,28 @@ LAB_1000_1530:                ;XREF[1]:     1000:1547(j)
 LAB_1000_1581:                ;XREF[1]:     1000:141d(*)
     JMP         FUN_1000_1408
 LAB_1000_1584:                ;XREF[1]:     1000:141f(*)
-    LODSB       SI
+    LODSB ;       SI
     MOVZX       CX,AL
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
     DEC         CX
 LAB_1000_15a1:                ;XREF[1]:     1000:15bb(j)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     PUSH        CX
     XCHG        DI,SI
@@ -2141,13 +2141,13 @@ LAB_1000_15a1:                ;XREF[1]:     1000:15bb(j)
     XCHG        DI,SI
     POP         CX
     LOOP        LAB_1000_15a1
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     XCHG        DI,SI
     CALL        FUN_1000_47ec
@@ -2165,17 +2165,17 @@ LAB_1000_15a1:                ;XREF[1]:     1000:15bb(j)
     CALL        FUN_1000_30ee
     JMP         FUN_1000_1408
 LAB_1000_15f4:                ;XREF[1]:     1000:1421(*)
-    LODSB       SI
+    LODSB ;       SI
     MOVZX       CX,AL
-    LODSW       SI
+    LODSW ;       SI
     MOV         [0xdb12],AX
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2184,13 +2184,13 @@ LAB_1000_15f4:                ;XREF[1]:     1000:1421(*)
     XCHG        DI,SI
     DEC         CX
 LAB_1000_161d:                ;XREF[1]:     1000:163f(j)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2200,13 +2200,13 @@ LAB_1000_161d:                ;XREF[1]:     1000:163f(j)
     XCHG        DI,SI
     POP         CX
     LOOP        LAB_1000_161d
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2226,28 +2226,28 @@ LAB_1000_161d:                ;XREF[1]:     1000:163f(j)
     CALL        FUN_1000_30ee
     JMP         FUN_1000_1408
 LAB_1000_1680:                ;XREF[1]:     1000:1423(*)
-    LODSB       SI
+    LODSB ;       SI
     MOVZX       CX,AL
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD       SI
+    LODSD ;       SI
     MOV         EBX,EAX
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
     DEC         CX
 LAB_1000_169f:                ;XREF[1]:     1000:16bb(j)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD       SI
+    LODSD ;       SI
     MOV         EBX,EAX
     PUSH        CX
     XCHG        DI,SI
@@ -2255,13 +2255,13 @@ LAB_1000_169f:                ;XREF[1]:     1000:16bb(j)
     XCHG        DI,SI
     POP         CX
     LOOP        LAB_1000_169f
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD       SI
+    LODSD ;       SI
     MOV         EBX,EAX
     XCHG        DI,SI
     CALL        FUN_1000_47ec
@@ -2279,7 +2279,7 @@ LAB_1000_169f:                ;XREF[1]:     1000:16bb(j)
     CALL        FUN_1000_36fe
     JMP         FUN_1000_1408
 LAB_1000_16f6:                ;XREF[1]:     1000:1425(*)
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2292,7 +2292,7 @@ LAB_1000_16f6:                ;XREF[1]:     1000:1425(*)
     NOP
     MOV         BX,word [DI + 0x6]
     MOV         BP,word [DI + 0x8]
-    LODSW       SI
+    LODSW ;       SI
     CWD
     IDIV        CX
     MOV         DX,AX
@@ -2302,31 +2302,31 @@ LAB_1000_16f6:                ;XREF[1]:     1000:1425(*)
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     SUB         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     POP         ES
     MOV         word [0xdb14],0x4
@@ -2337,7 +2337,7 @@ LAB_1000_1760:                ;XREF[1]:     1000:170b(j)
     JMP         FUN_1000_1408
 LAB_1000_1766:                ;XREF[1]:     1000:1427(*)
     PUSH        SI
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         BX,AX
     SHL         AX,0x2
@@ -2345,12 +2345,12 @@ LAB_1000_1766:                ;XREF[1]:     1000:1427(*)
     MOV         AX,word [BX + 0x128]
     CMP         AX,word [0x120]
     JL          LAB_1000_190a
-    LODSW       SI
+    LODSW ;       SI
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
-    LODSW       SI
+    LODSW ;       SI
     PUSH        BX
     PUSH        SI
     MOV         SI,BX
@@ -2468,38 +2468,38 @@ LAB_1000_181b:                ;XREF[1]:     1000:1812(j)
     MOV         AX,BX
     SUB         AX,word [0x5d8]
     SUB         AX,word [0x5da]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     SUB         AX,word [0x5d8]
     ADD         AX,word [0x5da]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     ADD         AX,word [0x5da]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     SUB         AX,word [0x5da]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
-    STOSW       ES:DI
+    STOSW ;       ES:DI
     MOVSD       ES:DI,SI
     POP         ES
     MOV         word [0xdb14],0x4
@@ -4622,17 +4622,17 @@ LAB_1000_2bc9:                ;XREF[1]:     1000:2be9(j)
     JMP         LAB_1000_2bcf
 LAB_1000_2bcf:                ;XREF[1]:     1000:2bcd(j)
     INC         DX
-    LODSB       SI
+    LODSB ;       SI
     SHR         AL,0x2
     OUT         DX,AL
     JMP         LAB_1000_2bd7
 LAB_1000_2bd7:                ;XREF[1]:     1000:2bd5(j)
-    LODSB       SI
+    LODSB ;       SI
     SHR         AL,0x2
     OUT         DX,AL
     JMP         LAB_1000_2bde
 LAB_1000_2bde:                ;XREF[1]:     1000:2bdc(j)
-    LODSB       SI
+    LODSB ;       SI
     SHR         AL,0x2
     OUT         DX,AL
     JMP         LAB_1000_2be5
@@ -4809,7 +4809,7 @@ LAB_1000_2da1:                ;XREF[1]:     1000:2d99(j)
     JNC         LAB_1000_2db1
     NOP
     NOP
-    STOSB       ES:DI
+    STOSB ;       ES:DI
 LAB_1000_2db1:                ;XREF[1]:     1000:2dac(j)
     ADD         SI,0x4
     DEC         DX
@@ -4840,7 +4840,7 @@ LAB_1000_2ddc:                ;XREF[1]:     1000:2dd4(j)
 LAB_1000_2de0:                ;XREF[1]:     1000:2de8(j)
     MOV         BL,byte ES:[DI]
     MOV         AL,byte [BX + 0x2e51]
-    STOSB       ES:DI
+    STOSB ;       ES:DI
     LOOP        LAB_1000_2de0
     ADD         SI,0x4
     DEC         DX
@@ -5443,7 +5443,7 @@ LAB_1000_3215:                ;XREF[1]:     1000:3209(j)
     CLD
 LAB_1000_3237:                ;XREF[1]:     1000:3243(j)
     ROR         EAX,0x10
-    STOSB       ES:DI
+    STOSB ;       ES:DI
     ROL         EAX,0x10
     ADD         EAX,EBX
     LOOP        LAB_1000_3237
@@ -8928,24 +8928,24 @@ FUN_1000_5091:
     ADD         DX,word [SI]
     ADD         DX,0x2
     MOV         SI,0xec1b
-    LODSW       SI
+    LODSW ;       SI
     MOV         CX,AX
     MOV         word [0xea99],0x0
 LAB_1000_50a5:                ;XREF[1]:     1000:51b7(j)
     PUSH        CX
-    LODSW       SI
+    LODSW ;       SI
     MOV         BX,AX
     SHL         BX,0x3
     SUB         BX,AX
     SHL         BX,0x2
     ADD         BX,DX
-    LODSW       SI
+    LODSW ;       SI
     MOV         BP,AX
     SHL         BP,0x3
     SUB         BP,AX
     SHL         BP,0x2
     ADD         BP,DX
-    LODSW       SI
+    LODSW ;       SI
     MOV         DI,AX
     SHL         DI,0x3
     SUB         DI,AX
@@ -9703,10 +9703,10 @@ FUN_1000_5864:
     CALL        FUN_1000_58fc
     MOV         AL,0x8
     CALL        FUN_1000_589b
-    LODSB       SI
+    LODSB ;       SI
     MOV         AH,0xa8
     CALL        FUN_1000_58fc
-    LODSB       SI
+    LODSB ;       SI
     MOV         AH,0xb8
     CALL        FUN_1000_58fc
     POP         DX
@@ -9724,47 +9724,47 @@ FUN_1000_589b:
     MOV         BL,byte CS:[BX + DAT_unk_592c]
     MOV         AH,0x20
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x40
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x60
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x80
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0xe0
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x23
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x43
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x63
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0x83
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0xe3
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     MOV         AH,0xc0
     ADD         AH,BL
-    LODSB       SI
+    LODSB ;       SI
     CALL        FUN_1000_58fc
     RET
 ;************************************************************************************************
@@ -9833,7 +9833,7 @@ FUN_1000_5940:
     MOV         CX,AX
     CLD
 LAB_1000_5948:                ;XREF[4]:     1000:5959(j),1000:596d(j),1000:5978(j),1000:59bf(j)
-    LODSB       SI
+    LODSB ;       SI
     CMP         AL,0x0
     JNZ         LAB_1000_5950
     NOP
@@ -9857,7 +9857,7 @@ LAB_1000_5962:                ;XREF[1]:     1000:595d(j)
     JNZ         LAB_1000_596f
     NOP
     NOP
-    LODSB       SI
+    LODSB ;       SI
     MOV         CS:[BYTE_1000_59c1],AL                  ;= Fh
     JMP         LAB_1000_5948
 LAB_1000_596f:                ;XREF[1]:     1000:5964(j)
@@ -10039,7 +10039,7 @@ LAB_1000_5b11:                ;XREF[2]:     1000:5af3(j),1000:5b03(j)
     JNC         LAB_1000_5b1a
     NOP
     NOP
-    STOSB       ES:DI
+    STOSB ;       ES:DI
 LAB_1000_5b1a:                ;XREF[1]:     1000:5b15(j)
     INC         CX
     CMP         CX,word [0xef80]
@@ -10068,7 +10068,7 @@ FUN_1000_5b26:
     POP         AX
     MOV         SI,0xf008
 LAB_1000_5b41:                ;XREF[1]:     1000:5b2a(j)
-    LODSB       SI
+    LODSB ;       SI
     RET
 
  ; 1000:5cce [UNDEFINED BYTES REMOVED]

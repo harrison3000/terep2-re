@@ -11,3 +11,4 @@ s#FIM_DO_CODIGO#;FIM#
 s#^( +)ddw#\1dd#
 s#^( +)ds #; ds #
 s#=>#  ; =>#
+s#^\s+(LODS|STOS)([BWD])#\0 ;#
