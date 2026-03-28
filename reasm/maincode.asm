@@ -1212,28 +1212,28 @@ FUN_1000_0cd3:
     MOV         AX,BP
     SUB         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     SUB         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
     POP         DI
@@ -1928,9 +1928,9 @@ FUN_1000_1408:
     LODSB ;       SI
     MOVZX       BX,AL
     ADD         BX,BX
-    JMP         word CS:[BX + JMP_TABLE_1413]
+    JMP         [CS:BX + JMP_TABLE_1413]
 JMP_TABLE_1413:
-    addr[21]
+    ;addr[21]
          dw  LAB_1000_143d
          dw  LAB_1000_1463
          dw  LAB_1000_1487
@@ -2306,28 +2306,28 @@ LAB_1000_16f6:                ;XREF[1]:     1000:1425(*)
     MOV         AX,BP
     SUB         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     SUB         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     SUB         AX,DX
     STOSW ;       ES:DI
     MOV         AX,BP
     ADD         AX,DX
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     POP         ES
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
@@ -2473,7 +2473,7 @@ LAB_1000_181b:                ;XREF[1]:     1000:1812(j)
     ADD         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     SUB         AX,word [0x5d8]
     ADD         AX,word [0x5da]
@@ -2482,7 +2482,7 @@ LAB_1000_181b:                ;XREF[1]:     1000:1812(j)
     ADD         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     ADD         AX,word [0x5da]
@@ -2491,7 +2491,7 @@ LAB_1000_181b:                ;XREF[1]:     1000:1812(j)
     SUB         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     SUB         AX,word [0x5da]
@@ -2500,7 +2500,7 @@ LAB_1000_181b:                ;XREF[1]:     1000:1812(j)
     SUB         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
     STOSW ;       ES:DI
-    MOVSD       ES:DI,SI
+    MOVSD ;       ES:DI,SI
     POP         ES
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
@@ -2951,7 +2951,7 @@ FUN_1000_1cde:
     NOP
     NOP
     ADD         BH,CH
-    XLAT        BX
+    XLAT      ;  BX
     MOV         AH,AL
     MOV         [0xdb12],AX
     PUSH        SI
@@ -3089,7 +3089,7 @@ FUN_1000_1e3a:
     NOP
     NOP
     ADD         BH,CH
-    XLAT        BX
+    XLAT     ;   BX
     MOV         AH,AL
     MOV         [0xdb12],AX
     PUSH        SI
@@ -9472,135 +9472,7 @@ DAT_keys_571e:                ;XREF[14,9]:  1000:04fa(R),1000:0513(R),1000:052b(
                               ;             1000:56f6(W),1000:5705(W),1000:04fa(R),1000:0513(R),
                               ;             1000:052b(R),1000:0544(R),1000:0a3d(R),1000:0a47(R),
                               ;             1000:0a55(RW),1000:0a6c(RW),1000:543d(W)
-    db[128]
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
-         db          FFh
+    times 128 db 0xFF
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -9803,13 +9675,13 @@ LAB_1000_5915:                ;XREF[1]:     1000:5916(j)
  ; 1000:592b [UNDEFINED BYTES REMOVED]
 
 DAT_unk_592c:
-    db[20]
+;    db[20]
          db          0h
          db          1h
          db          2h
          db          8h
          db          9h
-         db          Ah
+         db          0xA
          db          10h
          db          11h
          db          12h
@@ -9916,7 +9788,7 @@ LAB_1000_59ba:                ;XREF[1]:     1000:5995(j)
     INC         CX
     JMP         LAB_1000_5948
 BYTE_1000_59c1:               ;XREF[3]:     1000:5940(W),1000:5969(W),1000:59a8(R)
-    db          Fh
+    db          0xF
 
  ; 1000:5a5f [UNDEFINED BYTES REMOVED]
 
