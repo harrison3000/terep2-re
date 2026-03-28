@@ -5,7 +5,7 @@ entry:
                               ;XREF[1]:     Entry Point(*)
     CLI
     IN          AL,0x21
-    PUSH        AX=>0xf70e                ;= 6B63h
+    PUSH        AX  ; =>0xf70e                ;= 6B63h
     MOV         AL,0xff
     OUT         0x21,AL
     MOV         CX,SS
@@ -15,7 +15,7 @@ entry:
     MOV         SP,0x1e
     MOV         SS,CX
     MOV         SP,DX
-    POP         AX=>0xf70e                ;= 6B63h
+    POP         AX  ; =>0xf70e                ;= 6B63h
     OUT         0x21,AL
     STI
     JMP         LAB_1000_0046
@@ -212,7 +212,7 @@ LAB_1000_0258:                ;XREF[2]:     1000:05a9(j),1000:05b2(j)
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
+    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -286,7 +286,7 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     SHL         BX,0x1
     MOV         DI,0x80
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
+    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -358,7 +358,7 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     SHL         BX,0x1
     MOV         DI,0x92
                               ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]=>CODE_1:DAT_15cd...;undefined F_0893()
+    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
                                                         ;= 0893h
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
@@ -9256,7 +9256,7 @@ fun_setup_interrupts:
     CLD
     MOV         CL,0x80
                               ; FWD[2]:     1000:571e(W),1000:571f(W)
-    REP STOSB ;   ES:DI=>DAT_keys_571e
+    REP STOSB ;   ES:DI  ; =>DAT_keys_571e
     POP         ES
     CLI
     IN          AL,0x21
@@ -9404,7 +9404,7 @@ iFUN_timer_5680:
     MOV         BP,0x5ad9
 LAB_1000_56ad:                ;XREF[1]:     1000:56c6(j)
                               ; FWD[2]:     15cd:5bbc(R),15cd:5bbe(R)
-    MOV         SI,word [DI]=>0x5bbc
+    MOV         SI,word [DI]  ; =>0x5bbc
     PUSH        CX
     PUSH        DI
     PUSH        BP

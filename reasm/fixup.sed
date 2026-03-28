@@ -10,3 +10,4 @@ s#addr +(LAB_1000_)#dw  \1#
 s#FIM_DO_CODIGO#;FIM#
 s#^( +)ddw#\1dd#
 s#^( +)ds #; ds #
+s#=>#  ; =>#
