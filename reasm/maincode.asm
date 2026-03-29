@@ -37,7 +37,7 @@ LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
     SUB         BX,AX
     MOV         AH,0x4a
     INT         0x21
-    MOV         AX,0x15cd
+    MOV         AX, data
     MOV         DS,AX
     MOV         word [0x0073],F_0693  ;= 0693h
     MOV         word [0x0075],F_073f  ;= 073Fh
@@ -9388,7 +9388,7 @@ iFUN_timer_5680:
     PUSH        ES
     PUSH        FS
     PUSH        GS
-    MOV         AX,0x15cd
+    MOV         AX, data
     MOV         DS,AX
     CMP         byte [0x006e],0x1
     JNZ         LAB_1000_56d1
@@ -9554,11 +9554,38 @@ LAB_1000_57f5:                ;XREF[1]:     1000:57ff(j)
     OR          AL,0x20
     MOV         AH,0xb1
     CALL        FUN_1000_58fc
-    MOV         DX,0x5831
-    MOV         AX,0x588b
+    MOV         DX, FUN_1000_5831
+    MOV         AX, FUN_dummy_1000_588b
     RET
 
- ; 1000:5863 [UNDEFINED BYTES REMOVED]
+;************************************************************************************************
+;*                                           FUNCTION                                           *
+;************************************************************************************************
+FUN_1000_5831:
+    MOV         CH,AL
+    MOV         DX,0x388
+    MOV         AL,BL
+    MOV         AH,0xa0
+    ADD         AH,CH
+    CALL        FUN_1000_58fc
+    MOV         AL,BH
+    OR          AL,0x20
+    MOV         AH,0xb0
+    ADD         AH,CH
+    CALL        FUN_1000_58fc
+    MOV         AL,0x3f
+    SUB         AL,CL
+    CMP         AL,0x3f
+    JBE         LAB_1000_5856
+    NOP
+    NOP
+    MOV         AL,0x3f
+LAB_1000_5856:                ;XREF[1]:     1000:5850(j)
+    MOV         AH,0x43
+    MOVZX       BX,CH
+    ADD         AH,byte CS:[BX + DAT_unk_592c]
+    CALL        FUN_1000_58fc
+    RET
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -9585,7 +9612,10 @@ FUN_1000_5864:
     POP         SI
     RET
 
- ; 1000:589a [UNDEFINED BYTES REMOVED]
+FUN_dummy_1000_588b:
+    ud2
+    ret
+
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
