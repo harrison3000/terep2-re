@@ -4597,16 +4597,16 @@ FUN_1000_2b98:
 ;************************************************************************************************
 FUN_1000_2baa:
                               ;XREF[1]:     1000:04f7(c)
-    PUSH        DS
-    MOV         DS,word [0xdb10]
+    PUSH        FS
+    MOV         FS,word [0xdb10]
     XOR         SI,SI
     MOV         AX,0xa000
     MOV         ES,AX
     XOR         DI,DI
     MOV         CX,0x3e80
     CLD
-    REP MOVSD ;   ES:DI,SI
-    POP         DS
+    REP FS MOVSD ;   ES:DI,SI
+    POP         FS
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
