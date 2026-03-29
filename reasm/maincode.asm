@@ -106,7 +106,7 @@ LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     XOR         SI,SI
-LAB_1000_0193:                ;XREF[1]:     1000:0219(j)
+LAB_1000_0193_mainloop:                ;XREF[1]:     1000:0219(j)
     MOV         DI,word [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
@@ -178,7 +178,8 @@ LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
     INC         SI
     INC         SI
     MOV         word [SI + 0x5bbc],DI
-    JMP         LAB_1000_0193
+    JMP         LAB_1000_0193_mainloop
+
 LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     CALL        FUN_1000_2b70
     JC          LAB_1000_001e
@@ -9297,7 +9298,7 @@ fun_setup_interrupts:
     MOV         word CS:[WORD_1000_5530],ES
     MOV         AX,CS
     MOV         DS,AX
-    MOV         DX,0x553f
+    MOV         DX, dummy_ifunc
     MOV         AX,0x2500
     INT         0x21
     MOV         AX,0x35f1
@@ -9320,6 +9321,9 @@ fun_setup_interrupts:
     OUT         0x21,AL
     STI
     RET
+
+dummy_ifunc:
+    iret
 
  ; 1000:551e [UNDEFINED BYTES REMOVED]
 
