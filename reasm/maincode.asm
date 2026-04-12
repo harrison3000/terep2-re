@@ -103,7 +103,7 @@ LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     XOR         SI,SI
-LAB_1000_0193_mainloop:                ;XREF[1]:     1000:0219(j)
+LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
     MOV         DI,word [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
@@ -167,13 +167,13 @@ LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
     INC         SI
     INC         SI
     MOV         word [SI + 0x5bbc],DI
-    JMP         LAB_1000_0193_mainloop
+    JMP         LAB_1000_0193_load_cars_maybe
 
 LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     CALL        FUN_1000_2b70
     JC          LAB_1000_001e
     MOV         SI,0x1a4d
-    CALL        FUN_1000_2bc1
+    CALL        FUN_1000_2bc1_setup_palette
     CALL        fun_setup_interrupts
     CALL        FUN_1000_57e0
     MOV         word [0x006f],DX
@@ -4182,7 +4182,7 @@ FUN_1000_2baa:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_1000_2bc1:
+FUN_1000_2bc1_setup_palette:
                               ;XREF[1]:     1000:0226(c)
     MOV         CX,0x100
     MOV         DX,0x3c8
