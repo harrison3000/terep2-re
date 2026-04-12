@@ -184,7 +184,16 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
 
 LAB_1000_0252:                ;XREF[1]:     1000:0236(j)
     MOV         byte [0x006e],0x1
-LAB_1000_0258:                ;XREF[2]:     1000:05a9(j),1000:05b2(j)
+
+LAB_ultraloop:
+    CALL FUN_main_render
+    CMP ax, 1
+    je LAB_1000_001e
+
+    ;a hlt here speeds things up in dosbox, but who cares?
+    jmp LAB_ultraloop
+
+FUN_main_render:
     TEST        byte [0x007d],0xff
     JNZ         LAB_1000_032e
     MOV         word [0xdbc0],0x0
@@ -446,12 +455,14 @@ LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
     JZ          LAB_1000_061e
     CMP         AL,0x43
     JZ          LAB_1000_05dd
-    JMP         LAB_1000_0258
+    mov ax, 0
+    ret
 LAB_1000_05ac:                ;XREF[11]:    1000:05bb(j),1000:05c3(j),1000:05cb(j),1000:05d3(j),
                               ;             1000:05db(j),1000:05e2(j),1000:05ea(j),1000:05f2(j),
                               ;             1000:0607(j),1000:061c(j),1000:0624(j)
     MOV         byte CS:[DAT_keys_571e],0x0
-    JMP         LAB_1000_0258
+    mov ax, 0
+    ret
 LAB_1000_05b5:                ;XREF[1]:     1000:0575(j)
     MOV         byte [0x007e],0x0     ;= 03h
     JMP         LAB_1000_05ac
@@ -501,7 +512,8 @@ LAB_1000_061e:                ;XREF[1]:     1000:059f(j)
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
 LAB_1000_0654:                ;XREF[1]:     1000:0563(j)
-    JMP         LAB_1000_001e
+    mov ax, 1
+    ret
 
  ; 1000:0692 [UNDEFINED BYTES REMOVED]
 
