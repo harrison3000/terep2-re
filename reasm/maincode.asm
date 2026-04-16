@@ -22,11 +22,6 @@ LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
     INT         0x21
     MOV         AX, data
     MOV         DS,AX
-    MOV         word [0x0073],F_0693  ;= 0693h
-    MOV         word [0x0075],F_073f  ;= 073Fh
-    MOV         word [0x0077],F_0828  ;= 0828h
-    MOV         word [0x0079],F_0893  ;= 0893h
-    MOV         word [0x007b],F_0948  ;= 0948h
     JMP         LAB_1000_00dc
 
  ; 1000:00db [UNDEFINED BYTES REMOVED]
@@ -177,6 +172,36 @@ LAB_ultraloop:
     ;a hlt here speeds things up in dosbox, but who cares?
     jmp LAB_ultraloop
 
+cam_select:
+    SHL BX, 1
+    JMP         [CS:BX + .JMP_TABLE_CAMERAS]
+    .JMP_TABLE_CAMERAS:
+            dw  .CAMERA_1
+            dw  .CAMERA_2
+            dw  .CAMERA_3
+            dw  .CAMERA_4
+            dw  .CAMERA_5
+
+    .CAMERA_1:
+    call F_0693  ;= 0693h
+    ret
+
+    .CAMERA_2:
+    call F_073f  ;= 073Fh
+    ret
+
+    .CAMERA_3:
+    call F_0828  ;= 0828h
+    ret
+
+    .CAMERA_4:
+    call F_0893  ;= 0893h
+    ret
+
+    .CAMERA_5:
+    call F_0948
+    ret
+
 FUN_main_render:
     TEST        byte [0x007d],0xff
     JNZ         LAB_1000_032e
@@ -190,11 +215,8 @@ FUN_main_render:
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007e]      ;= 03h
-    SHL         BX,0x1
     MOV         DI,0x80
-                              ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
-                                                        ;= 0893h
+    CALL cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -243,7 +265,7 @@ LAB_1000_0322:                ;XREF[1]:     1000:031c(j)
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word [0x006f]
+    CALL        FUN_1000_5831 ;was indirect
     JMP         LAB_1000_04b7
 LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     MOV         word [0xdbc0],0x0
@@ -256,11 +278,8 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007e]      ;= 03h
-    SHL         BX,0x1
     MOV         DI,0x80
-                              ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
-                                                        ;= 0893h
+    CALL cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -309,7 +328,7 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word [0x006f]
+    CALL        FUN_1000_5831 ;was indirect
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -320,11 +339,8 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007f]      ;= 03h
-    SHL         BX,0x1
     MOV         DI,0x92
-                              ; FWD[2]:     1000:0893(c),15cd:0079(R)
-    CALL        word [BX + 0x73]  ; =>CODE_1:DAT_15cd...;undefined F_0893()
-                                                        ;= 0893h
+    CALL cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -371,7 +387,7 @@ LAB_1000_04ae:                ;XREF[1]:     1000:04a8(j)
     ADD         CX,0x2c
     MOV         AL,0x1
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        word [0x006f]
+    CALL        FUN_1000_5831 ;was indirect
 LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
@@ -8884,7 +8900,7 @@ LAB_1000_57f5:                ;XREF[1]:     1000:57ff(j)
     OR          AL,0x20
     MOV         AH,0xb1
     CALL        FUN_1000_58fc
-    MOV         DX, FUN_1000_5831
+    ;MOV         DX, FUN_1000_5831
     MOV         AX, FUN_dummy_1000_588b
     RET
 
