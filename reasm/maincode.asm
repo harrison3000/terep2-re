@@ -2,22 +2,6 @@
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 entry:
-                              ;XREF[1]:     Entry Point(*)
-    CLI
-    IN          AL,0x21
-    PUSH        AX  ; =>0xf70e                ;= 6B63h
-    MOV         AL,0xff
-    OUT         0x21,AL
-    MOV         CX,SS
-    MOV         DX,SP
-    MOV         AX,CS
-    MOV         SS,AX
-    MOV         SP,0x1e
-    MOV         SS,CX
-    MOV         SP,DX
-    POP         AX  ; =>0xf70e                ;= 6B63h
-    OUT         0x21,AL
-    STI
     JMP         LAB_1000_0046
 
  ; 1000:001d [UNDEFINED BYTES REMOVED]
