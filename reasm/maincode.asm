@@ -174,13 +174,19 @@ LAB_ultraloop:
 
 cam_select:
     SHL BX, 1
+    AND BX, 15
     JMP         [CS:BX + .JMP_TABLE_CAMERAS]
     .JMP_TABLE_CAMERAS:
-            dw  .CAMERA_1
-            dw  .CAMERA_2
-            dw  .CAMERA_3
-            dw  .CAMERA_4
-            dw  .CAMERA_5
+        dw  .CAMERA_1
+        dw  .CAMERA_2
+        dw  .CAMERA_3
+        dw  .CAMERA_4
+        dw  .CAMERA_5
+            
+        times 3 dw .LAB_RUIM
+
+    .LAB_RUIM:
+    ud2
 
     .CAMERA_1:
     call F_0693  ;= 0693h
@@ -1741,9 +1747,10 @@ FUN_1000_1408:
                               ;             1000:1942(c)
     LODSB ;       SI
     MOVZX       BX,AL
-    ADD         BX,BX
-    JMP         [CS:BX + JMP_TABLE_1413]
-JMP_TABLE_1413:
+    SHL         BX, 1
+    AND BX, 63
+    JMP         [CS:BX + .JMP_TABLE_1413]
+.JMP_TABLE_1413:
     ;addr[21]
          dw  LAB_1000_143d
          dw  LAB_1000_1463
@@ -1766,6 +1773,12 @@ JMP_TABLE_1413:
          dw  LAB_1000_1443
          dw  LAB_1000_144d
          dw  LAB_1000_1458
+
+         times 11 dw .LAB_RUIM
+
+.LAB_RUIM:
+    ud2
+
 LAB_1000_143d:                ;XREF[6]:     1000:1413(*),1000:1429(*),1000:142b(*),1000:142d(*),
                               ;             1000:142f(*),1000:1431(*)
     RET
