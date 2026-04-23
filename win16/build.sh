@@ -1,2 +1,3 @@
 #openwatcom needs to be correctly set up for this to run
-wcl -3 -zastd=c99 -bcl=windows  main.c
+nasm -f obj test.asm
+wcl -3 -ml -k32768 -zastd=c99 -bcl=windows test.obj main.c

@@ -1,5 +1,9 @@
 #include <win16.h>
 
+#pragma aux initgame value [ax];
+extern int far initgame();
+
+
 char szAppName[] = "Terep Win16";
 
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
@@ -43,7 +47,13 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         RegisterClass(&wndclass);
     }
 
-    HWND hwnd = CreateWindow(szAppName, "320x240 Canvas",
+    int err = initgame();
+    if(err){
+        MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail",0);    
+        return 1;
+    }
+
+    HWND hwnd = CreateWindow(szAppName, "Terep2 RE",
                         WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         320, 240,
