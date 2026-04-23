@@ -10,4 +10,4 @@ initgame_:
 
 
 segment _DATA2 class=DATA align=16
-    db 0
+    incbin "memdumps/data.bin"
