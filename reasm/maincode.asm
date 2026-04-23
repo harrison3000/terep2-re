@@ -1,32 +1,15 @@
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-entry:
-    JMP         LAB_1000_0046
 
  ; 1000:001d [UNDEFINED BYTES REMOVED]
 
 LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(j),1000:0177(j),
-                              ;             1000:021f(j),1000:0654(j)
-    MOV         AX,0x4c00
-    INT         0x21
-    UD2
+    MOV ax, 1
+    ret
 
  ; 1000:0045 [UNDEFINED BYTES REMOVED]
 
-LAB_1000_0046:                ;XREF[1]:     1000:001b(j)
-    MOV         BX,0x3000
-    MOV         AX,DS
-    SUB         BX,AX
-    MOV         AH,0x4a
-    INT         0x21
-    MOV         AX, data
-    MOV         DS,AX
-    JMP         LAB_1000_00dc
-
  ; 1000:00db [UNDEFINED BYTES REMOVED]
 
-LAB_1000_00dc:                ;XREF[1]:     1000:0075(j)
+t_init:
     MOV         word [0xec50],0x78    ;= 00C8h
     MOV         dword [0x006a],0x1800 ;= 00000C00h
     MOV         word [0xe9e2],0x800   ;= 0320h
@@ -40,40 +23,40 @@ LAB_1000_00dc:                ;XREF[1]:     1000:0075(j)
     MOV         DX,0x1a3d
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     JC          LAB_1000_0142
     MOV         DX,0xe9e2
     MOV         CX,0x2
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         DX,0xe9e4
     MOV         CX,0x2
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
 LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
     MOV         AH,0x48
     MOV         BX,0x1000
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_001e
     MOV         [0x1a45],AX
     MOV         GS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_001e
     MOV         [0x1a47],AX
     MOV         FS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_001e
     MOV         [0x1a49],AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_001e
     MOV         [0x1a4b],AX
     CALL        FUN_1000_24c0
@@ -109,7 +92,7 @@ LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     JC          LAB_1000_0206
     CALL        FUN_1000_5a95
@@ -123,7 +106,7 @@ LAB_1000_01e1:                ;XREF[1]:     1000:01da(j)
     INC         AX
     MOV         BX,AX
     MOV         AH,0x48
-    INT         0x21
+    call far DOS3Call
     POP         BX
     JC          LAB_1000_0202
     POP         SI
@@ -135,7 +118,7 @@ LAB_1000_01e1:                ;XREF[1]:     1000:01da(j)
     CALL        FUN_1000_5acf
 LAB_1000_0202:                ;XREF[1]:     1000:01ee(j)
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
 LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
     POP         SI
     POP         DI
@@ -152,17 +135,16 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     CALL        FUN_1000_2b70
     JC          LAB_1000_001e
     MOV         SI,0x1a4d
-    CALL        FUN_1000_2bc1_setup_palette
-    CALL        fun_setup_interrupts
+    ;CALL        FUN_1000_2bc1_setup_palette ;FIXME call in C somehow
+    ;CALL        fun_setup_interrupts ; FIXME call in C somehow
     CALL        FUN_1000_57e0
     MOV         word [0x006f],DX
     MOV         [0x0071],AX
-    JMP         LAB_1000_0252
-
- ; 1000:0251 [UNDEFINED BYTES REMOVED]
-
-LAB_1000_0252:                ;XREF[1]:     1000:0236(j)
+    
     MOV         byte [0x006e],0x1
+
+    MOV ax, 0 
+    ret
 
 LAB_ultraloop:
     CALL FUN_main_render
@@ -8763,7 +8745,7 @@ iFUN_timer_5680:
     PUSH        ES
     PUSH        FS
     PUSH        GS
-    MOV         AX, data
+    MOV         AX, 0xbad
     MOV         DS,AX
     CMP         byte [0x006e],0x1
     JNZ         LAB_1000_56d1
