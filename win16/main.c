@@ -1,16 +1,15 @@
 #include <win16.h>
 
-char szAppName[] = "Win16Canvas";
+char szAppName[] = "Terep Win16";
 
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
-    HDC hdc;
-    PAINTSTRUCT ps;
-    int x, y;
 
     switch (message) {
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
+        case WM_PAINT:{
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
             // Example pixel manipulation: 320x240 loop
+            int x, y;
             for (y = 0; y < 240; y++) {
                 for (x = 0; x < 320; x++) {
                     SetPixel(hdc, x, y, RGB(x % 255, y % 255, (x + y) % 255));
@@ -18,7 +17,7 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             }
             EndPaint(hwnd, &ps);
             return 0;
-
+        }
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
@@ -27,8 +26,6 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
 }
 
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow) {
-    HWND hwnd;
-    MSG msg;
     WNDCLASS wndclass;
 
     if (!hPrevInstance) {
@@ -46,7 +43,7 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         RegisterClass(&wndclass);
     }
 
-    hwnd = CreateWindow(szAppName, "320x240 Canvas",
+    HWND hwnd = CreateWindow(szAppName, "320x240 Canvas",
                         WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         320, 240,
@@ -55,6 +52,7 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
+    MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
