@@ -5,3 +5,5 @@ Just publishing some things I did in a effort to reverse engineer the old Terep2
 I started doing this in 2019 and gave up, but after I discovered people still care about this game I decided to try again
 
 The `symbols.txt` file can be imported with the `ImportSymbolScript` on ghidra
+
+I wont be working on this anymore, its just Hooke's Law and a software 3d renderer implemented in x86 assembly after all
