@@ -10,6 +10,8 @@ LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(
  ; 1000:00db [UNDEFINED BYTES REMOVED]
 
 t_init:
+    MOV         word [0x5bba], -2     ;just to be sure
+
     MOV         word [0xec50],0x78    ;= 00C8h
     MOV         dword [0x006a],0x1800 ;= 00000C00h
     MOV         word [0xe9e2],0x800   ;= 0320h
@@ -144,6 +146,10 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     MOV         byte [0x006e],0x1
 
     MOV ax, 0 
+    ret
+
+t_carsLoaded:
+    mov ax, [0x5bba]
     ret
 
 LAB_ultraloop:

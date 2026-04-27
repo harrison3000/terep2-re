@@ -1,8 +1,11 @@
 #include <win16.h>
+#include <stdio.h>
 
 #pragma aux initgame value [ax];
 extern int far initgame();
 
+#pragma aux initgame value [ax];
+extern int far carsLoaded();
 
 char szAppName[] = "Terep Win16";
 
@@ -47,10 +50,22 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         RegisterClass(&wndclass);
     }
 
+    MessageBox(NULL, "The game is about to start, hold on to your hats", "Pre-loading warning", MB_ICONASTERISK);
+
     int err = initgame();
+    int ncars = carsLoaded();
     if(err){
-        MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail",0);    
+        MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail", MB_ICONSTOP);
         return 1;
+    }else if(ncars <= 0){
+        MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
+        return 1;
+    }else{
+        
+        char theMsg[60];
+        sprintf(theMsg, "OK, maybe, cars loaded: %d", ncars);
+
+        MessageBox(NULL, theMsg, "OK, I guess",MB_ICONEXCLAMATION);
     }
 
     HWND hwnd = CreateWindow(szAppName, "Terep2 RE",
