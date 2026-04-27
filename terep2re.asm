@@ -13,14 +13,15 @@ segment _CODE2 class=CODE align=16
 
 
 initgame_:
-    PUSH DS 
+    PUSH DS
+    PUSH EBP
+
     MOV AX, _DATA2
     MOV DS, AX
 
     CALL t_init
-    ;FIXME if I run in a fake directory it gives a fake ok return, if I run in a actual track directory it hangs
-    ;use winedbg to find out why, probably registers being clobbered
 
+    POP EBP
     POP DS
     retf
 

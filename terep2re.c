@@ -1,7 +1,7 @@
 #include <win16.h>
 #include <stdio.h>
 
-#pragma aux initgame value [ax];
+#pragma aux initgame value [ax] modify [bx cx dx si di es];
 extern int far initgame();
 
 #pragma aux initgame value [ax];
