@@ -4,8 +4,8 @@
 #pragma aux initgame value [ax] modify [bx cx dx si di es];
 extern int far initgame();
 
-#pragma aux initgame value [ax];
-extern int far carsLoaded();
+#pragma aux getMem16 value [ax] parm [bx];
+extern int far getMem16();
 
 char szAppName[] = "Terep Win16";
 
@@ -53,7 +53,7 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
     MessageBox(NULL, "The game is about to start, hold on to your hats", "Pre-loading warning", MB_ICONASTERISK);
 
     int err = initgame();
-    int ncars = carsLoaded();
+    int ncars = getMem16(0x5bba);
     if(err){
         MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail", MB_ICONSTOP);
         return 1;

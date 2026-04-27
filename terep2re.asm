@@ -3,7 +3,7 @@ bits 16
 extern DOS3Call
 
 global initgame_
-global carsLoaded_
+global getMem16_
 global render_
 global physics_
 global handlekey_
@@ -25,12 +25,12 @@ initgame_:
     POP DS
     retf
 
-carsLoaded_:
+getMem16_:
     PUSH DS 
     MOV AX, _DATA2
     MOV DS, AX
 
-    CALL t_carsLoaded
+    MOV AX, [BX]
 
     POP DS
     retf

@@ -148,10 +148,6 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     MOV ax, 0 
     ret
 
-t_carsLoaded:
-    mov ax, [0x5bba]
-    ret
-
 LAB_ultraloop:
     CALL FUN_main_render
     CMP ax, 1
