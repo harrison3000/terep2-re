@@ -3460,16 +3460,16 @@ FUN_1000_2454:
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     JC          LAB_1000_24bc
     MOV         DX,DI
     MOV         CX,0x2710
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         BP,AX
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
     POP         BX
     POP         AX
     PUSH        AX
@@ -3520,51 +3520,51 @@ FUN_1000_24c0:
     MOV         DX,0x1a0b
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     CALL        FUN_1000_5a95
     JC          LAB_1000_255a
     MOV         CX,0xffff
     MOV         DX,0xfd00
     MOV         AX,0x4202
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_255a
     MOV         DX,0x1a4d
     MOV         CX,0x300
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         CX,0x0
     MOV         DX,0x80
     MOV         AX,0x4200
-    INT         0x21
+    call far DOS3Call
     MOV         ES,word [0x1a47]
     XOR         DI,DI
     CALL        FUN_1000_5acf
     JC          LAB_1000_255a
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
     MOV         DX,0x1a2b
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     MOV         DX,0x1d51
     MOV         CX,0x1100
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
     MOV         DX,0x1a33
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     MOV         DX,0x2e51
     MOV         CX,0x1000
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
 LAB_1000_255a:                ;XREF[5]:     1000:24cd(j),1000:24dd(j),1000:24ef(j),1000:24fe(j),
                               ;             1000:2520(j)
     POP         ES
@@ -4142,7 +4142,7 @@ FUN_1000_2b70:
                               ;XREF[1]:     1000:021c(c)
     MOV         AH,0x48
     MOV         BX,0xfa0
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_2b89
     MOV         [0xdb10],AX
     MOV         AX,0x13
@@ -8637,32 +8637,32 @@ fun_setup_interrupts:
     MOV         word FS:[0x20],DX
     POP         FS
     MOV         AX,0x3509
-    INT         0x21
+    call far DOS3Call
     MOV         word CS:[WORD_1000_5536],BX
     MOV         word CS:[WORD_1000_5538],ES
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,iFUN_keyboard_56df
     MOV         AX,0x2509
-    INT         0x21
+    call far DOS3Call
     MOV         AX,0x3500
-    INT         0x21
+    call far DOS3Call
     MOV         word CS:[WORD_1000_552e],BX
     MOV         word CS:[WORD_1000_5530],ES
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX, dummy_ifunc
     MOV         AX,0x2500
-    INT         0x21
+    call far DOS3Call
     MOV         AX,0x35f1
-    INT         0x21
+    call far DOS3Call
     MOV         word CS:[WORD_1000_553a],BX
     MOV         word CS:[WORD_1000_553c],ES
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,iFUN_int_f1_579e
     MOV         AX,0x25f1
-    INT         0x21
+    call far DOS3Call
     POP         ES
     POP         DS
     MOV         CX,word [0xec50]
@@ -9153,7 +9153,7 @@ FUN_1000_5a60:
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    INT         0x21
+    call far DOS3Call
     MOV         BX,AX
     JC          LAB_1000_5a94
     CALL        FUN_1000_5a95
@@ -9161,12 +9161,12 @@ FUN_1000_5a60:
     MOV         CX,0x0
     MOV         DX,0x80
     MOV         AX,0x4200
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_5a94
     CALL        FUN_1000_5acf
     JC          LAB_1000_5a94
     MOV         AH,0x3e
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_5a94
     RET
 LAB_1000_5a94:                ;XREF[5]:     1000:5a6a(j),1000:5a71(j),1000:5a80(j),1000:5a87(j),
@@ -9180,7 +9180,7 @@ FUN_1000_5a95:
     MOV         DX,0xef88
     MOV         CX,0x80
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     JC          LAB_1000_5ace
     MOV         AX,[0xef90]
     SUB         AX,word [0xef8c]
@@ -9262,7 +9262,7 @@ FUN_1000_5b26:
     MOV         DX,0xf008
     MOV         CX,CX
     MOV         AH,0x3f
-    INT         0x21
+    call far DOS3Call
     POP         CX
     POP         AX
     MOV         SI,0xf008
