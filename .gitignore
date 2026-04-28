@@ -2,3 +2,6 @@
 *.obj
 *.EXE
 *.exe.txt
+*.err
+*.o
+sim.cfg
