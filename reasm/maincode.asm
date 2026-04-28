@@ -136,10 +136,7 @@ LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
 LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     CALL        FUN_1000_2b70
     JC          LAB_1000_001e
-    MOV         SI,0x1a4d
-    ;CALL        FUN_1000_2bc1_setup_palette ;FIXME call in C somehow
-    ;CALL        fun_setup_interrupts ; FIXME call in C somehow
-    ;CALL        FUN_1000_57e0
+    ;CALL        FUN_1000_57e0 ;FIXME restore sound!
     MOV         word [0x006f],DX
     MOV         [0x0071],AX
     
@@ -4120,6 +4117,7 @@ LAB_1000_2b61:                ;XREF[1]:     1000:2b0a(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;MODIFIED: now it only alocates and doesnt set vga to mode 13h
 FUN_1000_2b70:
                               ;XREF[1]:     1000:021c(c)
     MOV         AH,0x48
@@ -4127,11 +4125,6 @@ FUN_1000_2b70:
     call far DOS3Call
     JC          LAB_1000_2b89
     MOV         [0xdb10],AX
-    MOV         AX,0x13
-    INT         0x10
-    MOV         DX,0x3c2
-    MOV         AL,0xe3
-    OUT         DX,AL
 LAB_1000_2b89:                ;XREF[1]:     1000:2b77(j)
     RET
 
@@ -4140,6 +4133,7 @@ LAB_1000_2b89:                ;XREF[1]:     1000:2b77(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: this clears the framebuffer
 FUN_1000_2b98:
                               ;XREF[2]:     1000:02c6(c),1000:0392(c)
     PUSH        ES
@@ -4157,43 +4151,9 @@ FUN_1000_2b98:
 ;************************************************************************************************
 FUN_1000_2baa:
                               ;XREF[1]:     1000:04f7(c)
-;REMOVED
+;REMOVED, was copy to VGA mem
     RET
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_2bc1_setup_palette:
-                              ;XREF[1]:     1000:0226(c)
-    MOV         CX,0x100
-    MOV         DX,0x3c8
-    MOV         AH,0x0
-LAB_1000_2bc9:                ;XREF[1]:     1000:2be9(j)
-    MOV         AL,AH
-    CLI
-    OUT         DX,AL
-    JMP         LAB_1000_2bcf
-LAB_1000_2bcf:                ;XREF[1]:     1000:2bcd(j)
-    INC         DX
-    LODSB ;       SI
-    SHR         AL,0x2
-    OUT         DX,AL
-    JMP         LAB_1000_2bd7
-LAB_1000_2bd7:                ;XREF[1]:     1000:2bd5(j)
-    LODSB ;       SI
-    SHR         AL,0x2
-    OUT         DX,AL
-    JMP         LAB_1000_2bde
-LAB_1000_2bde:                ;XREF[1]:     1000:2bdc(j)
-    LODSB ;       SI
-    SHR         AL,0x2
-    OUT         DX,AL
-    JMP         LAB_1000_2be5
-LAB_1000_2be5:                ;XREF[1]:     1000:2be3(j)
-    DEC         DX
-    STI
-    INC         AH
-    LOOP        LAB_1000_2bc9
-    RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************

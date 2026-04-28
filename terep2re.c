@@ -20,6 +20,13 @@ char szAppName[] = "Terep Win16";
 
 int cnt = 0;
 
+typedef struct imageeee {
+    BITMAPINFOHEADER info;
+    RGBQUAD palette[256];
+} st_image;
+
+st_image paleta;
+
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
 
     switch (message) {
@@ -33,19 +40,12 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
 
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            // Example pixel manipulation: 320x240 loop
-            int x, y;
-            for (y = 0; y < 240; y++) {
-                for (x = 0; x < 320; x++) {
-                    if(idx >= 64000){
-                        break;
-                    }
-
-                    char val = video[idx];
-                    idx++;
-                    SetPixel(hdc, x, y, RGB(val, val, val));
-                }
-            }
+            StretchDIBits(hdc,
+                0,0, 320, 200,
+                0,0, 320, 200,
+                video, (void far *)&paleta,
+                DIB_RGB_COLORS, SRCCOPY
+            );
             EndPaint(hwnd, &ps);
             return 0;
         }
@@ -82,6 +82,28 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
     return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
+void load_palette(){
+    BITMAPINFOHEADER bih = {
+        .biSize = sizeof(BITMAPINFOHEADER),
+        .biWidth = 320,
+        .biHeight = -200,
+        .biPlanes = 1,
+        .biBitCount = 8,
+        .biCompression = BI_RGB,
+        .biSizeImage = 320 * 200,
+    };
+
+    paleta.info = bih;
+
+    int ptr = 0x1a4d;
+    for(int i =0; i<256;i++){
+        paleta.palette[i].rgbRed = getMem16(ptr);
+        paleta.palette[i].rgbGreen = getMem16(ptr + 1);
+        paleta.palette[i].rgbBlue = getMem16(ptr + 2);
+        ptr += 3;
+    }
+}
+
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow) {
     WNDCLASS wndclass;
 
@@ -116,6 +138,8 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
 
         MessageBox(NULL, theMsg, "OK, I guess",MB_ICONEXCLAMATION);
     }
+
+    load_palette();
 
     HWND hwnd = CreateWindow(szAppName, "Terep2 RE",
                         WS_OVERLAPPEDWINDOW,
