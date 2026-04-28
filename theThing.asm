@@ -8,6 +8,10 @@ segment code
 segment data align=16
     incbin "memdumps/data.bin"
 
+    db "SUPER SEPARATOR, DATA MOVED FROM CS BELOW", 0
+
+    %include "reasm/cs_data.asm"
+
 segment stack class=stack
     times 128 dd 'TheStack'
 
