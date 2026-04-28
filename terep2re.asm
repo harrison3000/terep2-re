@@ -36,7 +36,7 @@ initgame_:
 
     POP EBP
     POP DS
-    retf
+    ret
 
 render_:
     PUSH DS
@@ -64,7 +64,7 @@ render_:
     POP FS
     POP ES
     POP DS
-    retf
+    ret
 
 getMem16_:
     PUSH DS 
@@ -74,17 +74,15 @@ getMem16_:
     MOV AX, [BX]
 
     POP DS
-    retf
+    ret
 
 physics_:
     ;the function already push registers and sets the DS correctly
-    CALL iFUN_timer_5680
-    retf
+    jmp iFUN_timer_5680
 
 
 handlekey_:
-    CALL iFUN_keyboard_56df
-    retf
+    jmp iFUN_keyboard_56df
 
     %include "reasm/maincode.asm"
 
