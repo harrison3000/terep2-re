@@ -8,6 +8,9 @@ For now I made it into a win16 app, so it can be run using wine (and winevdm) in
 
 ## It kinda works
 
+<img width="340" height="259" alt="Screenshot From 2026-04-27 23-02-18" src="https://github.com/user-attachments/assets/d4b37fef-2f56-480c-87b1-b15e4a9e8ec5" />
 This is the very first time I got it working on win16 mode, no palette, no sound, no physics, nothing... just a very crude proof of concept
 
-<img width="340" height="259" alt="Screenshot From 2026-04-27 23-02-18" src="https://github.com/user-attachments/assets/d4b37fef-2f56-480c-87b1-b15e4a9e8ec5" />
+
+<img width="359" height="260" alt="Screenshot From 2026-04-28 20-55-18" src="https://github.com/user-attachments/assets/5c3be341-af07-4a9e-9e34-23a75b006979" />
+After a bunch of fixes, playable, but no sound yet
