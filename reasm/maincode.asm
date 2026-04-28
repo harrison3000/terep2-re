@@ -139,7 +139,7 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     MOV         SI,0x1a4d
     ;CALL        FUN_1000_2bc1_setup_palette ;FIXME call in C somehow
     ;CALL        fun_setup_interrupts ; FIXME call in C somehow
-    CALL        FUN_1000_57e0
+    ;CALL        FUN_1000_57e0
     MOV         word [0x006f],DX
     MOV         [0x0071],AX
     
@@ -4157,16 +4157,7 @@ FUN_1000_2b98:
 ;************************************************************************************************
 FUN_1000_2baa:
                               ;XREF[1]:     1000:04f7(c)
-    PUSH        FS
-    MOV         FS,word [0xdb10]
-    XOR         SI,SI
-    MOV         AX,0xa000
-    MOV         ES,AX
-    XOR         DI,DI
-    MOV         CX,0x3e80
-    CLD
-    REP FS MOVSD ;   ES:DI,SI
-    POP         FS
+;REMOVED
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8577,81 +8568,6 @@ LAB_1000_539b:                ;XREF[1]:     1000:5355(j)
 LAB_1000_53ea:                ;XREF[1]:     1000:5399(j)
     RET
 
- ; 1000:542f [UNDEFINED BYTES REMOVED]
-
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-fun_setup_interrupts:
-                              ;XREF[1]:     1000:0229(c)
-    PUSH        ES
-    MOV         AX,DS
-    MOV         ES,AX
-    MOV         DI,CSD_DAT_keys_571e
-    MOV         AL,0xff
-    CLD
-    MOV         CL,0x80
-                              ; FWD[2]:     1000:571e(W),1000:571f(W)
-    REP STOSB ;   ES:DI  ; =>DAT_keys_571e
-    POP         ES
-    CLI
-    IN          AL,0x21
-    MOV         [CSD_BYTE_1000_553e],AL
-    MOV         AL,0xff
-    OUT         0x21,AL
-    PUSH        DS
-    PUSH        ES
-    PUSH        FS
-    XOR         AX,AX
-    MOV         FS,AX
-    MOV         ES,word FS:[0x22]
-    MOV         BX,word FS:[0x20]
-    POP         FS
-    ;ISR backup removed
-    MOV         AX,CS
-    MOV         DS,AX
-    MOV         DX,iFUN_timer_5680
-    PUSH        FS
-    XOR         AX,AX
-    MOV         FS,AX
-    MOV         word FS:[0x22],DS
-    MOV         word FS:[0x20],DX
-    POP         FS
-    MOV         AX,0x3509
-    call far DOS3Call
-    ;ISR backup removed
-    MOV         AX,CS
-    MOV         DS,AX
-    MOV         DX,iFUN_keyboard_56df
-    MOV         AX,0x2509
-    call far DOS3Call
-    MOV         AX,0x3500
-    call far DOS3Call
-    ;ISR backup removed
-    MOV         AX,CS
-    MOV         DS,AX
-    MOV         DX, dummy_ifunc
-    MOV         AX,0x2500
-    call far DOS3Call
-    MOV         AX,0x35f1
-    call far DOS3Call
-    ;ISR backup removed
-    MOV         AX,CS
-    MOV         DS,AX
-    MOV         DX,iFUN_int_f1_579e
-    MOV         AX,0x25f1
-    call far DOS3Call
-    POP         ES
-    POP         DS
-    MOV         CX,word [0xec50]
-    MOV         AX,0x34dc
-    MOV         DX,0x12
-    DIV         CX
-    CALL        FUN_1000_551f
-    MOV         AL,[CSD_BYTE_1000_553e]
-    OUT         0x21,AL
-    STI
-    RET
 
 dummy_ifunc:
     iret
@@ -8755,7 +8671,7 @@ iFUN_keyboard_56df:
     PUSH        AX
     PUSH        BX
 
-    mov ax, data
+    mov ax, _DATA2
     mov ds, ax
 
     IN          AL,0x60

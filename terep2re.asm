@@ -25,6 +25,19 @@ initgame_:
     POP DS
     retf
 
+render_:
+    PUSH DS
+    PUSH EBP
+
+    MOV AX, _DATA2
+    MOV DS, AX
+
+    CALL FUN_main_render
+
+    POP EBP
+    POP DS
+    retf
+
 getMem16_:
     PUSH DS 
     MOV AX, _DATA2
@@ -40,3 +53,7 @@ getMem16_:
 
 segment _DATA2 class=DATA align=16
     incbin "memdumps/data.bin"
+
+    db "SEPARATOR", 0
+
+    %include "reasm/cs_data.asm"

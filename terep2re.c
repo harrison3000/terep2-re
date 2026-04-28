@@ -1,8 +1,12 @@
 #include <win16.h>
 #include <stdio.h>
+#include <i86.h>
 
 #pragma aux initgame value [ax] modify [bx cx dx si di es];
 extern int far initgame();
+
+#pragma aux render value [ax] modify [bx cx dx si di es];
+extern int far render();
 
 #pragma aux getMem16 value [ax] parm [bx];
 extern int far getMem16();
@@ -13,13 +17,21 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
 
     switch (message) {
         case WM_PAINT:{
+            int idx = 0;
+            int seg = getMem16(0xdb10);
+
+            char far *video = MK_FP(seg, 0);
+
+
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             // Example pixel manipulation: 320x240 loop
             int x, y;
             for (y = 0; y < 240; y++) {
                 for (x = 0; x < 320; x++) {
-                    SetPixel(hdc, x, y, RGB(x % 255, y % 255, (x + y) % 255));
+                    char val = video[idx];
+                    idx++;
+                    SetPixel(hdc, x, y, RGB(val, val, val));
                 }
             }
             EndPaint(hwnd, &ps);
@@ -61,7 +73,8 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
         return 1;
     }else{
-        
+        render();//FIXME not the best place
+
         char theMsg[60];
         sprintf(theMsg, "OK, maybe, cars loaded: %d", ncars);
 
