@@ -11,17 +11,22 @@ extern int far render();
 #pragma aux getMem16 value [ax] parm [bx];
 extern int far getMem16();
 
+extern int far physics();
+
 char szAppName[] = "Terep Win16";
+
+int cnt = 0;
 
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
 
     switch (message) {
         case WM_PAINT:{
-            int idx = 0;
+            unsigned int idx = 0;
             int seg = getMem16(0xdb10);
 
-            char far *video = MK_FP(seg, 0);
+            render();
 
+            char far *video = MK_FP(seg, 0);
 
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
@@ -29,6 +34,10 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             int x, y;
             for (y = 0; y < 240; y++) {
                 for (x = 0; x < 320; x++) {
+                    if(idx >= 64000){
+                        break;
+                    }
+
                     char val = video[idx];
                     idx++;
                     SetPixel(hdc, x, y, RGB(val, val, val));
@@ -37,6 +46,14 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             EndPaint(hwnd, &ps);
             return 0;
         }
+        case WM_TIMER:
+            physics();
+            cnt = !cnt;
+            if(cnt){
+                InvalidateRect(hwnd, 0, TRUE);
+            }
+            return 0;
+
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
@@ -73,8 +90,6 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
         return 1;
     }else{
-        render();//FIXME not the best place
-
         char theMsg[60];
         sprintf(theMsg, "OK, maybe, cars loaded: %d", ncars);
 
@@ -86,6 +101,8 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         320, 240,
                         NULL, NULL, hInstance, NULL);
+    
+    SetTimer(hwnd, 100, 1000/120, NULL);
 
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
