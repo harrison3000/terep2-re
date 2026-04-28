@@ -81,6 +81,11 @@ physics_:
     CALL iFUN_timer_5680
     retf
 
+
+handlekey_:
+    CALL iFUN_keyboard_56df
+    retf
+
     %include "reasm/maincode.asm"
 
 

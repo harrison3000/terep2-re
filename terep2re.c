@@ -13,6 +13,9 @@ extern int far getMem16();
 
 extern int far physics();
 
+#pragma aux handlekey parm [ax bx];
+extern int far handlekey(int pnp, int scc);
+
 char szAppName[] = "Terep Win16";
 
 int cnt = 0;
@@ -53,6 +56,16 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
                 InvalidateRect(hwnd, 0, TRUE);
             }
             return 0;
+        
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        {
+            WORD keyFlags = HIWORD(lParam);
+            WORD scanCode = LOBYTE(keyFlags); 
+            BOOL isKeyReleased = (keyFlags & KF_UP) == KF_UP;
+            handlekey(isKeyReleased, scanCode);
+            return 0;
+        }
 
         case WM_DESTROY:
             PostQuitMessage(0);
@@ -99,7 +112,7 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
     HWND hwnd = CreateWindow(szAppName, "Terep2 RE",
                         WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, CW_USEDEFAULT,
-                        320, 240,
+                        340, 240,
                         NULL, NULL, hInstance, NULL);
     
     SetTimer(hwnd, 100, 1000/120, NULL);

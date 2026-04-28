@@ -8664,39 +8664,21 @@ LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 iFUN_keyboard_56df:
-    CLI
-    push ds
-    PUSH        AX
-    PUSH        BX
 
     mov ax, _DATA2
     mov ds, ax
 
-    IN          AL,0x60
-    MOV         BL,AL
     AND         BX,0x7f
-    AND         AL,0x80
+    AND         AL,0x01
     JNS         LAB_1000_56ff
     MOV         byte [BX + CSD_DAT_keys_571e],0xff
     MOV         byte [CSD_DAT_keys_571e],0x0
-    JMP         LAB_1000_570a
+    ret
+
 LAB_1000_56ff:                ;XREF[1]:     1000:56eb(j)
     AND         byte [BX + CSD_DAT_keys_571e],0x7f
     MOV         byte [CSD_DAT_keys_571e],BL
-LAB_1000_570a:                ;XREF[1]:     1000:56fd(j)
-    IN          AL,0x61
-    MOV         AH,AL
-    OR          AL,0x80
-    OUT         0x61,AL
-    MOV         AL,AH
-    OUT         0x61,AL
-    MOV         AL,0x20
-    OUT         0x20,AL
-    POP         BX
-    POP         AX
-    pop ds
-    STI
-    IRET
+    ret
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
