@@ -396,31 +396,31 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         CL,0xf
     CALL        FUN_1000_5940
     CALL        FUN_1000_2baa
-    TEST        byte CS:[DAT_keys_571e + 78],0x80
+    TEST        byte [CSD_DAT_keys_571e + 78],0x80
     JS          LAB_1000_0513
     CMP         word [0x011c],0x3e8   ;= 0100h
     JG          LAB_1000_0513
     ADD         word [0x011c],0x14    ;= 0100h
 LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
-    TEST        byte CS:[DAT_keys_571e + 74],0x80
+    TEST        byte [CSD_DAT_keys_571e + 74],0x80
     JS          LAB_1000_052b
     CMP         word [0x011c],0x32    ;= 0100h
     JL          LAB_1000_052b
     SUB         word [0x011c],0x14    ;= 0100h
 LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
-    TEST        byte CS:[DAT_keys_571e + 53],0x80
+    TEST        byte [CSD_DAT_keys_571e + 53],0x80
     JS          LAB_1000_0544
     CMP         word [0x011e],0x1000  ;= 0400h
     JG          LAB_1000_0544
     ADD         word [0x011e],0x28    ;= 0400h
 LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
-    TEST        byte CS:[DAT_keys_571e + 55],0x80
+    TEST        byte [CSD_DAT_keys_571e + 55],0x80
     JS          LAB_1000_055d
     CMP         word [0x011e],0x100   ;= 0400h
     JL          LAB_1000_055d
     SUB         word [0x011e],0x28    ;= 0400h
 LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
-    MOV         AL,CS:[DAT_keys_571e]
+    MOV         AL,[CSD_DAT_keys_571e]
     CMP         AL,0x1
     JZ          LAB_1000_0654
     CMP         AL,0xf
@@ -450,7 +450,7 @@ LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
 LAB_1000_05ac:                ;XREF[11]:    1000:05bb(j),1000:05c3(j),1000:05cb(j),1000:05d3(j),
                               ;             1000:05db(j),1000:05e2(j),1000:05ea(j),1000:05f2(j),
                               ;             1000:0607(j),1000:061c(j),1000:0624(j)
-    MOV         byte CS:[DAT_keys_571e],0x0
+    MOV         byte [CSD_DAT_keys_571e],0x0
     mov ax, 0
     ret
 LAB_1000_05b5:                ;XREF[1]:     1000:0575(j)
@@ -854,10 +854,10 @@ FUN_1000_0a3b:
                               ;XREF[1]:     1000:56ce(c)
     PUSH        SI
     PUSH        DI
-    TEST        byte CS:[DAT_keys_571e + 2],0xc0
+    TEST        byte [CSD_DAT_keys_571e + 2],0xc0
     JNS         LAB_1000_0a54
 LAB_1000_0a47:                ;XREF[1]:     1000:0a69(j)
-    TEST        byte CS:[DAT_keys_571e + 3],0xc0
+    TEST        byte [CSD_DAT_keys_571e + 3],0xc0
     JNS         LAB_1000_0a6b
 LAB_1000_0a51:                ;XREF[1]:     1000:0a80(j)
     POP         DI
@@ -865,7 +865,7 @@ LAB_1000_0a51:                ;XREF[1]:     1000:0a80(j)
     RET
 LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     PUSHF
-    AND         byte CS:[DAT_keys_571e + 2],0x3f
+    AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -874,7 +874,7 @@ LAB_1000_0a54:                ;XREF[1]:     1000:0a43(j)
     JMP         LAB_1000_0a47
 LAB_1000_0a6b:                ;XREF[1]:     1000:0a4d(j)
     PUSHF
-    AND         byte CS:[DAT_keys_571e + 3],0x3f
+    AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
@@ -1130,9 +1130,9 @@ LAB_1000_0d29:                ;XREF[1]:     1000:0cd7(j)
 FUN_1000_0d2a:
                               ;XREF[1]:     1000:56b4(c)
     MOVZX       BX,byte [DI]
-    MOV         AL,byte CS:[BX + DAT_keys_571e]
+    MOV         AL,byte [BX + CSD_DAT_keys_571e]
     MOVZX       BX,byte [DI + 0x1]
-    MOV         AH,byte CS:[BX + DAT_keys_571e]
+    MOV         AH,byte [BX + CSD_DAT_keys_571e]
     MOV         BX,word [SI + 0xc]
     MOV         CX,0x32
     TEST        AL,0x80
@@ -1168,9 +1168,9 @@ LAB_1000_0d8d:                ;XREF[1]:     1000:0d87(j)
 LAB_1000_0d8f:                ;XREF[2]:     1000:0d7a(j),1000:0d83(j)
     MOV         word [SI + 0xc],BX
     MOVZX       BX,byte [DI + 0x2]
-    MOV         AL,byte CS:[BX + DAT_keys_571e]
+    MOV         AL,byte [BX + CSD_DAT_keys_571e]
     MOVZX       BX,byte [DI + 0x3]
-    MOV         AH,byte CS:[BX + DAT_keys_571e]
+    MOV         AH,byte [BX + CSD_DAT_keys_571e]
     MOV         BX,word [SI + 0xa]
     MOV         ECX,dword [SI + 0x42]
     ADD         ECX,dword [SI + 0x46]
@@ -1215,7 +1215,7 @@ LAB_1000_0e0e:                ;XREF[2]:     1000:0df9(j),1000:0e02(j)
     MOV         word [SI + 0xa],BX
     XOR         AX,AX
     MOVZX       BX,byte [DI + 0x4]
-    TEST        byte CS:[BX + DAT_keys_571e],0x80
+    TEST        byte [BX + CSD_DAT_keys_571e],0x80
     JNZ         LAB_1000_0e24
     OR          AX,0x1
 LAB_1000_0e24:                ;XREF[1]:     1000:0e1d(j)
@@ -1247,12 +1247,10 @@ FUN_1000_0e28:
     SHR         BX,0x1
     ADD         AX,BX
     MOV         word [SI + 0x14],AX
-    MOV         word CS:[WORD_1000_0e67],0x0
+    MOV         word [CSD_WORD_1000_0e67],0x0
     RET
-WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),
-                              ;             1000:0ec7(RW),1000:0ee3(R),1000:0f09(RW),1000:0f25(R),
-                              ;             1000:0f4b(RW)
-    dw          0h
+
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -1271,61 +1269,61 @@ FUN_1000_0e69:
     XOR         ECX,ECX
     RET
 LAB_1000_0e8f:                ;XREF[1]:     1000:0e6c(j)
-    TEST        word CS:[WORD_1000_0e67],0x1
+    TEST        word [CSD_WORD_1000_0e67],0x1
     JNZ         LAB_1000_0ea3
     CALL        FUN_1000_1136
-    OR          word CS:[WORD_1000_0e67],0x1
+    OR          word [CSD_WORD_1000_0e67],0x1
 LAB_1000_0ea3:                ;XREF[1]:     1000:0e96(j)
-    MOV         EAX,CS:[DWORD_1000_12a7]
-    MOV         EBX,dword CS:[DWORD_1000_12ab]
-    MOV         ECX,dword CS:[DWORD_1000_12af]
+    MOV         EAX,[CSD_DWORD_1000_12a7]
+    MOV         EBX,dword [CSD_DWORD_1000_12ab]
+    MOV         ECX,dword [CSD_DWORD_1000_12af]
     MOV         EDX,dword [SI + 0x42]
     RET
 LAB_1000_0eb9:                ;XREF[1]:     1000:0e73(j)
-    TEST        word CS:[WORD_1000_0e67],0x1
+    TEST        word [CSD_WORD_1000_0e67],0x1
     JNZ         LAB_1000_0ecd
     CALL        FUN_1000_1136
-    OR          word CS:[WORD_1000_0e67],0x1
+    OR          word [CSD_WORD_1000_0e67],0x1
 LAB_1000_0ecd:                ;XREF[1]:     1000:0ec0(j)
-    MOV         EAX,CS:[DWORD_1000_12a7]
-    MOV         EBX,dword CS:[DWORD_1000_12ab]
-    MOV         ECX,dword CS:[DWORD_1000_12af]
+    MOV         EAX,[CSD_DWORD_1000_12a7]
+    MOV         EBX,dword [CSD_DWORD_1000_12ab]
+    MOV         ECX,dword [CSD_DWORD_1000_12af]
     MOV         EDX,dword [SI + 0x46]
     RET
 LAB_1000_0ee3:                ;XREF[1]:     1000:0e7a(j)
-    TEST        word CS:[WORD_1000_0e67],0x2
+    TEST        word [CSD_WORD_1000_0e67],0x2
     JNZ         LAB_1000_0f0f
     PUSH        SI
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
-    MOV         CS:[DWORD_1000_12bf],EAX
-    MOV         dword CS:[DWORD_1000_12c3],EBX
-    MOV         dword CS:[DWORD_1000_12c7],ECX
+    MOV         [CSD_DWORD_1000_12bf],EAX
+    MOV         dword [CSD_DWORD_1000_12c3],EBX
+    MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
-    OR          word CS:[WORD_1000_0e67],0x2
+    OR          word [CSD_WORD_1000_0e67],0x2
 LAB_1000_0f0f:                ;XREF[1]:     1000:0eea(j)
-    MOV         EAX,CS:[DWORD_1000_12bf]
-    MOV         EBX,dword CS:[DWORD_1000_12c3]
-    MOV         ECX,dword CS:[DWORD_1000_12c7]
+    MOV         EAX,[CSD_DWORD_1000_12bf]
+    MOV         EBX,dword [CSD_DWORD_1000_12c3]
+    MOV         ECX,dword [CSD_DWORD_1000_12c7]
     MOV         EDX,dword [SI + 0x4a]
     RET
 LAB_1000_0f25:                ;XREF[1]:     1000:0e81(j)
-    TEST        word CS:[WORD_1000_0e67],0x2
+    TEST        word [CSD_WORD_1000_0e67],0x2
     JNZ         LAB_1000_0f51
     PUSH        SI
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
-    MOV         CS:[DWORD_1000_12bf],EAX
-    MOV         dword CS:[DWORD_1000_12c3],EBX
-    MOV         dword CS:[DWORD_1000_12c7],ECX
+    MOV         [CSD_DWORD_1000_12bf],EAX
+    MOV         dword [CSD_DWORD_1000_12c3],EBX
+    MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
-    OR          word CS:[WORD_1000_0e67],0x2
+    OR          word [CSD_WORD_1000_0e67],0x2
 LAB_1000_0f51:                ;XREF[1]:     1000:0f2c(j)
-    MOV         EAX,CS:[DWORD_1000_12bf]
-    MOV         EBX,dword CS:[DWORD_1000_12c3]
-    MOV         ECX,dword CS:[DWORD_1000_12c7]
+    MOV         EAX,[CSD_DWORD_1000_12bf]
+    MOV         EBX,dword [CSD_DWORD_1000_12c3]
+    MOV         ECX,dword [CSD_DWORD_1000_12c7]
     MOV         EDX,dword [SI + 0x4e]
     RET
 ;************************************************************************************************
@@ -1498,45 +1496,45 @@ FUN_1000_1136:
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         CS:[DWORD_1000_12b3],EAX
-    MOV         dword CS:[DWORD_1000_12b7],EBX
-    MOV         dword CS:[DWORD_1000_12bb],ECX
+    MOV         [CSD_DWORD_1000_12b3],EAX
+    MOV         dword [CSD_DWORD_1000_12b7],EBX
+    MOV         dword [CSD_DWORD_1000_12bb],ECX
     CALL        FUN_1000_10b6
-    MOV         CS:[DWORD_1000_12bf],EAX
-    MOV         dword CS:[DWORD_1000_12c3],EBX
-    MOV         dword CS:[DWORD_1000_12c7],ECX
+    MOV         [CSD_DWORD_1000_12bf],EAX
+    MOV         dword [CSD_DWORD_1000_12c3],EBX
+    MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         CS:[DWORD_1000_129f],EAX
+    MOV         [CSD_DWORD_1000_129f],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         CS:[DWORD_1000_12a3],EAX                ;= 7FFF0000h
-    MOV         EAX,CS:[DWORD_1000_12bf]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         [CSD_DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         EAX,[CSD_DWORD_1000_12bf]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DWORD_1000_12b3]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         EAX,[CSD_DWORD_1000_12b3]
+    IMUL        dword [CSD_DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DWORD_1000_12a7],EBX
-    MOV         EAX,CS:[DWORD_1000_12c3]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         dword [CSD_DWORD_1000_12a7],EBX
+    MOV         EAX,[CSD_DWORD_1000_12c3]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DWORD_1000_12b7]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         EAX,[CSD_DWORD_1000_12b7]
+    IMUL        dword [CSD_DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DWORD_1000_12ab],EBX
-    MOV         EAX,CS:[DWORD_1000_12c7]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         dword [CSD_DWORD_1000_12ab],EBX
+    MOV         EAX,[CSD_DWORD_1000_12c7]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,CS:[DWORD_1000_12bb]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         EAX,[CSD_DWORD_1000_12bb]
+    IMUL        dword [CSD_DWORD_1000_129f]
     SUB         EBX,EDX
     SHL         EBX,0x1
-    MOV         dword CS:[DWORD_1000_12af],EBX
+    MOV         dword [CSD_DWORD_1000_12af],EBX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -1547,72 +1545,46 @@ FUN_1000_11f0:
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         CS:[DWORD_1000_12b3],EAX
-    MOV         dword CS:[DWORD_1000_12b7],EBX
-    MOV         dword CS:[DWORD_1000_12bb],ECX
+    MOV         [CSD_DWORD_1000_12b3],EAX
+    MOV         dword [CSD_DWORD_1000_12b7],EBX
+    MOV         dword [CSD_DWORD_1000_12bb],ECX
     CALL        FUN_1000_10b6
-    MOV         CS:[DWORD_1000_12bf],EAX
-    MOV         dword CS:[DWORD_1000_12c3],EBX
-    MOV         dword CS:[DWORD_1000_12c7],ECX
+    MOV         [CSD_DWORD_1000_12bf],EAX
+    MOV         dword [CSD_DWORD_1000_12c3],EBX
+    MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         CS:[DWORD_1000_129f],EAX
+    MOV         [CSD_DWORD_1000_129f],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         CS:[DWORD_1000_12a3],EAX                ;= 7FFF0000h
-    MOV         EAX,CS:[DWORD_1000_12bf]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         [CSD_DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         EAX,[CSD_DWORD_1000_12bf]
+    IMUL        dword [CSD_DWORD_1000_129f]
     MOV         EBX,EDX
-    MOV         EAX,CS:[DWORD_1000_12b3]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[CSD_DWORD_1000_12b3]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
     PUSH        EBX
-    MOV         EAX,CS:[DWORD_1000_12c3]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         EAX,[CSD_DWORD_1000_12c3]
+    IMUL        dword [CSD_DWORD_1000_129f]
     MOV         EBX,EDX
-    MOV         EAX,CS:[DWORD_1000_12b7]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[CSD_DWORD_1000_12b7]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
-    MOV         EAX,CS:[DWORD_1000_12c7]
-    IMUL        dword CS:[DWORD_1000_129f]
+    MOV         EAX,[CSD_DWORD_1000_12c7]
+    IMUL        dword [CSD_DWORD_1000_129f]
     MOV         ECX,EDX
-    MOV         EAX,CS:[DWORD_1000_12bb]
-    IMUL        dword CS:[DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[CSD_DWORD_1000_12bb]
+    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
     ADD         ECX,EDX
     SHL         ECX,0x7
     POP         EAX
     RET
-DWORD_1000_129f:              ;XREF[8]:     1000:116f(W),1000:1193(R),1000:11b8(R),1000:11dd(R),
-                              ;             1000:1229(W),1000:123f(R),1000:1261(R),1000:1281(R)
-    dd         0h
-DWORD_1000_12a3:              ;XREF[8]:     1000:117b(W),1000:1185(R),1000:11aa(R),1000:11cf(R),
-                              ;             1000:1235(W),1000:124d(R),1000:126f(R),1000:128f(R)
-    dd         7FFF0000h
-DWORD_1000_12a7:              ;XREF[3]:     1000:0ea3(R),1000:0ecd(R),1000:119f(W)
-    dd         0h
-DWORD_1000_12ab:              ;XREF[3]:     1000:0ea8(R),1000:0ed2(R),1000:11c4(W)
-    dd         0h
-DWORD_1000_12af:              ;XREF[3]:     1000:0eae(R),1000:0ed8(R),1000:11e9(W)
-    dd         0h
-DWORD_1000_12b3:              ;XREF[4]:     1000:113f(W),1000:118e(R),1000:11f9(W),1000:1248(R)
-    dd         0h
-DWORD_1000_12b7:              ;XREF[4]:     1000:1144(W),1000:11b3(R),1000:11fe(W),1000:126a(R)
-    dd         0h
-DWORD_1000_12bb:              ;XREF[4]:     1000:114a(W),1000:11d8(R),1000:1204(W),1000:128a(R)
-    dd         0h
-DWORD_1000_12bf:              ;XREF[8]:     1000:0ef7(W),1000:0f0f(R),1000:0f39(W),1000:0f51(R),
-                              ;             1000:1153(W),1000:1180(R),1000:120d(W),1000:123a(R)
-    dd         0h
-DWORD_1000_12c3:              ;XREF[8]:     1000:0efc(W),1000:0f14(R),1000:0f3e(W),1000:0f56(R),
-                              ;             1000:1158(W),1000:11a5(R),1000:1212(W),1000:125c(R)
-    dd         0h
-DWORD_1000_12c7:              ;XREF[8]:     1000:0f02(W),1000:0f1a(R),1000:0f44(W),1000:0f5c(R),
-                              ;             1000:115e(W),1000:11ca(R),1000:1218(W),1000:127c(R)
-    dd         0h
+
 
  ; 1000:1322 [UNDEFINED BYTES REMOVED]
 
@@ -3804,68 +3776,76 @@ FUN_1000_2760:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
+;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use the stack
 FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
+    push bp
+    mov bp, sp
+    sub sp, 4 ;2 vars
+
     XCHG        AX,BX
     XCHG        AX,CX
     PUSH        DI
     MOV         DI,DX
-    PUSH        ES
-    MOV         ES,AX
+    MOV         [bp-2],AX
     MOV         AX,BX
     IMUL        word [DI]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0x6]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX, [bp-2]
     IMUL        word [DI + 0xc]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    PUSH        BP
+    ADD         [bp-4],DX
+    PUSH        [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x2]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0x8]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX,[bp-2]
     IMUL        word [DI + 0xe]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    PUSH        BP
+    ADD         [bp-4],DX
+    PUSH        [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x4]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0xa]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX,[bp-2]
     IMUL        word [DI + 0x10]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         CX,BP
+    ADD         [bp-4],DX
+    MOV         CX,[bp-4]
     POP         BX
     POP         AX
-    POP         ES
     POP         DI
+
+    mov sp, bp
+    pop bp
+
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8605,9 +8585,9 @@ LAB_1000_53ea:                ;XREF[1]:     1000:5399(j)
 fun_setup_interrupts:
                               ;XREF[1]:     1000:0229(c)
     PUSH        ES
-    MOV         AX,CS
+    MOV         AX,DS
     MOV         ES,AX
-    MOV         DI,DAT_keys_571e
+    MOV         DI,CSD_DAT_keys_571e
     MOV         AL,0xff
     CLD
     MOV         CL,0x80
@@ -8616,7 +8596,7 @@ fun_setup_interrupts:
     POP         ES
     CLI
     IN          AL,0x21
-    MOV         CS:[BYTE_1000_553e],AL
+    MOV         [CSD_BYTE_1000_553e],AL
     MOV         AL,0xff
     OUT         0x21,AL
     PUSH        DS
@@ -8627,8 +8607,7 @@ fun_setup_interrupts:
     MOV         ES,word FS:[0x22]
     MOV         BX,word FS:[0x20]
     POP         FS
-    MOV         word CS:[WORD_1000_5532],BX
-    MOV         word CS:[WORD_1000_5534],ES
+    ;ISR backup removed
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,iFUN_timer_5680
@@ -8640,8 +8619,7 @@ fun_setup_interrupts:
     POP         FS
     MOV         AX,0x3509
     call far DOS3Call
-    MOV         word CS:[WORD_1000_5536],BX
-    MOV         word CS:[WORD_1000_5538],ES
+    ;ISR backup removed
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,iFUN_keyboard_56df
@@ -8649,8 +8627,7 @@ fun_setup_interrupts:
     call far DOS3Call
     MOV         AX,0x3500
     call far DOS3Call
-    MOV         word CS:[WORD_1000_552e],BX
-    MOV         word CS:[WORD_1000_5530],ES
+    ;ISR backup removed
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX, dummy_ifunc
@@ -8658,8 +8635,7 @@ fun_setup_interrupts:
     call far DOS3Call
     MOV         AX,0x35f1
     call far DOS3Call
-    MOV         word CS:[WORD_1000_553a],BX
-    MOV         word CS:[WORD_1000_553c],ES
+    ;ISR backup removed
     MOV         AX,CS
     MOV         DS,AX
     MOV         DX,iFUN_int_f1_579e
@@ -8672,7 +8648,7 @@ fun_setup_interrupts:
     MOV         DX,0x12
     DIV         CX
     CALL        FUN_1000_551f
-    MOV         AL,CS:[BYTE_1000_553e]
+    MOV         AL,[CSD_BYTE_1000_553e]
     OUT         0x21,AL
     STI
     RET
@@ -8695,24 +8671,6 @@ FUN_1000_551f:
     MOV         AL,AH
     OUT         0x40,AL
     RET
-WORD_1000_552e:               ;XREF[1]:     1000:54a2(W)
-    dw          0h
-WORD_1000_5530:               ;XREF[1]:     1000:54a7(W)
-    dw          0h
-WORD_1000_5532:               ;XREF[1]:     1000:545f(W)
-    dw          0h
-WORD_1000_5534:               ;XREF[1]:     1000:5464(W)
-    dw          0h
-WORD_1000_5536:               ;XREF[1]:     1000:5487(W)
-    dw          0h
-WORD_1000_5538:               ;XREF[1]:     1000:548c(W)
-    dw          0h
-WORD_1000_553a:               ;XREF[1]:     1000:54bd(W)
-    dw          0h
-WORD_1000_553c:               ;XREF[1]:     1000:54c2(W)
-    dw          0h
-BYTE_1000_553e:               ;XREF[2]:     1000:5443(W),1000:54e4(R)
-    db          0h
 
  ; 1000:55ec [UNDEFINED BYTES REMOVED]
 
@@ -8793,19 +8751,24 @@ LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
 ;************************************************************************************************
 iFUN_keyboard_56df:
     CLI
+    push ds
     PUSH        AX
     PUSH        BX
+
+    mov ax, data
+    mov ds, ax
+
     IN          AL,0x60
     MOV         BL,AL
     AND         BX,0x7f
     AND         AL,0x80
     JNS         LAB_1000_56ff
-    MOV         byte CS:[BX + DAT_keys_571e],0xff
-    MOV         byte CS:[DAT_keys_571e],0x0
+    MOV         byte [BX + CSD_DAT_keys_571e],0xff
+    MOV         byte [CSD_DAT_keys_571e],0x0
     JMP         LAB_1000_570a
 LAB_1000_56ff:                ;XREF[1]:     1000:56eb(j)
-    AND         byte CS:[BX + DAT_keys_571e],0x7f
-    MOV         byte CS:[DAT_keys_571e],BL
+    AND         byte [BX + CSD_DAT_keys_571e],0x7f
+    MOV         byte [CSD_DAT_keys_571e],BL
 LAB_1000_570a:                ;XREF[1]:     1000:56fd(j)
     IN          AL,0x61
     MOV         AH,AL
@@ -8817,15 +8780,10 @@ LAB_1000_570a:                ;XREF[1]:     1000:56fd(j)
     OUT         0x20,AL
     POP         BX
     POP         AX
+    pop ds
     STI
     IRET
-DAT_keys_571e:                ;XREF[14,9]:  1000:04fa(R),1000:0513(R),1000:052b(R),1000:0544(R),
-                              ;             1000:055d(R),1000:05ac(W),1000:0a3d(R),1000:0a47(R),
-                              ;             1000:0a55(RW),1000:0a6c(RW),1000:543d(W),1000:543d(W),
-                              ;             1000:56f6(W),1000:5705(W),1000:04fa(R),1000:0513(R),
-                              ;             1000:052b(R),1000:0544(R),1000:0a3d(R),1000:0a47(R),
-                              ;             1000:0a55(RW),1000:0a6c(RW),1000:543d(W)
-    times 128 db 0xFF
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -8924,7 +8882,7 @@ FUN_1000_5831:
 LAB_1000_5856:                ;XREF[1]:     1000:5850(j)
     MOV         AH,0x43
     MOVZX       BX,CH
-    ADD         AH,byte CS:[BX + DAT_unk_592c]
+    ADD         AH,byte [BX + CSD_DAT_unk_592c]
     CALL        FUN_1000_58fc
     RET
 
@@ -8964,7 +8922,7 @@ FUN_dummy_1000_588b:
 FUN_1000_589b:
                               ;XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
     MOVZX       BX,AL
-    MOV         BL,byte CS:[BX + DAT_unk_592c]
+    MOV         BL,byte [BX + CSD_DAT_unk_592c]
     MOV         AH,0x20
     ADD         AH,BL
     LODSB ;       SI
@@ -9045,34 +9003,12 @@ LAB_1000_5915:                ;XREF[1]:     1000:5916(j)
 
  ; 1000:592b [UNDEFINED BYTES REMOVED]
 
-DAT_unk_592c:
-;    db[20]
-         db          0h
-         db          1h
-         db          2h
-         db          8h
-         db          9h
-         db          0xA
-         db          10h
-         db          11h
-         db          12h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
-         db          0h
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_5940:
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
-    MOV         byte CS:[BYTE_1000_59c1],CL         ;= Fh
+    MOV         byte [CSD_BYTE_1000_59c1],CL         ;= Fh
     MOV         CX,AX
     CLD
 LAB_1000_5948:                ;XREF[4]:     1000:5959(j),1000:596d(j),1000:5978(j),1000:59bf(j)
@@ -9093,7 +9029,7 @@ LAB_1000_5962:                ;XREF[1]:     1000:595d(j)
     CMP         AL,0x1b
     JNZ         LAB_1000_596f
     LODSB ;       SI
-    MOV         CS:[BYTE_1000_59c1],AL                  ;= Fh
+    MOV         [CSD_BYTE_1000_59c1],AL                  ;= Fh
     JMP         LAB_1000_5948
 LAB_1000_596f:                ;XREF[1]:     1000:5964(j)
     CMP         AL,0x20
@@ -9125,7 +9061,7 @@ LAB_1000_5999:                ;XREF[2]:     1000:59a4(j),1000:59b3(j)
 LAB_1000_59a6:                ;XREF[1]:     1000:599b(j)
     PUSH        AX
     PUSH        BX
-    MOV         CL,byte CS:[BYTE_1000_59c1]         ;= Fh
+    MOV         CL,byte [CSD_BYTE_1000_59c1]         ;= Fh
     CALL        FUN_1000_3f98
     POP         BX
     POP         AX
@@ -9142,8 +9078,6 @@ LAB_1000_59ba:                ;XREF[1]:     1000:5995(j)
     MOV         CX,AX
     INC         CX
     JMP         LAB_1000_5948
-BYTE_1000_59c1:               ;XREF[3]:     1000:5940(W),1000:5969(W),1000:59a8(R)
-    db          0xF
 
  ; 1000:5a5f [UNDEFINED BYTES REMOVED]
 
