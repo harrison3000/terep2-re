@@ -3820,68 +3820,76 @@ FUN_1000_2760:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
+;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use the stack
 FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
+    push bp
+    mov bp, sp
+    sub sp, 4 ;2 vars
+
     XCHG        AX,BX
     XCHG        AX,CX
     PUSH        DI
     MOV         DI,DX
-    PUSH        ES
-    MOV         ES,AX
+    MOV         [bp-2],AX
     MOV         AX,BX
     IMUL        word [DI]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0x6]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX, [bp-2]
     IMUL        word [DI + 0xc]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    PUSH        BP
+    ADD         [bp-4],DX
+    PUSH        [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x2]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0x8]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX,[bp-2]
     IMUL        word [DI + 0xe]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    PUSH        BP
+    ADD         [bp-4],DX
+    PUSH        [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x4]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         BP,DX
+    MOV         [bp-4],DX
     MOV         AX,CX
     IMUL        word [DI + 0xa]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         AX,ES
+    ADD         [bp-4],DX
+    MOV         AX,[bp-2]
     IMUL        word [DI + 0x10]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         BP,DX
-    MOV         CX,BP
+    ADD         [bp-4],DX
+    MOV         CX,[bp-4]
     POP         BX
     POP         AX
-    POP         ES
     POP         DI
+
+    mov sp, bp
+    pop bp
+
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
