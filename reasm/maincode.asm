@@ -8665,11 +8665,12 @@ LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
 ;************************************************************************************************
 iFUN_keyboard_56df:
 
-    mov ax, _DATA2
-    mov ds, ax
+    mov bx, _DATA2
+    mov ds, bx
 
+    MOV         BL, AL
     AND         BX,0x7f
-    AND         AL,0x01
+    AND         AL,0x80
     JNS         LAB_1000_56ff
     MOV         byte [BX + CSD_DAT_keys_571e],0xff
     MOV         byte [CSD_DAT_keys_571e],0x0

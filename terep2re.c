@@ -13,8 +13,8 @@ extern int far getMem16();
 
 extern int far physics();
 
-#pragma aux handlekey parm [ax bx];
-extern int far handlekey(int pnp, int scc);
+#pragma aux handlekey parm [ax] modify [bx];
+extern int far handlekey(int pnp);
 
 char szAppName[] = "Terep Win16";
 
@@ -59,11 +59,19 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
         
         case WM_KEYDOWN:
         case WM_KEYUP:
+        //SYSKEY necessary for F10
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
         {
             WORD keyFlags = HIWORD(lParam);
-            WORD scanCode = LOBYTE(keyFlags); 
-            BOOL isKeyReleased = (keyFlags & KF_UP) == KF_UP;
-            handlekey(isKeyReleased, scanCode);
+            WORD scanCode = keyFlags & 0x7f ;            
+            if(keyFlags & KF_UP){
+                //key released
+                scanCode += 0x80;
+            }
+
+            handlekey(scanCode);
+            
             return 0;
         }
 
