@@ -1024,7 +1024,7 @@ LAB_1000_0c28:                ;XREF[1]:     1000:0cd0(j)
 LAB_1000_0c2e:                ;XREF[1]:     1000:0bbb(j)
     RET
 LAB_1000_0c2f:                ;XREF[1]:     1000:0c7e(j)
-    STI
+
     RET
 LAB_1000_0c31:                ;XREF[1]:     1000:0c15(j)
     PUSH        AX
@@ -1049,7 +1049,7 @@ LAB_1000_0c43:                ;XREF[1]:     1000:0c3a(j)
     MOV         dword [DI + 0x3e67],0x2710
     JMP         LAB_1000_0c25
 LAB_1000_0c72:                ;XREF[1]:     1000:0bc4(j)
-    CLI
+
     MOV         SI,word [0x3e51]
     SUB         SI,0x1c
     MOV         word [0x3e51],SI
@@ -1071,7 +1071,7 @@ LAB_1000_0c72:                ;XREF[1]:     1000:0bc4(j)
     MOV         AX,word [SI + 0x3e6d]
     MOV         word [DI + 0x3e6d],AX
     SUB         SI,0x1c
-    STI
+
     JMP         LAB_1000_0c28
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3419,7 +3419,7 @@ LAB_1000_244e:                ;XREF[1]:     1000:2444(j)
 ;************************************************************************************************
 FUN_1000_2454:
                               ;XREF[1]:     1000:01a9(c)
-    CLI
+
     PUSH        AX
     PUSH        BX
     PUSH        ES
@@ -3469,12 +3469,12 @@ LAB_1000_24a8:                ;XREF[1]:     1000:24b6(j)
     ADD         SI,0x1c
     LOOP        LAB_1000_24a8
     MOV         AX,BP
-    STI
+
     RET
 LAB_1000_24bc:                ;XREF[1]:     1000:246f(j)
     POP         BX
     POP         AX
-    STI
+
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8532,44 +8532,6 @@ LAB_1000_53ea:                ;XREF[1]:     1000:5399(j)
 dummy_ifunc:
     iret
 
- ; 1000:551e [UNDEFINED BYTES REMOVED]
-
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_551f:
-                              ;XREF[1]:     1000:54e1(c)
-    MOV         BX,AX
-    MOV         AL,0x36
-    OUT         0x43,AL
-    MOV         AX,BX
-    OUT         0x40,AL
-    MOV         AL,AH
-    OUT         0x40,AL
-    RET
-
- ; 1000:55ec [UNDEFINED BYTES REMOVED]
-
-; ds          "!core"
-; ds          "\r\nDivide overflow at segment="
-
- ; 1000:5611 [UNDEFINED BYTES REMOVED]
-
-; ds          ", offset="
-
- ; 1000:561c [UNDEFINED BYTES REMOVED]
-
-; ds          ", flags="
-
- ; 1000:5626 [UNDEFINED BYTES REMOVED]
-
-; ds          ", registers="
-
- ; 1000:564e [UNDEFINED BYTES REMOVED]
-
-; ds          ", memory="
-
- ; 1000:567f [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8610,8 +8572,6 @@ LAB_1000_56ad:                ;XREF[1]:     1000:56c6(j)
     CALL        FUN_1000_0bb5
     CALL        FUN_1000_0a3b
 LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
-    MOV         AL,0x20
-    OUT         0x20,AL
     POP         GS
     POP         FS
     POP         ES
@@ -8710,7 +8670,6 @@ LAB_1000_57f5:                ;XREF[1]:     1000:57ff(j)
     OR          AL,0x20
     MOV         AH,0xb1
     CALL        FUN_1000_58fc
-    ;MOV         DX, FUN_1000_5831
     MOV         AX, FUN_dummy_1000_588b
     RET
 
@@ -8834,25 +8793,11 @@ FUN_1000_58fc:
                               ;             1000:58d8(c),1000:58e0(c),1000:58e8(c),1000:58f0(c),
                               ;             1000:58f8(c)
     PUSH        AX
-    XCHG        AH,AL
-    MOV         DX,0x388
-    OUT         DX,AL
-    IN          AL,DX
-    IN          AL,DX
-    IN          AL,DX
-    IN          AL,DX
-    IN          AL,DX
-    IN          AL,DX
-    INC         DX
-    MOV         AL,AH
-    OUT         DX,AL
-    PUSH        ECX
-    MOV         ECX,0x1c
-LAB_1000_5915:                ;XREF[1]:     1000:5916(j)
-    IN          AL,DX
-    LOOP        LAB_1000_5915
-    POP         ECX
-    DEC         DX
+    PUSH BX
+
+    ;TODO actually do something with AX
+
+    POP BX
     POP         AX
     RET
 
