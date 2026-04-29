@@ -190,6 +190,10 @@ cam_select:
     ret
 
 FUN_main_render:
+    ;needed now that it runs on paint message
+    MOV         FS, [0x1a47]
+    MOV         GS, [0x1a45]
+
     TEST        byte [0x007d],0xff
     JNZ         LAB_1000_032e
     MOV         word [0xdbc0],0x0

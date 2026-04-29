@@ -21,19 +21,6 @@ initgame_:
 
     CALL t_init
 
-    PUSH AX
-    
-    MOV AX, ES
-    MOV [my_es_save], ax
-    
-    MOV AX, FS
-    MOV [my_fs_save], ax
-
-    MOV AX, GS
-    MOV [my_gs_save], ax    
-
-    POP AX
-
     POP EBP
     POP DS
     ret
@@ -47,15 +34,6 @@ render_:
 
     MOV AX, _DATA2
     MOV DS, AX
-
-    MOV AX, [my_es_save]
-    MOV ES, AX
-
-    MOV AX, [my_fs_save]
-    MOV FS, AX
-
-    MOV AX, [my_gs_save]
-    MOV GS, AX
 
     CALL FUN_main_render
 
@@ -91,10 +69,5 @@ segment _DATA2 class=DATA align=16
     incbin "memdumps/data.bin"
 
     db "SEPARATOR", 0
-
-    ;the render function expects the registers to be the way the init left them.... oh well
-    my_es_save dw 0
-    my_fs_save dw 0
-    my_gs_save dw 0
 
     %include "reasm/cs_data.asm"
