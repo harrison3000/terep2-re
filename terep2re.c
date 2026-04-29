@@ -3,18 +3,18 @@
 #include <i86.h>
 
 #pragma aux initgame value [ax] modify [bx cx dx si di es];
-extern int initgame();
+extern int far initgame();
 
 #pragma aux render value [ax] modify [bx cx dx si di es];
-extern int render();
+extern int far render();
 
 #pragma aux getMem16 value [ax] parm [bx];
-extern int getMem16();
+extern int far getMem16();
 
-extern int physics();
+extern int far physics();
 
 #pragma aux handlekey parm [ax] modify [bx];
-extern int handlekey(int pnp);
+extern int far handlekey(int pnp);
 
 char szAppName[] = "Terep Win16";
 
