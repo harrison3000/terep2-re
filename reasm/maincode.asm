@@ -191,8 +191,8 @@ cam_select:
 
 FUN_main_render:
     ;needed now that it runs on paint message
-    MOV         FS, [0x1a47]
-    MOV         GS, [0x1a45]
+    MOV         FS, word [0x1a47]
+    MOV         GS, word [0x1a45]
 
     TEST        byte [0x007d],0xff
     JNZ         LAB_1000_032e
@@ -4281,7 +4281,7 @@ FUN_1000_2d61:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, [0xdb10]
+    MOV         ES, word [0xdb10]
     MOV         SI,BX
     CMP         word [0xdb12],0xf0f0
     JNC         LAB_1000_2db9
@@ -4872,7 +4872,7 @@ FUN_1000_31d1:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, [0xdb10]
+    MOV         ES, word [0xdb10]
 LAB_1000_31e9:                ;XREF[1]:     1000:324b(j)
     MOV         DI,BX
     SHL         DI,0x2
@@ -5594,7 +5594,7 @@ FUN_1000_3827:
     INC         DI
     SHL         SI,0x2
     PUSH        ES
-    MOV         ES, [0xdb10]
+    MOV         ES, word [0xdb10]
 LAB_1000_383f:                ;XREF[1]:     1000:38f2(j)
     PUSH        DI
     MOV         DI,SI
@@ -6441,7 +6441,7 @@ FUN_1000_3f98:
     SHR         BX,0x1
     SHR         BX,0x1
     ADD         BX,AX
-    MOV         ES, [0xdb10]
+    MOV         ES, word [0xdb10]
     MOV         byte ES:[BX],CL
     POP         ES
 LAB_1000_3fce:                ;XREF[4]:     1000:3f9c(j),1000:3fa4(j),1000:3fac(j),1000:3fb4(j)
@@ -8547,8 +8547,8 @@ iFUN_timer_5680:
     MOV         ES,AX
     CMP         byte [0x006e],0x1
     JNZ         LAB_1000_56d1
-    MOV         FS, [0x1a47]
-    MOV         GS, [0x1a45]
+    MOV         FS, word [0x1a47]
+    MOV         GS, word [0x1a45]
     MOV         DI,0x5bbc
     MOV         CX,word [0x5bba]      ;= 0001h
     MOV         BP,0x5ad9
