@@ -7981,8 +7981,12 @@ LAB_1000_4e08:                ;XREF[1]:     1000:4d9f(j)
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 ;MODIFICATIONS: use SSE to calculate the vector length (the math kind of vector, and yeah you can use SSE in 16bit code, shocking!)
+; began using stack for local var storage, stoped using EBP as a GPR and BX is now a base like god intended
 FUN_1000_4e0a:
                               ;XREF[1]:     1000:48d1(c)
+
+    prologo 2
+
     MOV         AX,SI
     ADD         AX,word [SI]
     ADD         AX,0x2
@@ -7992,7 +7996,7 @@ FUN_1000_4e0a:
     MOV         [0xe9e6],AX
     ADD         SI,0x2
 LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
-    MOV         BP,SI
+    MOV         BX,SI
     MOV         DI,word [SI + 0x2]
     MOV         AX,DI
     SHL         DI,0x3
@@ -8045,111 +8049,122 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     cvtss2si eax, xmm3
 
     SAR         EAX,0xa
-    MOVSX       EBX,word DS:[BP + 0x4]
-    TEST        BX,BX
+
+    push ecx
+    MOVSX       ECX,word [BX + 0x4]
+    mov     dword [local_b], ECX
+    pop ecx
+
+    TEST        dword [local_b], 0x80000000
     JS          LAB_1000_5000
-    MOVZX       ECX,word DS:[BP + 0x8]
+    MOVZX       ECX,word [BX + 0x8]
     MOV         word [0xea04],CX
     AND         CX,0xff
     JZ          LAB_1000_4f72
     JS          LAB_1000_4f64
     CMP         CX,0x1
     JG          LAB_1000_4f8e
-    MOV         ECX,EBX
+    MOV         ECX,dword [local_b]
     SUB         ECX,EAX
     JZ          LAB_1000_4f64
     CMP         CX,word [0xe9e2]
     JG          LAB_1000_4fe3
     CMP         CX,word [0xe9e4]
     JL          LAB_1000_4ff7
-    MOV         EBX,EAX
+    MOV         dword [local_b],EAX
 LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(j)
     SHL         ECX,0x6
-    SHL         EBX,0x6
-    PUSH        EBP
-    MOV         EBP,ECX
+    SHL         dword [local_b],0x6
+    
+    MOV         dword [local_a],ECX
     MOV         CL,byte [0xea05]
     INC         CL
     MOV         EAX,[0xe9f8]
-    IMUL        EBP
-    IDIV        EBX
+    IMUL        dword [local_a]
+    IDIV        dword [local_b]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
     ADD         dword [SI + 0xc],EAX
     SUB         dword [DI + 0xc],EDX
     MOV         EAX,[0xe9fc]
-    IMUL        EBP
-    IDIV        EBX
+    IMUL        dword [local_a]
+    IDIV        dword [local_b]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
     ADD         dword [SI + 0x10],EAX
     SUB         dword [DI + 0x10],EDX
     MOV         EAX,[0xea00]
-    IMUL        EBP
-    IDIV        EBX
+    IMUL        dword [local_a]
+    IDIV        dword [local_b]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
     ADD         dword [SI + 0x14],EAX
     SUB         dword [DI + 0x14],EDX
-    POP         EBP
+    
 LAB_1000_4f64:                ;XREF[5]:     1000:4ed6(j),1000:4ee7(j),1000:4f8c(j),1000:4fd7(j),
                               ;             1000:4ffd(j)
-    MOV         SI,BP
+    MOV         SI,BX
 LAB_1000_4f66:                ;XREF[1]:     1000:5008(j)
     ADD         SI,0xe
     DEC         word [0xe9e6]
     JNZ         LAB_1000_4e1f
+    epilogo
     RET
 LAB_1000_4f72:                ;XREF[1]:     1000:4ed2(j)
-    MOVZX       EDX,word DS:[BP + 0xc]
+    MOVZX       EDX,word [BX + 0xc]
     CMP         EAX,EDX
     JG          LAB_1000_4fce
-    MOVZX       EDX,word DS:[BP + 0xa]
+    MOVZX       EDX,word [BX + 0xa]
     CMP         EAX,EDX
     JL          LAB_1000_4fce
     JMP         LAB_1000_4f64
 LAB_1000_4f8e:                ;XREF[1]:     1000:4edd(j)
-    MOVZX       EDX,word DS:[BP + 0xc]
+    MOVZX       EDX,word [BX + 0xc]
     CMP         EAX,EDX
     JG          LAB_1000_4fce
-    MOVZX       EDX,word DS:[BP + 0xa]
+    MOVZX       EDX,word [BX + 0xa]
     CMP         EAX,EDX
     JL          LAB_1000_4fce
-    XCHG        EAX,EBX
-    SUB         EAX,EBX
+    XCHG        EAX,dword [local_b]
+    SUB         EAX,dword [local_b]
     CDQ
     SHR         ECX,0x1
     IDIV        ECX
     MOV         ECX,EAX
-    MOVZX       EAX,word DS:[BP + 0x6]
-    SUB         EAX,EBX
+    MOVZX       EAX,word [BX + 0x6]
+    SUB         EAX,dword [local_b]
     SAR         EAX,0x1
     ADD         ECX,EAX
-    MOV         word DS:[BP + 0x6],BX
+
+    ;mem to mem
+    push word [local_b]
+    pop  word [BX + 0x6]
+
     JMP         LAB_1000_4efe
 LAB_1000_4fce:                ;XREF[4]:     1000:4f7b(j),1000:4f88(j),1000:4f97(j),1000:4fa4(j)
     MOV         ECX,EDX
     SUB         ECX,EAX
     SAR         ECX,0x1
     JZ          LAB_1000_4f64
-    MOV         EBX,EAX
-    MOV         word DS:[BP + 0x6],BX
+    MOV         dword [local_b],EAX
+    push  word [local_b]
+    pop   word [BX + 0x6]
     JMP         LAB_1000_4efe
 LAB_1000_4fe3:                ;XREF[1]:     1000:4eef(j)
     SAR         ECX,0x4
-    XCHG        EAX,EBX
+    XCHG        EAX,dword [local_b]
     SUB         EAX,ECX
-    MOV         word DS:[BP + 0x4],AX
-    MOV         word DS:[BP + 0x6],AX
+    MOV         word [BX + 0x4],AX
+    MOV         word [BX + 0x6],AX
     JMP         LAB_1000_4efe
 LAB_1000_4ff7:                ;XREF[1]:     1000:4ef7(j)
-    OR          word DS:[BP + 0x8],0x80
+    OR          word [BX + 0x8],0x80
     JMP         LAB_1000_4f64
 LAB_1000_5000:                ;XREF[1]:     1000:4ec0(j)
-    MOV         SI,BP
+    MOV         SI,BX
     MOV         word [SI + 0x4],AX
     MOV         word [SI + 0x6],AX
     JMP         LAB_1000_4f66
