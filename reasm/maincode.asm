@@ -3560,35 +3560,37 @@ FUN_1000_255c:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_256b:
-    ;FIXME use local vars
+    prologo 3
                               ;XREF[2]:     1000:261a(c),1000:265b(c)
     MOV         AX,[0x5ac1]
     IMUL        word [0x5ac9]
-    MOV         [0x5ad7],AX
+    MOV         [local_a],AX
     MOV         AX,[0x5ac3]
     IMUL        word [0x5ac7]
-    SUB         word [0x5ad7],AX
+    SUB         word [local_a],AX
     MOV         AX,[0x5acd]
     IMUL        word [0x5ac9]
-    MOV         [0x5ad3],AX
+    MOV         [local_b],AX
     MOV         AX,[0x5acf]
     IMUL        word [0x5ac7]
-    SUB         word [0x5ad3],AX
+    SUB         word [local_b],AX
     MOV         AX,[0x5acf]
     IMUL        word [0x5ac1]
-    MOV         [0x5ad5],AX
+    MOV         [local_c],AX
     MOV         AX,[0x5acd]
     IMUL        word [0x5ac3]
-    SUB         word [0x5ad5],AX
+    SUB         word [local_c],AX
     MOV         AX,[0x5ac5]
-    IMUL        word [0x5ad3]
+    IMUL        word [local_b]
     MOV         BX,AX
     MOV         CX,DX
     MOV         AX,[0x5acb]
-    IMUL        word [0x5ad5]
+    IMUL        word [local_c]
     ADD         AX,BX
     ADC         DX,CX
-    IDIV        word [0x5ad7]
+    IDIV        word [local_a]
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
