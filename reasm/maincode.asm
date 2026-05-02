@@ -7983,6 +7983,7 @@ LAB_1000_4e08:                ;XREF[1]:     1000:4d9f(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;MODIFICATIONS: use SSE to calculate the vector length (the math kind of vector, and yeah you can use SSE in 16bit code, shocking!)
 FUN_1000_4e0a:
                               ;XREF[1]:     1000:48d1(c)
     MOV         AX,SI
@@ -8013,33 +8014,39 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     SUB         ECX,dword [DI + 0xc]
     MOV         [0xe9f8],EAX
     ADD         EAX,ECX
-    MOV         [0xe9ec],EAX
+    xorps    xmm0, xmm0
+    cvtsi2ss xmm0, eax
+
     MOV         EAX,dword [SI + 0x4]
     SUB         EAX,dword [DI + 0x4]
     MOV         ECX,dword [SI + 0x10]
     SUB         ECX,dword [DI + 0x10]
     MOV         [0xe9fc],EAX
     ADD         EAX,ECX
-    MOV         [0xe9f0],EAX
+    xorps    xmm1, xmm1
+    cvtsi2ss xmm1, eax
+
     MOV         EAX,dword [SI + 0x8]
     SUB         EAX,dword [DI + 0x8]
     MOV         ECX,dword [SI + 0x14]
     SUB         ECX,dword [DI + 0x14]
     MOV         [0xea00],EAX
     ADD         EAX,ECX
-    MOV         [0xe9f4],EAX
-    FINIT
-    FILD        dword [0xe9ec]
-    FMUL        ST0
-    FILD        dword [0xe9f0]
-    FMUL        ST0
-    FILD        dword [0xe9f4]
-    FMUL        ST0
-    FADDP
-    FADDP
-    FSQRT
-    FISTP       dword [0xe9e8]
-    MOV         EAX,[0xe9e8]
+    xorps    xmm2, xmm2
+    cvtsi2ss xmm2, eax
+
+    mulss xmm0, xmm0
+    mulss xmm1, xmm1
+    mulss xmm2, xmm2
+
+    addss xmm1, xmm0
+    addss xmm2, xmm1
+
+    xorps xmm3, xmm3
+    sqrtss xmm3, xmm2
+
+    cvtss2si eax, xmm3
+
     SAR         EAX,0xa
     MOVSX       EBX,word DS:[BP + 0x4]
     TEST        BX,BX
