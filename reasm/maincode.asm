@@ -8446,33 +8446,37 @@ LAB_1000_52ce:                ;XREF[1]:     1000:527b(j)
 ;************************************************************************************************
 FUN_1000_52d4:
                               ;XREF[2]:     1000:5393(c),1000:53e4(c)
+    prologo 3
+
     MOV         AX,[0xea0c]
     IMUL        word [0xea14]
-    MOV         [0xea22],AX
+    MOV         [local_a],AX
     MOV         AX,[0xea0e]
     IMUL        word [0xea12]
-    SUB         word [0xea22],AX
+    SUB         word [local_a],AX
     MOV         AX,[0xea18]
     IMUL        word [0xea14]
-    MOV         [0xea1e],AX
+    MOV         [local_b],AX
     MOV         AX,[0xea1a]
     IMUL        word [0xea12]
-    SUB         word [0xea1e],AX
+    SUB         word [local_b],AX
     MOV         AX,[0xea1a]
     IMUL        word [0xea0c]
-    MOV         [0xea20],AX
+    MOV         [local_c],AX
     MOV         AX,[0xea18]
     IMUL        word [0xea0e]
-    SUB         word [0xea20],AX
+    SUB         word [local_c],AX
     MOV         AX,[0xea10]
-    IMUL        word [0xea1e]
+    IMUL        word [local_b]
     MOV         BX,AX
     MOV         CX,DX
     MOV         AX,[0xea16]
-    IMUL        word [0xea20]
+    IMUL        word [local_c]
     ADD         AX,BX
     ADC         DX,CX
-    IDIV        word [0xea22]
+    IDIV        word [local_a]
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
