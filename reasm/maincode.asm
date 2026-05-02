@@ -7985,7 +7985,7 @@ LAB_1000_4e08:                ;XREF[1]:     1000:4d9f(j)
 FUN_1000_4e0a:
                               ;XREF[1]:     1000:48d1(c)
 
-    prologo 7
+    prologo 8
 
     MOV         AX,SI
     ADD         AX,word [SI]
@@ -8050,15 +8050,13 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
 
     SAR         EAX,0xa
 
-    push ecx
     MOVSX       ECX,word [BX + 0x4]
-    mov     dword [local_b], ECX
-    pop ecx
+    mov         dword [local_b], ECX
 
     TEST        dword [local_b], 0x80000000
     JS          LAB_1000_5000
     MOVZX       ECX,word [BX + 0x8]
-    MOV         word [0xea04],CX
+    MOV         word [local_h],CX
     AND         CX,0xff
     JZ          LAB_1000_4f72
     JS          LAB_1000_4f64
@@ -8067,9 +8065,9 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     MOV         ECX,dword [local_b]
     SUB         ECX,EAX
     JZ          LAB_1000_4f64
-    CMP         CX,word [0xe9e2]
+    CMP         CX,word [0xe9e2] ;not local, set up on init function
     JG          LAB_1000_4fe3
-    CMP         CX,word [0xe9e4]
+    CMP         CX,word [0xe9e4] ;not local, set up on init function
     JL          LAB_1000_4ff7
     MOV         dword [local_b],EAX
 LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(j)
@@ -8077,7 +8075,7 @@ LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(
     SHL         dword [local_b],0x6
     
     MOV         dword [local_a],ECX
-    MOV         CL,byte [0xea05]
+    MOV         CL,byte [local_h + 1]
     INC         CL
     MOV         EAX, dword [local_c]
     IMUL        dword [local_a]
