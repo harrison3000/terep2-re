@@ -1,15 +1,5 @@
 
- ; 1000:001d [UNDEFINED BYTES REMOVED]
-
-LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(j),1000:0177(j),
-    MOV ax, 1
-    ret
-
- ; 1000:0045 [UNDEFINED BYTES REMOVED]
-
- ; 1000:00db [UNDEFINED BYTES REMOVED]
-
-t_init:
+f_init:
     MOV         word [0x5bba], -2     ;just to be sure
 
     MOV         word [0xec50],0x78    ;= 00C8h
@@ -145,15 +135,11 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     MOV ax, 0 
     ret
 
-LAB_ultraloop:
-    CALL FUN_main_render
-    CMP ax, 1
-    je LAB_1000_001e
+LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(j),1000:0177(j),
+    MOV ax, 1
+    ret
 
-    ;a hlt here speeds things up in dosbox, but who cares?
-    jmp LAB_ultraloop
-
-cam_select:
+f_cam_select:
     SHL BX, 1
     AND BX, 15
     JMP         [CS:BX + .JMP_TABLE_CAMERAS]
@@ -207,7 +193,7 @@ FUN_main_render:
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007e]      ;= 03h
     MOV         DI,0x80
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -270,7 +256,7 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007e]      ;= 03h
     MOV         DI,0x80
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -331,7 +317,7 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x007f]      ;= 03h
     MOV         DI,0x92
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0x00c6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -8519,14 +8505,11 @@ LAB_1000_53ea:                ;XREF[1]:     1000:5399(j)
     RET
 
 
-dummy_ifunc:
-    iret
-
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-iFUN_timer_5680:
+FUN_timer_5680:
     PUSHAD
     PUSH        DS
     PUSH        ES
@@ -8571,7 +8554,7 @@ LAB_1000_56d1:                ;XREF[1]:     1000:5693(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-iFUN_keyboard_56df:
+FUN_keyboard_56df:
 
     mov bx, _DATA2
     mov ds, bx
@@ -8589,39 +8572,6 @@ LAB_1000_56ff:                ;XREF[1]:     1000:56eb(j)
     MOV         byte [CSD_DAT_keys_571e],BL
     ret
 
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-iFUN_int_f1_579e:
-    CMP         AL,0x0
-    JZ          LAB_1000_57bd
-    CMP         AL,0x1
-    JZ          LAB_1000_57c1
-    CMP         AL,0x2
-    JZ          LAB_1000_57c5
-    CMP         AL,0x10
-    JZ          LAB_1000_57cb
-    CMP         AL,0x11
-    JZ          LAB_1000_57d1
-    IRET
-LAB_1000_57bd:                ;XREF[1]:     1000:57a0(j)
-    CALL        FUN_1000_2aad
-    IRET
-LAB_1000_57c1:                ;XREF[1]:     1000:57a6(j)
-    CALL        FUN_1000_2ad8
-    IRET
-LAB_1000_57c5:                ;XREF[1]:     1000:57ac(j)
-    MOV         AX,CX
-    CALL        FUN_1000_2b08
-    IRET
-LAB_1000_57cb:                ;XREF[1]:     1000:57b2(j)
-    MOV         AX,DX
-    CALL        FUN_1000_271d
-    IRET
-LAB_1000_57d1:                ;XREF[1]:     1000:57b8(j)
-    MOV         EAX,EDX
-    CALL        FUN_1000_2726
-    IRET
 
  ; 1000:57df [UNDEFINED BYTES REMOVED]
 
