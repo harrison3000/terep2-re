@@ -8017,6 +8017,7 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     ADD         EAX,ECX
     xorps    xmm0, xmm0
     cvtsi2ss xmm0, eax
+    mulss    xmm0, xmm0
 
     MOV         EAX,dword [SI + 0x4]
     SUB         EAX,dword [DI + 0x4]
@@ -8026,6 +8027,7 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     ADD         EAX,ECX
     xorps    xmm1, xmm1
     cvtsi2ss xmm1, eax
+    mulss    xmm1, xmm1
 
     MOV         EAX,dword [SI + 0x8]
     SUB         EAX,dword [DI + 0x8]
@@ -8035,15 +8037,12 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     ADD         EAX,ECX
     xorps    xmm2, xmm2
     cvtsi2ss xmm2, eax
-
-    mulss xmm0, xmm0
-    mulss xmm1, xmm1
-    mulss xmm2, xmm2
+    mulss    xmm2, xmm2
 
     addss xmm1, xmm0
     addss xmm2, xmm1
 
-    xorps xmm3, xmm3
+    xorps  xmm3, xmm3
     sqrtss xmm3, xmm2
 
     cvtss2si eax, xmm3
@@ -8052,7 +8051,6 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
 
     MOVSX       ECX,word [BX + 0x4]
     mov         dword [local_b], ECX
-
     TEST        dword [local_b], 0x80000000
     JS          LAB_1000_5000
     MOVZX       ECX,word [BX + 0x8]
