@@ -3783,69 +3783,66 @@ FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
-    push bp
-    mov bp, sp
-    sub sp, 4 ;2 vars
+    prologo 2
 
     XCHG        AX,BX
     XCHG        AX,CX
     PUSH        DI
     MOV         DI,DX
-    MOV         [bp-2],AX
+    MOV         [local_a],AX
     MOV         AX,BX
     IMUL        word [DI]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [local_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0x6]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX, [bp-2]
+    ADD         [local_b],DX
+    MOV         AX, [local_a]
     IMUL        word [DI + 0xc]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    PUSH        [bp-4]
+    ADD         [local_b],DX
+    PUSH        [local_b]
     MOV         AX,BX
     IMUL        word [DI + 0x2]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [local_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0x8]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX,[bp-2]
+    ADD         [local_b],DX
+    MOV         AX,[local_a]
     IMUL        word [DI + 0xe]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    PUSH        [bp-4]
+    ADD         [local_b],DX
+    PUSH        [local_b]
     MOV         AX,BX
     IMUL        word [DI + 0x4]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [local_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0xa]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX,[bp-2]
+    ADD         [local_b],DX
+    MOV         AX,[local_a]
     IMUL        word [DI + 0x10]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         CX,[bp-4]
+    ADD         [local_b],DX
+    MOV         CX,[local_b]
     POP         BX
     POP         AX
     POP         DI
 
-    mov sp, bp
-    pop bp
+    epilogo
 
     RET
 ;************************************************************************************************

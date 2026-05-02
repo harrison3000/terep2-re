@@ -8,6 +8,8 @@ global render_
 global physics_
 global handlekey_
 
+%include "reasm/macros.asm"
+
 segment _CODE2 class=CODE align=16
 
 
