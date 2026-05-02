@@ -3560,6 +3560,7 @@ FUN_1000_255c:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_256b:
+    ;FIXME use local vars
                               ;XREF[2]:     1000:261a(c),1000:265b(c)
     MOV         AX,[0x5ac1]
     IMUL        word [0x5ac9]
@@ -4253,10 +4254,8 @@ LAB_1000_2c9a:                ;XREF[1]:     1000:2c77(j)
     POP         AX
     SHL         EAX,0x10
 LAB_1000_2cb6:                ;XREF[1]:     1000:2cc6(j)
-    ROR         EAX,0x10
-    MOV         word [BX],AX
+    movup       word [BX],EAX
     ADD         BX,0x4
-    ROL         EAX,0x10
     ADD         EAX,EDX
     LOOP        LAB_1000_2cb6
     ROR         EAX,0x10
@@ -4999,12 +4998,8 @@ LAB_1000_32ff:                ;XREF[1]:     1000:32ab(j)
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     SUB         CX,word [0xdbc0]
     JZ          LAB_1000_3347
     SUB         AX,word [0xdbc0]
@@ -5097,12 +5092,8 @@ LAB_1000_33e5:                ;XREF[1]:     1000:3498(j)
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     SUB         AX,word [0xdbc2]
     SUB         CX,word [0xdbc2]
     PUSH        AX
@@ -5259,12 +5250,8 @@ LAB_1000_3555:                ;XREF[1]:     1000:34fe(j)
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
@@ -5358,12 +5345,8 @@ LAB_1000_363b:                ;XREF[1]:     1000:36f4(j)
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         AX,word [0xdbbe]
@@ -5582,6 +5565,7 @@ LAB_1000_3824:                ;XREF[1]:     1000:37be(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
 FUN_1000_3827:
                               ;XREF[1]:     1000:3795(c)
     MOV         SI,word [0xdbc4]
@@ -5676,6 +5660,7 @@ LAB_1000_38f8:                ;XREF[1]:     1000:38cf(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to also be related to rendering textured polygons
 FUN_1000_390a:
                               ;XREF[1]:     1000:3706(c)
     PUSH        SI
@@ -5785,12 +5770,8 @@ LAB_1000_39fd:                ;XREF[1]:     1000:3986(j)
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     SUB         CX,word [0xdbc0]
     JZ          LAB_1000_3a64
     SUB         AX,word [0xdbc0]
@@ -5913,12 +5894,8 @@ LAB_1000_3b2f:                ;XREF[1]:     1000:3c32(j)
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     SUB         AX,word [0xdbc2]
     SUB         CX,word [0xdbc2]
     PUSH        AX
@@ -6141,12 +6118,8 @@ LAB_1000_3d32:                ;XREF[1]:     1000:3cb8(j)
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
@@ -6271,12 +6244,8 @@ LAB_1000_3e67:                ;XREF[1]:     1000:3f70(j)
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         CX,AX
-    MOV         DX,BX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    movup    CX, EAX
+    movup    DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         AX,word [0xdbbe]

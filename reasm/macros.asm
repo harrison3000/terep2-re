@@ -17,3 +17,10 @@
 %define local_f bp-24
 %define local_g bp-28
 %define local_h bp-32
+
+%macro movup 2
+;mov upper word using the stack, gambiarras forever
+	push %2
+	add sp, 2
+	pop %1
+%endmacro
