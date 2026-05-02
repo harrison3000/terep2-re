@@ -7985,15 +7985,15 @@ LAB_1000_4e08:                ;XREF[1]:     1000:4d9f(j)
 FUN_1000_4e0a:
                               ;XREF[1]:     1000:48d1(c)
 
-    prologo 2
+    prologo 7
 
     MOV         AX,SI
     ADD         AX,word [SI]
     ADD         AX,0x2
-    MOV         [0xe9d8],AX
+    MOV         [local_f],AX
     ADD         SI,word [SI + 0x2]
     MOV         AX,word [SI]
-    MOV         [0xe9e6],AX
+    MOV         [local_g],AX
     ADD         SI,0x2
 LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     MOV         BX,SI
@@ -8002,18 +8002,18 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     SHL         DI,0x3
     SUB         DI,AX
     SHL         DI,0x2
-    ADD         DI,word [0xe9d8]
+    ADD         DI,word [local_f]
     MOV         SI,word [SI]
     MOV         AX,SI
     SHL         SI,0x3
     SUB         SI,AX
     SHL         SI,0x2
-    ADD         SI,word [0xe9d8]
+    ADD         SI,word [local_f]
     MOV         EAX,dword [SI]
     SUB         EAX,dword [DI]
     MOV         ECX,dword [SI + 0xc]
     SUB         ECX,dword [DI + 0xc]
-    MOV         [0xe9f8],EAX
+    MOV         dword [local_c],EAX
     ADD         EAX,ECX
     xorps    xmm0, xmm0
     cvtsi2ss xmm0, eax
@@ -8022,7 +8022,7 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     SUB         EAX,dword [DI + 0x4]
     MOV         ECX,dword [SI + 0x10]
     SUB         ECX,dword [DI + 0x10]
-    MOV         [0xe9fc],EAX
+    MOV         dword [local_d],EAX
     ADD         EAX,ECX
     xorps    xmm1, xmm1
     cvtsi2ss xmm1, eax
@@ -8031,7 +8031,7 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     SUB         EAX,dword [DI + 0x8]
     MOV         ECX,dword [SI + 0x14]
     SUB         ECX,dword [DI + 0x14]
-    MOV         [0xea00],EAX
+    MOV         dword [local_e],EAX
     ADD         EAX,ECX
     xorps    xmm2, xmm2
     cvtsi2ss xmm2, eax
@@ -8079,7 +8079,7 @@ LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(
     MOV         dword [local_a],ECX
     MOV         CL,byte [0xea05]
     INC         CL
-    MOV         EAX,[0xe9f8]
+    MOV         EAX, dword [local_c]
     IMUL        dword [local_a]
     IDIV        dword [local_b]
     MOV         EDX,EAX
@@ -8087,7 +8087,7 @@ LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(
     SUB         EDX,EAX
     ADD         dword [SI + 0xc],EAX
     SUB         dword [DI + 0xc],EDX
-    MOV         EAX,[0xe9fc]
+    MOV         EAX, dword [local_d]
     IMUL        dword [local_a]
     IDIV        dword [local_b]
     MOV         EDX,EAX
@@ -8095,7 +8095,7 @@ LAB_1000_4efe:                ;XREF[3]:     1000:4fcb(j),1000:4fe0(j),1000:4ff4(
     SUB         EDX,EAX
     ADD         dword [SI + 0x10],EAX
     SUB         dword [DI + 0x10],EDX
-    MOV         EAX,[0xea00]
+    MOV         EAX, dword [local_e]
     IMUL        dword [local_a]
     IDIV        dword [local_b]
     MOV         EDX,EAX
@@ -8109,7 +8109,7 @@ LAB_1000_4f64:                ;XREF[5]:     1000:4ed6(j),1000:4ee7(j),1000:4f8c(
     MOV         SI,BX
 LAB_1000_4f66:                ;XREF[1]:     1000:5008(j)
     ADD         SI,0xe
-    DEC         word [0xe9e6]
+    DEC         word [local_g]
     JNZ         LAB_1000_4e1f
     epilogo
     RET
