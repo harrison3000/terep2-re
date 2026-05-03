@@ -5537,20 +5537,14 @@ FUN_1000_379b:
     SHL         EBX,0x10
     XCHG        ECX,EDI
 .LAB_LOC_3:
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         word [SI],AX
-    MOV         word [SI + 0x320],BX
+    movup       word [SI],EAX
+    movup       word [SI + 0x320],EBX
     ADD         SI,0x4
-    ROL         EAX,0x10
-    ROL         EBX,0x10
     ADD         EAX,EDI
     ADD         EBX,EDX
     LOOP        .LAB_LOC_3
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    MOV         word [SI],AX
-    MOV         word [SI + 0x320],BX
+    movup       word [SI],EAX
+    movup       word [SI + 0x320],EBX
 .LAB_LOC_4:
     POP         SI
     POP         DI
