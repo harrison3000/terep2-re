@@ -1616,16 +1616,14 @@ FUN_1000_1347:
     CALL        FUN_1000_13cc
     MOV         EAX,dword [SI]
     MOV         EBX,dword [SI + 0x4]
-    ROR         EAX,0x10
-    ROR         EBX,0x10
-    PUSH        AX
-    PUSH        BX
+    PUSH        EAX
+    PUSH        EBX
+    shr  EAX, 0x10
+    shr  EBX, 0x10
     CALL        FUN_1000_25c5
     MOV         CX,AX
-    POP         BX
-    POP         AX
-    ROR         EAX,0x10
-    ROR         EBX,0x10
+    POP         EBX
+    POP         EAX
     SHL         ECX,0x10
     CALL        FUN_1000_13cc
     ADD         SI,0x1c
