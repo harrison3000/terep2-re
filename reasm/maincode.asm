@@ -57,7 +57,7 @@ f_init:
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     MOV         SI, 0
-.LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
+.load_cars_loop:
     MOV         DI,word [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
@@ -121,7 +121,7 @@ f_init:
     INC         SI
     INC         SI
     MOV         word [SI + 0x5bbc],DI
-    JMP         .LAB_1000_0193_load_cars_maybe
+    JMP         .load_cars_loop
 
 .LAB_LOC_5:
     CALL        FUN_1000_2b70
