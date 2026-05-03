@@ -1,4 +1,3 @@
-
 f_init:
     MOV         word [0x5bba], -2     ;just to be sure
 
@@ -17,7 +16,7 @@ f_init:
     MOV         AH,0x3d
     call far DOS3Call
     MOV         BX,AX
-    JC          LAB_1000_0142
+    JC          .LAB_LOC_1
     MOV         DX,0xe9e2
     MOV         CX,0x2
     MOV         AH,0x3f
@@ -28,28 +27,28 @@ f_init:
     call far DOS3Call
     MOV         AH,0x3e
     call far DOS3Call
-LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
+.LAB_LOC_1:
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
-    JC          LAB_1000_001e
+    JC          .LAB_LOC_6
     MOV         [0x1a45],AX
     MOV         GS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
-    JC          LAB_1000_001e
+    JC          .LAB_LOC_6
     MOV         [0x1a47],AX
     MOV         FS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
-    JC          LAB_1000_001e
+    JC          .LAB_LOC_6
     MOV         [0x1a49],AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
-    JC          LAB_1000_001e
+    JC          .LAB_LOC_6
     MOV         [0x1a4b],AX
     CALL        FUN_1000_24c0
     CALL        FUN_1000_255c
@@ -57,7 +56,7 @@ LAB_1000_0142:                ;XREF[1]:     1000:0126(j)
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     MOV         SI, 0
-LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
+.LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
     MOV         DI,word [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
@@ -68,7 +67,7 @@ LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
     PUSH        SI
     CALL        FUN_1000_2454
     POP         SI
-    JC          LAB_1000_021c
+    JC          .LAB_LOC_5
     PUSH        AX
     PUSH        DI
     PUSH        SI
@@ -86,13 +85,13 @@ LAB_1000_0193_load_cars_maybe:                ;XREF[1]:     1000:0219(j)
     MOV         AH,0x3d
     call far DOS3Call
     MOV         BX,AX
-    JC          LAB_1000_0206
+    JC          .LAB_LOC_4
     CALL        FUN_1000_5a95
     PUSH        BX
     CMP         AX,0x100
-    JLE         LAB_1000_01e1
+    JLE         .LAB_LOC_2
     MOV         AX,0x100
-LAB_1000_01e1:                ;XREF[1]:     1000:01da(j)
+.LAB_LOC_2:
     MUL         CX
     SHR         AX,0x4
     INC         AX
@@ -100,7 +99,7 @@ LAB_1000_01e1:                ;XREF[1]:     1000:01da(j)
     MOV         AH,0x48
     call far DOS3Call
     POP         BX
-    JC          LAB_1000_0202
+    JC          .LAB_LOC_3
     POP         SI
     PUSH        SI
     MOV         DI,word [SI + 0x5bbc]
@@ -108,10 +107,10 @@ LAB_1000_01e1:                ;XREF[1]:     1000:01da(j)
     MOV         ES,AX
     MOV         DI, 0
     CALL        FUN_1000_5acf
-LAB_1000_0202:                ;XREF[1]:     1000:01ee(j)
+.LAB_LOC_3:
     MOV         AH,0x3e
     call far DOS3Call
-LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
+.LAB_LOC_4:
     POP         SI
     POP         DI
     POP         AX
@@ -121,11 +120,11 @@ LAB_1000_0206:                ;XREF[1]:     1000:01cf(j)
     INC         SI
     INC         SI
     MOV         word [SI + 0x5bbc],DI
-    JMP         LAB_1000_0193_load_cars_maybe
+    JMP         .LAB_1000_0193_load_cars_maybe
 
-LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
+.LAB_LOC_5:
     CALL        FUN_1000_2b70
-    JC          LAB_1000_001e
+    JC          .LAB_LOC_6
     ;CALL        FUN_1000_57e0 ;FIXME restore sound!
     MOV         word [0x006f],DX
     MOV         [0x0071],AX
@@ -135,7 +134,7 @@ LAB_1000_021c:                ;XREF[1]:     1000:01ad(j)
     MOV ax, 0 
     ret
 
-LAB_1000_001e:                ;XREF[6]:     1000:0149(j),1000:0159(j),1000:0169(j),1000:0177(j),
+.LAB_LOC_6:
     MOV ax, 1
     ret
 
