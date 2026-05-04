@@ -3,7 +3,7 @@ f_init:
     MOV         word [0x5bba], -2     ;just to be sure
 
     MOV         word [0xec50],0x78    ;= 00C8h
-    MOV         dword [0x006a],0x1800 ;= 00000C00h
+    MOV         dword [0x6a],0x1800 ;= 00000C00h
     MOV         word [0xe9e2],0x800   ;= 0320h
     MOV         word [0xe9e4],0xf000  ;= F000h
     MOV         word [0xdbc0],0x0
@@ -127,10 +127,10 @@ f_init:
     CALL        FUN_1000_2b70
     JC          .LAB_LOC_6
     ;CALL        FUN_1000_57e0 ;FIXME restore sound!
-    MOV         word [0x006f],DX
-    MOV         [0x0071],AX
+    MOV         word [0x6f],DX
+    MOV         [0x71],AX
     
-    MOV         byte [0x006e],0x1
+    MOV         byte [0x6e],0x1
 
     MOV ax, 0 
     ret
@@ -180,7 +180,7 @@ FUN_main_render:
     MOV         FS, word [0x1a47]
     MOV         GS, word [0x1a45]
 
-    TEST        byte [0x007d],0xff
+    TEST        byte [0x7d],0xff
     JNZ         .LAB_LOC_5
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
@@ -188,19 +188,19 @@ FUN_main_render:
     MOV         word [0xdbbc],0x0
     MOV         word [0xdbba],0x50    ;= 0064h
     MOV         word [0xdbbe],0xc7    ;= 00C7h
-    MOV         SI,word [0x00a4]
+    MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    MOVZX       BX,byte [0x007e]      ;= 03h
+    MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
     CALL f_cam_select
-    MOV         BX,word [0x00c6]
+    MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
-    MOV         [0x05f7],AX
+    MOV         [0x5f7],AX
     CALL        FUN_1000_2ad8
     SAR         AX,0x7
-    MOV         [0x05f9],AX
+    MOV         [0x5f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989
@@ -209,7 +209,7 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0x00a4]
+    MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOV         CX,word [SI + 0x8]
@@ -251,19 +251,19 @@ FUN_main_render:
     MOV         word [0xdbbc],0x0
     MOV         word [0xdbba],0x32    ;= 0064h
     MOV         word [0xdbbe],0x62    ;= 00C7h
-    MOV         SI,word [0x00a4]
+    MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    MOVZX       BX,byte [0x007e]      ;= 03h
+    MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
     CALL f_cam_select
-    MOV         BX,word [0x00c6]
+    MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
-    MOV         [0x05f7],AX
+    MOV         [0x5f7],AX
     CALL        FUN_1000_2ad8
     SAR         AX,0x7
-    MOV         [0x05f9],AX
+    MOV         [0x5f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989
@@ -272,7 +272,7 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0x00a4]
+    MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOV         CX,word [SI + 0x8]
@@ -312,26 +312,26 @@ FUN_main_render:
     MOV         word [0xdbbc],0x64
     MOV         word [0xdbba],0x96    ;= 0064h
     MOV         word [0xdbbe],0xc7    ;= 00C7h
-    MOV         SI,word [0x00a6]
+    MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    MOVZX       BX,byte [0x007f]      ;= 03h
+    MOVZX       BX,byte [0x7f]      ;= 03h
     MOV         DI,0x92
     CALL f_cam_select
-    MOV         BX,word [0x00c6]
+    MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
-    MOV         [0x05f7],AX
+    MOV         [0x5f7],AX
     CALL        FUN_1000_2ad8
     SAR         AX,0x7
-    MOV         [0x05f9],AX
+    MOV         [0x5f9],AX
     MOV         SI,0xc2
     MOV         DI,0xce
     CALL        FUN_1000_2989
     CALL        FUN_1000_27f1
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0x00a6]
+    MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
     MOV         CX,word [SI + 0x8]
@@ -385,27 +385,27 @@ FUN_main_render:
     CALL        FUN_1000_2baa
     TEST        byte [CSD_DAT_keys_571e + 78],0x80
     JS          .LAB_LOC_15
-    CMP         word [0x011c],0x3e8   ;= 0100h
+    CMP         word [0x11c],0x3e8   ;= 0100h
     JG          .LAB_LOC_15
-    ADD         word [0x011c],0x14    ;= 0100h
+    ADD         word [0x11c],0x14    ;= 0100h
 .LAB_LOC_15:
     TEST        byte [CSD_DAT_keys_571e + 74],0x80
     JS          .LAB_LOC_16
-    CMP         word [0x011c],0x32    ;= 0100h
+    CMP         word [0x11c],0x32    ;= 0100h
     JL          .LAB_LOC_16
-    SUB         word [0x011c],0x14    ;= 0100h
+    SUB         word [0x11c],0x14    ;= 0100h
 .LAB_LOC_16:
     TEST        byte [CSD_DAT_keys_571e + 53],0x80
     JS          .LAB_LOC_17
-    CMP         word [0x011e],0x1000  ;= 0400h
+    CMP         word [0x11e],0x1000  ;= 0400h
     JG          .LAB_LOC_17
-    ADD         word [0x011e],0x28    ;= 0400h
+    ADD         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_17:
     TEST        byte [CSD_DAT_keys_571e + 55],0x80
     JS          .LAB_LOC_18
-    CMP         word [0x011e],0x100   ;= 0400h
+    CMP         word [0x11e],0x100   ;= 0400h
     JL          .LAB_LOC_18
-    SUB         word [0x011e],0x28    ;= 0400h
+    SUB         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_18:
     MOV         AL,[CSD_DAT_keys_571e]
     CMP         AL,0x1
@@ -441,49 +441,49 @@ FUN_main_render:
     mov ax, 0
     ret
 .LAB_LOC_20:
-    MOV         byte [0x007e],0x0     ;= 03h
+    MOV         byte [0x7e],0x0     ;= 03h
     JMP         .LAB_LOC_19
 .LAB_LOC_21:
-    MOV         byte [0x007e],0x1     ;= 03h
+    MOV         byte [0x7e],0x1     ;= 03h
     JMP         .LAB_LOC_19
 .LAB_LOC_22:
-    MOV         byte [0x007e],0x2     ;= 03h
+    MOV         byte [0x7e],0x2     ;= 03h
     JMP         .LAB_LOC_19
 .LAB_LOC_23:
-    MOV         byte [0x007e],0x3     ;= 03h
+    MOV         byte [0x7e],0x3     ;= 03h
     JMP         .LAB_LOC_19
 .LAB_LOC_24:
-    MOV         byte [0x007e],0x4     ;= 03h
+    MOV         byte [0x7e],0x4     ;= 03h
     JMP         .LAB_LOC_19
 .LAB_LOC_25:
-    XOR         byte [0x007d],0x1
+    XOR         byte [0x7d],0x1
     JMP         .LAB_LOC_19
 .LAB_LOC_26:
-    ADD         dword [0x006a],0x32   ;= 00000C00h
+    ADD         dword [0x6a],0x32   ;= 00000C00h
     JMP         .LAB_LOC_19
 .LAB_LOC_27:
-    SUB         dword [0x006a],0x32   ;= 00000C00h
+    SUB         dword [0x6a],0x32   ;= 00000C00h
     JMP         .LAB_LOC_19
 .LAB_LOC_28:
-    MOV         SI,word [0x00a4]
+    MOV         SI,word [0xa4]
     INC         SI
     CMP         SI,word [0x5bba]      ;= 0001h
     JC          .LAB_LOC_29
     MOV         SI, 0
 .LAB_LOC_29:
-    MOV         word [0x00a4],SI
+    MOV         word [0xa4],SI
     JMP         .LAB_LOC_19
 .LAB_LOC_30:
-    MOV         SI,word [0x00a6]
+    MOV         SI,word [0xa6]
     INC         SI
     CMP         SI,word [0x5bba]      ;= 0001h
     JC          .LAB_LOC_31
     MOV         SI, 0
 .LAB_LOC_31:
-    MOV         word [0x00a6],SI
+    MOV         word [0xa6],SI
     JMP         .LAB_LOC_19
 .LAB_LOC_32:
-    XOR         word [0x05f5],0x600   ;= 0600h
+    XOR         word [0x5f5],0x600   ;= 0600h
     JMP         .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
@@ -8515,7 +8515,7 @@ FUN_timer_5680:
     MOV         AX, _DATA2
     MOV         DS,AX
     MOV         ES,AX
-    CMP         byte [0x006e],0x1
+    CMP         byte [0x6e],0x1
     JNZ         .LAB_LOC_2
     MOV         FS, word [0x1a47]
     MOV         GS, word [0x1a45]
