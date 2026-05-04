@@ -9,6 +9,7 @@ global physics_
 global handlekey_
 
 %include "reasm/macros.asm"
+%include "reasm/known_vars.asm"
 
 segment _CODE2 class=CODE align=16
 

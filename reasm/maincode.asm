@@ -1,9 +1,9 @@
 
 f_init:
-    MOV         word [0x5bba], -2     ;just to be sure
+    MOV         word [v_num_loaded_cars], -2     ;just to be sure
 
     MOV         word [0xec50],0x78    ;= 00C8h
-    MOV         dword [0x6a],0x1800 ;= 00000C00h
+    MOV         dword [v_gravity],0x1800 ;= 00000C00h
     MOV         word [0xe9e2],0x800   ;= 0320h
     MOV         word [0xe9e4],0xf000  ;= F000h
     MOV         word [0xdbc0],0x0
@@ -33,27 +33,27 @@ f_init:
     MOV         BX,0x1000
     call far DOS3Call
     JC          .LAB_LOC_6
-    MOV         [0x1a45],AX
+    MOV         [v_memblock_a],AX
     MOV         GS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
     JC          .LAB_LOC_6
-    MOV         [0x1a47],AX
+    MOV         [v_memblock_b],AX
     MOV         FS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
     JC          .LAB_LOC_6
-    MOV         [0x1a49],AX
+    MOV         [v_memblock_c],AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call far DOS3Call
     JC          .LAB_LOC_6
-    MOV         [0x1a4b],AX
+    MOV         [v_memblock_d],AX
     CALL        FUN_1000_24c0
     CALL        FUN_1000_255c
-    MOV         word [0x5bba],0x0     ;= 0001h
+    MOV         word [v_num_loaded_cars],0x0     ;= 0001h
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     MOV         SI, 0
@@ -115,7 +115,7 @@ f_init:
     POP         SI
     POP         DI
     POP         AX
-    INC         word [0x5bba]         ;= 0001h
+    INC         word [v_num_loaded_cars]         ;= 0001h
     MOV         DI,word [SI + 0x5bbc]
     ADD         DI,AX
     INC         SI
@@ -177,8 +177,8 @@ f_cam_select:
 
 FUN_main_render:
     ;needed now that it runs on paint message
-    MOV         FS, word [0x1a47]
-    MOV         GS, word [0x1a45]
+    MOV         FS, word [v_memblock_b]
+    MOV         GS, word [v_memblock_a]
 
     TEST        byte [0x7d],0xff
     JNZ         .LAB_LOC_5
@@ -459,15 +459,15 @@ FUN_main_render:
     XOR         byte [0x7d],0x1
     JMP         .LAB_LOC_19
 .LAB_LOC_26:
-    ADD         dword [0x6a],0x32   ;= 00000C00h
+    ADD         dword [v_gravity],0x32   ;= 00000C00h
     JMP         .LAB_LOC_19
 .LAB_LOC_27:
-    SUB         dword [0x6a],0x32   ;= 00000C00h
+    SUB         dword [v_gravity],0x32   ;= 00000C00h
     JMP         .LAB_LOC_19
 .LAB_LOC_28:
     MOV         SI,word [0xa4]
     INC         SI
-    CMP         SI,word [0x5bba]      ;= 0001h
+    CMP         SI, word [v_num_loaded_cars]      ;= 0001h
     JC          .LAB_LOC_29
     MOV         SI, 0
 .LAB_LOC_29:
@@ -476,7 +476,7 @@ FUN_main_render:
 .LAB_LOC_30:
     MOV         SI,word [0xa6]
     INC         SI
-    CMP         SI,word [0x5bba]      ;= 0001h
+    CMP         SI, word [v_num_loaded_cars]      ;= 0001h
     JC          .LAB_LOC_31
     MOV         SI, 0
 .LAB_LOC_31:
@@ -757,7 +757,7 @@ F_0948:
     MOV         EAX, 0
     MOV         EBX, 0
     MOV         EDX, 0
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
     MOV         DI, 0
 .LAB_LOC_1:
     MOV         SI,word [DI + 0x5bbc]
@@ -771,7 +771,7 @@ F_0948:
     ADD         DI,0x2
     LOOP        .LAB_LOC_1
     MOV         ECX,EDX
-    MOVZX       EBP,word [0x5bba]
+    MOVZX       EBP, word [v_num_loaded_cars]
     CDQ
     DIV         EBP
     MOV         [0xc8],AX
@@ -880,7 +880,7 @@ FUN_1000_0a82:
     MOV         CX,AX
     SHR         EAX,0x1
     INC         EAX
-    IMUL        EAX,dword [0x6a]
+    IMUL        EAX, dword [v_gravity]
     POPF
     JP          .LAB_LOC_3
     INC         DI
@@ -914,7 +914,7 @@ FUN_1000_0a82:
 FUN_1000_0b25:
                               ;XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
     PUSH        FS
-    MOV         FS,word [0x1a49]
+    MOV         FS, word [v_memblock_c]
     MOV         DI, 0
     CMP         DI,word [0x3e51]
     JNC         .LAB_LOC_4
@@ -999,7 +999,7 @@ FUN_1000_0bb5:
     POP         BX
     POP         AX
     JNS         .LAB_LOC_6
-    MOV         EAX,[0x6a]
+    MOV         EAX, [v_gravity]
     SAR         EAX,0x1
     SUB         dword [DI + 0x3e67],EAX
 .LAB_LOC_2:
@@ -1584,7 +1584,7 @@ FUN_1000_1323:
     MOV         AX,word [SI + 0x1e]
     TEST        AX,AX
     JNZ         .LAB_LOC_1
-    MOV         AX,[0x1a49]
+    MOV         AX, [v_memblock_c]
 .LAB_LOC_1:
     PUSH        FS
     MOV         FS,AX
@@ -2308,7 +2308,7 @@ FUN_1000_194c:
                               ;XREF[8]:     1000:1a50(c),1000:1b06(c),1000:1bfa(c),1000:1caa(c),
                               ;             1000:2063(c),1000:2117(c),1000:220c(c),1000:22bc(c)
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_1:
     MOV         SI,word [DI]
     CMP         DX,word [SI + 0x1a]
@@ -2334,7 +2334,7 @@ FUN_1000_1965:
     TEST        AH,0xa0
     JNP         .LAB_LOC_12
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_1:
     PUSH        CX
     MOV         SI,word [DI]
@@ -2490,7 +2490,7 @@ FUN_1000_1965:
     RET
 .LAB_LOC_12:
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_13:
     PUSH        CX
     MOV         SI,word [DI]
@@ -2651,7 +2651,7 @@ FUN_1000_1965:
     TEST        AH,0xc0
     JNS         .LAB_LOC_36
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_25:
     PUSH        CX
     MOV         SI,word [DI]
@@ -2807,7 +2807,7 @@ FUN_1000_1965:
     RET
 .LAB_LOC_36:
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_37:
     PUSH        CX
     MOV         SI,word [DI]
@@ -3019,7 +3019,7 @@ FUN_1000_1cde:
     RET
 .LAB_LOC_4:
     PUSH        FS
-    MOV         FS,word [0x1a4b]
+    MOV         FS, word [v_memblock_d]
     MOV         AH,byte [0x5fc]
     MOV         BH,AL
     AND         BH,0xf0
@@ -3136,7 +3136,7 @@ FUN_1000_1e3a:
     RET
 .LAB_LOC_4:
     PUSH        FS
-    MOV         FS,word [0x1a4b]
+    MOV         FS, word [v_memblock_d]
     MOV         AH,byte [0x5fc]
     MOV         BH,AL
     AND         BH,0xf0
@@ -3469,12 +3469,12 @@ FUN_1000_24c0:
                               ;XREF[1]:     1000:017e(c)
     PUSH        ES
     MOV         DX,0x1a03
-    MOV         ES,word [0x1a45]
+    MOV         ES, word [v_memblock_a]
     MOV         DI, 0
     CALL        FUN_1000_5a60
     JC          .LAB_LOC_1
     MOV         DX,0x1a20
-    MOV         ES,word [0x1a4b]
+    MOV         ES, word [v_memblock_d]
     MOV         DI, 0
     CALL        FUN_1000_5a60
     JC          .LAB_LOC_1
@@ -3490,7 +3490,7 @@ FUN_1000_24c0:
     MOV         AX,0x4202
     call far DOS3Call
     JC          .LAB_LOC_1
-    MOV         DX,0x1a4d
+    MOV         DX, v_palette
     MOV         CX,0x300
     MOV         AH,0x3f
     call far DOS3Call
@@ -3498,7 +3498,7 @@ FUN_1000_24c0:
     MOV         DX,0x80
     MOV         AX,0x4200
     call far DOS3Call
-    MOV         ES,word [0x1a47]
+    MOV         ES, word [v_memblock_b]
     MOV         DI, 0
     CALL        FUN_1000_5acf
     JC          .LAB_LOC_1
@@ -3537,7 +3537,7 @@ FUN_1000_255c:
                               ;XREF[1]:     1000:0181(c)
     PUSH        ES
     MOV         DX,0x1a13
-    MOV         ES,word [0x1a49]
+    MOV         ES, word [v_memblock_c]
     MOV         DI, 0
     CALL        FUN_1000_5a60
     POP         ES
@@ -4117,7 +4117,7 @@ FUN_1000_2b70:
     MOV         BX,0xfa0
     call far DOS3Call
     JC          .LAB_LOC_1
-    MOV         [0xdb10],AX
+    MOV         [v_image_segment],AX
 .LAB_LOC_1:
     RET
 
@@ -4131,7 +4131,7 @@ FUN_1000_2b98:
                               ;XREF[2]:     1000:02c6(c),1000:0392(c)
     PUSH        ES
     PUSH        DI
-    MOV         ES,word [0xdb10]
+    MOV         ES, word [v_image_segment]
     MOV         DI, 0
     MOV         CX,0x3e80
     CLD
@@ -4268,7 +4268,7 @@ FUN_1000_2d61:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, word [0xdb10]
+    MOV         ES, word [v_image_segment]
     MOV         SI,BX
     CMP         word [0xdb12],0xf0f0
     JNC         .LAB_LOC_5
@@ -4859,7 +4859,7 @@ FUN_1000_31d1:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, word [0xdb10]
+    MOV         ES, word [v_image_segment]
 .LAB_LOC_1:
     MOV         DI,BX
     SHL         DI,0x2
@@ -5560,7 +5560,7 @@ FUN_1000_3827:
     INC         DI
     SHL         SI,0x2
     PUSH        ES
-    MOV         ES, word [0xdb10]
+    MOV         ES, word [v_image_segment]
 .LAB_LOC_1:
     PUSH        DI
     MOV         DI,SI
@@ -6392,7 +6392,7 @@ FUN_1000_3f98:
     SHR         BX,0x1
     SHR         BX,0x1
     ADD         BX,AX
-    MOV         ES, word [0xdb10]
+    MOV         ES, word [v_image_segment]
     MOV         byte ES:[BX],CL
     POP         ES
 .LAB_LOC_1:
@@ -7512,7 +7512,7 @@ FUN_1000_48db:
     MOV         word [0xe9d6],0x0
     ADD         DI,0x2
 .LAB_LOC_1:
-    MOV         EAX,[0x6a]
+    MOV         EAX, [v_gravity]
     SUB         dword [DI + 0x14],EAX
     MOV         EAX,dword [DI]
     MOV         EBX,dword [DI + 0x4]
@@ -8125,14 +8125,14 @@ FUN_1000_500b:
                               ;XREF[1]:     1000:56c8(c)
     MOV         byte [0xea28],0x0
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_1:
     PUSH        CX
     PUSH        DI
     MOV         SI,word [DI]
     CALL        FUN_1000_5091
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]
+    MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_2:
     PUSH        CX
     PUSH        DI
@@ -8517,10 +8517,10 @@ FUN_timer_5680:
     MOV         ES,AX
     CMP         byte [0x6e],0x1
     JNZ         .LAB_LOC_2
-    MOV         FS, word [0x1a47]
-    MOV         GS, word [0x1a45]
+    MOV         FS, word [v_memblock_b]
+    MOV         GS, word [v_memblock_a]
     MOV         DI,0x5bbc
-    MOV         CX,word [0x5bba]      ;= 0001h
+    MOV         CX, word [v_num_loaded_cars]      ;= 0001h
     MOV         BP,0x5ad9
 .LAB_LOC_1:
                               ; FWD[2]:     15cd:5bbc(R),15cd:5bbe(R)
