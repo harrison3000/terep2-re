@@ -408,29 +408,29 @@ FUN_main_render:
     SUB         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_18:
     MOV         AL,[CSD_DAT_keys_571e]
-    CMP         AL,0x1
+    CMP         AL,0x1      ;Esc
     JZ          .LAB_LOC_33
-    CMP         AL,0xf
+    CMP         AL,0xf      ;Tab
     JZ          .LAB_LOC_28
-    CMP         AL,0x10
+    CMP         AL,0x10     ;Q
     JZ          .LAB_LOC_30
-    CMP         AL,0x3b
+    CMP         AL,0x3b     ;F1
     JZ          .LAB_LOC_20
-    CMP         AL,0x3c
+    CMP         AL,0x3c     ;F2
     JZ          .LAB_LOC_21
-    CMP         AL,0x3d
+    CMP         AL,0x3d     ;F3
     JZ          .LAB_LOC_22
-    CMP         AL,0x3e
+    CMP         AL,0x3e     ;F4
     JZ          .LAB_LOC_23
-    CMP         AL,0x3f
+    CMP         AL,0x3f     ;F5
     JZ          .LAB_LOC_24
-    CMP         AL,0x1a
+    CMP         AL,0x1a     ;[
     JZ          .LAB_LOC_26
-    CMP         AL,0x1b
+    CMP         AL,0x1b     ;]
     JZ          .LAB_LOC_27
-    CMP         AL,0x44
+    CMP         AL,0x44     ;F10
     JZ          .LAB_LOC_32
-    CMP         AL,0x43
+    CMP         AL,0x43     ;F9
     JZ          .LAB_LOC_25
     mov ax, 0
     ret
