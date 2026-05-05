@@ -180,8 +180,14 @@ FUN_main_render:
     MOV         FS, word [v_memblock_b]
     MOV         GS, word [v_memblock_a]
 
+    ;clears the framebuffer
+    MOV         EAX,0xffffffff
+    CALL        FUN_1000_2b98
+
     TEST        byte [0x7d],0xff
     JNZ         .LAB_LOC_5
+
+    ;singleplayer
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -189,62 +195,14 @@ FUN_main_render:
     MOV         word [0xdbba],0x50    ;= 0064h
     MOV         word [0xdbbe],0xc7    ;= 00C7h
     MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
-    CALL f_cam_select
-    MOV         BX,word [0xc6]
-    CALL        FUN_1000_2aad
-    SAR         AX,0x7
-    MOV         [0x5f7],AX
-    CALL        FUN_1000_2ad8
-    SAR         AX,0x7
-    MOV         [0x5f9],AX
-    MOV         SI,0xc2
-    MOV         DI,0xce
-    CALL        FUN_1000_2989
-    CALL        FUN_1000_27f1
-    MOV         EAX,0xffffffff
-    CALL        FUN_1000_2b98
-    CALL        FUN_1000_1965
-    CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_2
-    DEC         CX
-    JZ          .LAB_LOC_1
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_1:
-    MOV         EBX,EAX
-.LAB_LOC_2:
-    AND         BX,BX
-    JGE         .LAB_LOC_3
-    NEG         BX
-.LAB_LOC_3:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_4
-    NEG         CX
-.LAB_LOC_4:
-    ADD         CX,0x2c
+    call f_sanic_the_hendgerong
     MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
     CALL        FUN_1000_5831 ;was indirect
     JMP         .LAB_LOC_14
 .LAB_LOC_5:
+    ;split-screen
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -252,60 +210,12 @@ FUN_main_render:
     MOV         word [0xdbba],0x32    ;= 0064h
     MOV         word [0xdbbe],0x62    ;= 00C7h
     MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
-    CALL f_cam_select
-    MOV         BX,word [0xc6]
-    CALL        FUN_1000_2aad
-    SAR         AX,0x7
-    MOV         [0x5f7],AX
-    CALL        FUN_1000_2ad8
-    SAR         AX,0x7
-    MOV         [0x5f9],AX
-    MOV         SI,0xc2
-    MOV         DI,0xce
-    CALL        FUN_1000_2989
-    CALL        FUN_1000_27f1
-    MOV         EAX,0xffffffff
-    CALL        FUN_1000_2b98
-    CALL        FUN_1000_1965
-    CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_7
-    DEC         CX
-    JZ          .LAB_LOC_6
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_6:
-    MOV         EBX,EAX
-.LAB_LOC_7:
-    AND         BX,BX
-    JGE         .LAB_LOC_8
-    NEG         BX
-.LAB_LOC_8:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_9
-    NEG         CX
-.LAB_LOC_9:
-    ADD         CX,0x2c
+    call f_sanic_the_hendgerong
     MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
     CALL        FUN_1000_5831 ;was indirect
+
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -313,57 +223,10 @@ FUN_main_render:
     MOV         word [0xdbba],0x96    ;= 0064h
     MOV         word [0xdbbe],0xc7    ;= 00C7h
     MOV         SI,word [0xa6]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7f]      ;= 03h
     MOV         DI,0x92
-    CALL f_cam_select
-    MOV         BX,word [0xc6]
-    CALL        FUN_1000_2aad
-    SAR         AX,0x7
-    MOV         [0x5f7],AX
-    CALL        FUN_1000_2ad8
-    SAR         AX,0x7
-    MOV         [0x5f9],AX
-    MOV         SI,0xc2
-    MOV         DI,0xce
-    CALL        FUN_1000_2989
-    CALL        FUN_1000_27f1
-    CALL        FUN_1000_1965
-    CALL        FUN_1000_0b25
-    MOV         SI,word [0xa6]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_11
-    DEC         CX
-    JZ          .LAB_LOC_10
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_10:
-    MOV         EBX,EAX
-.LAB_LOC_11:
-    AND         BX,BX
-    JGE         .LAB_LOC_12
-    NEG         BX
-.LAB_LOC_12:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_13
-    NEG         CX
-.LAB_LOC_13:
-    ADD         CX,0x2c
+    call f_sanic_the_hendgerong
     MOV         AL,0x1
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
     CALL        FUN_1000_5831 ;was indirect
 .LAB_LOC_14:
     MOV         word [0xdbc0],0x0
@@ -493,6 +356,55 @@ FUN_main_render:
     ret
 
  ; 1000:0692 [UNDEFINED BYTES REMOVED]
+
+
+f_sanic_the_hendgerong:    
+    SHL         SI,0x1
+    MOV         SI,word [SI + 0x5bbc]
+    PUSH SI
+    CALL f_cam_select
+    MOV         BX,word [0xc6]
+    CALL        FUN_1000_2aad
+    SAR         AX,0x7
+    MOV         [0x5f7],AX
+    CALL        FUN_1000_2ad8
+    SAR         AX,0x7
+    MOV         [0x5f9],AX
+    MOV         SI,0xc2
+    MOV         DI,0xce
+    CALL        FUN_1000_2989
+    CALL        FUN_1000_27f1
+    CALL        FUN_1000_1965
+    CALL        FUN_1000_0b25
+    POP SI
+    MOV         CX,word [SI + 0x8]
+    MOV         EAX,dword [SI + 0x42]
+    ADD         EAX,dword [SI + 0x46]
+    SAR         EAX,0xe
+    MOV         EBX,dword [SI + 0x4a]
+    ADD         EBX,dword [SI + 0x4e]
+    SAR         EBX,0xe
+    TEST        CX,CX
+    JZ          .LAB_LOC_7
+    DEC         CX
+    JZ          .LAB_LOC_6
+    ADD         EAX,EBX
+    SAR         EAX,0x1
+.LAB_LOC_6:
+    MOV         EBX,EAX
+.LAB_LOC_7:
+    AND         BX,BX
+    JGE         .LAB_LOC_8
+    NEG         BX
+.LAB_LOC_8:
+    ADD         BX,0x1030
+    MOV         CX,word [SI + 0xc]
+    SAR         CX,0x9
+    AND         CX,CX
+    JGE         .LAB_LOC_9
+    NEG         CX
+.LAB_LOC_9:
+    ADD         CX,0x2c
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
