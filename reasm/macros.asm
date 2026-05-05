@@ -24,3 +24,17 @@
 	add sp, 2
 	pop %1
 %endmacro
+
+%macro push_args 1-*
+    %rep %0
+        %rotate -1
+        push %1
+    %endrep
+%endmacro
+
+;bp points to "old bp", bp+2 to the return address
+%define param_aw bp+4
+%define param_bw bp+6
+%define param_cw bp+8
+%define param_dw bp+10
+%define param_ew bp+12

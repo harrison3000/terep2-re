@@ -2242,7 +2242,10 @@ FUN_1000_1965:
     JNP         .LAB_LOC_24
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
+
+    push_args 2, 0
     CALL        FUN_1000_40c8
+    add sp,4
     MOV         AX,[0xc6]
     TEST        AH,0xa0
     JNP         .LAB_LOC_12
@@ -2560,7 +2563,10 @@ FUN_1000_1965:
 .LAB_LOC_24:
     MOV         byte [0x5fb],0x1
     CALL        FUN_1000_41b2
-    CALL        FUN_1000_42aa
+
+    push_args 0, 2
+    CALL        FUN_1000_40c8
+    add sp,4
     MOV         AX,[0xc6]
     TEST        AH,0xc0
     JNS         .LAB_LOC_36
@@ -6409,9 +6415,11 @@ FUN_1000_3fd0:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_40c8:
+    prologo 0
                               ;XREF[1]:     1000:40c4(c)
     MOV         SI,0xe532
     MOV         DI,0xe55c
+    push ebp ;the functions below use ebp for other things, TODO fix it inside them!
     CALL        FUN_1000_4394
     XCHG        DI,SI
     CALL        FUN_1000_444d
@@ -6419,6 +6427,7 @@ FUN_1000_40c8:
     CALL        FUN_1000_4506
     XCHG        DI,SI
     CALL        FUN_1000_45c3
+    pop ebp
     MOV         SI,DI
     MOV         CX,word [SI + -0x2]
     CMP         CX,0x3
@@ -6436,7 +6445,10 @@ FUN_1000_40c8:
     MOV         BX,word [SI + 0x2]
     MOV         CX,word [SI + 0x4]
     MOV         DX,word [SI + 0x6]
+
+    push_args [param_aw], [param_bw]
     CALL        FUN_1000_4120
+    add sp,4
     POP         SI
     POP         CX
     ADD         SI,0x4
@@ -6446,14 +6458,21 @@ FUN_1000_40c8:
     POP         SI
     MOV         CX,word [SI]
     MOV         DX,word [SI + 0x2]
+
+    push_args [param_aw], [param_bw]
     CALL        FUN_1000_4120
+    add sp,4
 .LAB_LOC_2:
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_4120:
                               ;XREF[2]:     1000:4107(c),1000:411c(c)
+    prologo 0
+
     XCHG        DX,CX
     CMP         BX,CX
     JLE         .LAB_LOC_3
@@ -6469,7 +6488,7 @@ FUN_1000_4120:
 .LAB_LOC_2:
     SUB         CX,BX
     SHL         BX,0x2
-    ADD         BX,0x2
+    ADD         BX,[param_aw]
     JMP         .LAB_LOC_6
 .LAB_LOC_3:
     CMP         BX,word [0xe58c]
@@ -6482,6 +6501,7 @@ FUN_1000_4120:
 .LAB_LOC_5:
     SUB         CX,BX
     SHL         BX,0x2
+    ADD         BX,[param_bw]
 .LAB_LOC_6:
     JCXZ        .LAB_LOC_14
     PUSH        DX
@@ -6502,6 +6522,8 @@ FUN_1000_4120:
     LOOP        .LAB_LOC_7
     POP         AX
     MOV         word [BX + 0xe590],AX
+
+    epilogo
     RET
 .LAB_LOC_10:
     NEG         DX
@@ -6520,8 +6542,12 @@ FUN_1000_4120:
     LOOP        .LAB_LOC_11
     POP         AX
     MOV         word [BX + 0xe590],AX
+
+    epilogo
     RET
 .LAB_LOC_14:
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6613,124 +6639,6 @@ FUN_1000_41b2:
     SAR         BX,0x8
     SUB         AX,BX
     MOV         [0xe542],AX
-    RET
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_42aa:
-                              ;XREF[1]:     1000:42a6(c)
-    MOV         SI,0xe532
-    MOV         DI,0xe55c
-    CALL        FUN_1000_4394
-    XCHG        DI,SI
-    CALL        FUN_1000_444d
-    XCHG        DI,SI
-    CALL        FUN_1000_4506
-    XCHG        DI,SI
-    CALL        FUN_1000_45c3
-    MOV         SI,DI
-    MOV         CX,word [SI + -0x2]
-    CMP         CX,0x3
-    JC          .LAB_LOC_2
-    MOV         AX,[0xe586]
-    MOV         [0xe58c],AX
-    MOV         AX,[0xe584]
-    MOV         [0xe58e],AX
-    PUSH        SI
-    DEC         CX
-.LAB_LOC_1:
-    PUSH        CX
-    PUSH        SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    CALL        FUN_1000_4302
-    POP         SI
-    POP         CX
-    ADD         SI,0x4
-    LOOP        .LAB_LOC_1
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    POP         SI
-    MOV         CX,word [SI]
-    MOV         DX,word [SI + 0x2]
-    CALL        FUN_1000_4302
-.LAB_LOC_2:
-    RET
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_4302:
-                              ;XREF[2]:     1000:42e9(c),1000:42fe(c)
-    XCHG        DX,CX
-    CMP         BX,CX
-    JLE         .LAB_LOC_3
-    XCHG        AX,DX
-    XCHG        CX,BX
-    CMP         BX,word [0xe58c]
-    JGE         .LAB_LOC_1
-    MOV         word [0xe58c],BX
-.LAB_LOC_1:
-    CMP         CX,word [0xe58e]
-    JLE         .LAB_LOC_2
-    MOV         word [0xe58e],CX
-.LAB_LOC_2:
-    SUB         CX,BX
-    SHL         BX,0x2
-    JMP         .LAB_LOC_6
-.LAB_LOC_3:
-    CMP         BX,word [0xe58c]
-    JGE         .LAB_LOC_4
-    MOV         word [0xe58c],BX
-.LAB_LOC_4:
-    CMP         CX,word [0xe58e]
-    JLE         .LAB_LOC_5
-    MOV         word [0xe58e],CX
-.LAB_LOC_5:
-    SUB         CX,BX
-    SHL         BX,0x2
-    ADD         BX,0x2
-.LAB_LOC_6:
-    JCXZ        .LAB_LOC_14
-    PUSH        DX
-    SUB         DX,AX
-    JS          .LAB_LOC_10
-    MOV         DI, 0
-    MOV         SI,CX
-.LAB_LOC_7:
-    MOV         word [BX + 0xe590],AX
-    ADD         BX,0x4
-    SUB         DI,DX
-    JNS         .LAB_LOC_9
-.LAB_LOC_8:
-    INC         AX
-    ADD         DI,SI
-    JS          .LAB_LOC_8
-.LAB_LOC_9:
-    LOOP        .LAB_LOC_7
-    POP         AX
-    MOV         word [BX + 0xe590],AX
-    RET
-.LAB_LOC_10:
-    NEG         DX
-    MOV         DI, 0
-    MOV         SI,CX
-.LAB_LOC_11:
-    MOV         word [BX + 0xe590],AX
-    ADD         BX,0x4
-    SUB         DI,DX
-    JNS         .LAB_LOC_13
-.LAB_LOC_12:
-    DEC         AX
-    ADD         DI,SI
-    JS          .LAB_LOC_12
-.LAB_LOC_13:
-    LOOP        .LAB_LOC_11
-    POP         AX
-    MOV         word [BX + 0xe590],AX
-    RET
-.LAB_LOC_14:
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
