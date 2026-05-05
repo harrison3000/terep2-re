@@ -11,3 +11,9 @@
 %define v_num_loaded_cars 0x5bba
 
 ;0x5bbc seemd to point to car data, but I am not sure, needs more research
+
+;0x5af7 array of pointers to the strings with the file names for each carx.dat
+;0x5b2e same, but for carx.pcx
+;0x5a53 another table of pointers, but I have no idea for what
+;0x120 seems to be near clipping plane
+;0x5f5 seems to be the textured draw distance
