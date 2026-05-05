@@ -25,6 +25,12 @@
 	pop %1
 %endmacro
 
+%macro mov_m2m 2
+;mov memory to memory using the stack, yeah, not efficient, who cares?
+	push %2
+	pop %1
+%endmacro
+
 %macro push_args 1-*
     %rep %0
         %rotate -1

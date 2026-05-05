@@ -7908,11 +7908,7 @@ FUN_1000_4e0a:
     SUB         EAX,dword [local_b]
     SAR         EAX,0x1
     ADD         ECX,EAX
-
-    ;mem to mem
-    push word [local_b]
-    pop  word [BX + 0x6]
-
+    mov_m2m  word [BX + 0x6], word [local_b]
     JMP         .LAB_LOC_2
 .LAB_LOC_7:
     MOV         ECX,EDX
@@ -7920,8 +7916,7 @@ FUN_1000_4e0a:
     SAR         ECX,0x1
     JZ          .LAB_LOC_3
     MOV         dword [local_b],EAX
-    push  word [local_b]
-    pop   word [BX + 0x6]
+    mov_m2m  word [BX + 0x6], word [local_b]
     JMP         .LAB_LOC_2
 .LAB_LOC_8:
     SAR         ECX,0x4
