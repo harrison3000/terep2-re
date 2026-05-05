@@ -2242,6 +2242,7 @@ FUN_1000_1965:
     JNP         .LAB_LOC_24
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
+    CALL        FUN_1000_40c8
     MOV         AX,[0xc6]
     TEST        AH,0xa0
     JNP         .LAB_LOC_12
@@ -2559,6 +2560,7 @@ FUN_1000_1965:
 .LAB_LOC_24:
     MOV         byte [0x5fb],0x1
     CALL        FUN_1000_41b2
+    CALL        FUN_1000_42aa
     MOV         AX,[0xc6]
     TEST        AH,0xc0
     JNS         .LAB_LOC_36
@@ -6402,7 +6404,6 @@ FUN_1000_3fd0:
     SAR         BX,0x8
     SUB         AX,BX
     MOV         [0xe544],AX
-    CALL        FUN_1000_40c8
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6612,7 +6613,6 @@ FUN_1000_41b2:
     SAR         BX,0x8
     SUB         AX,BX
     MOV         [0xe542],AX
-    CALL        FUN_1000_42aa
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
