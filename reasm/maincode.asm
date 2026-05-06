@@ -6553,93 +6553,18 @@ FUN_1000_4120:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_41b2:
-                              ;XREF[1]:     1000:1f94(c)
-    MOV         word [0xe530],0x6
-    MOV         BX,word [0x5f9]
-    SAR         BX,0x6
-    MOV         AX,[0xac]
-    SHR         AX,0x8
-    ADD         AX,BX
-    MOV         [0xe53c],AX
-    MOV         AX,[0xb0]
-    SHR         AX,0x8
-    ADD         AX,BX
-    MOV         [0xe536],AX
-    MOV         AX,[0xac]
-    SHR         AX,0x8
-    SUB         AX,BX
-    MOV         [0xe534],AX
-    MOV         BX,word [0x5f7]
-    SAR         BX,0x6
-    MOV         AX,[0xb0]
-    SHR         AX,0x8
-    ADD         AX,BX
-    MOV         [0xe53a],AX
-    MOV         AX,[0xac]
-    SHR         AX,0x8
-    SUB         AX,BX
-    MOV         [0xe538],AX
-    MOV         AX,[0xb0]
-    SHR         AX,0x8
-    SUB         AX,BX
-    MOV         [0xe532],AX
-    MOV         AX,[0x5f9]
-    IMUL        word [0x5f1]
-    MOV         BX,AX
-    MOV         AX,[0x5f7]
-    IMUL        word [0x5f3]
-    MOV         CX,AX
-    SUB         AX,BX
-    MOV         DX,word [0xb0]
-    SHR         DX,0x8
-    SAR         AX,0x8
-    ADD         AX,DX
-    MOV         [0xe53e],AX
-    MOV         AX,CX
-    NEG         AX
-    SUB         AX,BX
-    MOV         DX,word [0xb0]
-    SHR         DX,0x8
-    SAR         AX,0x8
-    ADD         AX,DX
-    MOV         [0xe546],AX
-    MOV         AX,[0x5f9]
-    IMUL        word [0x5f3]
-    MOV         CX,AX
-    MOV         AX,[0x5f7]
-    IMUL        word [0x5f1]
-    MOV         BX,AX
-    MOV         AX,CX
-    ADD         AX,BX
-    SAR         AX,0x8
-    MOV         DX,word [0xac]
-    SHR         DX,0x8
-    ADD         AX,DX
-    MOV         [0xe540],AX
-    MOV         AX,BX
-    SUB         AX,CX
-    MOV         DX,word [0xac]
-    SHR         DX,0x8
-    SAR         AX,0x8
-    ADD         AX,DX
-    MOV         [0xe548],AX
-    MOV         AX,[0x5ef]
-    IMUL        word [0x5f9]
-    MOV         BX,AX
-    MOV         AX,[0x5ef]
-    IMUL        word [0x5f7]
-    MOV         CX,AX
-    MOV         AX,[0xac]
-    SHR         AX,0x8
-    SAR         CX,0x8
-    ADD         AX,CX
-    MOV         [0xe544],AX
-    MOV         AX,[0xb0]
-    SHR         AX,0x8
-    SAR         BX,0x8
-    SUB         AX,BX
-    MOV         [0xe542],AX
-    RET
+    call FUN_1000_3fd0 ; very similar but exchanges the vector axes...
+    ;Super ineficiente, mas deixa o Ryzen trabalhar!
+    xchg_m2m [0xe53c], [0xe53a]
+    xchg_m2m [0xe536], [0xe538]
+    xchg_m2m [0xe534], [0xe532]
+
+    xchg_m2m [0xe53e], [0xe540]
+    xchg_m2m [0xe546], [0xe548]
+    xchg_m2m [0xe544], [0xe542]
+
+    ret
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************

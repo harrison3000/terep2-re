@@ -31,6 +31,13 @@
 	pop %1
 %endmacro
 
+%macro xchg_m2m 2
+	push %2
+	push %1
+	pop %2
+	pop %1
+%endmacro
+
 %macro push_args 1-*
     %rep %0
         %rotate -1
