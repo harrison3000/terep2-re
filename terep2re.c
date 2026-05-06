@@ -16,9 +16,10 @@ extern int far physics();
 #pragma aux handlekey parm [ax] modify [bx];
 extern int far handlekey(int pnp);
 
-char szAppName[] = "Terep Win16";
+#define HZ_PHYSICS 120 //TODO check if this is right
+#define HZ_DISPLAY 60
 
-int cnt = 0;
+char szAppName[] = "Terep Win16";
 
 typedef struct imageeee {
     BITMAPINFOHEADER info;
@@ -50,9 +51,10 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             return 0;
         }
         case WM_TIMER:
-            physics();
-            cnt = !cnt;
-            if(cnt){
+            if(wParam == 100){
+                physics();
+            }
+            if(wParam == 102){
                 InvalidateRect(hwnd, 0, TRUE);
             }
             return 0;
@@ -147,7 +149,8 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
                         340, 240,
                         NULL, NULL, hInstance, NULL);
     
-    SetTimer(hwnd, 100, 1000/120, NULL);
+    SetTimer(hwnd, 100, 1000/HZ_PHYSICS, NULL);
+    SetTimer(hwnd, 102, 1000/HZ_DISPLAY, NULL);
 
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
