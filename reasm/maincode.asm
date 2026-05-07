@@ -8484,14 +8484,17 @@ FUN_1000_58fc:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_5940:
+    prologo 1
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
-    MOV         byte [CSD_BYTE_1000_59c1],CL         ;= Fh
+    MOV         byte [local_a],CL         ;= Fh
     MOV         CX,AX
     CLD
 .LAB_LOC_1:
     LODSB 
     CMP         AL,0x0
     JNZ         .LAB_LOC_2
+
+    epilogo
     RET
 .LAB_LOC_2:
     CMP         AL,0x9
@@ -8501,12 +8504,14 @@ FUN_1000_5940:
 .LAB_LOC_3:
     CMP         AL,0xd
     JNZ         .LAB_LOC_4
+
+    epilogo
     RET
 .LAB_LOC_4:
     CMP         AL,0x1b
     JNZ         .LAB_LOC_5
     LODSB 
-    MOV         [CSD_BYTE_1000_59c1],AL                  ;= Fh
+    MOV         [local_a],AL                  ;= Fh
     JMP         .LAB_LOC_1
 .LAB_LOC_5:
     CMP         AL,0x20
@@ -8538,7 +8543,7 @@ FUN_1000_5940:
 .LAB_LOC_9:
     PUSH        AX
     PUSH        BX
-    MOV         CL,byte [CSD_BYTE_1000_59c1]         ;= Fh
+    MOV         CL,byte [local_a]         ;= Fh
     CALL        FUN_1000_3f98
     POP         BX
     POP         AX
