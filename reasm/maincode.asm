@@ -239,12 +239,21 @@ FUN_main_render:
     MOV         AX,0xa
     MOV         BX,0xa
     MOV         CL,0xf
-    CALL        FUN_1000_5940
+    CALL        FUN_1000_5940_render_text
     MOV         SI,0x4b
     MOV         AX,0x64
     MOV         BX,0xbe
     MOV         CL,0xf
-    CALL        FUN_1000_5940
+    CALL        FUN_1000_5940_render_text
+
+    MOV         SI, nova_linha ;string
+    MOV         AX, 5         ;X
+    MOV         BX, 190       ;Y
+    MOV         CL, byte [giracor]       ;color
+    SHR         CL, 2
+    CALL        FUN_1000_5940_render_text
+    INC         byte [giracor]
+
     CALL        FUN_1000_2baa
     TEST        byte [CSD_DAT_keys_571e + 78],0x80
     JS          .LAB_LOC_15
@@ -8483,7 +8492,7 @@ FUN_1000_58fc:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_1000_5940:
+FUN_1000_5940_render_text:
     prologo 1
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
     MOV         byte [local_a],CL         ;= Fh
