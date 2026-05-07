@@ -4046,7 +4046,7 @@ FUN_1000_2b70:
     MOV         BX,0xfa0
     call far DOS3Call
     JC          .LAB_LOC_1
-    MOV         [v_image_segment],AX
+    MOV         [v_framebuffer_segment],AX
 .LAB_LOC_1:
     RET
 
@@ -4060,7 +4060,7 @@ FUN_1000_2b98:
                               ;XREF[2]:     1000:02c6(c),1000:0392(c)
     PUSH        ES
     PUSH        DI
-    MOV         ES, word [v_image_segment]
+    MOV         ES, word [v_framebuffer_segment]
     MOV         DI, 0
     MOV         CX,0x3e80
     CLD
@@ -4197,7 +4197,7 @@ FUN_1000_2d61:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, word [v_image_segment]
+    MOV         ES, word [v_framebuffer_segment]
     MOV         SI,BX
     CMP         word [0xdb12],0xf0f0
     JNC         .LAB_LOC_5
@@ -4788,7 +4788,7 @@ FUN_1000_31d1:
     INC         DX
     SHL         BX,0x2
     PUSH        ES
-    MOV         ES, word [v_image_segment]
+    MOV         ES, word [v_framebuffer_segment]
 .LAB_LOC_1:
     MOV         DI,BX
     SHL         DI,0x2
@@ -5489,7 +5489,7 @@ FUN_1000_3827:
     INC         DI
     SHL         SI,0x2
     PUSH        ES
-    MOV         ES, word [v_image_segment]
+    MOV         ES, word [v_framebuffer_segment]
 .LAB_LOC_1:
     PUSH        DI
     MOV         DI,SI
@@ -6321,7 +6321,7 @@ FUN_1000_3f98:
     SHR         BX,0x1
     SHR         BX,0x1
     ADD         BX,AX
-    MOV         ES, word [v_image_segment]
+    MOV         ES, word [v_framebuffer_segment]
     MOV         byte ES:[BX],CL
     POP         ES
 .LAB_LOC_1:

@@ -180,7 +180,7 @@ zeroRuns();
 unkRuns();
 
 const known = {
-    "db10" : "v_image_segment",
+    "db10" : "v_framebuffer_segment",
     "6a" : "v_gravity",
 
     "1a4d" : "v_palette",

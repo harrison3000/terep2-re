@@ -488,7 +488,7 @@ dt_addr_db0e:
 dt_addr_db0f:
     db 0x20
 
-v_image_segment:  ;current address: 0xdb10
+v_framebuffer_segment:  ;current address: 0xdb10
     dw 0xa000
 
 dt_addr_db12:
