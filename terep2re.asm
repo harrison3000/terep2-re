@@ -73,3 +73,8 @@ segment _DATA2 class=DATA align=16
     db "SEPARATOR", 0
 
     %include "reasm/cs_data.asm"
+
+nova_linha:
+    db "GAMBIARRA FOREVER!", 0
+giracor:
+    db 0

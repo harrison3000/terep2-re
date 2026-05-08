@@ -396,6 +396,15 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         BX,0xbe
     MOV         CL,0xf
     CALL        FUN_1000_5940
+
+    MOV         SI, nova_linha ;string
+    MOV         AX, 5         ;X
+    MOV         BX, 190       ;Y
+    MOV         CL, byte [giracor]       ;color
+    SHR         CL, 2
+    CALL        FUN_1000_5940
+    INC         byte [giracor]
+
     CALL        FUN_1000_2baa
     TEST        byte [CSD_DAT_keys_571e + 78],0x80
     JS          LAB_1000_0513
