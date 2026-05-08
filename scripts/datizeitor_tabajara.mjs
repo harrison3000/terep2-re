@@ -49,11 +49,6 @@ const catg = [...dados].map(function(v){
     return "u"; //unknown
 });
 
-function printloc(a){
-    var aa = idx.toString(16);
-    console.log(";%s at %s (%d)", a, aa, idx);
-}
-
 /** @type {Item[]} */
 let coisas = [];
 
@@ -61,7 +56,21 @@ class Item {
     inicio = 0;
     len = 0;
     getval = function(){};
+    comment = "";
 }
+
+const known = {};
+
+(await readFile("reasm/known_vars.txt"))
+    .toString("utf8")
+    .split("\n")
+    .filter(x => x.trim() !== "")
+    .forEach(s => {
+        let vals = s.split(",").map(s => s.trim());
+        known[vals[0]] = vals[2];
+        //TODO adicionar no used address tambem
+        debugger;
+    })
 
 function emmitStrings(idx, num){    
     for(let i = 0; i < num; i++){
@@ -113,7 +122,8 @@ function zeroRuns(){
     findRun("z",
         function(it){
             let len = it.len;
-            it.getval = () => `resb ${len} ;unkown zeros`;
+            it.comment = "unknown zeros";
+            it.getval = () => `resb ${len}`;
         }
     )
 }
@@ -121,12 +131,19 @@ function zeroRuns(){
 function unkRuns(){
     findRun("u", function(it){
         let d = dados.slice(it.inicio, it.inicio + it.len);
-        var u = [];
+        var u = [[]];
         d.forEach(x => {
-            u.push("0x" + x.toString(16));
+            let last = u.at(-1);
+            last.push("0x" + x.toString(16));
+            if(last.length > 100){
+                u.push([]);
+            }
         })
 
-        it.getval = () => "db " + u.join(", ");
+        var i = u.map(x => "db " + x.join(", "));
+
+        it.getval = () => i.join("\n    ");
+        it.comment = "unknown data";
         //debugger;
     });
 }
@@ -179,31 +196,25 @@ processData();
 zeroRuns();
 unkRuns();
 
-const known = {
-    "db10" : "v_framebuffer_segment",
-    "6a" : "v_gravity",
 
-    "1a4d" : "v_palette",
-
-    "1a45" : "v_memblock_a",
-    "1a47" : "v_memblock_b",
-    "1a49" : "v_memblock_c",
-    "1a4b" : "v_memblock_d",
-
-    "5bba" : "v_num_loaded_cars",
-};
+//TODO pointers e coisas assim
 
 coisas.sort((a,b) => a.inicio - b.inicio );
 
-var st = [";data segment at home"];
+var st = [";data segment at home:" , ""];
 
 coisas.forEach(x => {
     var a = x.inicio.toString(16);
     var  k = known[a];
+    var c = x.comment;
     if(k){
-        st.push(k + ":  ;current address: 0x" + a);
+        st.push(k + ":");
+        c = "current address: 0x" + a;
     }else{
         st.push(`dt_addr_${a}:`);
+    }
+    if(c){
+        st.push("    ;"+ c);
     }
     st.push("    " + x.getval());
 
