@@ -3816,7 +3816,7 @@ FUN_1000_277e:
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [bp-4],DX
-    PUSH        [bp-4]
+    PUSH        word [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x2]
     SHL         AX,0x1
@@ -3832,7 +3832,7 @@ FUN_1000_277e:
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [bp-4],DX
-    PUSH        [bp-4]
+    PUSH        word [bp-4]
     MOV         AX,BX
     IMUL        word [DI + 0x4]
     SHL         AX,0x1
