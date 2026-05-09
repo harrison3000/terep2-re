@@ -1,0 +1,54 @@
+0, string, v_credits
+4b, string, v_wipwarn
+
+5b01, string, v_fn_car1dat
+5b0a, string, v_fn_car2dat
+5b13, string, v_fn_car3dat
+5b1c, string, v_fn_car4dat
+5b25, string, v_fn_car5dat
+
+5b38, string, v_fn_car1pcx
+5b41, string, v_fn_car2pcx
+5b4a, string, v_fn_car3pcx
+5b53, string, v_fn_car4pcx
+5b5c, string, v_fn_car5pcx
+
+1a03, string, v_fn_map
+1a0b, string, v_fn_col
+1a13, string, v_fn_tex
+1a20, string, v_fn_maptex
+1a2b, string, v_fn_fog
+1a33, string, v_fn_smoke
+1a3d, string, v_fn_simcfg
+
+db10, word,v_framebuffer_segment
+6a,   word, v_gravity
+
+1a4d, word, v_palette
+
+1a45, word, v_memblock_a
+1a47, word, v_memblock_b
+1a49, word, v_memblock_c
+1a4b, word, v_memblock_d
+
+5bba, word, v_num_loaded_cars
+
+5af7, ptr, vptr_car_dfile1
+5af9, ptr, vptr_car_dfile2
+5afb, ptr, vptr_car_dfile3
+5afd, ptr, vptr_car_dfile4
+5aff, ptr, vptr_car_dfile5
+
+5b2e, ptr, vptr_car_tfile1
+5b30, ptr, vptr_car_tfile2
+5b32, ptr, vptr_car_tfile3
+5b34, ptr, vptr_car_tfile4
+5b36, ptr, vptr_car_tfile5
+
+
+;0x5bbc seemd to point to car data, but I am not sure, needs more research
+
+;0x5b2e same, but for carx.pcx
+;0x5a53 another table of pointers, but I have no idea for what
+;0x120 seems to be near clipping plane
+;0x5f5 seems to be the textured draw distance
