@@ -28,30 +28,51 @@ typedef struct imageeee {
 
 st_image paleta;
 
+void do_the_render_roll(HDC hdc){
+    unsigned int idx = 0;
+    int seg = getMem16(0xdb10);
+
+    render();
+
+    char far *video = MK_FP(seg, 0);
+
+    StretchDIBits(hdc,
+        0,0, 320*2, 200*2,
+        0,0, 320, 200,
+        video, (void far *)&paleta,
+        DIB_RGB_COLORS, SRCCOPY
+    );
+    
+}
+
+int started = 0;
+
+RECT button = {.left = 40, .top  = 40, .right = 250,  .bottom = 120};
+RECT txtbutton = {.left = 40, .top  = 55, .right = 250,  .bottom = 120};
+
+
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
 
     switch (message) {
         case WM_PAINT:{
-            unsigned int idx = 0;
-            int seg = getMem16(0xdb10);
-
-            render();
-
-            char far *video = MK_FP(seg, 0);
-
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            StretchDIBits(hdc,
-                0,0, 320, 200,
-                0,0, 320, 200,
-                video, (void far *)&paleta,
-                DIB_RGB_COLORS, SRCCOPY
-            );
+            if(started){
+                do_the_render_roll(hdc);
+            }else{
+                HBRUSH borda = GetStockObject(DKGRAY_BRUSH);
+                HBRUSH fundo = GetStockObject(LTGRAY_BRUSH);
+
+                FillRect(hdc, &button, fundo);
+                FrameRect(hdc, &button, borda);
+                DrawText(hdc, "Could not load track,\nclick here to search for it", -1, &txtbutton, DT_CENTER);
+            }
             EndPaint(hwnd, &ps);
+            
             return 0;
         }
         case WM_TIMER:
-            if(wParam == 100){
+            if(wParam == 100 && started){
                 physics();
             }
             if(wParam == 102){
@@ -70,11 +91,29 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             if(keyFlags & KF_UP){
                 //key released
                 scanCode += 0x80;
+            }else if(scanCode == 1){
+                //esc pressed
+                PostQuitMessage(0);
+                return 0;
             }
 
-            handlekey(scanCode);
+            if(started){
+                handlekey(scanCode);
+            }
             
             return 0;
+        }
+
+        case WM_LBUTTONDOWN:
+        {
+            int xPos = LOWORD(lParam);
+            int yPos = HIWORD(lParam);
+            
+            if(!started && yPos > button.top && yPos < button.bottom && xPos > button.left && xPos < button.right){
+                MessageBox(NULL, "clico", "Fail", MB_ICONSTOP);
+            }
+            
+            return 0; // Message processed
         }
 
         case WM_DESTROY:
@@ -106,6 +145,23 @@ void load_palette(){
     }
 }
 
+void let_it_rip(int warn){
+    //TODO check for files
+
+    int err = initgame();
+    int ncars = getMem16(0x5bba);
+    if(err){
+        MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail", MB_ICONSTOP);
+        return;
+    }else if(ncars <= 0){
+        MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
+        return;
+    }
+
+    load_palette();
+    started = 1;
+}
+
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow) {
     WNDCLASS wndclass;
 
@@ -124,29 +180,10 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
         RegisterClass(&wndclass);
     }
 
-    MessageBox(NULL, "The game is about to start, hold on to your hats", "Pre-loading warning", MB_ICONASTERISK);
-
-    int err = initgame();
-    int ncars = getMem16(0x5bba);
-    if(err){
-        MessageBox(NULL, "Error initializing... what failed? your guess is as good as mine", "Fail", MB_ICONSTOP);
-        return 1;
-    }else if(ncars <= 0){
-        MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
-        return 1;
-    }else{
-        char theMsg[60];
-        sprintf(theMsg, "OK, maybe, cars loaded: %d", ncars);
-
-        MessageBox(NULL, theMsg, "OK, I guess",MB_ICONEXCLAMATION);
-    }
-
-    load_palette();
-
     HWND hwnd = CreateWindow(szAppName, "Terep2 RE",
                         WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, CW_USEDEFAULT,
-                        340, 240,
+                        330*2, 230*2,
                         NULL, NULL, hInstance, NULL);
     
     SetTimer(hwnd, 100, 1000/HZ_PHYSICS, NULL);
@@ -155,10 +192,17 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
+    int try = 1;
+
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+
+        if(try){
+            try = 0;
+            let_it_rip(0);
+        }
     }
     return msg.wParam;
 }
