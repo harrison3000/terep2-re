@@ -961,22 +961,14 @@ FUN_1000_0bb5:
     SUB         SI,0x1c
     MOV         word [0x3e51],SI
     JZ          .LAB_LOC_5
-    MOV         EAX,dword [SI + 0x3e53]
-    MOV         dword [DI + 0x3e53],EAX
-    MOV         EAX,dword [SI + 0x3e57]
-    MOV         dword [DI + 0x3e57],EAX
-    MOV         EAX,dword [SI + 0x3e5b]
-    MOV         dword [DI + 0x3e5b],EAX
-    MOV         EAX,dword [SI + 0x3e5f]
-    MOV         dword [DI + 0x3e5f],EAX
-    MOV         EAX,dword [SI + 0x3e63]
-    MOV         dword [DI + 0x3e63],EAX
-    MOV         EAX,dword [SI + 0x3e67]
-    MOV         dword [DI + 0x3e67],EAX
-    MOV         AX,word [SI + 0x3e6b]
-    MOV         word [DI + 0x3e6b],AX
-    MOV         AX,word [SI + 0x3e6d]
-    MOV         word [DI + 0x3e6d],AX
+    mov_m2m     dword [DI + 0x3e53], dword [SI + 0x3e53]
+    mov_m2m     dword [DI + 0x3e57], dword [SI + 0x3e57]
+    mov_m2m     dword [DI + 0x3e5b], dword [SI + 0x3e5b]
+    mov_m2m     dword [DI + 0x3e5f], dword [SI + 0x3e5f]
+    mov_m2m     dword [DI + 0x3e63], dword [SI + 0x3e63]
+    mov_m2m     dword [DI + 0x3e67], dword [SI + 0x3e67]
+    mov_m2m     word [DI + 0x3e6b], word [SI + 0x3e6b]
+    mov_m2m     word [DI + 0x3e6d], word [SI + 0x3e6d]
     SUB         SI,0x1c
 
     JMP         .LAB_LOC_3
