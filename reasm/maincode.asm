@@ -1398,15 +1398,18 @@ FUN_1000_10b6:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to steering, disabling this function disables steering
 FUN_1000_1136:
+    prologo 8
+
                               ;XREF[2]:     1000:0e9a(c),1000:0ec4(c)
     PUSH        SI
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         [CSD_DWORD_1000_12b3],EAX
-    MOV         dword [CSD_DWORD_1000_12b7],EBX
-    MOV         dword [CSD_DWORD_1000_12bb],ECX
+    MOV         [local_a],EAX
+    MOV         dword [local_b],EBX
+    MOV         dword [local_c],ECX
     CALL        FUN_1000_10b6
     MOV         [CSD_DWORD_1000_12bf],EAX
     MOV         dword [CSD_DWORD_1000_12c3],EBX
@@ -1415,47 +1418,51 @@ FUN_1000_1136:
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         [CSD_DWORD_1000_129f],EAX
+    MOV         [local_d],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         [CSD_DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         [local_e],EAX                ;= 7FFF0000h
     MOV         EAX,[CSD_DWORD_1000_12bf]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    IMUL        dword [local_e]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12b3]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    MOV         EAX,[local_a]
+    IMUL        dword [local_d]
     SUB         EBX,EDX
     SHL         EBX,0x1
     MOV         dword [CSD_DWORD_1000_12a7],EBX
     MOV         EAX,[CSD_DWORD_1000_12c3]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    IMUL        dword [local_e]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12b7]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    MOV         EAX,[local_b]
+    IMUL        dword [local_d]
     SUB         EBX,EDX
     SHL         EBX,0x1
     MOV         dword [CSD_DWORD_1000_12ab],EBX
     MOV         EAX,[CSD_DWORD_1000_12c7]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    IMUL        dword [local_e]          ;= 7FFF0000h
     MOV         EBX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12bb]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    MOV         EAX,[local_c]
+    IMUL        dword [local_d]
     SUB         EBX,EDX
     SHL         EBX,0x1
     MOV         dword [CSD_DWORD_1000_12af],EBX
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;also relate do steering maybe, disabling it just makes the game crash
 FUN_1000_11f0:
+    prologo 8
                               ;XREF[1]:     1000:138f(c)
     PUSH        SI
     ADD         SI,word [SI]
     ADD         SI,0x2
     CALL        FUN_1000_1091
-    MOV         [CSD_DWORD_1000_12b3],EAX
-    MOV         dword [CSD_DWORD_1000_12b7],EBX
-    MOV         dword [CSD_DWORD_1000_12bb],ECX
+    MOV         [local_a],EAX
+    MOV         dword [local_b],EBX
+    MOV         dword [local_c],ECX
     CALL        FUN_1000_10b6
     MOV         [CSD_DWORD_1000_12bf],EAX
     MOV         dword [CSD_DWORD_1000_12c3],EBX
@@ -1464,33 +1471,35 @@ FUN_1000_11f0:
     MOV         BX,word [SI + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
-    MOV         [CSD_DWORD_1000_129f],EAX
+    MOV         [local_d],EAX
     CALL        FUN_1000_2ad8
     SHL         EAX,0x10
-    MOV         [CSD_DWORD_1000_12a3],EAX                ;= 7FFF0000h
+    MOV         [local_e],EAX                ;= 7FFF0000h
     MOV         EAX,[CSD_DWORD_1000_12bf]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    IMUL        dword [local_d]
     MOV         EBX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12b3]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[local_a]
+    IMUL        dword [local_e]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
     PUSH        EBX
     MOV         EAX,[CSD_DWORD_1000_12c3]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    IMUL        dword [local_d]
     MOV         EBX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12b7]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[local_b]
+    IMUL        dword [local_e]          ;= 7FFF0000h
     ADD         EBX,EDX
     SHL         EBX,0x7
     MOV         EAX,[CSD_DWORD_1000_12c7]
-    IMUL        dword [CSD_DWORD_1000_129f]
+    IMUL        dword [local_d]
     MOV         ECX,EDX
-    MOV         EAX,[CSD_DWORD_1000_12bb]
-    IMUL        dword [CSD_DWORD_1000_12a3]          ;= 7FFF0000h
+    MOV         EAX,[local_c]
+    IMUL        dword [local_e]          ;= 7FFF0000h
     ADD         ECX,EDX
     SHL         ECX,0x7
     POP         EAX
+
+    epilogo
     RET
 
 
