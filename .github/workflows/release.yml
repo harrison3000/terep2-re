@@ -13,14 +13,14 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Let it rip
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/src \
             -w /src \
-            arlaneenalra/watcom-docker \
+            arlaneenalra/watcom-docker:2026-05-02-Build \
             sh build.sh
           
       - name: Publish it
