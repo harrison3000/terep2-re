@@ -1,0 +1,32 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Let it rip
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            -w /src \
+            arlaneenalra/watcom-docker:2026-05-02-Build \
+            sh build.sh
+          
+      - name: Publish it
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            terep2re.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
