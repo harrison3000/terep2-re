@@ -1,4 +1,5 @@
 #include <win16.h>
+#include <commdlg.h>
 #include <stdio.h>
 #include <i86.h>
 
@@ -50,6 +51,7 @@ int started = 0;
 RECT button = {.left = 40, .top  = 40, .right = 250,  .bottom = 120};
 RECT txtbutton = {.left = 40, .top  = 55, .right = 250,  .bottom = 120};
 
+void let_it_rip(HWND hwnd);
 
 long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
 
@@ -110,7 +112,7 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             int yPos = HIWORD(lParam);
             
             if(!started && yPos > button.top && yPos < button.bottom && xPos > button.left && xPos < button.right){
-                MessageBox(NULL, "clico", "Fail", MB_ICONSTOP);
+                let_it_rip(hwnd);
             }
             
             return 0; // Message processed
@@ -145,8 +147,34 @@ void load_palette(){
     }
 }
 
-void let_it_rip(int warn){
-    //TODO check for files
+void let_it_rip(HWND hwnd){
+    if(started){
+        //fail safe
+        return;
+    }
+
+    OFSTRUCT st;
+    int f = OpenFile("CAR1.DAT",&st, OF_EXIST);
+    if(f == -1){
+        if(hwnd == NULL){
+            return;
+        }
+        char path[260];
+
+        OPENFILENAME ofl = {
+            .lStructSize = sizeof(OPENFILENAME),
+            .lpstrFilter = "DAT Files\0*.dat\0PCX Files\0*.pcx\0",
+            .nMaxFile = 260,
+            .Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_READONLY,
+        };
+        ofl.lpstrFile = path;
+        ofl.hwndOwner = hwnd;
+        BOOL ok = GetOpenFileName(&ofl);
+        if(!ok){
+            return;
+        }
+        //TODO explicitly set the working dir, there is a obscure GetOpenFileName behavior changes the directory, but we better not count on it
+    }
 
     int err = initgame();
     int ncars = getMem16(0x5bba);
@@ -201,7 +229,7 @@ int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, in
 
         if(try){
             try = 0;
-            let_it_rip(0);
+            let_it_rip(NULL);
         }
     }
     return msg.wParam;
