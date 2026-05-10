@@ -33,22 +33,13 @@ db10, word,v_framebuffer_segment
 
 5bba, word, v_num_loaded_cars
 
-5af7, ptr, vptr_car_dfile1
-5af9, ptr, vptr_car_dfile2
-5afb, ptr, vptr_car_dfile3
-5afd, ptr, vptr_car_dfile4
-5aff, ptr, vptr_car_dfile5
+5af7, ptr[5], vptrs_car_dfile
+5b2e, ptr[5], vptrs_car_tfile
 
-5b2e, ptr, vptr_car_tfile1
-5b30, ptr, vptr_car_tfile2
-5b32, ptr, vptr_car_tfile3
-5b34, ptr, vptr_car_tfile4
-5b36, ptr, vptr_car_tfile5
+5a53, ptr[16], vptrs_unk
 
 
 ;0x5bbc seemd to point to car data, but I am not sure, needs more research
 
-;0x5b2e same, but for carx.pcx
-;0x5a53 another table of pointers, but I have no idea for what
 ;0x120 seems to be near clipping plane
 ;0x5f5 seems to be the textured draw distance

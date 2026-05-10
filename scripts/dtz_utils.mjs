@@ -22,18 +22,7 @@ export function findAddressesInASM(filename){
         if(x !== null){
             return {type : x[1], addr: x[2], addrNum: parseInt(x[2], 16), s};
         }
-        //for some reason ghidra ommits the size for AX
-        let y = /( E?A[XL],)?\[0x([a-f0-9]{1,4})\](,E?A[XL])?$/.exec(s);
-        if(y !== null && (y[1] || y[3])){
-            let siz = "word";
-            if(y[0].includes("EAX")){
-                siz = "dword";
-            }else if(y[0].includes("AL")){
-                siz = "byte";
-            }
-            return {type: siz, addr: y[2], addrNum: parseInt(y[2], 16), s};
-        }
-
+        debugger; // should never get here
         return null;
     })
     .filter(x => x !== null)

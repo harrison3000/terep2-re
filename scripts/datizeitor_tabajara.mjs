@@ -17,10 +17,6 @@ const catg = [...dados].map(function(v){
 });
 
 
-
-
-//=========================================================================
-
 let aldevars = known.concat(discovered);
 for(let v of aldevars){
     //TODO pointer finder
@@ -33,16 +29,22 @@ for(let v of aldevars){
         v.skip = st.length + 1;
         continue;
     }
-    if(v.type === "ptr"){
-        const val = dados.readUint16LE(a);
-        const nn = aldevars.find(x => x.addrNum === val);
-        if(nn){
-            v.valor = "dw " + nn.name;
-        }else{
-            v.valor = `dw 0x${val.toString(16)} ; pointer to unknown var`;
-        }
+    if(v.type.startsWith("ptr")){
+        const u = v.type.match(/\[(\d+)\]/)[1];
+        const n = parseInt(u);
 
-        v.skip = 2;
+        const vals = [];
+        for(let i = 0; i < n; i++){
+            const val = dados.readUint16LE(a + i*2);
+            const nn = aldevars.find(x => x.addrNum === val);
+            if(nn){
+                vals.push(nn.name);
+            }else{
+                vals.push(`0x${val.toString(16)}`);
+            }
+        }
+        v.valor = "dw " + vals.join(", ");
+        v.skip = n * 2;
         continue;
     }
     if(v.type === "word"){
@@ -101,11 +103,11 @@ for(let i = 0; i < dados.length; ){
         let l = ur?.len ?? 1;
         let zp = [];
         for(let j = 0;j < l;j++){
-            zp.push(`0x${dados[i].toString(16)}`);
-            i++;
+            zp.push(`0x${dados[i+j].toString(16)}`);
         }
 
-        await out.write("\n    ;unknown data\n    db " + zp.join(", ") + "\n");
+        await out.write("\n    ;unknown data at 0x" + i.toString(16) + "\n    db " + zp.join(", ") + "\n");
+        i += l;
         continue
     }
 
