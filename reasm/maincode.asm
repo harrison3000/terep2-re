@@ -4081,6 +4081,7 @@ FUN_1000_2baa:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: this has something to do with flat shaded polygons, disabling this function makes only the textured ones render
 FUN_1000_2bec:
                               ;XREF[5]:     1000:157b(c),1000:1d27(c),1000:1d62(c),1000:1e83(c),
                               ;             1000:1ebb(c)
@@ -4706,12 +4707,14 @@ FUN_1000_302d:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;TODO find out when this is called
 FUN_1000_30ee:
                               ;XREF[2]:     1000:15ee(c),1000:167a(c)
     PUSH        SI
     PUSH        DI
     MOV         SI,0xdb16
     MOV         DI,0xdb68
+    ;TODO parametrize and all that jazz
     CALL        FUN_1000_324f
     XCHG        DI,SI
     CALL        FUN_1000_3376
@@ -5384,6 +5387,7 @@ FUN_1000_35cf:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to textured polygons
 FUN_1000_36fe:
                               ;XREF[8]:     1000:0d24(c),1000:16f0(c),1000:175a(c),1000:1907(c),
                               ;             1000:1ddb(c),1000:1e34(c),1000:1f2f(c),1000:1f88(c)
@@ -5391,6 +5395,7 @@ FUN_1000_36fe:
     PUSH        DI
     MOV         SI,0xdb16
     MOV         DI,0xdb68
+    ;TODO parametrize and all that jazz
     CALL        FUN_1000_390a
     XCHG        DI,SI
     CALL        FUN_1000_3aa3
