@@ -235,12 +235,12 @@ FUN_main_render:
     MOV         word [0xdbbc],0x0
     MOV         word [0xdbba],0x50    ;= 0064h
     MOV         word [0xdbbe],0xc7    ;= 00C7h
-    MOV         SI,0x0
+    MOV         SI, v_credits
     MOV         AX,0xa
     MOV         BX,0xa
     MOV         CL,0xf
     CALL        FUN_1000_5940_render_text
-    MOV         SI,0x4b
+    MOV         SI, v_wipwarn
     MOV         AX,0x64
     MOV         BX,0xbe
     MOV         CL,0xf

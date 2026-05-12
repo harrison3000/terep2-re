@@ -79,3 +79,7 @@ nova_linha:
 giracor:
     db 0
 
+
+;padding
+;numbers higher than this probably encode some special values, this is the max
+times (65534 - ($ - $$)) db 'P'
