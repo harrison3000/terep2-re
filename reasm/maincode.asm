@@ -6459,13 +6459,21 @@ FUN_1000_40c8:
     MOV         SI,0xe532
     MOV         DI,0xe55c
 
+    push_args   [0xe588]
     CALL        FUN_1000_4394
+    add sp, 2
     XCHG        DI,SI
+    push_args   [0xe58a]
     CALL        FUN_1000_444d
+    add sp, 2
     XCHG        DI,SI
+    push_args   [0xe584]
     CALL        FUN_1000_4506
+    add sp, 2
     XCHG        DI,SI
+    push_args   [0xe586]
     CALL        FUN_1000_45c3
+    add sp, 2
 
     MOV         SI,DI
     MOV         CX,word [SI + -0x2]
@@ -6626,7 +6634,7 @@ FUN_1000_4394:
     MOV         word [DI + 0x2],BX
     POP         DI
     ADD         SI,0x4
-    CMP         AX,word [0xe588]
+    CMP         AX,word [param_aw]
     JL          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
@@ -6639,7 +6647,7 @@ FUN_1000_4394:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         AX,word [0xe588]
+    CMP         AX,word [param_aw]
     JL          .LAB_LOC_3
     POP         CX
     LOOP        .LAB_LOC_1
@@ -6652,11 +6660,11 @@ FUN_1000_4394:
 .LAB_LOC_3:
     PUSH        AX
     PUSH        BX
-    SUB         AX,word [0xe588]
-    SUB         CX,word [0xe588]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,AX
-    MOV         AX, word [0xe588]
+    MOV         AX, word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6675,11 +6683,11 @@ FUN_1000_4394:
     PUSH        BX
     XCHG        AX,CX
     XCHG        DX,BX
-    SUB         AX,word [0xe588]
-    SUB         CX,word [0xe588]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,AX
-    MOV         AX, word [0xe588]
+    MOV         AX, word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6700,7 +6708,7 @@ FUN_1000_4394:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         AX,word [0xe588]
+    CMP         AX,word [param_aw]
     JGE         .LAB_LOC_4
     POP         CX
     LOOP        .LAB_LOC_5
@@ -6731,7 +6739,7 @@ FUN_1000_444d:
     MOV         word [DI + 0x2],BX
     POP         DI
     ADD         SI,0x4
-    CMP         AX,word [0xe58a]
+    CMP         AX,word [param_aw]
     JG          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
@@ -6744,7 +6752,7 @@ FUN_1000_444d:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         AX,word [0xe58a]
+    CMP         AX,word [param_aw]
     JG          .LAB_LOC_3
     POP         CX
     LOOP        .LAB_LOC_1
@@ -6759,11 +6767,11 @@ FUN_1000_444d:
     PUSH        BX
     XCHG        AX,CX
     XCHG        DX,BX
-    SUB         AX,word [0xe58a]
-    SUB         CX,word [0xe58a]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,AX
-    MOV         AX, word [0xe58a]
+    MOV         AX, word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6780,11 +6788,11 @@ FUN_1000_444d:
 .LAB_LOC_4:
     PUSH        AX
     PUSH        BX
-    SUB         AX,word [0xe58a]
-    SUB         CX,word [0xe58a]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,AX
-    MOV         AX, word [0xe58a]
+    MOV         AX, word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6805,7 +6813,7 @@ FUN_1000_444d:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         AX,word [0xe58a]
+    CMP         AX,word [param_aw]
     JLE         .LAB_LOC_4
     POP         CX
     LOOP        .LAB_LOC_5
@@ -6836,7 +6844,7 @@ FUN_1000_4506:
     MOV         word [DI + 0x2],BX
     POP         DI
     ADD         SI,0x4
-    CMP         BX,word [0xe584]
+    CMP         BX,word [param_aw]
     JL          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
@@ -6849,7 +6857,7 @@ FUN_1000_4506:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         BX,word [0xe584]
+    CMP         BX,word [param_aw]
     JL          .LAB_LOC_3
     POP         CX
     LOOP        .LAB_LOC_1
@@ -6864,10 +6872,10 @@ FUN_1000_4506:
     PUSH        BX
     XCHG        AX,BX
     XCHG        DX,CX
-    SUB         AX,word [0xe584]
-    SUB         CX,word [0xe584]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
-    MOV         BX,word [0xe584]
+    MOV         BX,word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6888,10 +6896,10 @@ FUN_1000_4506:
     XCHG        DX,BX
     XCHG        AX,BX
     XCHG        DX,CX
-    SUB         AX,word [0xe584]
-    SUB         CX,word [0xe584]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
-    MOV         BX,word [0xe584]
+    MOV         BX,word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6912,7 +6920,7 @@ FUN_1000_4506:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         BX,word [0xe584]
+    CMP         BX,word [param_aw]
     JGE         .LAB_LOC_4
     POP         CX
     LOOP        .LAB_LOC_5
@@ -6943,7 +6951,7 @@ FUN_1000_45c3:
     MOV         word [DI + 0x2],BX
     POP         DI
     ADD         SI,0x4
-    CMP         BX,word [0xe586]
+    CMP         BX,word [param_aw]
     JG          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
@@ -6956,7 +6964,7 @@ FUN_1000_45c3:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         BX,word [0xe586]
+    CMP         BX,word [param_aw]
     JG          .LAB_LOC_3
     POP         CX
     LOOP        .LAB_LOC_1
@@ -6973,10 +6981,10 @@ FUN_1000_45c3:
     XCHG        DX,BX
     XCHG        AX,BX
     XCHG        DX,CX
-    SUB         AX,word [0xe586]
-    SUB         CX,word [0xe586]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
-    MOV         BX,word [0xe586]
+    MOV         BX,word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -6995,10 +7003,10 @@ FUN_1000_45c3:
     PUSH        BX
     XCHG        AX,BX
     XCHG        DX,CX
-    SUB         AX,word [0xe586]
-    SUB         CX,word [0xe586]
+    SUB         AX,word [param_aw]
+    SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
-    MOV         BX,word [0xe586]
+    MOV         BX,word [param_aw]
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x4
@@ -7019,7 +7027,7 @@ FUN_1000_45c3:
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     ADD         SI,0x4
-    CMP         BX,word [0xe586]
+    CMP         BX,word [param_aw]
     JLE         .LAB_LOC_4
     POP         CX
     LOOP        .LAB_LOC_5
