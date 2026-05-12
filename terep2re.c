@@ -9,8 +9,8 @@ extern int far initgame();
 #pragma aux render value [ax] modify [bx cx dx si di es];
 extern int far render();
 
-#pragma aux getMem16 value [ax] parm [bx];
-extern int far getMem16();
+#pragma aux getData2 value [ax];
+extern unsigned int far getData2();
 
 extern int far physics();
 
@@ -29,18 +29,24 @@ typedef struct imageeee {
 
 st_image paleta;
 
+char *gameData;
+
+int getMem16(unsigned int offset){
+    int *z  = (int*) &gameData[offset];
+    return *z;
+}
+
 void do_the_render_roll(HDC hdc){
-    unsigned int idx = 0;
     int seg = getMem16(0xdb10);
 
     render();
 
-    char far *video = MK_FP(seg, 0);
+    char *video = MK_FP(seg, 0);
 
     StretchDIBits(hdc,
         0,0, 320*2, 200*2,
         0,0, 320, 200,
-        video, (void far *)&paleta,
+        video, (void *)&paleta,
         DIB_RGB_COLORS, SRCCOPY
     );
     
@@ -138,11 +144,11 @@ void load_palette(){
 
     paleta.info = bih;
 
-    int ptr = 0x1a4d;
+    char *ptr = &gameData[0x1a4d];
     for(int i =0; i<256;i++){
-        paleta.palette[i].rgbRed = getMem16(ptr);
-        paleta.palette[i].rgbGreen = getMem16(ptr + 1);
-        paleta.palette[i].rgbBlue = getMem16(ptr + 2);
+        paleta.palette[i].rgbRed = ptr[0];
+        paleta.palette[i].rgbGreen = ptr[1];
+        paleta.palette[i].rgbBlue = ptr[2];
         ptr += 3;
     }
 }
@@ -191,6 +197,8 @@ void let_it_rip(HWND hwnd){
 }
 
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow) {
+    gameData = MK_FP(getData2(),0);
+
     WNDCLASS wndclass;
 
     if (!hPrevInstance) {

@@ -3,7 +3,7 @@ bits 16
 extern DOS3Call
 
 global initgame_
-global getMem16_
+global getData2_
 global render_
 global physics_
 global handlekey_
@@ -44,14 +44,8 @@ render_:
     POP DS
     retf
 
-getMem16_:
-    PUSH DS 
+getData2_:
     MOV AX, _DATA2
-    MOV DS, AX
-
-    MOV AX, [BX]
-
-    POP DS
     retf
 
 physics_:
@@ -78,3 +72,7 @@ nova_linha:
     db "GAMBIARRA FOREVER!", 0
 giracor:
     db 0
+
+
+;pad to the limit
+times (65534 - ($ - $$)) db 'P'
