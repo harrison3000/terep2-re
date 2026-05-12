@@ -4258,14 +4258,17 @@ FUN_1000_2d61:
     JNZ         .LAB_LOC_6
     POP         ES
     RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_2df2:
                               ;XREF[1]:     1000:2bf4(c)
+    prologo
+
     PUSH        SI
     PUSH        DI
-    MOV         BP, 0
+    MOV         word [local_a], 0
     MOV         CX,word [SI + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
@@ -4285,7 +4288,7 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
     MOV         AX,word [SI]
@@ -4298,7 +4301,8 @@ FUN_1000_2df2:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4312,7 +4316,7 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
 .LAB_LOC_4:
     POP         BX
     POP         AX
@@ -4320,7 +4324,8 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_5:
     PUSH        AX
@@ -4335,14 +4340,15 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     POP         BX
     POP         AX
     POP         CX
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
@@ -4357,16 +4363,19 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_2eaf:
                               ;XREF[1]:     1000:2bf9(c)
+    prologo
+    
     PUSH        SI
     PUSH        DI
-    MOV         BP, 0
+    MOV         word [local_a], 0
     MOV         CX,word [SI + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
@@ -4386,7 +4395,7 @@ FUN_1000_2eaf:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
     MOV         AX,word [SI]
@@ -4399,7 +4408,8 @@ FUN_1000_2eaf:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4415,7 +4425,7 @@ FUN_1000_2eaf:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
 .LAB_LOC_4:
     POP         BX
     POP         AX
@@ -4423,7 +4433,8 @@ FUN_1000_2eaf:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_5:
     PUSH        AX
@@ -4436,14 +4447,15 @@ FUN_1000_2eaf:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     POP         BX
     POP         AX
     POP         CX
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
@@ -4458,16 +4470,18 @@ FUN_1000_2eaf:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_2f6c:
                               ;XREF[1]:     1000:2bfe(c)
+    prologo
     PUSH        SI
     PUSH        DI
-    MOV         BP, 0
+    MOV         word [local_a], 0
     MOV         CX,word [SI + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
@@ -4487,7 +4501,7 @@ FUN_1000_2f6c:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
     MOV         AX,word [SI]
@@ -4500,7 +4514,8 @@ FUN_1000_2f6c:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4515,7 +4530,7 @@ FUN_1000_2f6c:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
 .LAB_LOC_4:
     POP         BX
     POP         AX
@@ -4523,7 +4538,8 @@ FUN_1000_2f6c:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_5:
     PUSH        AX
@@ -4539,14 +4555,17 @@ FUN_1000_2f6c:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    ;was a loop
+    dec cx
+    jnz .LAB_LOC_1 
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
@@ -4561,16 +4580,19 @@ FUN_1000_2f6c:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_302d:
                               ;XREF[1]:     1000:2c03(c)
+    prologo
+    
     PUSH        SI
     PUSH        DI
-    MOV         BP, 0
+    MOV         word [local_a], 0
     MOV         CX,word [SI + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
@@ -4590,7 +4612,7 @@ FUN_1000_302d:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
     MOV         AX,word [SI]
@@ -4603,7 +4625,8 @@ FUN_1000_302d:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4620,7 +4643,7 @@ FUN_1000_302d:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
 .LAB_LOC_4:
     POP         BX
     POP         AX
@@ -4628,7 +4651,8 @@ FUN_1000_302d:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_5:
     PUSH        AX
@@ -4642,14 +4666,16 @@ FUN_1000_302d:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         BP
+    INC         word [local_a]
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    dec cx
+    jnz .LAB_LOC_1 ;was a loop
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
@@ -4664,8 +4690,10 @@ FUN_1000_302d:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    MOV         word [DI + -0x2],BP
+    mov_m2m     word [DI + -0x2], word [local_a]
+    epilogo
     RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
