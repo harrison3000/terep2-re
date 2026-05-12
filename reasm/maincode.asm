@@ -7938,7 +7938,10 @@ FUN_1000_500b:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
 FUN_1000_5091:
+    prologo 8
+
                               ;XREF[1]:     1000:501c(c)
     PUSH        SI
     MOV         DX,SI
@@ -7957,11 +7960,11 @@ FUN_1000_5091:
     SHL         BX,0x2
     ADD         BX,DX
     LODSW 
-    MOV         BP,AX
-    SHL         BP,0x3
-    SUB         BP,AX
-    SHL         BP,0x2
-    ADD         BP,DX
+    MOV         word [local_a],AX
+    SHL         word [local_a],0x3
+    SUB         word [local_a],AX
+    SHL         word [local_a],0x2
+    ADD         word [local_a],DX
     LODSW 
     MOV         DI,AX
     SHL         DI,0x3
@@ -7970,10 +7973,9 @@ FUN_1000_5091:
     ADD         DI,DX
     PUSH        SI
     PUSH        DX
-    MOV         SI,BP
-    MOV         BP,word [0xea99]
+    MOV         SI, word [local_a]
     MOV         EAX,dword [BX + 0x4]
-    MOV         dword DS:[BP + 0xeb5f],EAX
+    MOV         dword [local_b],EAX     ;+ 0xeb5f
     SUB         EAX,dword [SI + 0x4]
     MOV         ECX,dword [BX + 0x8]
     SUB         ECX,dword [DI + 0x8]
@@ -7989,9 +7991,9 @@ FUN_1000_5091:
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
-    MOV         dword DS:[BP + 0xea9b],EDX
+    MOV         dword [local_c],EDX   ;+ 0xea9b
     MOV         EAX,dword [BX + 0x8]
-    MOV         dword DS:[BP + 0xeb63],EAX
+    MOV         dword [local_d],EAX   ;+ 0xeb63
     SUB         EAX,dword [DI + 0x8]
     MOV         ECX,dword [BX]
     SUB         ECX,dword [SI]
@@ -8008,9 +8010,9 @@ FUN_1000_5091:
     IMUL        EAX,ECX
     SUB         EDX,EAX
     NEG         EDX
-    MOV         dword DS:[BP + 0xea9f],EDX
+    MOV         dword [local_e],EDX  ;+ 0xea9f
     MOV         EAX,dword [BX]
-    MOV         dword DS:[BP + 0xeb5b],EAX
+    MOV         dword [local_f],EAX  ;+ 0xeb5b
     SUB         EAX,dword [DI]
     MOV         ECX,dword [BX + 0x4]
     SUB         ECX,dword [SI + 0x4]
@@ -8026,14 +8028,27 @@ FUN_1000_5091:
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
-    MOV         dword DS:[BP + 0xeaa3],EDX
+    MOV         dword [local_g],EDX  ;+ 0xeaa3
     POP         DX
     POP         SI
+
+    mov  BX, word [0xea99]
+    mov_m2m  dword [BX + 0xeb5f], dword [local_b]
+    mov_m2m  dword [BX + 0xea9b], dword [local_c]
+    mov_m2m  dword [BX + 0xeb63], dword [local_d]
+
+    mov_m2m  dword [BX + 0xea9f], dword [local_e]
+    mov_m2m  dword [BX + 0xeb5b], dword [local_f]
+    mov_m2m  dword [BX + 0xeaa3], dword [local_g]
+    ;no need to restore bx, it will be rewritten next loop
+
     ADD         word [0xea99],0xc
     POP         CX
     DEC         CX
     JNZ         .LAB_LOC_1
     POP         SI
+
+    epilogo
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
