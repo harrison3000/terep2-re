@@ -447,6 +447,8 @@ LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
     JZ          LAB_1000_05cd
     CMP         AL,0x3f
     JZ          LAB_1000_05d5
+    CMP         AL,0x40
+    JZ          CYCLE_2ND_CAM
     CMP         AL,0x1a
     JZ          LAB_1000_05e4
     CMP         AL,0x1b
@@ -508,6 +510,13 @@ LAB_1000_0618:                ;XREF[1]:     1000:0612(j)
 LAB_1000_061e:                ;XREF[1]:     1000:059f(j)
     XOR         word [0x05f5],0x600   ;= 0600h
     JMP         LAB_1000_05ac
+
+CYCLE_2ND_CAM:
+    INC   byte [0x7f]
+    CMP   byte [0x7f], 5
+    JL    LAB_1000_05ac
+    MOV   byte [0x7f], 0
+    JL    LAB_1000_05ac
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
