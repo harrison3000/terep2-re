@@ -1,22 +1,21 @@
-%macro prologo 1
-	push bp
-	mov bp, sp
-	sub sp, %1*4
+%macro prologo 0
+	;8 local vars ought to be enough for anybody
+	;always dword because we have plenty of stack space
+	enter 8*4, 0
 %endmacro
 
 %macro epilogo 0
-    mov sp, bp
-    pop bp
+    leave
 %endmacro
 
-%define local_a bp-4
-%define local_b bp-8
-%define local_c bp-12
-%define local_d bp-16
-%define local_e bp-20
-%define local_f bp-24
-%define local_g bp-28
-%define local_h bp-32
+%define local_a bp-4*1
+%define local_b bp-4*2
+%define local_c bp-4*3
+%define local_d bp-4*4
+%define local_e bp-4*5
+%define local_f bp-4*6
+%define local_g bp-4*7
+%define local_h bp-4*8
 
 %macro movup 2
 ;mov upper word using the stack, gambiarras forever

@@ -1393,7 +1393,7 @@ FUN_1000_10b6:
 ;************************************************************************************************
 ;ANALYSIS: related to steering, disabling this function disables steering
 FUN_1000_1136:
-    prologo 8
+    prologo
 
                               ;XREF[2]:     1000:0e9a(c),1000:0ec4(c)
     PUSH        SI
@@ -1447,7 +1447,7 @@ FUN_1000_1136:
 ;************************************************************************************************
 ;also relate do steering maybe, disabling it just makes the game crash
 FUN_1000_11f0:
-    prologo 8
+    prologo
                               ;XREF[1]:     1000:138f(c)
     PUSH        SI
     ADD         SI,word [SI]
@@ -3477,7 +3477,7 @@ FUN_1000_255c:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_256b:
-    prologo 3
+    prologo
                               ;XREF[2]:     1000:261a(c),1000:265b(c)
     MOV         AX, word [0x5ac1]
     IMUL        word [0x5ac9]
@@ -3703,7 +3703,7 @@ FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
-    prologo 2
+    prologo
 
     XCHG        AX,BX
     XCHG        AX,CX
@@ -6426,7 +6426,7 @@ FUN_1000_3fd0:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_40c8:
-    prologo 0
+    prologo
                               ;XREF[1]:     1000:40c4(c)
     MOV         SI,0xe532
     MOV         DI,0xe55c
@@ -6482,7 +6482,7 @@ FUN_1000_40c8:
 ;************************************************************************************************
 FUN_1000_4120:
                               ;XREF[2]:     1000:4107(c),1000:411c(c)
-    prologo 0
+    prologo
 
     XCHG        DX,CX
     CMP         BX,CX
@@ -7695,7 +7695,7 @@ FUN_1000_4d96:
 FUN_1000_4e0a:
                               ;XREF[1]:     1000:48d1(c)
 
-    prologo 8
+    prologo
 
     MOV         AX,SI
     ADD         AX,word [SI]
@@ -7940,7 +7940,7 @@ FUN_1000_500b:
 ;************************************************************************************************
 ;ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
 FUN_1000_5091:
-    prologo 8
+    prologo
 
                               ;XREF[1]:     1000:501c(c)
     PUSH        SI
@@ -8164,7 +8164,7 @@ FUN_1000_51bd:
 ;************************************************************************************************
 FUN_1000_52d4:
                               ;XREF[2]:     1000:5393(c),1000:53e4(c)
-    prologo 3
+    prologo
 
     MOV         AX, word [0xea0c]
     IMUL        word [0xea14]
@@ -8510,7 +8510,7 @@ FUN_1000_58fc:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_5940_render_text:
-    prologo 1
+    prologo
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
     MOV         byte [local_a],CL         ;= Fh
     MOV         CX,AX
