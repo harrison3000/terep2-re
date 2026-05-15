@@ -1,0 +1,1 @@
+sed -E -f trasnform.sed copy.asm > maincode.asm
