@@ -938,18 +938,21 @@ FUN_1000_0bb5:
     PUSH        AX
     PUSH        BX
     MOV         BL,AH
-    MOV         AL,byte FS:[BX]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10]
     TEST        AL,0xf
     JZ          .LAB_LOC_7
     DEC         AL
-    MOV         byte FS:[BX],AL
+    setup_FS    R10, BX
+    MOV         byte [R10],AL
 .LAB_LOC_7:
     POP         BX
     POP         AX
     ADD         BX,0x80
     ADD         AX,0x80
     MOV         BL,AH
-    DEC         byte GS:[BX]
+    setup_GS    R10, BX
+    DEC         byte [R10]
     MOV         word [DI + 0x3e6d],0x1
     MOV         EAX,0x0
     MOV         dword [DI + 0x3e5f],EAX
@@ -2287,9 +2290,11 @@ FUN_1000_1965:
 .LAB_LOC_3:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + 0xfeff]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + 0xfeff]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2352,9 +2357,11 @@ FUN_1000_1965:
 .LAB_LOC_7:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + 0xff00]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + 0xff00]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2443,9 +2450,11 @@ FUN_1000_1965:
 .LAB_LOC_15:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + -0x1]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + -0x1]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2508,9 +2517,11 @@ FUN_1000_1965:
 .LAB_LOC_19:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2608,9 +2619,11 @@ FUN_1000_1965:
 .LAB_LOC_27:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + 0xfeff]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + 0xfeff]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2673,9 +2686,11 @@ FUN_1000_1965:
 .LAB_LOC_31:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + -0x1]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + -0x1]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2764,9 +2779,11 @@ FUN_1000_1965:
 .LAB_LOC_39:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX + 0xff00]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + 0xff00]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -2829,9 +2846,11 @@ FUN_1000_1965:
 .LAB_LOC_43:
     MOV         word [0x5fd],BX
     PUSH        BX
-    MOV         AL,byte FS:[BX]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10]
     MOV         byte [0x5fc],AL
-    MOVZX       CX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       CX,byte [R10]
     SHL         CX,0x4
     MOV         AH,BL
     MOV         AL, 0
@@ -3529,14 +3548,17 @@ FUN_1000_25c5:
     MOV         byte [0x5acd],AL
     MOV         byte [0x5acf],BL
     MOV         BL,AH
-    MOVZX       AX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10]
     SHL         AX,0x4
     MOV         CX,AX
-    MOVZX       AX,byte GS:[BX + 0x1]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0x5ac5],AX
-    MOVZX       AX,byte GS:[BX + 0x100]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0x5acb],AX
@@ -3553,14 +3575,17 @@ FUN_1000_25c5:
     MOV         byte [0x5acd],AL
     MOV         byte [0x5acf],BL
     MOV         BL,AH
-    MOVZX       AX,byte GS:[BX + 0x101]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x101]
     SHL         AX,0x4
     MOV         CX,AX
-    MOVZX       AX,byte GS:[BX + 0x1]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0x5acb],AX
-    MOVZX       AX,byte GS:[BX + 0x100]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0x5ac5],AX
@@ -4259,7 +4284,8 @@ FUN_1000_2d61:
     ADD         DI,AX
     CLD
 .LAB_LOC_8:
-    MOV         BL,byte ES:[DI]
+    setup_ES    R10, DI
+    MOV         BL,byte [R10]
     MOV         AL,byte [BX + 0x2e51]
     STOSB 
     LOOP        .LAB_LOC_8
@@ -5583,12 +5609,14 @@ FUN_1000_3827:
     ROR         ESI,0x10
     MOV         SI,R8W
     SHL         SI,0x8
-    MOV         AL,byte FS:[BX + SI]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10 + SI]
     CMP         AL,0xff
     JZ          .LAB_LOC_4
     CMP         AL,0xf0
     JNC         .LAB_LOC_6
-    MOV         byte ES:[DI],AL
+    setup_ES    R10, DI
+    MOV         byte [R10],AL
 .LAB_LOC_4:
     INC         DI
     ROL         ESI,0x10
@@ -5609,11 +5637,13 @@ FUN_1000_3827:
 .LAB_LOC_6:
     SUB         AL,0xf0
     MOV         AH,AL
-    MOV         AL,byte ES:[DI]
+    setup_ES    R10, DI
+    MOV         AL,byte [R10]
     XCHG        AX,BX
     MOV         BL,byte [BX + 0x2e51]
     XCHG        AX,BX
-    MOV         byte ES:[DI],AL
+    setup_ES    R10, DI
+    MOV         byte [R10],AL
     JMP         .LAB_LOC_4
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6366,7 +6396,8 @@ FUN_1000_3f98:
     SHR         BX,0x1
     ADD         BX,AX
     load_ES     word [v_framebuffer_segment]
-    MOV         byte ES:[BX],CL
+    setup_ES    R10, BX
+    MOV         byte [R10],CL
     POP_ES    
 .LAB_LOC_1:
     RET
@@ -8290,17 +8321,21 @@ FUN_1000_532e:
     MOV         byte [0xea18],AL
     MOV         byte [0xea1a],BL
     MOV         BL,AH
-    MOV         AL,byte FS:[BX]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10]
     MOV         byte [0xea28],AL
-    MOVZX       AX,byte GS:[BX]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10]
     SHL         AX,0x4
     MOV         CX,AX
-    MOVZX       AX,byte GS:[BX + 0x1]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0xea10],AX
     MOV         word [0xea24],AX
-    MOVZX       AX,byte GS:[BX + 0x100]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0xea16],AX
@@ -8318,18 +8353,22 @@ FUN_1000_532e:
     MOV         byte [0xea18],AL
     MOV         byte [0xea1a],BL
     MOV         BL,AH
-    MOV         AL,byte FS:[BX]
+    setup_FS    R10, BX
+    MOV         AL,byte [R10]
     MOV         byte [0xea28],AL
-    MOVZX       AX,byte GS:[BX + 0x101]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x101]
     SHL         AX,0x4
     MOV         CX,AX
-    MOVZX       AX,byte GS:[BX + 0x1]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0xea16],AX
     NEG         AX
     MOV         word [0xea26],AX
-    MOVZX       AX,byte GS:[BX + 0x100]
+    setup_GS    R10, BX
+    MOVZX       AX,byte [R10 + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [0xea10],AX

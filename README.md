@@ -16,9 +16,13 @@ This is the very first time I got it working on win16 mode, no palette, no sound
 After a bunch of fixes, playable, but no sound yet
 
 ## TODO 
- - [ ] Stop Using BP as a GPR, its too powerful and useful to be treated as a mere data holder
+ - [x] Stop Using BP as a GPR, its too powerful and useful to be treated as a mere data holder
  - [ ] Stop using ROL/ROR to hold unrelated data on the upper bits of registers
  - [ ] Identify where SI/DI refers to a index, a full address of something else entirely
  - [ ] Identify and fix all local variables stored as globals
  - [ ] Identify and fix all parameters being passed on global vars instead of on stack/register
  - [ ] Find a way to validate if the "fixes" arent breaking something
+
+## 64-bit port
+ Just a bunch of macros and gambiarras using the upper registers
+ BP -> R8
