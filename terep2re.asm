@@ -1,4 +1,4 @@
-bits 16
+bits 64
 
 extern DOS3Call
 
@@ -10,7 +10,7 @@ global handlekey_
 
 %include "reasm/macros.asm"
 
-segment _CODE2 class=CODE align=16
+section .text
 
 initgame_:
     PUSH DS
@@ -23,7 +23,7 @@ initgame_:
 
     POP EBP
     POP DS
-    retf
+    ret
 
 render_:
     PUSH DS
@@ -42,7 +42,7 @@ render_:
     POP FS
     POP ES
     POP DS
-    retf
+    ret
 
 getMem16_:
     PUSH DS 
@@ -52,22 +52,22 @@ getMem16_:
     MOV AX, [BX]
 
     POP DS
-    retf
+    ret
 
 physics_:
     ;the inner function already push registers and sets the DS correctly
     call FUN_timer_5680
-    retf
+    ret
 
 
 handlekey_:
     call FUN_keyboard_56df
-    retf
+    ret
 
     %include "reasm/maincode.asm"
 
 
-segment _DATA2 class=DATA align=16
+section .data
     %include "reasm/dataseg.asm"
 
     db "SEPARATOR", 0
