@@ -110,3 +110,8 @@
 	;FIXME actually implement
 	nop
 %endmacro
+
+%macro setup_data 2
+	;FIXME actually implement
+	nop
+%endmacro

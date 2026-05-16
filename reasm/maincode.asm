@@ -58,13 +58,15 @@ f_init:
     MOV         word [0x5bbc],DI
     MOV         SI, 0
 .load_cars_loop:
-    MOV         DI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x5bbc]
     MOV         AX,SI
     NEG         AX
     SHL         AX,0x7
     ADD         AX,0x8000
     MOV         BX,0x7a00
-    MOV         DX,word [SI + 0x5af7] ;= 5B01h
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x5af7] ;= 5B01h
     PUSH        SI
     CALL        FUN_1000_2454
     POP         SI
@@ -72,7 +74,8 @@ f_init:
     PUSH        AX
     PUSH        DI
     PUSH        SI
-    MOV         SI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x5bbc]
     CALL        FUN_1000_2431
     POP         SI
     POP         DI
@@ -80,7 +83,8 @@ f_init:
     PUSH        AX
     PUSH        DI
     PUSH        SI
-    MOV         DX,word [SI + 0x5b2e]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x5b2e]
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
@@ -103,8 +107,10 @@ f_init:
     JC          .LAB_LOC_3
     POP         SI
     PUSH        SI
-    MOV         DI,word [SI + 0x5bbc]
-    MOV         word [DI + 0x1e],AX
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x5bbc]
+    setup_data  R12, DI
+    MOV         word [R12 + 0x1e],AX
     load_ES    AX
     MOV         DI, 0
     CALL        FUN_1000_5acf
@@ -116,11 +122,13 @@ f_init:
     POP         DI
     POP         AX
     INC         word [v_num_loaded_cars]         ;= 0001h
-    MOV         DI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x5bbc]
     ADD         DI,AX
     INC         SI
     INC         SI
-    MOV         word [SI + 0x5bbc],DI
+    setup_data  R11, SI
+    MOV         word [R11 + 0x5bbc],DI
     JMP         .load_cars_loop
 
 .LAB_LOC_5:
@@ -369,7 +377,8 @@ FUN_main_render:
 
 f_sanic_the_hendgerong:    
     SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x5bbc]
     PUSH SI
     CALL f_cam_select
     MOV         BX,word [0xc6]
@@ -386,12 +395,17 @@ f_sanic_the_hendgerong:
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
     POP SI
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x42]
+    setup_data  R11, SI
+    ADD         EAX,dword [R11 + 0x46]
     SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
+    setup_data  R11, SI
+    MOV         EBX,dword [R11 + 0x4a]
+    setup_data  R11, SI
+    ADD         EBX,dword [R11 + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
     JZ          .LAB_LOC_7
@@ -407,7 +421,8 @@ f_sanic_the_hendgerong:
     NEG         BX
 .LAB_LOC_8:
     ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xc]
     SAR         CX,0x9
     AND         CX,CX
     JGE         .LAB_LOC_9
@@ -420,16 +435,21 @@ f_sanic_the_hendgerong:
 ;************************************************************************************************
 F_0693:
     PUSH        SI
-    ADD         SI,word [SI + 0x20]
-    MOV         EAX,dword [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x20]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11]
     MOV         dword [0xaa],EAX
-    MOV         EAX,dword [SI + 0x4]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x4]
     MOV         dword [0xae],EAX
-    MOV         EAX,dword [SI + 0x8]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x8]
     MOV         dword [0xb2],EAX
     POP         SI
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     INC         SI
     INC         SI
     CALL        FUN_1000_1091
@@ -483,16 +503,21 @@ F_0693:
 ;************************************************************************************************
 F_073f:
     PUSH        SI
-    ADD         SI,word [SI + 0x20]
-    MOV         EAX,dword [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x20]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11]
     MOV         dword [0xaa],EAX
-    MOV         EAX,dword [SI + 0x4]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x4]
     MOV         dword [0xae],EAX
-    MOV         EAX,dword [SI + 0x8]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x8]
     MOV         dword [0xb2],EAX
     POP         SI
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     INC         SI
     INC         SI
     CALL        FUN_1000_1091
@@ -564,9 +589,11 @@ F_073f:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 F_0828:
-    MOV         EAX,dword [DI]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12]
     MOV         dword [0xaa],EAX
-    MOV         EAX,dword [DI + 0x4]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x4]
     MOV         dword [0xae],EAX
     MOV         AX, word [0xac]
     MOV         BX,word [0xb0]
@@ -575,10 +602,13 @@ F_0828:
     SHL         EAX,0x10
     MOV         dword [0xb2],EAX
     PUSH        SI
-    ADD         SI,word [SI + 0x20]
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x20]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0xac]
-    MOV         BX,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x6]
     SUB         BX,word [0xb0]
     NEG         BX
     PUSH        AX
@@ -590,7 +620,8 @@ F_0828:
     POP         AX
     CALL        FUN_1000_26dd
     MOV         BX,AX
-    MOV         AX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xa]
     SUB         AX,word [0xb4]
     CALL        FUN_1000_2b08
     SUB         AX,word [0xc4]
@@ -606,14 +637,20 @@ F_0828:
 F_0893:
                               ;XREF[3]:     1000:029a(c),1000:0366(c),1000:042f(c)
     PUSH        SI
-    ADD         SI,word [SI + 0x20]
-    MOV         AX,word [SI + 0x2]
-    SUB         AX,word [DI + 0x2]
-    MOV         BX,word [SI + 0x6]
-    SUB         BX,word [DI + 0x6]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x20]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x2]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x6]
+    setup_data  R12, DI
+    SUB         BX,word [R12 + 0x6]
     NEG         BX
     CALL        FUN_1000_2b08
-    MOV         word [DI + 0xc],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xc],AX
     MOV         BX,AX
     CALL        FUN_1000_2ad8
     MOV         CX,AX
@@ -628,48 +665,71 @@ F_0893:
     MOV         AX,DX
     XCHG        AX,BX
     NEG         AX
-    ADD         AX,word [SI + 0x2]
-    ADD         BX,word [SI + 0x6]
-    SUB         AX,word [DI + 0x2]
-    ADD         word [DI + 0x2],AX
-    SUB         BX,word [DI + 0x6]
-    ADD         word [DI + 0x6],BX
-    MOV         AX,word [DI + 0x2]
-    MOV         BX,word [DI + 0x6]
+    setup_data  R11, SI
+    ADD         AX,word [R11 + 0x2]
+    setup_data  R11, SI
+    ADD         BX,word [R11 + 0x6]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x2]
+    setup_data  R12, DI
+    ADD         word [R12 + 0x2],AX
+    setup_data  R12, DI
+    SUB         BX,word [R12 + 0x6]
+    setup_data  R12, DI
+    ADD         word [R12 + 0x6],BX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x2]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x6]
     CALL        FUN_1000_25c5
     MOV         BX,AX
     ADD         BX,0x28
     ADD         AX,word [0x11c]
-    SUB         AX,word [DI + 0xa]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0xa]
     SAR         AX,0x3
-    ADD         word [DI + 0xa],AX
-    CMP         BX,word [DI + 0xa]
+    setup_data  R12, DI
+    ADD         word [R12 + 0xa],AX
+    setup_data  R12, DI
+    CMP         BX,word [R12 + 0xa]
     JA          .LAB_LOC_2
 .LAB_LOC_1:
     MOV         BX,word [0x11e]
-    MOV         AX,word [SI + 0xa]
-    SUB         AX,word [DI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xa]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0xa]
     CALL        FUN_1000_2b08
-    SUB         AX,word [DI + 0xe]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0xe]
     SAR         AX,0x2
-    ADD         word [DI + 0xe],AX
-    MOV         word [DI + 0x10],0x0
-    MOV         AX,word [DI + 0xc]
+    setup_data  R12, DI
+    ADD         word [R12 + 0xe],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x10],0x0
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0xc]
     MOV         word [0xc6],AX
-    MOV         AX,word [DI + 0xe]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0xe]
     MOV         word [0xc4],AX
-    MOV         AX,word [DI + 0x10]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x10]
     MOV         word [0xc2],AX
-    MOV         EAX,dword [DI]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12]
     MOV         dword [0xaa],EAX
-    MOV         EAX,dword [DI + 0x4]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x4]
     MOV         dword [0xae],EAX
-    MOV         EAX,dword [DI + 0x8]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x8]
     MOV         dword [0xb2],EAX
     POP         SI
     RET
 .LAB_LOC_2:
-    MOV         word [DI + 0xa],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xa],BX
     JMP         .LAB_LOC_1
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -681,13 +741,18 @@ F_0948:
     MOV         CX, word [v_num_loaded_cars]
     MOV         DI, 0
 .LAB_LOC_1:
-    MOV         SI,word [DI + 0x5bbc]
-    ADD         SI,word [SI + 0x20]
-    MOVZX       R8D,word [SI + 0x2]
+    setup_data  R12, DI
+    MOV         SI,word [R12 + 0x5bbc]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x20]
+    setup_data  R11, SI
+    MOVZX       R8D,word [R11 + 0x2]
     ADD         EAX,R8D
-    MOVZX       R8D,word [SI + 0x6]
+    setup_data  R11, SI
+    MOVZX       R8D,word [R11 + 0x6]
     ADD         EBX,R8D
-    MOVZX       R8D,word [SI + 0xa]
+    setup_data  R11, SI
+    MOVZX       R8D,word [R11 + 0xa]
     ADD         EDX,R8D
     ADD         DI,0x2
     LOOP        .LAB_LOC_1
@@ -776,7 +841,8 @@ FUN_1000_0a3b:
     AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x5bbc]
     POPF
     CALL        FUN_1000_0a82
     JMP         .LAB_LOC_1
@@ -785,7 +851,8 @@ FUN_1000_0a3b:
     AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x5bbc]
     POPF
     CALL        FUN_1000_0a82
     JMP         .LAB_LOC_2
@@ -796,8 +863,10 @@ FUN_1000_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
     PUSHF
     MOV         DI,SI
-    ADD         DI,word [SI]
-    MOVZX       EAX,word [DI]
+    setup_data  R11, SI
+    ADD         DI,word [R11]
+    setup_data  R12, DI
+    MOVZX       EAX,word [R12]
     MOV         CX,AX
     SHR         EAX,0x1
     INC         EAX
@@ -807,20 +876,25 @@ FUN_1000_0a82:
     INC         DI
     INC         DI
     MOV         DX,DI
-    MOV         BX,word [DI + 0xa]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0xa]
     ADD         DI,0x1c
     DEC         CX
 .LAB_LOC_1:
-    MOV         AX,word [DI + 0xa]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0xa]
     CMP         AX,BX
     JL          .LAB_LOC_4
 .LAB_LOC_2:
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1
-    MOV         word [SI + 0x22],DX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x22],DX
 .LAB_LOC_3:
-    MOV         DI,word [SI + 0x22]
-    ADD         dword [DI + 0x14],EAX
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x22]
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x14],EAX
     RET
 .LAB_LOC_4:
     MOV         BX,AX
@@ -841,8 +915,10 @@ FUN_1000_0b25:
     CMP         DI,word [0x3e51]
     JNC         .LAB_LOC_4
 .LAB_LOC_1:
-    MOV         AX,word [DI + 0x3e55]
-    MOV         BX,word [DI + 0x3e59]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x3e55]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x3e59]
     PUSH        AX
     PUSH        BX
     TEST        byte [0x5fb],0x1
@@ -856,13 +932,16 @@ FUN_1000_0b25:
     CMP         BX,word [0xe58e]
     JG          .LAB_LOC_5
     SHL         BX,0x2
-    CMP         AX,word [BX + 0xe590]
+    setup_data  R11, BX
+    CMP         AX,word [R11 + 0xe590]
     JL          .LAB_LOC_5
-    CMP         AX,word [BX + 0xe592]
+    setup_data  R11, BX
+    CMP         AX,word [R11 + 0xe592]
     JG          .LAB_LOC_5
     POP         BX
     POP         AX
-    MOV         CX,word [DI + 0x3e5d]
+    setup_data  R12, DI
+    MOV         CX,word [R12 + 0x3e5d]
     SUB         AX,word [0xac]
     SUB         BX,word [0xb0]
     SUB         CX,word [0xb4]
@@ -871,10 +950,12 @@ FUN_1000_0b25:
     NEG         BX
     CALL        FUN_1000_2418
     JC          .LAB_LOC_3
-    MOVZX       SI,byte [DI + 0x3e6d]
+    setup_data  R12, DI
+    MOVZX       SI,byte [R12 + 0x3e6d]
     SHR         SI,0x4
     SHL         SI,0x1
-    MOV         SI,word [SI + 0x5a53]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x5a53]
     CALL        FUN_1000_0cd3
 .LAB_LOC_3:
     ADD         DI,0x1c
@@ -896,19 +977,30 @@ FUN_1000_0bb5:
     CMP         DI,word [0x3e51]
     JNC         .LAB_LOC_4
 .LAB_LOC_1:
-    SUB         word [DI + 0x3e6b],0x2
+    setup_data  R12, DI
+    SUB         word [R12 + 0x3e6b],0x2
     JS          .LAB_LOC_8
-    MOV         EAX,dword [DI + 0x3e5f]
-    MOV         EBX,dword [DI + 0x3e63]
-    MOV         ECX,dword [DI + 0x3e67]
-    ADD         dword [DI + 0x3e53],EAX
-    ADD         dword [DI + 0x3e57],EBX
-    ADD         dword [DI + 0x3e5b],ECX
-    CMP         word [DI + 0x3e6d],0xf
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x3e5f]
+    setup_data  R12, DI
+    MOV         EBX,dword [R12 + 0x3e63]
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x3e67]
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x3e53],EAX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x3e57],EBX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x3e5b],ECX
+    setup_data  R12, DI
+    CMP         word [R12 + 0x3e6d],0xf
     JNZ         .LAB_LOC_2
-    MOV         EAX,dword [DI + 0x3e53]
-    MOV         EBX,dword [DI + 0x3e57]
-    MOV         ECX,dword [DI + 0x3e5b]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x3e53]
+    setup_data  R12, DI
+    MOV         EBX,dword [R12 + 0x3e57]
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x3e5b]
     SAR         EAX,0x10
     SAR         EBX,0x10
     SAR         ECX,0x10
@@ -923,7 +1015,8 @@ FUN_1000_0bb5:
     JNS         .LAB_LOC_6
     MOV         EAX, [v_gravity]
     SAR         EAX,0x1
-    SUB         dword [DI + 0x3e67],EAX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x3e67],EAX
 .LAB_LOC_2:
     ADD         DI,0x1c
 .LAB_LOC_3:
@@ -953,11 +1046,15 @@ FUN_1000_0bb5:
     MOV         BL,AH
     setup_GS    R10, BX
     DEC         byte [R10]
-    MOV         word [DI + 0x3e6d],0x1
+    setup_data  R12, DI
+    MOV         word [R12 + 0x3e6d],0x1
     MOV         EAX,0x0
-    MOV         dword [DI + 0x3e5f],EAX
-    MOV         dword [DI + 0x3e63],EAX
-    MOV         dword [DI + 0x3e67],0x2710
+    setup_data  R12, DI
+    MOV         dword [R12 + 0x3e5f],EAX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0x3e63],EAX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0x3e67],0x2710
     JMP         .LAB_LOC_2
 .LAB_LOC_8:
 
@@ -965,14 +1062,30 @@ FUN_1000_0bb5:
     SUB         SI,0x1c
     MOV         word [0x3e51],SI
     JZ          .LAB_LOC_5
-    mov_m2m     dword [DI + 0x3e53], dword [SI + 0x3e53]
-    mov_m2m     dword [DI + 0x3e57], dword [SI + 0x3e57]
-    mov_m2m     dword [DI + 0x3e5b], dword [SI + 0x3e5b]
-    mov_m2m     dword [DI + 0x3e5f], dword [SI + 0x3e5f]
-    mov_m2m     dword [DI + 0x3e63], dword [SI + 0x3e63]
-    mov_m2m     dword [DI + 0x3e67], dword [SI + 0x3e67]
-    mov_m2m     word [DI + 0x3e6b], word [SI + 0x3e6b]
-    mov_m2m     word [DI + 0x3e6d], word [SI + 0x3e6d]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e53], dword [R11 + 0x3e53]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e57], dword [R11 + 0x3e57]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e5b], dword [R11 + 0x3e5b]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e5f], dword [R11 + 0x3e5f]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e63], dword [R11 + 0x3e63]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     dword [R12 + 0x3e67], dword [R11 + 0x3e67]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     word [R12 + 0x3e6b], word [R11 + 0x3e6b]
+    setup_data  R12, DI
+    setup_data  R11, SI
+    mov_m2m     word [R12 + 0x3e6d], word [R11 + 0x3e6d]
     SUB         SI,0x1c
 
     JMP         .LAB_LOC_3
@@ -1033,11 +1146,16 @@ FUN_1000_0cd3:
 ;************************************************************************************************
 FUN_1000_0d2a:
                               ;XREF[1]:     1000:56b4(c)
-    MOVZX       BX,byte [DI]
-    MOV         AL,byte [BX + CSD_DAT_keys_571e]
-    MOVZX       BX,byte [DI + 0x1]
-    MOV         AH,byte [BX + CSD_DAT_keys_571e]
-    MOV         BX,word [SI + 0xc]
+    setup_data  R12, DI
+    MOVZX       BX,byte [R12]
+    setup_data  R11, BX
+    MOV         AL,byte [R11 + CSD_DAT_keys_571e]
+    setup_data  R12, DI
+    MOVZX       BX,byte [R12 + 0x1]
+    setup_data  R11, BX
+    MOV         AH,byte [R11 + CSD_DAT_keys_571e]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0xc]
     MOV         CX,0x32
     TEST        AL,0x80
     JS          .LAB_LOC_2
@@ -1070,14 +1188,22 @@ FUN_1000_0d2a:
 .LAB_LOC_5:
     SUB         BX,CX
 .LAB_LOC_6:
-    MOV         word [SI + 0xc],BX
-    MOVZX       BX,byte [DI + 0x2]
-    MOV         AL,byte [BX + CSD_DAT_keys_571e]
-    MOVZX       BX,byte [DI + 0x3]
-    MOV         AH,byte [BX + CSD_DAT_keys_571e]
-    MOV         BX,word [SI + 0xa]
-    MOV         ECX,dword [SI + 0x42]
-    ADD         ECX,dword [SI + 0x46]
+    setup_data  R11, SI
+    MOV         word [R11 + 0xc],BX
+    setup_data  R12, DI
+    MOVZX       BX,byte [R12 + 0x2]
+    setup_data  R11, BX
+    MOV         AL,byte [R11 + CSD_DAT_keys_571e]
+    setup_data  R12, DI
+    MOVZX       BX,byte [R12 + 0x3]
+    setup_data  R11, BX
+    MOV         AH,byte [R11 + CSD_DAT_keys_571e]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0xa]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0x42]
+    setup_data  R11, SI
+    ADD         ECX,dword [R11 + 0x46]
     AND         CX,CX
     JGE         .LAB_LOC_7
     NEG         CX
@@ -1116,14 +1242,18 @@ FUN_1000_0d2a:
 .LAB_LOC_12:
     SUB         BX,CX
 .LAB_LOC_13:
-    MOV         word [SI + 0xa],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0xa],BX
     MOV         AX, 0
-    MOVZX       BX,byte [DI + 0x4]
-    TEST        byte [BX + CSD_DAT_keys_571e],0x80
+    setup_data  R12, DI
+    MOVZX       BX,byte [R12 + 0x4]
+    setup_data  R11, BX
+    TEST        byte [R11 + CSD_DAT_keys_571e],0x80
     JNZ         .LAB_LOC_14
     OR          AX,0x1
 .LAB_LOC_14:
-    MOV         word [SI + 0xe],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0xe],AX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -1131,26 +1261,36 @@ FUN_1000_0d2a:
 FUN_1000_0e28:
                               ;XREF[1]:     1000:48db(c)
     MOV         DI,SI
-    ADD         DI,word [SI]
+    setup_data  R11, SI
+    ADD         DI,word [R11]
     ADD         DI,0x2
-    MOV         AX,word [DI + 0x72]
-    MOV         BX,word [DI + 0xaa]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x72]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0xaa]
     SHR         AX,0x1
     SHR         BX,0x1
     ADD         AX,BX
-    MOV         word [SI + 0x10],AX
-    MOV         AX,word [DI + 0x76]
-    MOV         BX,word [DI + 0xae]
+    setup_data  R11, SI
+    MOV         word [R11 + 0x10],AX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x76]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0xae]
     SHR         AX,0x1
     SHR         BX,0x1
     ADD         AX,BX
-    MOV         word [SI + 0x12],AX
-    MOV         AX,word [DI + 0x7a]
-    MOV         BX,word [DI + 0xb2]
+    setup_data  R11, SI
+    MOV         word [R11 + 0x12],AX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x7a]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0xb2]
     SHR         AX,0x1
     SHR         BX,0x1
     ADD         AX,BX
-    MOV         word [SI + 0x14],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x14],AX
     MOV         word [CSD_WORD_1000_0e67],0x0
     RET
 
@@ -1181,7 +1321,8 @@ FUN_1000_0e69:
     MOV         EAX,[CSD_DWORD_1000_12a7]
     MOV         EBX,dword [CSD_DWORD_1000_12ab]
     MOV         ECX,dword [CSD_DWORD_1000_12af]
-    MOV         EDX,dword [SI + 0x42]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0x42]
     RET
 .LAB_LOC_3:
     TEST        word [CSD_WORD_1000_0e67],0x1
@@ -1192,13 +1333,15 @@ FUN_1000_0e69:
     MOV         EAX,[CSD_DWORD_1000_12a7]
     MOV         EBX,dword [CSD_DWORD_1000_12ab]
     MOV         ECX,dword [CSD_DWORD_1000_12af]
-    MOV         EDX,dword [SI + 0x46]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0x46]
     RET
 .LAB_LOC_5:
     TEST        word [CSD_WORD_1000_0e67],0x2
     JNZ         .LAB_LOC_6
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
     MOV         [CSD_DWORD_1000_12bf],EAX
@@ -1210,13 +1353,15 @@ FUN_1000_0e69:
     MOV         EAX,[CSD_DWORD_1000_12bf]
     MOV         EBX,dword [CSD_DWORD_1000_12c3]
     MOV         ECX,dword [CSD_DWORD_1000_12c7]
-    MOV         EDX,dword [SI + 0x4a]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0x4a]
     RET
 .LAB_LOC_7:
     TEST        word [CSD_WORD_1000_0e67],0x2
     JNZ         .LAB_LOC_8
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
     CALL        FUN_1000_10b6
     MOV         [CSD_DWORD_1000_12bf],EAX
@@ -1228,14 +1373,16 @@ FUN_1000_0e69:
     MOV         EAX,[CSD_DWORD_1000_12bf]
     MOV         EBX,dword [CSD_DWORD_1000_12c3]
     MOV         ECX,dword [CSD_DWORD_1000_12c7]
-    MOV         EDX,dword [SI + 0x4e]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0x4e]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_0f67:
                               ;XREF[1]:     1000:4bd5(c)
-    MOV         CX,word [SI + 0x8]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x8]
     CMP         AX,0x0
     JZ          .LAB_LOC_1
     CMP         AX,0x1
@@ -1248,50 +1395,62 @@ FUN_1000_0f67:
 .LAB_LOC_1:
     TEST        CX,CX
     JZ          .LAB_LOC_2
-    MOV         EAX,dword [SI + 0x42]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x42]
     SUB         EAX,EBX
     SAR         EAX,0x2
     ADD         EAX,EBX
-    MOV         dword [SI + 0x42],EAX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x42],EAX
     RET
 .LAB_LOC_2:
-    MOV         dword [SI + 0x42],EBX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x42],EBX
     RET
 .LAB_LOC_3:
     TEST        CX,CX
     JZ          .LAB_LOC_4
-    MOV         EAX,dword [SI + 0x46]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x46]
     SUB         EAX,EBX
     SAR         EAX,0x2
     ADD         EAX,EBX
-    MOV         dword [SI + 0x46],EAX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x46],EAX
     RET
 .LAB_LOC_4:
-    MOV         dword [SI + 0x46],EBX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x46],EBX
     RET
 .LAB_LOC_5:
     TEST        CX,0x1
     JZ          .LAB_LOC_6
-    MOV         EAX,dword [SI + 0x4a]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x4a]
     SUB         EAX,EBX
     SAR         EAX,0x2
     ADD         EAX,EBX
-    MOV         dword [SI + 0x4a],EAX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x4a],EAX
     RET
 .LAB_LOC_6:
-    MOV         dword [SI + 0x4a],EBX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x4a],EBX
     RET
 .LAB_LOC_7:
     TEST        CX,0x1
     JZ          .LAB_LOC_8
-    MOV         EAX,dword [SI + 0x4e]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x4e]
     SUB         EAX,EBX
     SAR         EAX,0x2
     ADD         EAX,EBX
-    MOV         dword [SI + 0x4e],EAX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x4e],EAX
     RET
 .LAB_LOC_8:
-    MOV         dword [SI + 0x4e],EBX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x4e],EBX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -1304,66 +1463,91 @@ FUN_1000_1003:
 ;************************************************************************************************
 FUN_1000_1004:
                               ;XREF[1]:     1000:56b7(c)
-    MOV         AX,word [SI + 0xa]
-    MOV         word [SI + 0x16],AX
-    MOV         AX,word [SI + 0xc]
-    MOV         word [SI + 0x18],AX
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xa]
+    setup_data  R11, SI
+    MOV         word [R11 + 0x16],AX
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xc]
+    setup_data  R11, SI
+    MOV         word [R11 + 0x18],AX
     MOV         CX,0x10
     MOV         BX,0x0
 .LAB_LOC_1:
-    MOV         EAX,dword [BX + SI + 0x42]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + SI + 0x42]
     SAR         EAX,0x7
-    SUB         dword [BX + SI + 0x42],EAX
+    setup_data  R11, BX
+    SUB         dword [R11 + SI + 0x42],EAX
     ADD         BX,0x4
     LOOP        .LAB_LOC_1
-    TEST        word [SI + 0xe],0x1
+    setup_data  R11, SI
+    TEST        word [R11 + 0xe],0x1
     JZ          .LAB_LOC_3
     MOV         CX,0x10
     MOV         BX,0x0
 .LAB_LOC_2:
-    MOV         EAX,dword [BX + SI + 0x42]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + SI + 0x42]
     SAR         EAX,0x2
-    SUB         dword [BX + SI + 0x42],EAX
+    setup_data  R11, BX
+    SUB         dword [R11 + SI + 0x42],EAX
     ADD         BX,0x4
     LOOP        .LAB_LOC_2
 .LAB_LOC_3:
-    MOV         AX,word [SI + 0x18]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x18]
     CWD
     MOV         CX,0x4000
     IMUL        CX
     MOVSX       EAX,DX
-    MOV         BX,word [SI + 0x8]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x8]
     TEST        BX,BX
     JZ          .LAB_LOC_4
     DEC         BX
     JZ          .LAB_LOC_5
     ROL         EAX,0x3
-    ADD         dword [SI + 0x42],EAX
-    ADD         dword [SI + 0x46],EAX
-    ADD         dword [SI + 0x4a],EAX
-    ADD         dword [SI + 0x4e],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x42],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x46],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x4a],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x4e],EAX
     RET
 .LAB_LOC_4:
     ROL         EAX,0x4
-    ADD         dword [SI + 0x4a],EAX
-    ADD         dword [SI + 0x4e],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x4a],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x4e],EAX
     RET
 .LAB_LOC_5:
     ROL         EAX,0x4
-    ADD         dword [SI + 0x42],EAX
-    ADD         dword [SI + 0x46],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x42],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x46],EAX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_1091:
                               ;XREF[4]:     1000:06b4(c),1000:0760(c),1000:113c(c),1000:11f6(c)
-    MOV         EDX,dword [SI + 0xc4]
-    SUB         EDX,dword [SI + 0xa8]
-    MOV         EBX,dword [SI + 0xc8]
-    SUB         EBX,dword [SI + 0xac]
-    MOV         ECX,dword [SI + 0xcc]
-    SUB         ECX,dword [SI + 0xb0]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0xc4]
+    setup_data  R11, SI
+    SUB         EDX,dword [R11 + 0xa8]
+    setup_data  R11, SI
+    MOV         EBX,dword [R11 + 0xc8]
+    setup_data  R11, SI
+    SUB         EBX,dword [R11 + 0xac]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0xcc]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11 + 0xb0]
     MOV         EAX,EDX
     CALL        FUN_1000_2726
     RET
@@ -1373,18 +1557,30 @@ FUN_1000_1091:
 FUN_1000_10b6:
                               ;XREF[6]:     1000:06c5(c),1000:0771(c),1000:0ef4(c),1000:0f36(c),
                               ;             1000:1150(c),1000:120a(c)
-    MOV         EDX,dword [SI + 0x70]
-    SUB         EDX,dword [SI + 0xa8]
-    ADD         EDX,dword [SI + 0x8c]
-    SUB         EDX,dword [SI + 0xc4]
-    MOV         EBX,dword [SI + 0x74]
-    SUB         EBX,dword [SI + 0xac]
-    ADD         EBX,dword [SI + 0x90]
-    SUB         EBX,dword [SI + 0xc8]
-    MOV         ECX,dword [SI + 0x78]
-    SUB         ECX,dword [SI + 0xb0]
-    ADD         ECX,dword [SI + 0x94]
-    SUB         ECX,dword [SI + 0xcc]
+    setup_data  R11, SI
+    MOV         EDX,dword [R11 + 0x70]
+    setup_data  R11, SI
+    SUB         EDX,dword [R11 + 0xa8]
+    setup_data  R11, SI
+    ADD         EDX,dword [R11 + 0x8c]
+    setup_data  R11, SI
+    SUB         EDX,dword [R11 + 0xc4]
+    setup_data  R11, SI
+    MOV         EBX,dword [R11 + 0x74]
+    setup_data  R11, SI
+    SUB         EBX,dword [R11 + 0xac]
+    setup_data  R11, SI
+    ADD         EBX,dword [R11 + 0x90]
+    setup_data  R11, SI
+    SUB         EBX,dword [R11 + 0xc8]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0x78]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11 + 0xb0]
+    setup_data  R11, SI
+    ADD         ECX,dword [R11 + 0x94]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11 + 0xcc]
     MOV         EAX,EDX
     CALL        FUN_1000_2726
     RET
@@ -1400,7 +1596,8 @@ FUN_1000_1136:
 
                               ;XREF[2]:     1000:0e9a(c),1000:0ec4(c)
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
     CALL        FUN_1000_1091
     MOV         [local_a],EAX
@@ -1411,7 +1608,8 @@ FUN_1000_1136:
     MOV         dword [CSD_DWORD_1000_12c3],EBX
     MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
-    MOV         BX,word [SI + 0x16]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
     MOV         [local_d],EAX
@@ -1453,7 +1651,8 @@ FUN_1000_11f0:
     prologo
                               ;XREF[1]:     1000:138f(c)
     PUSH        SI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
     CALL        FUN_1000_1091
     MOV         [local_a],EAX
@@ -1464,7 +1663,8 @@ FUN_1000_11f0:
     MOV         dword [CSD_DWORD_1000_12c3],EBX
     MOV         dword [CSD_DWORD_1000_12c7],ECX
     POP         SI
-    MOV         BX,word [SI + 0x16]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x16]
     CALL        FUN_1000_2aad
     SHL         EAX,0x10
     MOV         [local_d],EAX
@@ -1507,7 +1707,8 @@ FUN_1000_11f0:
 FUN_1000_1323:
                               ;XREF[1]:     1000:195c(c)
     PUSHA
-    MOV         AX,word [SI + 0x1e]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x1e]
     TEST        AX,AX
     JNZ         .LAB_LOC_1
     MOV         AX, [v_memblock_c]
@@ -1519,7 +1720,8 @@ FUN_1000_1323:
     MOV         AX,DS
     load_ES    AX
     POP         SI
-    ADD         SI,word [SI + 0x4]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x4]
     CALL        FUN_1000_1408
     POP_FS    
     POPA
@@ -1530,18 +1732,25 @@ FUN_1000_1323:
 FUN_1000_1347:
                               ;XREF[1]:     1000:1335(c)
     PUSH        SI
-    ADD         SI,word [SI]
-    MOV         CX,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
     ADD         SI,0x2
     MOV         DI,0x126
 .LAB_LOC_1:
     PUSH        CX
-    MOV         EAX,dword [SI]
-    MOV         EBX,dword [SI + 0x4]
-    MOV         ECX,dword [SI + 0x8]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11]
+    setup_data  R11, SI
+    MOV         EBX,dword [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0x8]
     CALL        FUN_1000_13cc
-    MOV         EAX,dword [SI]
-    MOV         EBX,dword [SI + 0x4]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11]
+    setup_data  R11, SI
+    MOV         EBX,dword [R11 + 0x4]
     PUSH        EAX
     PUSH        EBX
     shr  EAX, 0x10
@@ -1560,11 +1769,15 @@ FUN_1000_1347:
     PUSH        EAX
     PUSH        EBX
     PUSH        ECX
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
-    ADD         EAX,dword [SI]
-    ADD         EBX,dword [SI + 0x4]
-    ADD         ECX,dword [SI + 0x8]
+    setup_data  R11, SI
+    ADD         EAX,dword [R11]
+    setup_data  R11, SI
+    ADD         EBX,dword [R11 + 0x4]
+    setup_data  R11, SI
+    ADD         ECX,dword [R11 + 0x8]
     CALL        FUN_1000_13cc
     POP         ECX
     POP         EBX
@@ -1573,9 +1786,12 @@ FUN_1000_1347:
     NEG         EAX
     NEG         EBX
     NEG         ECX
-    ADD         EAX,dword [SI]
-    ADD         EBX,dword [SI + 0x4]
-    ADD         ECX,dword [SI + 0x8]
+    setup_data  R11, SI
+    ADD         EAX,dword [R11]
+    setup_data  R11, SI
+    ADD         EBX,dword [R11 + 0x4]
+    setup_data  R11, SI
+    ADD         ECX,dword [R11 + 0x8]
     CALL        FUN_1000_13cc
     RET
 ;************************************************************************************************
@@ -1592,13 +1808,18 @@ FUN_1000_13cc:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CALL        FUN_1000_2418
     JC          .LAB_LOC_1
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_1:
     ADD         DI,0xa
     RET
@@ -1682,12 +1903,15 @@ FUN_1000_1408:
     ADD         DI,AX
     ADD         DI,0x126
     MOV         AX, word [0x120]
-    CMP         word [DI + 0x2],AX
+    setup_data  R12, DI
+    CMP         word [R12 + 0x2],AX
     LODSW 
     MOV         CL,AL
     JL          FUN_1000_1408
-    MOV         AX,word [DI + 0x6]
-    MOV         BX,word [DI + 0x8]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x6]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x8]
     CALL        FUN_1000_3f98
     JMP         FUN_1000_1408
 .LAB_LOC_7:
@@ -1696,13 +1920,15 @@ FUN_1000_1408:
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
-    MOV         BX,word [DI + 0x128]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x128]
     LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
-    MOV         AX,word [DI + 0x128]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x128]
     LODSW 
     CMP         BX,AX
     LAHF
@@ -1737,7 +1963,8 @@ FUN_1000_1408:
     XCHG        DI,SI
     CALL        FUN_1000_46d3
     XCHG        DI,SI
-    MOV         AX,word [SI + -0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + -0x6]
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1871,7 +2098,8 @@ FUN_1000_1408:
     ADD         DI,0x126
     LODSW 
     MOV         BX,AX
-    MOV         BX,word [BX + 0x50e]
+    setup_data  R11, BX
+    MOV         BX,word [R11 + 0x50e]
     ADD         BX,word [0xdb12]
     XCHG        DI,SI
     CALL        FUN_1000_46a0
@@ -1886,7 +2114,8 @@ FUN_1000_1408:
     ADD         DI,0x126
     LODSW 
     MOV         BX,AX
-    MOV         BX,word [BX + 0x50e]
+    setup_data  R11, BX
+    MOV         BX,word [R11 + 0x50e]
     ADD         BX,word [0xdb12]
     PUSH        CX
     XCHG        DI,SI
@@ -1902,7 +2131,8 @@ FUN_1000_1408:
     ADD         DI,0x126
     LODSW 
     MOV         BX,AX
-    MOV         BX,word [BX + 0x50e]
+    setup_data  R11, BX
+    MOV         BX,word [R11 + 0x50e]
     ADD         BX,word [0xdb12]
     XCHG        DI,SI
     CALL        FUN_1000_47ec
@@ -1979,11 +2209,14 @@ FUN_1000_1408:
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    MOV         CX,word [DI + 0x2]
+    setup_data  R12, DI
+    MOV         CX,word [R12 + 0x2]
     CMP         CX,word [0x120]
     JL          .LAB_LOC_19
-    MOV         BX,word [DI + 0x6]
-    MOV         R8W,word [DI + 0x8]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x6]
+    setup_data  R12, DI
+    MOV         R8W,word [R12 + 0x8]
     LODSW 
     CWD
     IDIV        CX
@@ -2034,7 +2267,8 @@ FUN_1000_1408:
     MOV         BX,AX
     SHL         AX,0x2
     ADD         BX,AX
-    MOV         AX,word [BX + 0x128]
+    setup_data  R11, BX
+    MOV         AX,word [R11 + 0x128]
     CMP         AX,word [0x120]
     JL          .LAB_LOC_23
     LODSW 
@@ -2046,36 +2280,54 @@ FUN_1000_1408:
     PUSH        BX
     PUSH        SI
     MOV         SI,BX
-    MOV         AX,word [SI + 0x126]
-    MOV         BX,word [SI + 0x128]
-    MOV         CX,word [SI + 0x12a]
-    SUB         AX,word [DI + 0x126]
-    SUB         BX,word [DI + 0x128]
-    SUB         CX,word [DI + 0x12a]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x126]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x128]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x12a]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x126]
+    setup_data  R12, DI
+    SUB         BX,word [R12 + 0x128]
+    setup_data  R12, DI
+    SUB         CX,word [R12 + 0x12a]
     CALL        FUN_1000_271d
     MOVSX       R8D,AX
-    MOV         AX,word [SI + 0x126]
-    MOV         BX,word [SI + 0x128]
-    MOV         CX,word [SI + 0x12a]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x126]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x128]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x12a]
     CALL        FUN_1000_271d
     IMUL        R8D
     MOV         R8D,EAX
-    MOV         AX,word [DI + 0x126]
-    SUB         AX,word [SI + 0x126]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x126]
+    setup_data  R11, SI
+    SUB         AX,word [R11 + 0x126]
     CWD
-    IMUL        word [SI + 0x126]
+    setup_data  R11, SI
+    IMUL        word [R11 + 0x126]
     MOV         BX,AX
     MOV         CX,DX
-    MOV         AX,word [DI + 0x128]
-    SUB         AX,word [SI + 0x128]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x128]
+    setup_data  R11, SI
+    SUB         AX,word [R11 + 0x128]
     CWD
-    IMUL        word [SI + 0x128]
+    setup_data  R11, SI
+    IMUL        word [R11 + 0x128]
     ADD         BX,AX
     ADC         CX,DX
-    MOV         AX,word [DI + 0x12a]
-    SUB         AX,word [SI + 0x12a]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x12a]
+    setup_data  R11, SI
+    SUB         AX,word [R11 + 0x12a]
     CWD
-    IMUL        word [SI + 0x12a]
+    setup_data  R11, SI
+    IMUL        word [R11 + 0x12a]
     ADD         AX,BX
     ADC         DX,CX
     XCHG        AX,DX
@@ -2089,7 +2341,8 @@ FUN_1000_1408:
     MOV         CX,0x8
     MOV         BX,0x5de
 .LAB_LOC_21:
-    CMP         AX,word [BX]
+    setup_data  R11, BX
+    CMP         AX,word [R11]
     JL          .LAB_LOC_22
     ADD         BX,0x2
     LOOP        .LAB_LOC_21
@@ -2100,13 +2353,18 @@ FUN_1000_1408:
     ADD         SI,CX
     SHL         CX,0x2
     ADD         SI,CX
-    MOV         CX,word [BX + 0x128]
-    MOV         DX,word [BX + 0x12c]
-    MOV         R8W,word [BX + 0x12e]
+    setup_data  R11, BX
+    MOV         CX,word [R11 + 0x128]
+    setup_data  R11, BX
+    MOV         DX,word [R11 + 0x12c]
+    setup_data  R11, BX
+    MOV         R8W,word [R11 + 0x12e]
     PUSH        DX
     PUSH        R8W
-    MOV         AX,word [DI + 0x12c]
-    MOV         BX,word [DI + 0x12e]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x12c]
+    setup_data  R12, DI
+    MOV         BX,word [R12 + 0x12e]
     SUB         AX,DX
     SUB         BX,R8W
     CALL        FUN_1000_2b08
@@ -2115,7 +2373,8 @@ FUN_1000_1408:
     MOV         R8W,AX
     CALL        FUN_1000_2ad8
     MOV         BX,AX
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     IMUL        BX
     SHL         AX,0x1
     RCL         DX,0x1
@@ -2123,7 +2382,8 @@ FUN_1000_1408:
     CWD
     IDIV        CX
     MOV         word [0x5d8],AX
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     IMUL        R8W
     SHL         AX,0x1
     RCL         DX,0x1
@@ -2132,7 +2392,8 @@ FUN_1000_1408:
     IDIV        CX
     MOV         word [0x5d6],AX
     ADD         SI,0x2
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     IMUL        BX
     SHL         AX,0x1
     RCL         DX,0x1
@@ -2140,7 +2401,8 @@ FUN_1000_1408:
     CWD
     IDIV        CX
     MOV         word [0x5dc],AX
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     IMUL        R8W
     SHL         AX,0x1
     RCL         DX,0x1
@@ -2203,12 +2465,14 @@ FUN_1000_1408:
     SAHF
     JS          .LAB_LOC_25
     PUSH        SI
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     ADD         SI,AX
     CALL        FUN_1000_1408
     POP         SI
     PUSH        SI
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     ADD         SI,AX
     CALL        FUN_1000_1408
     POP         SI
@@ -2216,12 +2480,14 @@ FUN_1000_1408:
     JMP         FUN_1000_1408
 .LAB_LOC_25:
     PUSH        SI
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     ADD         SI,AX
     CALL        FUN_1000_1408
     POP         SI
     PUSH        SI
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     ADD         SI,AX
     CALL        FUN_1000_1408
     POP         SI
@@ -2236,8 +2502,10 @@ FUN_1000_194c:
     MOV         DI,0x5bbc
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_1:
-    MOV         SI,word [DI]
-    CMP         DX,word [SI + 0x1a]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
+    setup_data  R11, SI
+    CMP         DX,word [R11 + 0x1a]
     JNZ         .LAB_LOC_2
     CALL        FUN_1000_1323
 .LAB_LOC_2:
@@ -2267,7 +2535,8 @@ FUN_1000_1965:
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_1:
     PUSH        CX
-    MOV         SI,word [DI]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
     CALL        FUN_1000_22f0
     ADD         DI,0x2
     POP         CX
@@ -2279,7 +2548,8 @@ FUN_1000_1965:
     ADD         SI,AX
 .LAB_LOC_2:
     PUSH        BX
-    MOV         BL,byte [SI]
+    setup_data  R11, SI
+    MOV         BL,byte [R11]
     MOVZX       DX,BL
     SHL         DX,0x1
     MOV         DI,DX
@@ -2305,26 +2575,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_4
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_4:
     MOV         DX,word [0x5fd]
     CMP         DH,byte [0xe58c]
     JZ          .LAB_LOC_5
-    CMP         DL,byte [SI]
+    setup_data  R11, SI
+    CMP         DL,byte [R11]
     JZ          .LAB_LOC_5
-    CMP         DL,byte [SI + -0x4]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + -0x4]
     JBE         .LAB_LOC_5
-    CMP         DL,byte [SI + -0x2]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + -0x2]
     JA          .LAB_LOC_5
     PUSH        SI
     PUSH        DI
@@ -2346,7 +2624,8 @@ FUN_1000_1965:
     ADD         DI,0xa
     JMP         .LAB_LOC_3
 .LAB_LOC_6:
-    MOV         BL,byte [SI + 0x2]
+    setup_data  R11, SI
+    MOV         BL,byte [R11 + 0x2]
     MOVZX       DX,BL
     SHL         DX,0x1
     MOV         DI,DX
@@ -2372,26 +2651,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_8
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_8:
     MOV         DX,word [0x5fd]
     CMP         DH,byte [0xe58c]
     JZ          .LAB_LOC_9
-    CMP         DL,byte [SI + 0x2]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x2]
     JZ          .LAB_LOC_9
-    CMP         DL,byte [SI + -0x4]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + -0x4]
     JC          .LAB_LOC_9
-    CMP         DL,byte [SI + -0x2]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + -0x2]
     JNC         .LAB_LOC_9
     PUSH        SI
     PUSH        DI
@@ -2427,7 +2714,8 @@ FUN_1000_1965:
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_13:
     PUSH        CX
-    MOV         SI,word [DI]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
     CALL        FUN_1000_233b
     ADD         DI,0x2
     POP         CX
@@ -2439,7 +2727,8 @@ FUN_1000_1965:
     ADD         SI,AX
 .LAB_LOC_14:
     PUSH        BX
-    MOV         BL,byte [SI]
+    setup_data  R11, SI
+    MOV         BL,byte [R11]
     MOVZX       DX,BL
     SHL         DX,0x1
     MOV         DI,DX
@@ -2465,26 +2754,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_16
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_16:
     MOV         DX,word [0x5fd]
     CMP         DH,byte [0xe58e]
     JZ          .LAB_LOC_17
-    CMP         DL,byte [SI]
+    setup_data  R11, SI
+    CMP         DL,byte [R11]
     JZ          .LAB_LOC_17
-    CMP         DL,byte [SI + 0x4]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x4]
     JBE         .LAB_LOC_17
-    CMP         DL,byte [SI + 0x6]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x6]
     JA          .LAB_LOC_17
     PUSH        SI
     PUSH        DI
@@ -2506,7 +2803,8 @@ FUN_1000_1965:
     ADD         DI,0xa
     JMP         .LAB_LOC_15
 .LAB_LOC_18:
-    MOV         BL,byte [SI + 0x2]
+    setup_data  R11, SI
+    MOV         BL,byte [R11 + 0x2]
     MOVZX       DX,BL
     SHL         DX,0x1
     MOV         DI,DX
@@ -2532,26 +2830,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_20
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_20:
     MOV         DX,word [0x5fd]
     CMP         DH,byte [0xe58e]
     JZ          .LAB_LOC_21
-    CMP         DL,byte [SI + 0x2]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x2]
     JZ          .LAB_LOC_21
-    CMP         DL,byte [SI + 0x4]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x4]
     JC          .LAB_LOC_21
-    CMP         DL,byte [SI + 0x6]
+    setup_data  R11, SI
+    CMP         DL,byte [R11 + 0x6]
     JNC         .LAB_LOC_21
     PUSH        SI
     PUSH        DI
@@ -2596,7 +2902,8 @@ FUN_1000_1965:
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_25:
     PUSH        CX
-    MOV         SI,word [DI]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
     CALL        FUN_1000_2384
     ADD         DI,0x2
     POP         CX
@@ -2608,7 +2915,8 @@ FUN_1000_1965:
     ADD         SI,AX
 .LAB_LOC_26:
     PUSH        BX
-    MOV         BH,byte [SI]
+    setup_data  R11, SI
+    MOV         BH,byte [R11]
     MOVZX       DX,BH
     SHL         DX,0x1
     MOV         DI,DX
@@ -2634,26 +2942,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_28
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_28:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58c]
     JZ          .LAB_LOC_29
-    CMP         DH,byte [SI]
+    setup_data  R11, SI
+    CMP         DH,byte [R11]
     JZ          .LAB_LOC_29
-    CMP         DH,byte [SI + -0x4]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + -0x4]
     JBE         .LAB_LOC_29
-    CMP         DH,byte [SI + -0x2]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + -0x2]
     JA          .LAB_LOC_29
     PUSH        SI
     PUSH        DI
@@ -2675,7 +2991,8 @@ FUN_1000_1965:
     ADD         DI,0xa
     JMP         .LAB_LOC_27
 .LAB_LOC_30:
-    MOV         BH,byte [SI + 0x2]
+    setup_data  R11, SI
+    MOV         BH,byte [R11 + 0x2]
     MOVZX       DX,BH
     SHL         DX,0x1
     MOV         DI,DX
@@ -2701,26 +3018,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_32
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_32:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58c]
     JZ          .LAB_LOC_33
-    CMP         DH,byte [SI + 0x2]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x2]
     JZ          .LAB_LOC_33
-    CMP         DH,byte [SI + -0x4]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + -0x4]
     JC          .LAB_LOC_33
-    CMP         DH,byte [SI + -0x2]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + -0x2]
     JNC         .LAB_LOC_33
     PUSH        SI
     PUSH        DI
@@ -2756,7 +3081,8 @@ FUN_1000_1965:
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_37:
     PUSH        CX
-    MOV         SI,word [DI]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
     CALL        FUN_1000_23cf
     ADD         DI,0x2
     POP         CX
@@ -2768,7 +3094,8 @@ FUN_1000_1965:
     ADD         SI,AX
 .LAB_LOC_38:
     PUSH        BX
-    MOV         BH,byte [SI]
+    setup_data  R11, SI
+    MOV         BH,byte [R11]
     MOVZX       DX,BH
     SHL         DX,0x1
     MOV         DI,DX
@@ -2794,26 +3121,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_40
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_40:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58e]
     JZ          .LAB_LOC_41
-    CMP         DH,byte [SI]
+    setup_data  R11, SI
+    CMP         DH,byte [R11]
     JZ          .LAB_LOC_41
-    CMP         DH,byte [SI + 0x4]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x4]
     JBE         .LAB_LOC_41
-    CMP         DH,byte [SI + 0x6]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x6]
     JA          .LAB_LOC_41
     PUSH        SI
     PUSH        DI
@@ -2835,7 +3170,8 @@ FUN_1000_1965:
     ADD         DI,0xa
     JMP         .LAB_LOC_39
 .LAB_LOC_42:
-    MOV         BH,byte [SI + 0x2]
+    setup_data  R11, SI
+    MOV         BH,byte [R11 + 0x2]
     MOVZX       DX,BH
     SHL         DX,0x1
     MOV         DI,DX
@@ -2861,26 +3197,34 @@ FUN_1000_1965:
     MOV         DX,0xce
     CALL        FUN_1000_277e
     NEG         BX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],CX
     CMP         BX,word [0x120]
     JL          .LAB_LOC_44
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    MOV         word [DI + 0x6],AX
-    MOV         word [DI + 0x8],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],BX
 .LAB_LOC_44:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58e]
     JZ          .LAB_LOC_45
-    CMP         DH,byte [SI + 0x2]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x2]
     JZ          .LAB_LOC_45
-    CMP         DH,byte [SI + 0x4]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x4]
     JC          .LAB_LOC_45
-    CMP         DH,byte [SI + 0x6]
+    setup_data  R11, SI
+    CMP         DH,byte [R11 + 0x6]
     JNC         .LAB_LOC_45
     PUSH        SI
     PUSH        DI
@@ -2918,8 +3262,10 @@ FUN_1000_1cde:
                               ;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
     MOV         AL, byte [0x5fc]
     MOV         BX,0x1d51
-    MOV         CX,word [DI + 0xc]
-    ADD         CX,word [SI + 0x2]
+    setup_data  R12, DI
+    MOV         CX,word [R12 + 0xc]
+    setup_data  R11, SI
+    ADD         CX,word [R11 + 0x2]
     SAR         CX,0x2
     CMP         CX,word [0x5f5]
     JL          .LAB_LOC_4
@@ -3036,8 +3382,10 @@ FUN_1000_1e3a:
                               ;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
     MOV         AL, byte [0x5fc]
     MOV         BX,0x1d51
-    MOV         CX,word [DI + 0xc]
-    ADD         CX,word [SI + 0x2]
+    setup_data  R12, DI
+    MOV         CX,word [R12 + 0xc]
+    setup_data  R11, SI
+    ADD         CX,word [R11 + 0x2]
     SAR         CX,0x2
     CMP         CX,word [0x5f5]
     JL          .LAB_LOC_4
@@ -3151,14 +3499,18 @@ FUN_1000_1e3a:
 FUN_1000_22f0:
                               ;XREF[1]:     1000:1998(c)
     PUSH        SI
-    ADD         SI,word [SI]
-    MOV         R8W,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         R8W,word [R11]
     ADD         SI,0x2
     MOV         BX,0x0
     MOV         CX,0x7f7f
 .LAB_LOC_1:
-    MOV         AH,byte [SI + 0x7]
-    MOV         AL,byte [SI + 0x3]
+    setup_data  R11, SI
+    MOV         AH,byte [R11 + 0x7]
+    setup_data  R11, SI
+    MOV         AL,byte [R11 + 0x3]
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
@@ -3177,7 +3529,8 @@ FUN_1000_22f0:
     DEC         R8W
     JNZ         .LAB_LOC_1
     POP         SI
-    MOV         word [SI + 0x1a],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x1a],BX
     RET
 .LAB_LOC_5:
     MOV         BL,DL
@@ -3193,14 +3546,18 @@ FUN_1000_22f0:
 FUN_1000_233b:
                               ;XREF[1]:     1000:1b44(c)
     PUSH        SI
-    ADD         SI,word [SI]
-    MOV         R8W,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         R8W,word [R11]
     ADD         SI,0x2
     MOV         BX,0x0
     MOV         CX,0x7f7f
 .LAB_LOC_1:
-    MOV         AH,byte [SI + 0x7]
-    MOV         AL,byte [SI + 0x3]
+    setup_data  R11, SI
+    MOV         AH,byte [R11 + 0x7]
+    setup_data  R11, SI
+    MOV         AL,byte [R11 + 0x3]
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
@@ -3218,7 +3575,8 @@ FUN_1000_233b:
     DEC         R8W
     JNZ         .LAB_LOC_1
     POP         SI
-    MOV         word [SI + 0x1a],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x1a],BX
     RET
 .LAB_LOC_5:
     MOV         BL,DL
@@ -3234,14 +3592,18 @@ FUN_1000_233b:
 FUN_1000_2384:
                               ;XREF[1]:     1000:1fab(c)
     PUSH        SI
-    ADD         SI,word [SI]
-    MOV         R8W,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         R8W,word [R11]
     ADD         SI,0x2
     MOV         BX,0x0
     MOV         CX,0x7f7f
 .LAB_LOC_1:
-    MOV         AH,byte [SI + 0x7]
-    MOV         AL,byte [SI + 0x3]
+    setup_data  R11, SI
+    MOV         AH,byte [R11 + 0x7]
+    setup_data  R11, SI
+    MOV         AL,byte [R11 + 0x3]
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
@@ -3260,7 +3622,8 @@ FUN_1000_2384:
     DEC         R8W
     JNZ         .LAB_LOC_1
     POP         SI
-    MOV         word [SI + 0x1a],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x1a],BX
     RET
 .LAB_LOC_5:
     MOV         BL,DL
@@ -3276,14 +3639,18 @@ FUN_1000_2384:
 FUN_1000_23cf:
                               ;XREF[1]:     1000:2155(c)
     PUSH        SI
-    ADD         SI,word [SI]
-    MOV         R8W,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         R8W,word [R11]
     ADD         SI,0x2
     MOV         BX,0x0
     MOV         CX,0x7f7f
 .LAB_LOC_1:
-    MOV         AH,byte [SI + 0x7]
-    MOV         AL,byte [SI + 0x3]
+    setup_data  R11, SI
+    MOV         AH,byte [R11 + 0x7]
+    setup_data  R11, SI
+    MOV         AL,byte [R11 + 0x3]
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
@@ -3301,7 +3668,8 @@ FUN_1000_23cf:
     DEC         R8W
     JNZ         .LAB_LOC_1
     POP         SI
-    MOV         word [SI + 0x1a],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x1a],BX
     RET
 .LAB_LOC_5:
     MOV         BL,DL
@@ -3333,22 +3701,27 @@ FUN_1000_2418:
 FUN_1000_2431:
                               ;XREF[1]:     1000:01b8(c)
     MOV         DI,SI
-    MOV         CX,word [SI]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
     INC         CX
     INC         CX
-    MOV         word [SI + 0x20],CX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x20],CX
     MOV         DI,SI
     ADD         DI,CX
-    MOV         CX,word [DI]
+    setup_data  R12, DI
+    MOV         CX,word [R12]
 .LAB_LOC_1:
-    CMP         word [DI + 0x1a],-0x1
+    setup_data  R12, DI
+    CMP         word [R12 + 0x1a],-0x1
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1
     RET
 .LAB_LOC_2:
     SUB         DI,SI
-    MOV         word [SI + 0x20],DI
+    setup_data  R11, SI
+    MOV         word [R11 + 0x20],DI
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3395,13 +3768,18 @@ FUN_1000_2454:
     SHL         ECX,0x10
     MOV         EDX,ECX
     MOV         SI,DI
-    ADD         SI,word [SI]
-    MOV         CX,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
     ADD         SI,0x2
 .LAB_LOC_1:
-    ADD         dword [SI],EAX
-    ADD         dword [SI + 0x4],EBX
-    ADD         dword [SI + 0x8],EDX
+    setup_data  R11, SI
+    ADD         dword [R11],EAX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x4],EBX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x8],EDX
     ADD         SI,0x1c
     LOOP        .LAB_LOC_1
     MOV         AX,R8W
@@ -3603,17 +3981,25 @@ FUN_1000_2662:
                               ;             1000:16e4(c),1000:1d20(c),1000:1d4c(c),1000:1dd4(c),
                               ;             1000:1e2d(c),1000:1e7c(c),1000:1ea5(c),1000:1f28(c),
                               ;             1000:1f81(c)
-    MOV         AX,word [SI]
-    SUB         AX,word [SI + 0x8]
-    MOV         DX,word [SI + 0x12]
-    SUB         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    SUB         AX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x12]
+    setup_data  R11, SI
+    SUB         DX,word [R11 + 0xa]
     IMUL        DX
     MOV         CX,AX
     MOV         BX,DX
-    MOV         AX,word [SI + 0x10]
-    SUB         AX,word [SI + 0x8]
-    MOV         DX,word [SI + 0x2]
-    SUB         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x10]
+    setup_data  R11, SI
+    SUB         AX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
+    setup_data  R11, SI
+    SUB         DX,word [R11 + 0xa]
     IMUL        DX
     SUB         AX,CX
     SBB         DX,BX
@@ -3736,49 +4122,58 @@ FUN_1000_277e:
     MOV         DI,DX
     MOV         [local_a],AX
     MOV         AX,BX
-    IMUL        word [DI]
+    setup_data  R12, DI
+    IMUL        word [R12]
     SHL         AX,0x1
     RCL         DX,0x1
     MOV         [local_b],DX
     MOV         AX,CX
-    IMUL        word [DI + 0x6]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0x6]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
     MOV         AX, [local_a]
-    IMUL        word [DI + 0xc]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0xc]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
     PUSH        [local_b]
     MOV         AX,BX
-    IMUL        word [DI + 0x2]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0x2]
     SHL         AX,0x1
     RCL         DX,0x1
     MOV         [local_b],DX
     MOV         AX,CX
-    IMUL        word [DI + 0x8]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0x8]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
     MOV         AX,[local_a]
-    IMUL        word [DI + 0xe]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0xe]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
     PUSH        [local_b]
     MOV         AX,BX
-    IMUL        word [DI + 0x4]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0x4]
     SHL         AX,0x1
     RCL         DX,0x1
     MOV         [local_b],DX
     MOV         AX,CX
-    IMUL        word [DI + 0xa]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0xa]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
     MOV         AX,[local_a]
-    IMUL        word [DI + 0x10]
+    setup_data  R12, DI
+    IMUL        word [R12 + 0x10]
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         [local_b],DX
@@ -3795,15 +4190,24 @@ FUN_1000_277e:
 ;************************************************************************************************
 FUN_1000_27f1:
                               ;XREF[3]:     1000:02bd(c),1000:0389(c),1000:0452(c)
-    MOV         AX,word [DI + 0x2]
-    XCHG        word [DI + 0x6],AX
-    MOV         word [DI + 0x2],AX
-    MOV         AX,word [DI + 0x4]
-    XCHG        word [DI + 0xc],AX
-    MOV         word [DI + 0x4],AX
-    MOV         AX,word [DI + 0xa]
-    XCHG        word [DI + 0xe],AX
-    MOV         word [DI + 0xa],AX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x2]
+    setup_data  R12, DI
+    XCHG        word [R12 + 0x6],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],AX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x4]
+    setup_data  R12, DI
+    XCHG        word [R12 + 0xc],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0xa]
+    setup_data  R12, DI
+    XCHG        word [R12 + 0xe],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xa],AX
     RET
 
  ; 1000:2988 [UNDEFINED BYTES REMOVED]
@@ -3813,17 +4217,20 @@ FUN_1000_27f1:
 ;************************************************************************************************
 FUN_1000_2989:
                               ;XREF[3]:     1000:02ba(c),1000:0386(c),1000:044f(c)
-    MOV         BX,word [SI]
+    setup_data  R11, SI
+    MOV         BX,word [R11]
     CALL        FUN_1000_2aad
     MOV         word [0xd100],AX
     CALL        FUN_1000_2ad8
     MOV         word [0xd102],AX
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     CALL        FUN_1000_2aad
     MOV         word [0xd104],AX
     CALL        FUN_1000_2ad8
     MOV         word [0xd106],AX
-    MOV         BX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x4]
     CALL        FUN_1000_2aad
     NEG         AX
     MOV         word [0xd108],AX
@@ -3850,7 +4257,8 @@ FUN_1000_2989:
     RCL         DX,0x1
     MOV         AX,DX
     ADD         DX,CX
-    MOV         word [DI],DX
+    setup_data  R12, DI
+    MOV         word [R12],DX
     XCHG        AX,BX
     IMUL        word [0xd10a]
     SHL         AX,0x1
@@ -3867,7 +4275,8 @@ FUN_1000_2989:
     INC         DX
 .LAB_LOC_2:
     NEG         DX
-    MOV         word [DI + 0x2],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],DX
     MOV         AX, word [0xd100]
     IMUL        word [0xd106]
     SHL         AX,0x1
@@ -3877,24 +4286,28 @@ FUN_1000_2989:
     INC         DX
 .LAB_LOC_3:
     NEG         DX
-    MOV         word [DI + 0x4],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],DX
     MOV         AX, word [0xd108]
     IMUL        word [0xd106]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         word [DI + 0x6],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],DX
     MOV         AX, word [0xd10a]
     IMUL        word [0xd106]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         word [DI + 0x8],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x8],DX
     MOV         DX,word [0xd104]
     CMP         DX,0x8000
     JNZ         .LAB_LOC_4
     INC         DX
 .LAB_LOC_4:
     NEG         DX
-    MOV         word [DI + 0xa],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xa],DX
     MOV         AX,CX
     IMUL        word [0xd104]
     SHL         AX,0x1
@@ -3905,7 +4318,8 @@ FUN_1000_2989:
     SHL         AX,0x1
     RCL         DX,0x1
     ADD         DX,CX
-    MOV         word [DI + 0xc],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xc],DX
     MOV         AX,BX
     IMUL        word [0xd104]
     SHL         AX,0x1
@@ -3921,12 +4335,14 @@ FUN_1000_2989:
 .LAB_LOC_5:
     NEG         DX
     ADD         DX,CX
-    MOV         word [DI + 0xe],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xe],DX
     MOV         AX, word [0xd102]
     IMUL        word [0xd106]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         word [DI + 0x10],DX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x10],DX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3950,7 +4366,8 @@ FUN_1000_2aad:
     AND         AL,0xfe
     PUSH        BX
     MOV         BX,AX
-    MOV         AX,word [BX + 0xd10c]
+    setup_data  R11, BX
+    MOV         AX,word [R11 + 0xd10c]
     POP         BX
     TEST        BH,0x80
     JZ          .LAB_LOC_2
@@ -3982,7 +4399,8 @@ FUN_1000_2ad8:
     AND         AL,0xfe
     PUSH        BX
     MOV         BX,AX
-    MOV         AX,word [BX + 0xd10c]
+    setup_data  R11, BX
+    MOV         AX,word [R11 + 0xd10c]
     POP         BX
     TEST        BH,0xc0
     JP          .LAB_LOC_3
@@ -4058,7 +4476,8 @@ FUN_1000_2b3b:
     MOV         BL,AH
     MOV         BH, 0
     SHL         BX,0x1
-    MOV         AX,word [BX + 0xd90e]
+    setup_data  R11, BX
+    MOV         AX,word [R11 + 0xd90e]
     RET
 
  ; 1000:2b6f [UNDEFINED BYTES REMOVED]
@@ -4131,7 +4550,8 @@ FUN_1000_2bec:
     CALL        FUN_1000_302d
     add sp, 2
     MOV         SI,DI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     CMP         CX,0x3
     JC          .LAB_LOC_2
     MOV         AX, word [0xdbbe]
@@ -4143,20 +4563,28 @@ FUN_1000_2bec:
 .LAB_LOC_1:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0x8]
-    MOV         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
     POP         CX
     ADD         SI,0x8
     LOOP        .LAB_LOC_1
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI]
-    MOV         DX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
     CALL        FUN_1000_2c4b
     CALL        FUN_1000_2d61
 .LAB_LOC_2:
@@ -4211,12 +4639,14 @@ FUN_1000_2c4b:
     POP         AX
     SHL         EAX,0x10
 .LAB_LOC_7:
-    movup       word [BX],EAX
+    setup_data  R11, BX
+    movup       word [R11],EAX
     ADD         BX,0x4
     ADD         EAX,EDX
     LOOP        .LAB_LOC_7
     ROR         EAX,0x10
-    MOV         word [BX],AX
+    setup_data  R11, BX
+    MOV         word [R11],AX
 .LAB_LOC_8:
     RET
 
@@ -4243,8 +4673,10 @@ FUN_1000_2d61:
     SHL         DI,0x2
     ADD         DI,SI
     SHL         DI,0x4
-    MOV         AX,word [SI + 0xdbc8]
-    MOV         CX,word [SI + 0xdbca]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xdbc8]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xdbca]
     SUB         CX,AX
     JNS         .LAB_LOC_2
     ADD         AX,CX
@@ -4273,8 +4705,10 @@ FUN_1000_2d61:
     SHL         DI,0x2
     ADD         DI,SI
     SHL         DI,0x4
-    MOV         AX,word [SI + 0xdbc8]
-    MOV         CX,word [SI + 0xdbca]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xdbc8]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xdbca]
     SUB         CX,AX
     JNS         .LAB_LOC_7
     ADD         AX,CX
@@ -4286,7 +4720,8 @@ FUN_1000_2d61:
 .LAB_LOC_8:
     setup_ES    R10, DI
     MOV         BL,byte [R10]
-    MOV         AL,byte [BX + 0x2e51]
+    setup_data  R11, BX
+    MOV         AL,byte [R11 + 0x2e51]
     STOSB 
     LOOP        .LAB_LOC_8
     ADD         SI,0x4
@@ -4305,30 +4740,39 @@ FUN_1000_2df2:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JL          .LAB_LOC_3
@@ -4337,7 +4781,8 @@ FUN_1000_2df2:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -4349,8 +4794,10 @@ FUN_1000_2df2:
     CALL        FUN_1000_3f7a
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
 .LAB_LOC_4:
@@ -4360,7 +4807,8 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
@@ -4373,8 +4821,10 @@ FUN_1000_2df2:
     CALL        FUN_1000_3f7a
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     POP         BX
@@ -4383,15 +4833,18 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JGE         .LAB_LOC_5
@@ -4399,7 +4852,8 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -4412,30 +4866,39 @@ FUN_1000_2eaf:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JG          .LAB_LOC_3
@@ -4444,7 +4907,8 @@ FUN_1000_2eaf:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -4458,8 +4922,10 @@ FUN_1000_2eaf:
     CALL        FUN_1000_3f7a
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
 .LAB_LOC_4:
@@ -4469,7 +4935,8 @@ FUN_1000_2eaf:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
@@ -4480,8 +4947,10 @@ FUN_1000_2eaf:
     CALL        FUN_1000_3f7a
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     POP         BX
@@ -4490,15 +4959,18 @@ FUN_1000_2eaf:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         AX,word [param_aw]
     JLE         .LAB_LOC_5
@@ -4506,7 +4978,8 @@ FUN_1000_2eaf:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -4518,30 +4991,39 @@ FUN_1000_2f6c:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JL          .LAB_LOC_3
@@ -4550,7 +5032,8 @@ FUN_1000_2f6c:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -4563,8 +5046,10 @@ FUN_1000_2f6c:
     SUB         AX,word [param_aw]
     CALL        FUN_1000_3f7a
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
 .LAB_LOC_4:
@@ -4574,7 +5059,8 @@ FUN_1000_2f6c:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
@@ -4588,8 +5074,10 @@ FUN_1000_2f6c:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_3f7a
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     POP         BX
@@ -4600,15 +5088,18 @@ FUN_1000_2f6c:
     jnz .LAB_LOC_1 
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JGE         .LAB_LOC_5
@@ -4616,7 +5107,8 @@ FUN_1000_2f6c:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -4629,30 +5121,39 @@ FUN_1000_302d:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JG          .LAB_LOC_3
@@ -4661,7 +5162,8 @@ FUN_1000_302d:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -4676,8 +5178,10 @@ FUN_1000_302d:
     SUB         AX,word [param_aw]
     CALL        FUN_1000_3f7a
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
 .LAB_LOC_4:
@@ -4687,7 +5191,8 @@ FUN_1000_302d:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
@@ -4699,8 +5204,10 @@ FUN_1000_302d:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_3f7a
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x8
     INC         word [local_a]
     POP         BX
@@ -4710,15 +5217,18 @@ FUN_1000_302d:
     jnz .LAB_LOC_1 ;was a loop
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_6:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x8
     CMP         BX,word [param_aw]
     JLE         .LAB_LOC_5
@@ -4726,7 +5236,8 @@ FUN_1000_302d:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 
@@ -4749,7 +5260,8 @@ FUN_1000_30ee:
     XCHG        DI,SI
     CALL        FUN_1000_35cf
     MOV         SI,DI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     CMP         CX,0x3
     JC          .LAB_LOC_3
     MOV         AX, word [0xdbbe]
@@ -4761,42 +5273,59 @@ FUN_1000_30ee:
 .LAB_LOC_1:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0x8]
-    MOV         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
     POP         CX
     ADD         SI,0x8
     LOOP        .LAB_LOC_1
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI]
-    MOV         DX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
     CALL        FUN_1000_2c4b
     MOV         SI,0xdb16
     PUSH        SI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     DEC         CX
 .LAB_LOC_2:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI + 0x4]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0xc]
-    MOV         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xc]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xa]
     CALL        FUN_1000_317d
     POP         SI
     POP         CX
     ADD         SI,0x8
     LOOP        .LAB_LOC_2
-    MOV         AX,word [SI + 0x4]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI + 0x4]
-    MOV         DX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
     CALL        FUN_1000_317d
     CALL        FUN_1000_31d1
 .LAB_LOC_3:
@@ -4835,13 +5364,15 @@ FUN_1000_317d:
     SHL         EAX,0x10
 .LAB_LOC_3:
     ROR         EAX,0x10
-    MOV         word [BX],AX
+    setup_data  R11, BX
+    MOV         word [R11],AX
     ADD         BX,0x4
     ROL         EAX,0x10
     ADD         EAX,EDX
     LOOP        .LAB_LOC_3
     ROR         EAX,0x10
-    MOV         word [BX],AX
+    setup_data  R11, BX
+    MOV         word [R11],AX
 .LAB_LOC_4:
     RET
 ;************************************************************************************************
@@ -4864,10 +5395,14 @@ FUN_1000_31d1:
     SHL         DI,0x4
     PUSH        BX
     PUSH        DX
-    MOV         AX,word [BX + 0xdbc8]
-    MOV         CX,word [BX + 0xdbca]
-    MOV         R8W,word [BX + 0xdee8]
-    MOV         DX,word [BX + 0xdeea]
+    setup_data  R11, BX
+    MOV         AX,word [R11 + 0xdbc8]
+    setup_data  R11, BX
+    MOV         CX,word [R11 + 0xdbca]
+    setup_data  R11, BX
+    MOV         R8W,word [R11 + 0xdee8]
+    setup_data  R11, BX
+    MOV         DX,word [R11 + 0xdeea]
     SUB         DX,R8W
     SUB         CX,AX
     JNS         .LAB_LOC_2
@@ -4911,35 +5446,48 @@ FUN_1000_324f:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     POP         DI
     ADD         SI,0x8
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     ADD         DI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_4
@@ -4949,7 +5497,8 @@ FUN_1000_324f:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4965,15 +5514,18 @@ FUN_1000_324f:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc0]
-    MOV         word [DI],CX
-    MOV         word [DI + 0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12],CX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],AX
     POP         CX
     POP         AX
     MOV         DX,R8W
     ROR         R8D,0x10
     MOV         BX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
     POP         R8W
@@ -4995,15 +5547,18 @@ FUN_1000_324f:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc0]
-    MOV         word [DI],CX
-    MOV         word [DI + 0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12],CX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],AX
     POP         CX
     POP         AX
     MOV         BX,R8W
     ROR         R8D,0x10
     MOV         DX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5018,9 +5573,12 @@ FUN_1000_324f:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         AX,word [0xdbc0]
     JGE         .LAB_LOC_3
@@ -5035,35 +5593,48 @@ FUN_1000_3376:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     POP         DI
     ADD         SI,0x8
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     ADD         DI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_4
@@ -5074,7 +5645,8 @@ FUN_1000_3376:
     POP         SI
     MOV         AX, word [0xe528]
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -5088,15 +5660,18 @@ FUN_1000_3376:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc2]
-    MOV         word [DI],CX
-    MOV         word [DI + 0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12],CX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],AX
     POP         CX
     POP         AX
     MOV         BX,R8W
     ROR         R8D,0x10
     MOV         DX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
     POP         R8W
@@ -5121,15 +5696,18 @@ FUN_1000_3376:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc2]
-    MOV         word [DI],CX
-    MOV         word [DI + 0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12],CX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],AX
     POP         CX
     POP         AX
     MOV         DX,R8W
     ROR         R8D,0x10
     MOV         BX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5144,9 +5722,12 @@ FUN_1000_3376:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         AX,word [0xdbc2]
     JLE         .LAB_LOC_3
@@ -5161,35 +5742,48 @@ FUN_1000_34a2:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     POP         DI
     ADD         SI,0x8
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     ADD         DI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_4
@@ -5199,7 +5793,8 @@ FUN_1000_34a2:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -5217,15 +5812,18 @@ FUN_1000_34a2:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbc]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],CX
     POP         CX
     POP         AX
     MOV         DX,R8W
     ROR         R8D,0x10
     MOV         BX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
     POP         R8W
@@ -5249,15 +5847,18 @@ FUN_1000_34a2:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbc]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],CX
     POP         CX
     POP         AX
     MOV         BX,R8W
     ROR         R8D,0x10
     MOV         DX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5272,9 +5873,12 @@ FUN_1000_34a2:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         BX,word [0xdbbc]
     JGE         .LAB_LOC_3
@@ -5289,35 +5893,48 @@ FUN_1000_35cf:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     POP         DI
     ADD         SI,0x8
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
     ADD         DI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_4
@@ -5327,7 +5944,8 @@ FUN_1000_35cf:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -5343,15 +5961,18 @@ FUN_1000_35cf:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbe]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],CX
     POP         CX
     POP         AX
     MOV         BX,R8W
     ROR         R8D,0x10
     MOV         DX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
     POP         R8W
@@ -5378,15 +5999,18 @@ FUN_1000_35cf:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbe]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],CX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],CX
     POP         CX
     POP         AX
     MOV         DX,R8W
     ROR         R8D,0x10
     MOV         BX,R8W
     CALL        FUN_1000_3f7a
-    MOV         word [DI + 0x4],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],AX
     ADD         DI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5401,9 +6025,12 @@ FUN_1000_35cf:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         R8D,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
     ADD         SI,0x8
     CMP         BX,word [0xdbbe]
     JLE         .LAB_LOC_3
@@ -5430,7 +6057,8 @@ FUN_1000_36fe:
     XCHG        DI,SI
     CALL        FUN_1000_3ddb
     MOV         SI,DI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     CMP         CX,0x3
     JC          .LAB_LOC_3
     MOV         AX, word [0xdbbe]
@@ -5442,46 +6070,67 @@ FUN_1000_36fe:
 .LAB_LOC_1:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0x8]
-    MOV         DX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
     POP         CX
     ADD         SI,0x8
     LOOP        .LAB_LOC_1
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI]
-    MOV         DX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
     CALL        FUN_1000_2c4b
     MOV         SI,0xdb16
     PUSH        SI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     DEC         CX
 .LAB_LOC_2:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI + 0x4]
-    MOV         BX,word [SI + 0x6]
-    MOV         CX,word [SI + 0xc]
-    MOV         DX,word [SI + 0xe]
-    MOV         DI,word [SI + 0xa]
-    MOV         SI,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x6]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xc]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xe]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0xa]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0x2]
     CALL        FUN_1000_379b
     POP         SI
     POP         CX
     ADD         SI,0x8
     LOOP        .LAB_LOC_2
-    MOV         AX,word [SI + 0x4]
-    MOV         BX,word [SI + 0x6]
-    MOV         R8W,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x6]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    MOV         DI,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x2]
     MOV         SI,R8W
     CALL        FUN_1000_379b
     CALL        FUN_1000_3827
@@ -5534,14 +6183,18 @@ FUN_1000_379b:
     SHL         EBX,0x10
     XCHG        ECX,EDI
 .LAB_LOC_3:
-    movup       word [SI],EAX
-    movup       word [SI + 0x320],EBX
+    setup_data  R11, SI
+    movup       word [R11],EAX
+    setup_data  R11, SI
+    movup       word [R11 + 0x320],EBX
     ADD         SI,0x4
     ADD         EAX,EDI
     ADD         EBX,EDX
     LOOP        .LAB_LOC_3
-    movup       word [SI],EAX
-    movup       word [SI + 0x320],EBX
+    setup_data  R11, SI
+    movup       word [R11],EAX
+    setup_data  R11, SI
+    movup       word [R11 + 0x320],EBX
 .LAB_LOC_4:
     POP         SI
     POP         DI
@@ -5567,12 +6220,18 @@ FUN_1000_3827:
     ADD         DI,SI
     SHL         DI,0x4
     PUSH        SI
-    MOV         AX,word [SI + 0xdbc8]
-    MOV         CX,word [SI + 0xdbca]
-    MOV         BX,word [SI + 0xdee8]
-    MOV         DX,word [SI + 0xdeea]
-    MOV         R8W,word [SI + 0xe208]
-    MOV         SI,word [SI + 0xe20a]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xdbc8]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0xdbca]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0xdee8]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0xdeea]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0xe208]
+    setup_data  R11, SI
+    MOV         SI,word [R11 + 0xe20a]
     SUB         SI,R8W
     SUB         DX,BX
     SUB         CX,AX
@@ -5640,7 +6299,8 @@ FUN_1000_3827:
     setup_ES    R10, DI
     MOV         AL,byte [R10]
     XCHG        AX,BX
-    MOV         BL,byte [BX + 0x2e51]
+    setup_data  R11, BX
+    MOV         BL,byte [R11 + 0x2e51]
     XCHG        AX,BX
     setup_ES    R10, DI
     MOV         byte [R10],AL
@@ -5654,20 +6314,29 @@ FUN_1000_390a:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
-    MOV         word [DI + 0x6],DX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],DX
     POP         DI
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -5677,10 +6346,14 @@ FUN_1000_390a:
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],BX
-    MOV         word [SI + 0x4],R8W
-    MOV         word [SI + 0x6],DI
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],R8W
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],DI
     ADD         SI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
@@ -5688,10 +6361,14 @@ FUN_1000_390a:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         AX,word [0xdbc0]
@@ -5702,7 +6379,8 @@ FUN_1000_390a:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -5719,8 +6397,10 @@ FUN_1000_390a:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc0]
-    MOV         word [SI],CX
-    MOV         word [SI + 0x2],AX
+    setup_data  R11, SI
+    MOV         word [R11],CX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],AX
     POP         CX
     POP         AX
     MOV         DX,R8W
@@ -5732,7 +6412,8 @@ FUN_1000_390a:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         DX,DI
@@ -5742,7 +6423,8 @@ FUN_1000_390a:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
     POP         DI
@@ -5767,8 +6449,10 @@ FUN_1000_390a:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc0]
-    MOV         word [SI],CX
-    MOV         word [SI + 0x2],AX
+    setup_data  R11, SI
+    MOV         word [R11],CX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],AX
     POP         CX
     POP         AX
     MOV         BX,R8W
@@ -5780,7 +6464,8 @@ FUN_1000_390a:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         BX,DI
@@ -5790,7 +6475,8 @@ FUN_1000_390a:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5808,10 +6494,14 @@ FUN_1000_390a:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         AX,word [0xdbc0]
@@ -5827,20 +6517,29 @@ FUN_1000_3aa3:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
-    MOV         word [DI + 0x6],DX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],DX
     POP         DI
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -5850,10 +6549,14 @@ FUN_1000_3aa3:
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],BX
-    MOV         word [SI + 0x4],R8W
-    MOV         word [SI + 0x6],DI
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],R8W
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],DI
     ADD         SI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
@@ -5861,10 +6564,14 @@ FUN_1000_3aa3:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         AX,word [0xdbc2]
@@ -5875,7 +6582,8 @@ FUN_1000_3aa3:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -5890,8 +6598,10 @@ FUN_1000_3aa3:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc2]
-    MOV         word [SI],CX
-    MOV         word [SI + 0x2],AX
+    setup_data  R11, SI
+    MOV         word [R11],CX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],AX
     POP         CX
     POP         AX
     MOV         BX,R8W
@@ -5903,7 +6613,8 @@ FUN_1000_3aa3:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         BX,DI
@@ -5913,7 +6624,8 @@ FUN_1000_3aa3:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
     POP         DI
@@ -5940,8 +6652,10 @@ FUN_1000_3aa3:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbc2]
-    MOV         word [SI],CX
-    MOV         word [SI + 0x2],AX
+    setup_data  R11, SI
+    MOV         word [R11],CX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],AX
     POP         CX
     POP         AX
     MOV         DX,R8W
@@ -5953,7 +6667,8 @@ FUN_1000_3aa3:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         DX,DI
@@ -5963,7 +6678,8 @@ FUN_1000_3aa3:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -5981,10 +6697,14 @@ FUN_1000_3aa3:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         AX,word [0xdbc2]
@@ -6000,20 +6720,29 @@ FUN_1000_3c3c:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
-    MOV         word [DI + 0x6],DX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],DX
     POP         DI
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6023,10 +6752,14 @@ FUN_1000_3c3c:
     JL          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],BX
-    MOV         word [SI + 0x4],R8W
-    MOV         word [SI + 0x6],DI
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],R8W
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],DI
     ADD         SI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
@@ -6034,10 +6767,14 @@ FUN_1000_3c3c:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         BX,word [0xdbbc]
@@ -6048,7 +6785,8 @@ FUN_1000_3c3c:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -6067,8 +6805,10 @@ FUN_1000_3c3c:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbc]
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],CX
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],CX
     POP         CX
     POP         AX
     MOV         DX,R8W
@@ -6080,7 +6820,8 @@ FUN_1000_3c3c:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         DX,DI
@@ -6090,7 +6831,8 @@ FUN_1000_3c3c:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
     POP         DI
@@ -6117,8 +6859,10 @@ FUN_1000_3c3c:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbc]
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],CX
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],CX
     POP         CX
     POP         AX
     MOV         BX,R8W
@@ -6130,7 +6874,8 @@ FUN_1000_3c3c:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         BX,DI
@@ -6140,7 +6885,8 @@ FUN_1000_3c3c:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -6158,10 +6904,14 @@ FUN_1000_3c3c:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         BX,word [0xdbbc]
@@ -6177,20 +6927,29 @@ FUN_1000_3ddb:
     PUSH        SI
     PUSH        DI
     MOV         word [0xe528],0x0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
-    MOV         word [DI + 0x4],R8W
-    MOV         word [DI + 0x6],DX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x4],R8W
+    setup_data  R12, DI
+    MOV         word [R12 + 0x6],DX
     POP         DI
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6200,10 +6959,14 @@ FUN_1000_3ddb:
     JG          .LAB_LOC_6
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],BX
-    MOV         word [SI + 0x4],R8W
-    MOV         word [SI + 0x6],DI
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],BX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],R8W
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],DI
     ADD         SI,0x8
     INC         word [0xe528]
     SHL         EAX,0x10
@@ -6211,10 +6974,14 @@ FUN_1000_3ddb:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         BX,word [0xdbbe]
@@ -6225,7 +6992,8 @@ FUN_1000_3ddb:
     POP         DI
     POP         SI
     MOV         AX, word [0xe528]
-    MOV         word [DI + -0x2],AX
+    setup_data  R12, DI
+    MOV         word [R12 + -0x2],AX
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -6242,8 +7010,10 @@ FUN_1000_3ddb:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbe]
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],CX
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],CX
     POP         CX
     POP         AX
     MOV         BX,R8W
@@ -6255,7 +7025,8 @@ FUN_1000_3ddb:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         BX,DI
@@ -6265,7 +7036,8 @@ FUN_1000_3ddb:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
     POP         DI
@@ -6294,8 +7066,10 @@ FUN_1000_3ddb:
     PUSH        CX
     CALL        FUN_1000_3f7a
     MOV         CX,word [0xdbbe]
-    MOV         word [SI],AX
-    MOV         word [SI + 0x2],CX
+    setup_data  R11, SI
+    MOV         word [R11],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x2],CX
     POP         CX
     POP         AX
     MOV         DX,R8W
@@ -6307,7 +7081,8 @@ FUN_1000_3ddb:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
     POP         CX
     POP         AX
     MOV         DX,DI
@@ -6317,7 +7092,8 @@ FUN_1000_3ddb:
     SHR         BX,0x1
     CALL        FUN_1000_3f7a
     SHL         AX,0x1
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     ADD         SI,0x8
     INC         word [0xe528]
 .LAB_LOC_5:
@@ -6335,10 +7111,14 @@ FUN_1000_3ddb:
     SHL         R8D,0x10
     SHL         EDI,0x10
     ROR         ESI,0x10
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         R8W,word [SI + 0x4]
-    MOV         DI,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         R8W,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
     CMP         BX,word [0xdbbe]
@@ -6521,7 +7301,8 @@ FUN_1000_40c8:
     add sp, 2
 
     MOV         SI,DI
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     CMP         CX,0x3
     JC          .LAB_LOC_2
     MOV         AX, word [0xe586]
@@ -6533,10 +7314,14 @@ FUN_1000_40c8:
 .LAB_LOC_1:
     PUSH        CX
     PUSH        SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         CX,word [SI + 0x4]
-    MOV         DX,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x6]
 
     push_args [param_aw], [param_bw]
     CALL        FUN_1000_4120
@@ -6545,11 +7330,15 @@ FUN_1000_40c8:
     POP         CX
     ADD         SI,0x4
     LOOP        .LAB_LOC_1
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     POP         SI
-    MOV         CX,word [SI]
-    MOV         DX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x2]
 
     push_args [param_aw], [param_bw]
     CALL        FUN_1000_4120
@@ -6602,7 +7391,8 @@ FUN_1000_4120:
     MOV         DI, 0
     MOV         SI,CX
 .LAB_LOC_7:
-    MOV         word [BX + 0xe590],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
     JNS         .LAB_LOC_9
@@ -6613,7 +7403,8 @@ FUN_1000_4120:
 .LAB_LOC_9:
     LOOP        .LAB_LOC_7
     POP         AX
-    MOV         word [BX + 0xe590],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0xe590],AX
 
     epilogo
     RET
@@ -6622,7 +7413,8 @@ FUN_1000_4120:
     MOV         DI, 0
     MOV         SI,CX
 .LAB_LOC_11:
-    MOV         word [BX + 0xe590],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
     JNS         .LAB_LOC_13
@@ -6633,7 +7425,8 @@ FUN_1000_4120:
 .LAB_LOC_13:
     LOOP        .LAB_LOC_11
     POP         AX
-    MOV         word [BX + 0xe590],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0xe590],AX
 
     epilogo
     RET
@@ -6667,30 +7460,39 @@ FUN_1000_4394:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JL          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JL          .LAB_LOC_3
@@ -6699,7 +7501,8 @@ FUN_1000_4394:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -6710,8 +7513,10 @@ FUN_1000_4394:
     CALL        FUN_1000_4680
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6720,7 +7525,8 @@ FUN_1000_4394:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_4:
@@ -6733,8 +7539,10 @@ FUN_1000_4394:
     CALL        FUN_1000_4680
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6743,15 +7551,18 @@ FUN_1000_4394:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JGE         .LAB_LOC_4
@@ -6759,7 +7570,8 @@ FUN_1000_4394:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -6772,30 +7584,39 @@ FUN_1000_444d:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JG          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JG          .LAB_LOC_3
@@ -6804,7 +7625,8 @@ FUN_1000_444d:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -6817,8 +7639,10 @@ FUN_1000_444d:
     CALL        FUN_1000_4680
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6827,7 +7651,8 @@ FUN_1000_444d:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_4:
@@ -6838,8 +7663,10 @@ FUN_1000_444d:
     CALL        FUN_1000_4680
     MOV         BX,AX
     MOV         AX, word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6848,15 +7675,18 @@ FUN_1000_444d:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         AX,word [param_aw]
     JLE         .LAB_LOC_4
@@ -6864,7 +7694,8 @@ FUN_1000_444d:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -6877,30 +7708,39 @@ FUN_1000_4506:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JL          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JL          .LAB_LOC_3
@@ -6909,7 +7749,8 @@ FUN_1000_4506:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -6921,8 +7762,10 @@ FUN_1000_4506:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6931,7 +7774,8 @@ FUN_1000_4506:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_4:
@@ -6945,8 +7789,10 @@ FUN_1000_4506:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -6955,15 +7801,18 @@ FUN_1000_4506:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JGE         .LAB_LOC_4
@@ -6971,7 +7820,8 @@ FUN_1000_4506:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 ;************************************************************************************************
@@ -6984,30 +7834,39 @@ FUN_1000_45c3:
     PUSH        SI
     PUSH        DI
     MOV         word [local_a], 0
-    MOV         CX,word [SI + -0x2]
+    setup_data  R11, SI
+    MOV         CX,word [R11 + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
     ADD         DI,SI
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     POP         DI
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JG          .LAB_LOC_5
 .LAB_LOC_1:
     PUSH        CX
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JG          .LAB_LOC_3
@@ -7016,7 +7875,8 @@ FUN_1000_45c3:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_3:
@@ -7030,8 +7890,10 @@ FUN_1000_45c3:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -7040,7 +7902,8 @@ FUN_1000_45c3:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_4:
@@ -7052,8 +7915,10 @@ FUN_1000_45c3:
     SUB         CX,word [param_aw]
     CALL        FUN_1000_4680
     MOV         BX,word [param_aw]
-    MOV         word [DI],AX
-    MOV         word [DI + 0x2],BX
+    setup_data  R12, DI
+    MOV         word [R12],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0x2],BX
     ADD         DI,0x4
     INC         word [local_a]
     POP         BX
@@ -7062,15 +7927,18 @@ FUN_1000_45c3:
     LOOP        .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 .LAB_LOC_5:
     PUSH        CX
     MOV         CX,AX
     MOV         DX,BX
-    MOV         AX,word [SI]
-    MOV         BX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x2]
     ADD         SI,0x4
     CMP         BX,word [param_aw]
     JLE         .LAB_LOC_4
@@ -7078,7 +7946,8 @@ FUN_1000_45c3:
     LOOP        .LAB_LOC_5
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2], word [local_a]
+    setup_data  R12, DI
+    mov_m2m     word [R12 + -0x2], word [local_a]
     epilogo
     RET
 
@@ -7120,20 +7989,26 @@ FUN_1000_46a0:
                               ;             1000:1f41(c)
     PUSH        DI
     MOV         DI, 0
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0x120]
     MOV         word [0xe992],AX
     JL          .LAB_LOC_1
-    MOV         EAX,dword [SI + 0x6]
-    MOV         dword [DI + 0xdb16],EAX
-    MOV         dword [DI + 0xdb1a],EBX
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb16],EAX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],EBX
     ADD         DI,0x8
 .LAB_LOC_1:
     MOV         word [0xe996],DI
     POP         DI
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         word [0xe990],AX
-    MOV         AX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
     MOV         word [0xe994],AX
     RET
 ;************************************************************************************************
@@ -7152,25 +8027,32 @@ FUN_1000_46d3:
     JL          .LAB_LOC_3
     PUSH        DI
     MOV         DI,word [0xe996]
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0x120]
     JL          .LAB_LOC_1
     MOV         word [0xe992],AX
-    MOV         EAX,dword [SI + 0x6]
-    MOV         dword [DI + 0xdb16],EAX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb16],EAX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
     MOV         word [0xe996],DI
     POP         DI
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         word [0xe990],AX
-    MOV         AX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
     MOV         word [0xe994],AX
     RET
 .LAB_LOC_1:
     PUSH        AX
     JCXZ        .LAB_LOC_2
-    MOV         BX,word [SI]
+    setup_data  R11, SI
+    MOV         BX,word [R11]
     MOV         DX,word [0xe990]
     PUSH        AX
     PUSH        CX
@@ -7179,7 +8061,8 @@ FUN_1000_46d3:
     POP         CX
     POP         AX
     PUSH        BX
-    MOV         BX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x4]
     MOV         DX,word [0xe994]
     CALL        FUN_1000_3f7a
     MOV         CX,AX
@@ -7189,32 +8072,41 @@ FUN_1000_46d3:
     ADD         AX,0xa0
     NEG         BX
     ADD         BX,0x64
-    MOV         word [DI + 0xdb16],AX
-    MOV         word [DI + 0xdb18],BX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb16],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb18],BX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
 .LAB_LOC_2:
     POP         word [0xe992]
     MOV         word [0xe996],DI
     POP         DI
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         word [0xe990],AX
-    MOV         AX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
     MOV         word [0xe994],AX
     RET
 .LAB_LOC_3:
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0x120]
     JGE         .LAB_LOC_4
     MOV         word [0xe992],AX
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         word [0xe990],AX
-    MOV         AX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
     MOV         word [0xe994],AX
     RET
 .LAB_LOC_4:
     PUSH        AX
-    MOV         DX,word [SI]
+    setup_data  R11, SI
+    MOV         DX,word [R11]
     MOV         BX,word [0xe990]
     XCHG        AX,CX
     PUSH        AX
@@ -7224,7 +8116,8 @@ FUN_1000_46d3:
     POP         CX
     POP         AX
     PUSH        BX
-    MOV         DX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x4]
     MOV         BX,word [0xe994]
     CALL        FUN_1000_3f7a
     MOV         CX,AX
@@ -7236,20 +8129,28 @@ FUN_1000_46d3:
     ADD         BX,0x64
     PUSH        DI
     MOV         DI,word [0xe996]
-    MOV         word [DI + 0xdb16],AX
-    MOV         word [DI + 0xdb18],BX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb16],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb18],BX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
-    MOV         EAX,dword [SI + 0x6]
-    MOV         dword [DI + 0xdb16],EAX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x6]
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb16],EAX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
     MOV         word [0xe996],DI
     POP         DI
     POP         word [0xe992]
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         word [0xe990],AX
-    MOV         AX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x4]
     MOV         word [0xe994],AX
     RET
 ;************************************************************************************************
@@ -7264,7 +8165,8 @@ FUN_1000_47ec:
     MOV         CX,word [0xe992]
     TEST        CX,CX
     JL          .LAB_LOC_3
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0x120]
     JL          .LAB_LOC_1
     MOV         AX, word [0xe996]
@@ -7275,7 +8177,8 @@ FUN_1000_47ec:
     JCXZ        .LAB_LOC_2
     PUSH        DI
     MOV         DI,word [0xe996]
-    MOV         BX,word [SI]
+    setup_data  R11, SI
+    MOV         BX,word [R11]
     MOV         DX,word [0xe990]
     PUSH        AX
     PUSH        CX
@@ -7284,7 +8187,8 @@ FUN_1000_47ec:
     POP         CX
     POP         AX
     PUSH        BX
-    MOV         BX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         BX,word [R11 + 0x4]
     MOV         DX,word [0xe994]
     CALL        FUN_1000_3f7a
     MOV         CX,AX
@@ -7294,9 +8198,12 @@ FUN_1000_47ec:
     ADD         AX,0xa0
     NEG         BX
     ADD         BX,0x64
-    MOV         word [DI + 0xdb16],AX
-    MOV         word [DI + 0xdb18],BX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb16],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb18],BX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
     MOV         word [0xe996],DI
     POP         DI
@@ -7306,7 +8213,8 @@ FUN_1000_47ec:
     MOV         word [0xdb14],AX
     RET
 .LAB_LOC_3:
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     SUB         AX,word [0x120]
     JGE         .LAB_LOC_4
     MOV         AX, word [0xe996]
@@ -7314,7 +8222,8 @@ FUN_1000_47ec:
     MOV         word [0xdb14],AX
     RET
 .LAB_LOC_4:
-    MOV         DX,word [SI]
+    setup_data  R11, SI
+    MOV         DX,word [R11]
     MOV         BX,word [0xe990]
     XCHG        AX,CX
     PUSH        AX
@@ -7324,7 +8233,8 @@ FUN_1000_47ec:
     POP         CX
     POP         AX
     PUSH        BX
-    MOV         DX,word [SI + 0x4]
+    setup_data  R11, SI
+    MOV         DX,word [R11 + 0x4]
     MOV         BX,word [0xe994]
     CALL        FUN_1000_3f7a
     MOV         CX,AX
@@ -7336,9 +8246,12 @@ FUN_1000_47ec:
     ADD         BX,0x64
     PUSH        DI
     MOV         DI,word [0xe996]
-    MOV         word [DI + 0xdb16],AX
-    MOV         word [DI + 0xdb18],BX
-    MOV         dword [DI + 0xdb1a],R8D
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb16],AX
+    setup_data  R12, DI
+    MOV         word [R12 + 0xdb18],BX
+    setup_data  R12, DI
+    MOV         dword [R12 + 0xdb1a],R8D
     ADD         DI,0x8
     MOV         word [0xe996],DI
     MOV         AX,DI
@@ -7368,54 +8281,75 @@ FUN_1000_48db:
                               ;XREF[1]:     1000:48d6(c)
     CALL        FUN_1000_0e28
     MOV         DI,SI
-    ADD         DI,word [SI]
-    MOV         AX,word [DI]
+    setup_data  R11, SI
+    ADD         DI,word [R11]
+    setup_data  R12, DI
+    MOV         AX,word [R12]
     MOV         word [0xe9d4],AX
     MOV         word [0xe9d6],0x0
     ADD         DI,0x2
 .LAB_LOC_1:
     MOV         EAX, [v_gravity]
-    SUB         dword [DI + 0x14],EAX
-    MOV         EAX,dword [DI]
-    MOV         EBX,dword [DI + 0x4]
-    MOV         ECX,dword [DI + 0x8]
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x14],EAX
+    setup_data  R12, DI
+    MOV         EAX,dword [R12]
+    setup_data  R12, DI
+    MOV         EBX,dword [R12 + 0x4]
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x8]
     SHR         EAX,0x10
     SHR         EBX,0x10
     SHR         ECX,0x10
     PUSH        CX
     CALL        FUN_1000_532e
     POP         CX
-    ADD         AX,word [DI + 0x18]
+    setup_data  R12, DI
+    ADD         AX,word [R12 + 0x18]
     MOV         word [0xe9c6],AX
     CMP         AX,CX
     JNS         .LAB_LOC_11
 .LAB_LOC_2:
-    MOV         AX,word [DI + 0x2]
-    SUB         AX,word [DI + 0x18]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x2]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x18]
     CMP         AX,0x80
     JC          .LAB_LOC_7
 .LAB_LOC_3:
-    MOV         AX,word [DI + 0x6]
-    SUB         AX,word [DI + 0x18]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x6]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x18]
     CMP         AX,0x80
     JC          .LAB_LOC_8
 .LAB_LOC_4:
-    MOV         AX,word [DI + 0x2]
-    ADD         AX,word [DI + 0x18]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x2]
+    setup_data  R12, DI
+    ADD         AX,word [R12 + 0x18]
     CMP         AX,0xfe80
     JA          .LAB_LOC_9
 .LAB_LOC_5:
-    MOV         AX,word [DI + 0x6]
-    ADD         AX,word [DI + 0x18]
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x6]
+    setup_data  R12, DI
+    ADD         AX,word [R12 + 0x18]
     CMP         AX,0xfe80
     JA          .LAB_LOC_10
 .LAB_LOC_6:
-    MOV         EAX,dword [DI + 0xc]
-    MOV         EBX,dword [DI + 0x10]
-    MOV         ECX,dword [DI + 0x14]
-    ADD         dword [DI],EAX
-    ADD         dword [DI + 0x4],EBX
-    ADD         dword [DI + 0x8],ECX
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0xc]
+    setup_data  R12, DI
+    MOV         EBX,dword [R12 + 0x10]
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x14]
+    setup_data  R12, DI
+    ADD         dword [R12],EAX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x4],EBX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x8],ECX
     ADD         DI,0x1c
     INC         word [0xe9d6]
     DEC         word [0xe9d4]
@@ -7457,17 +8391,24 @@ FUN_1000_48db:
 .LAB_LOC_11:
     MOVZX       BX,byte [0xea28]
     SHR         BX,0x4
-    MOVZX       CX,byte [BX + 0xea49]
+    setup_data  R11, BX
+    MOVZX       CX,byte [R11 + 0xea49]
     JCXZ        .LAB_LOC_12
-    MOV         EAX,dword [DI + 0xc]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0xc]
     SAR         EAX,CL
-    SUB         dword [DI + 0xc],EAX
-    MOV         EAX,dword [DI + 0x10]
+    setup_data  R12, DI
+    SUB         dword [R12 + 0xc],EAX
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x10]
     SAR         EAX,CL
-    SUB         dword [DI + 0x10],EAX
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x10],EAX
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     SAR         EAX,CL
-    SUB         dword [DI + 0x14],EAX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x14],EAX
 .LAB_LOC_12:
     MOV         AX, word [0xea24]
     MOV         BX,0x100
@@ -7493,18 +8434,21 @@ FUN_1000_48db:
 FUN_1000_4a71:
                               ;XREF[5]:     1000:499c(c),1000:49bf(c),1000:49e3(c),1000:4a07(c),
                               ;             1000:4a6b(c)
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     IMUL        dword [0xe9a4]
     SHL         EDX,0x1
     MOV         EAX,EDX
     IMUL        dword [0xe9ac]
     SHL         EDX,0x1
     MOV         EBX,EDX
-    MOV         EAX,dword [DI + 0xc]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0xc]
     IMUL        dword [0xe9a0]
     SHL         EDX,0x1
     SUB         EBX,EDX
-    MOV         EAX,dword [DI + 0x10]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x10]
     IMUL        dword [0xe9a8]
     SHL         EDX,0x1
     SUB         EBX,EDX
@@ -7521,23 +8465,30 @@ FUN_1000_4a71:
     ADD         ECX,EAX
     MOV         EAX, dword [0xe9a0]
     IMUL        ECX
-    ADD         dword [DI + 0xc],EDX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0xc],EDX
     SHL         EDX,0x1
-    ADD         dword [DI],EDX
+    setup_data  R12, DI
+    ADD         dword [R12],EDX
     MOV         EAX, dword [0xe9a8]
     IMUL        ECX
-    ADD         dword [DI + 0x10],EDX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x10],EDX
     SHL         EDX,0x1
-    ADD         dword [DI + 0x4],EDX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x4],EDX
     MOV         EAX,ECX
     IMUL        dword [0xe9a4]
     SHL         EDX,0x1
     MOV         EAX,EDX
     IMUL        dword [0xe9ac]
-    SUB         dword [DI + 0x14],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x14],EDX
     SHL         EDX,0x1
-    SUB         dword [DI + 0x8],EDX
-    MOV         AX,word [DI + 0x1a]
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x8],EDX
+    setup_data  R12, DI
+    MOV         AX,word [R12 + 0x1a]
     CMP         AX,0x0
     JZ          .LAB_LOC_5
     CMP         AX,0xffff
@@ -7547,20 +8498,24 @@ FUN_1000_4a71:
  ; 1000:4b25 [UNDEFINED BYTES REMOVED]
 
 .LAB_LOC_2:
-    MOV         EAX,dword [DI + 0xc]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0xc]
     IMUL        dword [0xe9a4]
     SHL         EDX,0x1
     MOV         EBX,EDX
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     IMUL        dword [0xe9a0]
     SHL         EDX,0x1
     ADD         EBX,EDX
     MOV         dword [0xe9cc],EBX
-    MOV         EAX,dword [DI + 0x10]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x10]
     IMUL        dword [0xe9ac]
     SHL         EDX,0x1
     MOV         EBX,EDX
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     IMUL        dword [0xe9a8]
     SHL         EDX,0x1
     ADD         EBX,EDX
@@ -7602,20 +8557,24 @@ FUN_1000_4a71:
  ; 1000:4bdb [UNDEFINED BYTES REMOVED]
 
 .LAB_LOC_5:
-    MOV         EAX,dword [DI + 0xc]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0xc]
     IMUL        dword [0xe9a4]
     SHL         EDX,0x1
     MOV         EBX,EDX
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     IMUL        dword [0xe9a0]
     SHL         EDX,0x1
     ADD         EBX,EDX
     MOV         dword [0xe9cc],EBX
-    MOV         EAX,dword [DI + 0x10]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x10]
     IMUL        dword [0xe9ac]
     SHL         EDX,0x1
     MOV         EBX,EDX
-    MOV         EAX,dword [DI + 0x14]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x14]
     IMUL        dword [0xe9a8]
     SHL         EDX,0x1
     ADD         EBX,EDX
@@ -7669,9 +8628,11 @@ FUN_1000_4c68:
     MOVZX       BX,byte [0xea28]
     SHR         BX,0x4
     SHL         BX,0x1
-    MOVZX       ECX,word [BX + 0xea29]
+    setup_data  R11, BX
+    MOVZX       ECX,word [R11 + 0xea29]
     SHL         BX,0x1
-    MOV         EDX,dword [BX + 0xea59]
+    setup_data  R11, BX
+    MOV         EDX,dword [R11 + 0xea59]
     MOV         EBX,EAX
     MOV         EAX, dword [0xe9c8]
     NEG         EAX
@@ -7708,12 +8669,16 @@ FUN_1000_4cc3:
     MOV         EBX,dword [0xe9d0]
 .LAB_LOC_2:
     IMUL        dword [0xe9a4]
-    SUB         dword [DI + 0xc],EDX
-    SUB         dword [DI],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0xc],EDX
+    setup_data  R12, DI
+    SUB         dword [R12],EDX
     MOV         EAX,EBX
     IMUL        dword [0xe9ac]
-    SUB         dword [DI + 0x10],EDX
-    SUB         dword [DI + 0x4],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x10],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x4],EDX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -7751,12 +8716,16 @@ FUN_1000_4d0e:
     SUB         dword [0xe9d0],EDX
     MOV         EAX, dword [0xe9cc]
     IMUL        dword [0xe9a4]
-    SUB         dword [DI + 0xc],EDX
-    SUB         dword [DI],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0xc],EDX
+    setup_data  R12, DI
+    SUB         dword [R12],EDX
     MOV         EAX, dword [0xe9d0]
     IMUL        dword [0xe9ac]
-    SUB         dword [DI + 0x10],EDX
-    SUB         dword [DI + 0x4],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x10],EDX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x4],EDX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -7767,28 +8736,41 @@ FUN_1000_4d96:
     MOV         SI,word [0x3e51]
     CMP         SI,0x15e0
     JNC         .LAB_LOC_1
-    MOV         EAX,dword [DI]
-    MOV         EBX,dword [DI + 0x4]
-    MOV         ECX,dword [DI + 0x8]
-    MOV         dword [SI + 0x3e53],EAX
-    MOV         dword [SI + 0x3e57],EBX
-    MOVZX       EAX,word [DI + 0x18]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12]
+    setup_data  R12, DI
+    MOV         EBX,dword [R12 + 0x4]
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x8]
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e53],EAX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e57],EBX
+    setup_data  R12, DI
+    MOVZX       EAX,word [R12 + 0x18]
     SHL         EAX,0x10
     SUB         ECX,EAX
-    MOV         dword [SI + 0x3e5b],ECX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e5b],ECX
     MOV         EAX, dword [0xe9cc]
     IMUL        dword [0xe9a4]
     SHL         EDX,0x1
-    MOV         dword [SI + 0x3e5f],EDX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e5f],EDX
     MOV         EAX, dword [0xe9d0]
     IMUL        dword [0xe9ac]
     SHL         EDX,0x1
-    MOV         dword [SI + 0x3e63],EDX
-    MOV         ECX,dword [DI + 0x14]
-    MOV         dword [SI + 0x3e67],ECX
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e63],EDX
+    setup_data  R12, DI
+    MOV         ECX,dword [R12 + 0x14]
+    setup_data  R11, SI
+    MOV         dword [R11 + 0x3e67],ECX
     MOVZX       AX,byte [0xea28]
-    MOV         word [SI + 0x3e6d],AX
-    MOV         word [SI + 0x3e6b],0x64
+    setup_data  R11, SI
+    MOV         word [R11 + 0x3e6d],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x3e6b],0x64
     ADD         word [0x3e51],0x1c
 .LAB_LOC_1:
     POP         SI
@@ -7804,51 +8786,68 @@ FUN_1000_4e0a:
     prologo
 
     MOV         AX,SI
-    ADD         AX,word [SI]
+    setup_data  R11, SI
+    ADD         AX,word [R11]
     ADD         AX,0x2
     MOV         [local_f],AX
-    ADD         SI,word [SI + 0x2]
-    MOV         AX,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11 + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11]
     MOV         [local_g],AX
     ADD         SI,0x2
 .LAB_LOC_1:
     MOV         BX,SI
-    MOV         DI,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         DI,word [R11 + 0x2]
     MOV         AX,DI
     SHL         DI,0x3
     SUB         DI,AX
     SHL         DI,0x2
     ADD         DI,word [local_f]
-    MOV         SI,word [SI]
+    setup_data  R11, SI
+    MOV         SI,word [R11]
     MOV         AX,SI
     SHL         SI,0x3
     SUB         SI,AX
     SHL         SI,0x2
     ADD         SI,word [local_f]
-    MOV         EAX,dword [SI]
-    SUB         EAX,dword [DI]
-    MOV         ECX,dword [SI + 0xc]
-    SUB         ECX,dword [DI + 0xc]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0xc]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12 + 0xc]
     MOV         dword [local_c],EAX
     ADD         EAX,ECX
     xorps    xmm0, xmm0
     cvtsi2ss xmm0, eax
     mulss    xmm0, xmm0
 
-    MOV         EAX,dword [SI + 0x4]
-    SUB         EAX,dword [DI + 0x4]
-    MOV         ECX,dword [SI + 0x10]
-    SUB         ECX,dword [DI + 0x10]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x4]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12 + 0x4]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0x10]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12 + 0x10]
     MOV         dword [local_d],EAX
     ADD         EAX,ECX
     xorps    xmm1, xmm1
     cvtsi2ss xmm1, eax
     mulss    xmm1, xmm1
 
-    MOV         EAX,dword [SI + 0x8]
-    SUB         EAX,dword [DI + 0x8]
-    MOV         ECX,dword [SI + 0x14]
-    SUB         ECX,dword [DI + 0x14]
+    setup_data  R11, SI
+    MOV         EAX,dword [R11 + 0x8]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12 + 0x8]
+    setup_data  R11, SI
+    MOV         ECX,dword [R11 + 0x14]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12 + 0x14]
     MOV         dword [local_e],EAX
     ADD         EAX,ECX
     xorps    xmm2, xmm2
@@ -7865,11 +8864,13 @@ FUN_1000_4e0a:
 
     SAR         EAX,0xa
 
-    MOVSX       ECX,word [BX + 0x4]
+    setup_data  R11, BX
+    MOVSX       ECX,word [R11 + 0x4]
     mov         dword [local_b], ECX
     TEST        dword [local_b], 0x80000000
     JS          .LAB_LOC_10
-    MOVZX       ECX,word [BX + 0x8]
+    setup_data  R11, BX
+    MOVZX       ECX,word [R11 + 0x8]
     MOV         word [local_h],CX
     AND         CX,0xff
     JZ          .LAB_LOC_5
@@ -7897,24 +8898,30 @@ FUN_1000_4e0a:
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
-    ADD         dword [SI + 0xc],EAX
-    SUB         dword [DI + 0xc],EDX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0xc],EAX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0xc],EDX
     MOV         EAX, dword [local_d]
     IMUL        dword [local_a]
     IDIV        dword [local_b]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
-    ADD         dword [SI + 0x10],EAX
-    SUB         dword [DI + 0x10],EDX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x10],EAX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x10],EDX
     MOV         EAX, dword [local_e]
     IMUL        dword [local_a]
     IDIV        dword [local_b]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
-    ADD         dword [SI + 0x14],EAX
-    SUB         dword [DI + 0x14],EDX
+    setup_data  R11, SI
+    ADD         dword [R11 + 0x14],EAX
+    setup_data  R12, DI
+    SUB         dword [R12 + 0x14],EDX
     
 .LAB_LOC_3:
                               ;             1000:4ffd(j)
@@ -7926,18 +8933,22 @@ FUN_1000_4e0a:
     epilogo
     RET
 .LAB_LOC_5:
-    MOVZX       EDX,word [BX + 0xc]
+    setup_data  R11, BX
+    MOVZX       EDX,word [R11 + 0xc]
     CMP         EAX,EDX
     JG          .LAB_LOC_7
-    MOVZX       EDX,word [BX + 0xa]
+    setup_data  R11, BX
+    MOVZX       EDX,word [R11 + 0xa]
     CMP         EAX,EDX
     JL          .LAB_LOC_7
     JMP         .LAB_LOC_3
 .LAB_LOC_6:
-    MOVZX       EDX,word [BX + 0xc]
+    setup_data  R11, BX
+    MOVZX       EDX,word [R11 + 0xc]
     CMP         EAX,EDX
     JG          .LAB_LOC_7
-    MOVZX       EDX,word [BX + 0xa]
+    setup_data  R11, BX
+    MOVZX       EDX,word [R11 + 0xa]
     CMP         EAX,EDX
     JL          .LAB_LOC_7
     XCHG        EAX,dword [local_b]
@@ -7946,11 +8957,13 @@ FUN_1000_4e0a:
     SHR         ECX,0x1
     IDIV        ECX
     MOV         ECX,EAX
-    MOVZX       EAX,word [BX + 0x6]
+    setup_data  R11, BX
+    MOVZX       EAX,word [R11 + 0x6]
     SUB         EAX,dword [local_b]
     SAR         EAX,0x1
     ADD         ECX,EAX
-    mov_m2m  word [BX + 0x6], word [local_b]
+    setup_data  R11, BX
+    mov_m2m  word [R11 + 0x6], word [local_b]
     JMP         .LAB_LOC_2
 .LAB_LOC_7:
     MOV         ECX,EDX
@@ -7958,22 +8971,28 @@ FUN_1000_4e0a:
     SAR         ECX,0x1
     JZ          .LAB_LOC_3
     MOV         dword [local_b],EAX
-    mov_m2m  word [BX + 0x6], word [local_b]
+    setup_data  R11, BX
+    mov_m2m  word [R11 + 0x6], word [local_b]
     JMP         .LAB_LOC_2
 .LAB_LOC_8:
     SAR         ECX,0x4
     XCHG        EAX,dword [local_b]
     SUB         EAX,ECX
-    MOV         word [BX + 0x4],AX
-    MOV         word [BX + 0x6],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0x4],AX
+    setup_data  R11, BX
+    MOV         word [R11 + 0x6],AX
     JMP         .LAB_LOC_2
 .LAB_LOC_9:
-    OR          word [BX + 0x8],0x80
+    setup_data  R11, BX
+    OR          word [R11 + 0x8],0x80
     JMP         .LAB_LOC_3
 .LAB_LOC_10:
     MOV         SI,BX
-    MOV         word [SI + 0x4],AX
-    MOV         word [SI + 0x6],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x4],AX
+    setup_data  R11, SI
+    MOV         word [R11 + 0x6],AX
     JMP         .LAB_LOC_4
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -7986,36 +9005,46 @@ FUN_1000_500b:
 .LAB_LOC_1:
     PUSH        CX
     PUSH        DI
-    MOV         SI,word [DI]
+    setup_data  R12, DI
+    MOV         SI,word [R12]
     CALL        FUN_1000_5091
     MOV         DI,0x5bbc
     MOV         CX, word [v_num_loaded_cars]
 .LAB_LOC_2:
     PUSH        CX
     PUSH        DI
-    MOV         DI,word [DI]
+    setup_data  R12, DI
+    MOV         DI,word [R12]
     CMP         DI,SI
     JZ          .LAB_LOC_4
     PUSH        SI
     PUSH        DI
-    ADD         SI,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
     ADD         SI,0x2
-    ADD         DI,word [DI]
+    setup_data  R12, DI
+    ADD         DI,word [R12]
     ADD         DI,0x2
-    MOV         AX,word [SI + 0x2]
-    SUB         AX,word [DI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x2]
     CMP         AX,0x200
     JG          .LAB_LOC_3
     CMP         AX,0xfe00
     JL          .LAB_LOC_3
-    MOV         AX,word [SI + 0x6]
-    SUB         AX,word [DI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x6]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0x6]
     CMP         AX,0x200
     JG          .LAB_LOC_3
     CMP         AX,0xfe00
     JL          .LAB_LOC_3
-    MOV         AX,word [SI + 0xa]
-    SUB         AX,word [DI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xa]
+    setup_data  R12, DI
+    SUB         AX,word [R12 + 0xa]
     CMP         AX,0x200
     JG          .LAB_LOC_3
     CMP         AX,0xfe00
@@ -8051,7 +9080,8 @@ FUN_1000_5091:
                               ;XREF[1]:     1000:501c(c)
     PUSH        SI
     MOV         DX,SI
-    ADD         DX,word [SI]
+    setup_data  R11, SI
+    ADD         DX,word [R11]
     ADD         DX,0x2
     MOV         SI,0xec1b
     LODSW 
@@ -8080,56 +9110,80 @@ FUN_1000_5091:
     PUSH        SI
     PUSH        DX
     MOV         SI, word [local_a]
-    MOV         EAX,dword [BX + 0x4]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0x4]
     MOV         dword [local_b],EAX     ;+ 0xeb5f
-    SUB         EAX,dword [SI + 0x4]
-    MOV         ECX,dword [BX + 0x8]
-    SUB         ECX,dword [DI + 0x8]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11 + 0x4]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11 + 0x8]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12 + 0x8]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
     MOV         EDX,EAX
-    MOV         EAX,dword [BX + 0x4]
-    SUB         EAX,dword [DI + 0x4]
-    MOV         ECX,dword [BX + 0x8]
-    SUB         ECX,dword [SI + 0x8]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0x4]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12 + 0x4]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11 + 0x8]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11 + 0x8]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
     MOV         dword [local_c],EDX   ;+ 0xea9b
-    MOV         EAX,dword [BX + 0x8]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0x8]
     MOV         dword [local_d],EAX   ;+ 0xeb63
-    SUB         EAX,dword [DI + 0x8]
-    MOV         ECX,dword [BX]
-    SUB         ECX,dword [SI]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12 + 0x8]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
     MOV         EDX,EAX
-    MOV         EAX,dword [BX + 0x8]
-    SUB         EAX,dword [SI + 0x8]
-    MOV         ECX,dword [BX]
-    SUB         ECX,dword [DI]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0x8]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11 + 0x8]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
     NEG         EDX
     MOV         dword [local_e],EDX  ;+ 0xea9f
-    MOV         EAX,dword [BX]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11]
     MOV         dword [local_f],EAX  ;+ 0xeb5b
-    SUB         EAX,dword [DI]
-    MOV         ECX,dword [BX + 0x4]
-    SUB         ECX,dword [SI + 0x4]
+    setup_data  R12, DI
+    SUB         EAX,dword [R12]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11 + 0x4]
+    setup_data  R11, SI
+    SUB         ECX,dword [R11 + 0x4]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
     MOV         EDX,EAX
-    MOV         EAX,dword [BX]
-    SUB         EAX,dword [SI]
-    MOV         ECX,dword [BX + 0x4]
-    SUB         ECX,dword [DI + 0x4]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11]
+    setup_data  R11, BX
+    MOV         ECX,dword [R11 + 0x4]
+    setup_data  R12, DI
+    SUB         ECX,dword [R12 + 0x4]
     SAR         EAX,0xe
     SAR         ECX,0xe
     IMUL        EAX,ECX
@@ -8139,13 +9193,19 @@ FUN_1000_5091:
     POP         SI
 
     mov  BX, word [0xea99]
-    mov_m2m  dword [BX + 0xeb5f], dword [local_b]
-    mov_m2m  dword [BX + 0xea9b], dword [local_c]
-    mov_m2m  dword [BX + 0xeb63], dword [local_d]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xeb5f], dword [local_b]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xea9b], dword [local_c]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xeb63], dword [local_d]
 
-    mov_m2m  dword [BX + 0xea9f], dword [local_e]
-    mov_m2m  dword [BX + 0xeb5b], dword [local_f]
-    mov_m2m  dword [BX + 0xeaa3], dword [local_g]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xea9f], dword [local_e]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xeb5b], dword [local_f]
+    setup_data  R11, BX
+    mov_m2m  dword [R11 + 0xeaa3], dword [local_g]
     ;no need to restore bx, it will be rewritten next loop
 
     ADD         word [0xea99],0xc
@@ -8163,8 +9223,10 @@ FUN_1000_51bd:
                               ;XREF[1]:     1000:507a(c)
     PUSH        DI
     PUSH        SI
-    ADD         DI,word [DI]
-    MOV         CX,word [DI]
+    setup_data  R12, DI
+    ADD         DI,word [R12]
+    setup_data  R12, DI
+    MOV         CX,word [R12]
     ADD         DI,0x2
 .LAB_LOC_1:
     PUSH        CX
@@ -8172,20 +9234,29 @@ FUN_1000_51bd:
     MOV         BX,SI
     MOV         ECX,0x80000000
 .LAB_LOC_2:
-    MOV         EAX,dword [DI]
-    SUB         EAX,dword [SI + 0xeb5b]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11 + 0xeb5b]
     SAR         EAX,0x10
-    IMUL        EAX,dword [SI + 0xea9b]
+    setup_data  R11, SI
+    IMUL        EAX,dword [R11 + 0xea9b]
     MOV         EDX,EAX
-    MOV         EAX,dword [DI + 0x4]
-    SUB         EAX,dword [SI + 0xeb5f]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x4]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11 + 0xeb5f]
     SAR         EAX,0x10
-    IMUL        EAX,dword [SI + 0xea9f]
+    setup_data  R11, SI
+    IMUL        EAX,dword [R11 + 0xea9f]
     ADD         EDX,EAX
-    MOV         EAX,dword [DI + 0x8]
-    SUB         EAX,dword [SI + 0xeb63]
+    setup_data  R12, DI
+    MOV         EAX,dword [R12 + 0x8]
+    setup_data  R11, SI
+    SUB         EAX,dword [R11 + 0xeb63]
     SAR         EAX,0x10
-    IMUL        EAX,dword [SI + 0xeaa3]
+    setup_data  R11, SI
+    IMUL        EAX,dword [R11 + 0xeaa3]
     ADD         EDX,EAX
     JNS         .LAB_LOC_9
     CMP         EDX,ECX
@@ -8194,36 +9265,47 @@ FUN_1000_51bd:
     ADD         SI,0xc
     CMP         SI,word [0xea99]
     JC          .LAB_LOC_2
-    MOV         EAX,dword [BX + 0xea9b]
-    ADD         dword [DI + 0xc],EAX
-    MOV         EAX,dword [BX + 0xea9f]
-    ADD         dword [DI + 0x10],EAX
-    MOV         EAX,dword [BX + 0xeaa3]
-    ADD         dword [DI + 0x14],EAX
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xea9b]
+    setup_data  R12, DI
+    ADD         dword [R12 + 0xc],EAX
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xea9f]
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x10],EAX
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xeaa3]
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x14],EAX
     POP         CX
     POP         SI
     PUSH        SI
     PUSH        CX
     PUSH        BX
-    ADD         SI,word [SI]
-    MOV         CX,word [SI]
+    setup_data  R11, SI
+    ADD         SI,word [R11]
+    setup_data  R11, SI
+    MOV         CX,word [R11]
     ADD         SI,0x2
     MOV         DX,0x7fff
     MOV         R8W,SI
 .LAB_LOC_4:
-    MOV         AX,word [SI + 0x2]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x2]
     AND         AX,AX
     JGE         .LAB_LOC_5
     NEG         AX
 .LAB_LOC_5:
     MOV         BX,AX
-    MOV         AX,word [SI + 0x6]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0x6]
     AND         AX,AX
     JGE         .LAB_LOC_6
     NEG         AX
 .LAB_LOC_6:
     ADD         BX,AX
-    MOV         AX,word [SI + 0xa]
+    setup_data  R11, SI
+    MOV         AX,word [R11 + 0xa]
     AND         AX,AX
     JGE         .LAB_LOC_7
     NEG         AX
@@ -8236,18 +9318,27 @@ FUN_1000_51bd:
     LOOP        .LAB_LOC_4
     MOV         SI,R8W
     POP         BX
-    MOV         EAX,dword [BX + 0xea9b]
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xea9b]
     SAR         EAX,0x1
-    SUB         dword [SI + 0xc],EAX
-    ADD         dword [DI + 0xc],EAX
-    MOV         EAX,dword [BX + 0xea9f]
+    setup_data  R11, SI
+    SUB         dword [R11 + 0xc],EAX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0xc],EAX
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xea9f]
     SAR         EAX,0x1
-    SUB         dword [SI + 0x10],EAX
-    ADD         dword [DI + 0x10],EAX
-    MOV         EAX,dword [BX + 0xeaa3]
+    setup_data  R11, SI
+    SUB         dword [R11 + 0x10],EAX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x10],EAX
+    setup_data  R11, BX
+    MOV         EAX,dword [R11 + 0xeaa3]
     SAR         EAX,0x1
-    SUB         dword [SI + 0x14],EAX
-    ADD         dword [DI + 0x14],EAX
+    setup_data  R11, SI
+    SUB         dword [R11 + 0x14],EAX
+    setup_data  R12, DI
+    ADD         dword [R12 + 0x14],EAX
     CALL        FUN_1000_4d96
 .LAB_LOC_9:
     ADD         DI,0x1c
@@ -8404,7 +9495,8 @@ FUN_timer_5680:
     MOV         R8W,0x5ad9
 .LAB_LOC_1:
                               ; FWD[2]:     15cd:5bbc(R),15cd:5bbe(R)
-    MOV         SI,word [DI]  ; =>0x5bbc
+    setup_data  R12, DI
+    MOV         SI,word [R12]  ; =>0x5bbc
     PUSH        CX
     PUSH        DI
     PUSH        R8W
@@ -8440,12 +9532,14 @@ FUN_keyboard_56df:
     AND         BX,0x7f
     AND         AL,0x80
     JNS         .LAB_LOC_1
-    MOV         byte [BX + CSD_DAT_keys_571e],0xff
+    setup_data  R11, BX
+    MOV         byte [R11 + CSD_DAT_keys_571e],0xff
     MOV         byte [CSD_DAT_keys_571e],0x0
     ret
 
 .LAB_LOC_1:
-    AND         byte [BX + CSD_DAT_keys_571e],0x7f
+    setup_data  R11, BX
+    AND         byte [R11 + CSD_DAT_keys_571e],0x7f
     MOV         byte [CSD_DAT_keys_571e],BL
     ret
 
@@ -8513,7 +9607,8 @@ FUN_1000_5831:
 .LAB_LOC_1:
     MOV         AH,0x43
     MOVZX       BX,CH
-    ADD         AH,byte [BX + CSD_DAT_unk_592c]
+    setup_data  R11, BX
+    ADD         AH,byte [R11 + CSD_DAT_unk_592c]
     CALL        FUN_1000_58fc
     RET
 
@@ -8553,7 +9648,8 @@ FUN_dummy_1000_588b:
 FUN_1000_589b:
                               ;XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
     MOVZX       BX,AL
-    MOV         BL,byte [BX + CSD_DAT_unk_592c]
+    setup_data  R11, BX
+    MOV         BL,byte [R11 + CSD_DAT_unk_592c]
     MOV         AH,0x20
     ADD         AH,BL
     LODSB 
@@ -8665,13 +9761,15 @@ FUN_1000_5940_render_text:
     SUB         AH,AH
     ADD         AX,AX
     MOV         BX,AX
-    ADD         SI,word [BX + 0xed17]
+    setup_data  R11, BX
+    ADD         SI,word [R11 + 0xed17]
     ADD         SI,0x100
     POP         BX
     MOV         AX,CX
 .LAB_LOC_7:
     PUSH        BX
-    MOV         DL,byte [SI]
+    setup_data  R11, SI
+    MOV         DL,byte [R11]
     TEST        DL,DL
     JZ          .LAB_LOC_11
 .LAB_LOC_8:
