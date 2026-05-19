@@ -17,7 +17,7 @@
 %define local_g bp-4*7
 %define local_h bp-4*8
 
-%macro movup 2
+%macro mov_upper 2
 ;mov upper word using the stack, gambiarras forever
 	push %2
 	add sp, 2

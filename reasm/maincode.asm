@@ -4186,7 +4186,7 @@ FUN_1000_2c4b:
     POP         AX
     SHL         EAX,0x10
 .LAB_LOC_7:
-    movup       word [BX],EAX
+    mov_upper   word [BX],EAX
     ADD         BX,0x4
     ADD         EAX,EDX
     LOOP        .LAB_LOC_7
@@ -4960,8 +4960,8 @@ FUN_1000_324f:
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     SUB         CX,word [0xdbc0]
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc0]
@@ -5054,8 +5054,8 @@ FUN_1000_3376:
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     SUB         AX,word [0xdbc2]
     SUB         CX,word [0xdbc2]
     PUSH        AX
@@ -5212,8 +5212,8 @@ FUN_1000_34a2:
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
@@ -5307,8 +5307,8 @@ FUN_1000_35cf:
     PUSH        AX
     PUSH        BX
     PUSH        BP
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         AX,word [0xdbbe]
@@ -5508,14 +5508,14 @@ FUN_1000_379b:
     SHL         EBX,0x10
     XCHG        ECX,EDI
 .LAB_LOC_3:
-    movup       word [SI],EAX
-    movup       word [SI + 0x320],EBX
+    mov_upper   word [SI],EAX
+    mov_upper   word [SI + 0x320],EBX
     ADD         SI,0x4
     ADD         EAX,EDI
     ADD         EBX,EDX
     LOOP        .LAB_LOC_3
-    movup       word [SI],EAX
-    movup       word [SI + 0x320],EBX
+    mov_upper   word [SI],EAX
+    mov_upper   word [SI + 0x320],EBX
 .LAB_LOC_4:
     POP         SI
     POP         DI
@@ -5728,8 +5728,8 @@ FUN_1000_390a:
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     SUB         CX,word [0xdbc0]
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc0]
@@ -5852,8 +5852,8 @@ FUN_1000_3aa3:
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     SUB         AX,word [0xdbc2]
     SUB         CX,word [0xdbc2]
     PUSH        AX
@@ -6076,8 +6076,8 @@ FUN_1000_3c3c:
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
@@ -6202,8 +6202,8 @@ FUN_1000_3ddb:
     PUSH        BX
     PUSH        BP
     PUSH        DI
-    movup    CX, EAX
-    movup    DX, EBX
+    mov_upper   CX, EAX
+    mov_upper   DX, EBX
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         AX,word [0xdbbe]
