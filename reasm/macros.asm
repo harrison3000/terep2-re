@@ -19,9 +19,9 @@
 
 %macro mov_upper 2
 ;mov upper word using the stack, gambiarras forever
-	push %2
+	push dword %2
 	add sp, 2
-	pop %1
+	pop word %1
 %endmacro
 
 %macro mov_m2m 2
@@ -45,8 +45,8 @@
 %endmacro
 
 ;bp points to "old bp", bp+2 to the return address
-%define param_aw bp+4
-%define param_bw bp+6
-%define param_cw bp+8
-%define param_dw bp+10
-%define param_ew bp+12
+%define param_aw bp+2+2*1
+%define param_bw bp+2+2*2
+%define param_cw bp+2+2*3
+%define param_dw bp+2+2*4
+%define param_ew bp+2+2*5
