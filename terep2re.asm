@@ -19,7 +19,7 @@ initgame_:
     MOV AX, _DATA2
     MOV DS, AX
 
-    CALL t_init
+    CALL f_init
 
     POP EBP
     POP DS
@@ -50,12 +50,12 @@ getData2_:
 
 physics_:
     ;the inner function already push registers and sets the DS correctly
-    call iFUN_timer_5680
+    call FUN_timer_5680
     retf
 
 
 handlekey_:
-    call iFUN_keyboard_56df
+    call FUN_keyboard_56df
     retf
 
     %include "reasm/maincode.asm"
