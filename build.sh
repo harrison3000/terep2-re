@@ -3,3 +3,4 @@
 INCLUDE=/opt/watcom/h:/opt/watcom/h/win
 nasm -f obj terep2re.asm
 wcl -3 -ml -k32768 -zastd=c99 -bcl=windows terep2re.obj terep2re.c commdlg.lib
+sha256sum terep2re.exe
