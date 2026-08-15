@@ -153,7 +153,7 @@ LAB_ultraloop:
     ;a hlt here speeds things up in dosbox, but who cares?
     jmp LAB_ultraloop
 
-cam_select:
+f_cam_select:
     SHL BX, 1
     AND BX, 15
     JMP         [CS:BX + .JMP_TABLE_CAMERAS]
@@ -207,7 +207,7 @@ FUN_main_render:
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -270,7 +270,7 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7e]      ;= 03h
     MOV         DI,0x80
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -331,7 +331,7 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     MOV         SI,word [SI + 0x5bbc]
     MOVZX       BX,byte [0x7f]      ;= 03h
     MOV         DI,0x92
-    CALL cam_select
+    CALL f_cam_select
     MOV         BX,word [0xc6]
     CALL        FUN_1000_2aad
     SAR         AX,0x7
@@ -390,19 +390,19 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
     MOV         AX,0xa
     MOV         BX,0xa
     MOV         CL,0xf
-    CALL        FUN_1000_5940
+    CALL        FUN_1000_5940_render_text
     MOV         SI,0x4b
     MOV         AX,0x64
     MOV         BX,0xbe
     MOV         CL,0xf
-    CALL        FUN_1000_5940
+    CALL        FUN_1000_5940_render_text
 
     MOV         SI, nova_linha ;string
     MOV         AX, 5         ;X
     MOV         BX, 190       ;Y
     MOV         CL, byte [giracor]       ;color
     SHR         CL, 2
-    CALL        FUN_1000_5940
+    CALL        FUN_1000_5940_render_text
     INC         byte [giracor]
 
     CALL        FUN_1000_2baa
@@ -1769,14 +1769,14 @@ FUN_1000_1408:
     POP         SI
     JMP         FUN_1000_1408
 .LAB_LOC_4:
-    MOV         AL,[0x5ee]
+    MOV         AL, byte [0x5ee]
     SAHF
     LODSW 
     JS          FUN_1000_1408
     ADD         SI,AX
     JMP         FUN_1000_1408
 .LAB_LOC_5:
-    MOV         AL,[0x5ee]
+    MOV         AL, byte [0x5ee]
     SAHF
     LODSW 
     JNS         FUN_1000_1408
@@ -1814,7 +1814,7 @@ FUN_1000_1408:
     LODSW 
     CMP         BX,AX
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     JMP         FUN_1000_1408
 .LAB_LOC_8:
     XOR         BX,BX
@@ -1858,7 +1858,7 @@ FUN_1000_1408:
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     POP         SI
     JMP         FUN_1000_1408
 .LAB_LOC_9:
@@ -1906,7 +1906,7 @@ FUN_1000_1408:
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     POP         SI
     JS          FUN_1000_1408
     CALL        FUN_1000_2bec
@@ -1961,7 +1961,7 @@ FUN_1000_1408:
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     POP         SI
     JS          FUN_1000_1408
     CALL        FUN_1000_30ee
@@ -2022,7 +2022,7 @@ FUN_1000_1408:
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     POP         SI
     JS          FUN_1000_1408
     CALL        FUN_1000_30ee
@@ -2075,7 +2075,7 @@ FUN_1000_1408:
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
-    MOV         [0x5ee],AL
+    MOV         byte [0x5ee],AL
     POP         SI
     JS          FUN_1000_1408
     CALL        FUN_1000_36fe
@@ -2307,7 +2307,7 @@ FUN_1000_1408:
     ADD         SI,0xba
     JMP         FUN_1000_1408
 .LAB_LOC_24:
-    MOV         AL,[0x5ee]
+    MOV         AL, byte [0x5ee]
     SAHF
     JS          .LAB_LOC_25
     PUSH        SI
@@ -2395,7 +2395,7 @@ FUN_1000_1965:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xfeff]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -2460,7 +2460,7 @@ FUN_1000_1965:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xff00]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -2551,7 +2551,7 @@ FUN_1000_1965:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + -0x1]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -2616,7 +2616,7 @@ FUN_1000_1965:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -2682,7 +2682,7 @@ FUN_1000_1965:
 ;************************************************************************************************
 FUN_1000_1cde:
                               ;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
-    MOV         AL,[0x5fc]
+    MOV         AL, byte [0x5fc]
     MOV         BX,0x1d51
     MOV         CX,word [DI + 0xc]
     ADD         CX,word [SI + 0x2]
@@ -2800,7 +2800,7 @@ FUN_1000_1cde:
 ;************************************************************************************************
 FUN_1000_1e3a:
                               ;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
-    MOV         AL,[0x5fc]
+    MOV         AL, byte [0x5fc]
     MOV         BX,0x1d51
     MOV         CX,word [DI + 0xc]
     ADD         CX,word [SI + 0x2]
@@ -2947,7 +2947,7 @@ LAB_1000_1fd8:                ;XREF[1]:     1000:2076(j)
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xfeff]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -3012,7 +3012,7 @@ LAB_1000_2090:                ;XREF[1]:     1000:212a(j)
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + -0x1]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -3103,7 +3103,7 @@ LAB_1000_2182:                ;XREF[1]:     1000:221f(j)
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xff00]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -3168,7 +3168,7 @@ LAB_1000_2239:                ;XREF[1]:     1000:22cf(j)
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX]
-    MOV         [0x5fc],AL
+    MOV         byte [0x5fc],AL
     MOVZX       CX,byte GS:[BX]
     SHL         CX,0x4
     MOV         AH,BL
@@ -3626,7 +3626,7 @@ FUN_1000_25c5:
     ADD         CL,BL
     CMP         CL,0x80
     JA          .LAB_LOC_1
-    MOV         [0x5acd],AL
+    MOV         byte [0x5acd],AL
     MOV         byte [0x5acf],BL
     MOV         BL,AH
     MOVZX       AX,byte GS:[BX]
@@ -3650,7 +3650,7 @@ FUN_1000_25c5:
     NEG         BL
     ADD         AL,0x80
     ADD         BL,0x80
-    MOV         [0x5acd],AL
+    MOV         byte [0x5acd],AL
     MOV         byte [0x5acf],BL
     MOV         BL,AH
     MOVZX       AX,byte GS:[BX + 0x101]
@@ -8493,11 +8493,11 @@ FUN_1000_532e:
     ADD         CL,BL
     CMP         CL,0x80
     JA          .LAB_LOC_1
-    MOV         [0xea18],AL
+    MOV         byte [0xea18],AL
     MOV         byte [0xea1a],BL
     MOV         BL,AH
     MOV         AL,byte FS:[BX]
-    MOV         [0xea28],AL
+    MOV         byte [0xea28],AL
     MOVZX       AX,byte GS:[BX]
     SHL         AX,0x4
     MOV         CX,AX
@@ -8521,11 +8521,11 @@ FUN_1000_532e:
     NEG         BL
     ADD         AL,0x80
     ADD         BL,0x80
-    MOV         [0xea18],AL
+    MOV         byte [0xea18],AL
     MOV         byte [0xea1a],BL
     MOV         BL,AH
     MOV         AL,byte FS:[BX]
-    MOV         [0xea28],AL
+    MOV         byte [0xea28],AL
     MOVZX       AX,byte GS:[BX + 0x101]
     SHL         AX,0x4
     MOV         CX,AX
@@ -8826,7 +8826,7 @@ FUN_1000_58fc:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_1000_5940:
+FUN_1000_5940_render_text:
                               ;XREF[2]:     1000:04e6(c),1000:04f4(c)
     MOV         byte [CSD_BYTE_1000_59c1],CL         ;= Fh
     MOV         CX,AX
