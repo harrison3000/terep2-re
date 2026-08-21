@@ -2273,7 +2273,8 @@ FUN_1000_1965:
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
     TEST        AH,0x60
-    JNP         .LAB_LOC_24
+    ;jumping to another function, some kind of tail call optimization
+    JNP         FUN_1965_NP
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
 
@@ -2593,7 +2594,244 @@ FUN_1000_1965:
     JMP         .LAB_LOC_14
 .LAB_LOC_23:
     RET
-;this was 2 functions below, its here now for the local labels to work
+
+;************************************************************************************************
+;*                                           FUNCTION                                           *
+;************************************************************************************************
+FUN_1000_1cde:
+                              ;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
+    MOV         AL, byte [0x5fc]
+    MOV         BX,0x1d51
+    MOV         CX,word [DI + 0xc]
+    ADD         CX,word [SI + 0x2]
+    SAR         CX,0x2
+    CMP         CX,word [0x5f5]
+    JL          .LAB_LOC_4
+    ADD         BH,CH
+    XLAT      
+    MOV         AH,AL
+    MOV         word [0xdb12],AX
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    MOV         EBX, 0
+    CALL        FUN_1000_46a0
+    MOV         SI,DI
+    CALL        FUN_1000_46d3
+    POP         SI
+    CALL        FUN_1000_46d3
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_1
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JNS         .LAB_LOC_1
+    CALL        FUN_1000_2bec
+.LAB_LOC_1:
+    LEA         SI,[DI + 0xa]
+    MOV         EBX, 0
+    CALL        FUN_1000_46a0
+    POP         SI
+    CALL        FUN_1000_46d3
+    ADD         SI,0xa
+    CALL        FUN_1000_46d3
+    LEA         SI,[DI + 0xa]
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_3
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JNS         .LAB_LOC_3
+    MOV         AX, word [0xdb12]
+    TEST        AL,0xf
+    JZ          .LAB_LOC_2
+    SUB         word [0xdb12],0x101
+.LAB_LOC_2:
+    CALL        FUN_1000_2bec
+.LAB_LOC_3:
+    RET
+.LAB_LOC_4:
+    PUSH        FS
+    MOV         FS, word [v_memblock_d]
+    MOV         AH,byte [0x5fc]
+    MOV         BH,AL
+    AND         BH,0xf0
+    SHL         AH,0x4
+    MOV         BL,0x80
+    MOV         AL,0x80
+    SHL         EBX,0x10
+    MOV         BX,AX
+    MOV         dword [0x1d4d],EBX
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_46a0
+    MOV         SI,DI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0x0
+    CALL        FUN_1000_46d3
+    POP         SI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_46d3
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_5
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JNS         .LAB_LOC_5
+    CALL        FUN_1000_36fe
+.LAB_LOC_5:
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_46a0
+    POP         SI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_46d3
+    ADD         SI,0xa
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000f00
+    CALL        FUN_1000_46d3
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_6
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JNS         .LAB_LOC_6
+    CALL        FUN_1000_36fe
+.LAB_LOC_6:
+    POP         FS
+    RET
+;************************************************************************************************
+;*                                           FUNCTION                                           *
+;************************************************************************************************
+FUN_1000_1e3a:
+                              ;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
+    MOV         AL, byte [0x5fc]
+    MOV         BX,0x1d51
+    MOV         CX,word [DI + 0xc]
+    ADD         CX,word [SI + 0x2]
+    SAR         CX,0x2
+    CMP         CX,word [0x5f5]
+    JL          .LAB_LOC_4
+    ADD         BH,CH
+    XLAT     
+    MOV         AH,AL
+    MOV         word [0xdb12],AX
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    MOV         EBX, 0
+    CALL        FUN_1000_46a0
+    MOV         SI,DI
+    CALL        FUN_1000_46d3
+    POP         SI
+    CALL        FUN_1000_46d3
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_1
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JS          .LAB_LOC_1
+    CALL        FUN_1000_2bec
+.LAB_LOC_1:
+    LEA         SI,[DI + 0xa]
+    CALL        FUN_1000_46a0
+    POP         SI
+    CALL        FUN_1000_46d3
+    ADD         SI,0xa
+    CALL        FUN_1000_46d3
+    LEA         SI,[DI + 0xa]
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_3
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JS          .LAB_LOC_3
+    MOV         AX, word [0xdb12]
+    TEST        AL,0xf
+    JZ          .LAB_LOC_2
+    SUB         word [0xdb12],0x101
+.LAB_LOC_2:
+    CALL        FUN_1000_2bec
+.LAB_LOC_3:
+    RET
+.LAB_LOC_4:
+    PUSH        FS
+    MOV         FS, word [v_memblock_d]
+    MOV         AH,byte [0x5fc]
+    MOV         BH,AL
+    AND         BH,0xf0
+    SHL         AH,0x4
+    MOV         BL,0x80
+    MOV         AL,0x80
+    SHL         EBX,0x10
+    MOV         BX,AX
+    MOV         dword [0x1d4d],EBX
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_46a0
+    MOV         SI,DI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0x0
+    CALL        FUN_1000_46d3
+    POP         SI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_46d3
+    PUSH        SI
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_5
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JS          .LAB_LOC_5
+    CALL        FUN_1000_36fe
+.LAB_LOC_5:
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_46a0
+    POP         SI
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf00
+    CALL        FUN_1000_46d3
+    ADD         SI,0xa
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000f00
+    CALL        FUN_1000_46d3
+    LEA         SI,[DI + 0xa]
+    MOV         EBX,dword [0x1d4d]
+    OR          EBX,0xf000000
+    CALL        FUN_1000_47ec
+    CMP         AL,0x3
+    JL          .LAB_LOC_6
+    MOV         SI,0xdb16
+    CALL        FUN_1000_2662
+    JS          .LAB_LOC_6
+    CALL        FUN_1000_36fe
+.LAB_LOC_6:
+    POP         FS
+    RET
+
+;seems like a alternative version of FUN_1000_1965, what it does? who knows?
+FUN_1965_NP:
 .LAB_LOC_24:
     MOV         byte [0x5fb],0x1
     CALL        FUN_1000_41b2
@@ -2915,240 +3153,7 @@ FUN_1000_1965:
 .LAB_LOC_47:
     RET
 
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_1cde:
-                              ;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
-    MOV         AL, byte [0x5fc]
-    MOV         BX,0x1d51
-    MOV         CX,word [DI + 0xc]
-    ADD         CX,word [SI + 0x2]
-    SAR         CX,0x2
-    CMP         CX,word [0x5f5]
-    JL          .LAB_LOC_4
-    ADD         BH,CH
-    XLAT      
-    MOV         AH,AL
-    MOV         word [0xdb12],AX
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    MOV         EBX, 0
-    CALL        FUN_1000_46a0
-    MOV         SI,DI
-    CALL        FUN_1000_46d3
-    POP         SI
-    CALL        FUN_1000_46d3
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_1
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JNS         .LAB_LOC_1
-    CALL        FUN_1000_2bec
-.LAB_LOC_1:
-    LEA         SI,[DI + 0xa]
-    MOV         EBX, 0
-    CALL        FUN_1000_46a0
-    POP         SI
-    CALL        FUN_1000_46d3
-    ADD         SI,0xa
-    CALL        FUN_1000_46d3
-    LEA         SI,[DI + 0xa]
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_3
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JNS         .LAB_LOC_3
-    MOV         AX, word [0xdb12]
-    TEST        AL,0xf
-    JZ          .LAB_LOC_2
-    SUB         word [0xdb12],0x101
-.LAB_LOC_2:
-    CALL        FUN_1000_2bec
-.LAB_LOC_3:
-    RET
-.LAB_LOC_4:
-    PUSH        FS
-    MOV         FS, word [v_memblock_d]
-    MOV         AH,byte [0x5fc]
-    MOV         BH,AL
-    AND         BH,0xf0
-    SHL         AH,0x4
-    MOV         BL,0x80
-    MOV         AL,0x80
-    SHL         EBX,0x10
-    MOV         BX,AX
-    MOV         dword [0x1d4d],EBX
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_46a0
-    MOV         SI,DI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0x0
-    CALL        FUN_1000_46d3
-    POP         SI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_46d3
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_5
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JNS         .LAB_LOC_5
-    CALL        FUN_1000_36fe
-.LAB_LOC_5:
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_46a0
-    POP         SI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_46d3
-    ADD         SI,0xa
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000f00
-    CALL        FUN_1000_46d3
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_6
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JNS         .LAB_LOC_6
-    CALL        FUN_1000_36fe
-.LAB_LOC_6:
-    POP         FS
-    RET
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_1000_1e3a:
-                              ;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
-    MOV         AL, byte [0x5fc]
-    MOV         BX,0x1d51
-    MOV         CX,word [DI + 0xc]
-    ADD         CX,word [SI + 0x2]
-    SAR         CX,0x2
-    CMP         CX,word [0x5f5]
-    JL          .LAB_LOC_4
-    ADD         BH,CH
-    XLAT     
-    MOV         AH,AL
-    MOV         word [0xdb12],AX
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    MOV         EBX, 0
-    CALL        FUN_1000_46a0
-    MOV         SI,DI
-    CALL        FUN_1000_46d3
-    POP         SI
-    CALL        FUN_1000_46d3
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_1
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JS          .LAB_LOC_1
-    CALL        FUN_1000_2bec
-.LAB_LOC_1:
-    LEA         SI,[DI + 0xa]
-    CALL        FUN_1000_46a0
-    POP         SI
-    CALL        FUN_1000_46d3
-    ADD         SI,0xa
-    CALL        FUN_1000_46d3
-    LEA         SI,[DI + 0xa]
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_3
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JS          .LAB_LOC_3
-    MOV         AX, word [0xdb12]
-    TEST        AL,0xf
-    JZ          .LAB_LOC_2
-    SUB         word [0xdb12],0x101
-.LAB_LOC_2:
-    CALL        FUN_1000_2bec
-.LAB_LOC_3:
-    RET
-.LAB_LOC_4:
-    PUSH        FS
-    MOV         FS, word [v_memblock_d]
-    MOV         AH,byte [0x5fc]
-    MOV         BH,AL
-    AND         BH,0xf0
-    SHL         AH,0x4
-    MOV         BL,0x80
-    MOV         AL,0x80
-    SHL         EBX,0x10
-    MOV         BX,AX
-    MOV         dword [0x1d4d],EBX
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_46a0
-    MOV         SI,DI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0x0
-    CALL        FUN_1000_46d3
-    POP         SI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_46d3
-    PUSH        SI
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_5
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JS          .LAB_LOC_5
-    CALL        FUN_1000_36fe
-.LAB_LOC_5:
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_46a0
-    POP         SI
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf00
-    CALL        FUN_1000_46d3
-    ADD         SI,0xa
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000f00
-    CALL        FUN_1000_46d3
-    LEA         SI,[DI + 0xa]
-    MOV         EBX,dword [0x1d4d]
-    OR          EBX,0xf000000
-    CALL        FUN_1000_47ec
-    CMP         AL,0x3
-    JL          .LAB_LOC_6
-    MOV         SI,0xdb16
-    CALL        FUN_1000_2662
-    JS          .LAB_LOC_6
-    CALL        FUN_1000_36fe
-.LAB_LOC_6:
-    POP         FS
-    RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
