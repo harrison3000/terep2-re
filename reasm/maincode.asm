@@ -1,5 +1,4 @@
 
-
 f_init:
     MOV         word [0x5bba], -2     ;just to be sure
 
@@ -58,7 +57,7 @@ f_init:
     MOV         DI,0x5bd0
     MOV         word [0x5bbc],DI
     XOR         SI,SI
-.load_cars_loop:                ;XREF[1]:     1000:0219(j)
+.load_cars_loop:
     MOV         DI,word [SI + 0x5bbc]
     MOV         AX,SI
     NEG         AX
@@ -183,6 +182,8 @@ FUN_main_render:
 
     TEST        byte [0x7d],0xff
     JNZ         .LAB_LOC_5
+
+    ;singleplayer
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -246,6 +247,7 @@ FUN_main_render:
     CALL        FUN_1000_5831 ;was indirect
     JMP         .LAB_LOC_14
 .LAB_LOC_5:
+    ;split-screen
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -418,30 +420,55 @@ FUN_main_render:
     SUB         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_18:
     MOV         AL,[CSD_DAT_keys_571e]
+    ;Esc
     CMP         AL,0x1
     JZ          .LAB_LOC_33
+
+    ;Tab
     CMP         AL,0xf
     JZ          .LAB_LOC_28
+    
+    ;Q
     CMP         AL,0x10
     JZ          .LAB_LOC_30
+    
+    ;F1
     CMP         AL,0x3b
     JZ          .LAB_LOC_20
+    
+    ;F2
     CMP         AL,0x3c
     JZ          .LAB_LOC_21
+    
+    ;F3
     CMP         AL,0x3d
     JZ          .LAB_LOC_22
+    
+    ;F4
     CMP         AL,0x3e
     JZ          .LAB_LOC_23
+    
+    ;F5
     CMP         AL,0x3f
     JZ          .LAB_LOC_24
+
+    ;F6
     CMP         AL,0x40
     JZ          .CYCLE_2ND_CAM
+
+    ;[
     CMP         AL,0x1a
     JZ          .LAB_LOC_26
+    
+    ;]
     CMP         AL,0x1b
     JZ          .LAB_LOC_27
+    
+    ;F10
     CMP         AL,0x44
     JZ          .LAB_LOC_32
+    
+    ;F9
     CMP         AL,0x43
     JZ          .LAB_LOC_25
     mov ax, 0
@@ -930,6 +957,7 @@ FUN_1000_0a82:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to smoke, debris, particle effects in general
 FUN_1000_0b25:
                               ;XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
     PUSH        FS
@@ -1496,6 +1524,7 @@ FUN_1000_10b6:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to steering, disabling this function disables steering
 FUN_1000_1136:
                               ;XREF[2]:     1000:0e9a(c),1000:0ec4(c)
     PUSH        SI
@@ -1545,6 +1574,7 @@ FUN_1000_1136:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;also relate do steering maybe, disabling it just makes the game crash
 FUN_1000_11f0:
                               ;XREF[1]:     1000:138f(c)
     PUSH        SI
@@ -4764,12 +4794,14 @@ FUN_1000_302d:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;TODO find out when this is called
 FUN_1000_30ee:
                               ;XREF[2]:     1000:15ee(c),1000:167a(c)
     PUSH        SI
     PUSH        DI
     MOV         SI,0xdb16
     MOV         DI,0xdb68
+    ;TODO parametrize and all that jazz
     CALL        FUN_1000_324f
     XCHG        DI,SI
     CALL        FUN_1000_3376
@@ -5458,6 +5490,7 @@ FUN_1000_35cf:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to textured polygons
 FUN_1000_36fe:
                               ;XREF[8]:     1000:0d24(c),1000:16f0(c),1000:175a(c),1000:1907(c),
                               ;             1000:1ddb(c),1000:1e34(c),1000:1f2f(c),1000:1f88(c)
@@ -5598,6 +5631,7 @@ FUN_1000_379b:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
 FUN_1000_3827:
                               ;XREF[1]:     1000:3795(c)
     MOV         SI,word [0xdbc4]
@@ -5692,6 +5726,7 @@ FUN_1000_3827:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: seems to also be related to rendering textured polygons
 FUN_1000_390a:
                               ;XREF[1]:     1000:3706(c)
     PUSH        SI
@@ -8231,6 +8266,7 @@ FUN_1000_500b:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
 FUN_1000_5091:
                               ;XREF[1]:     1000:501c(c)
     PUSH        SI
