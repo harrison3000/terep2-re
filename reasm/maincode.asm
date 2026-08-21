@@ -195,7 +195,7 @@ FUN_main_render:
     MOV         GS, word [0x1a45]
 
     TEST        byte [0x7d],0xff
-    JNZ         LAB_1000_032e
+    JNZ         .LAB_LOC_5
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -234,31 +234,31 @@ FUN_main_render:
     ADD         EBX,dword [SI + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
-    JZ          LAB_1000_0308
+    JZ          .LAB_LOC_2
     DEC         CX
-    JZ          LAB_1000_0305
+    JZ          .LAB_LOC_1
     ADD         EAX,EBX
     SAR         EAX,0x1
-LAB_1000_0305:                ;XREF[1]:     1000:02fb(j)
+.LAB_LOC_1:
     MOV         EBX,EAX
-LAB_1000_0308:                ;XREF[1]:     1000:02f6(j)
+.LAB_LOC_2:
     AND         BX,BX
-    JGE         LAB_1000_0310
+    JGE         .LAB_LOC_3
     NEG         BX
-LAB_1000_0310:                ;XREF[1]:     1000:030a(j)
+.LAB_LOC_3:
     ADD         BX,0x1030
     MOV         CX,word [SI + 0xc]
     SAR         CX,0x9
     AND         CX,CX
-    JGE         LAB_1000_0322
+    JGE         .LAB_LOC_4
     NEG         CX
-LAB_1000_0322:                ;XREF[1]:     1000:031c(j)
+.LAB_LOC_4:
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
     CALL        FUN_1000_5831 ;was indirect
-    JMP         LAB_1000_04b7
-LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
+    JMP         .LAB_LOC_14
+.LAB_LOC_5:
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -297,25 +297,25 @@ LAB_1000_032e:                ;XREF[1]:     1000:025e(j)
     ADD         EBX,dword [SI + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
-    JZ          LAB_1000_03d4
+    JZ          .LAB_LOC_7
     DEC         CX
-    JZ          LAB_1000_03d1
+    JZ          .LAB_LOC_6
     ADD         EAX,EBX
     SAR         EAX,0x1
-LAB_1000_03d1:                ;XREF[1]:     1000:03c7(j)
+.LAB_LOC_6:
     MOV         EBX,EAX
-LAB_1000_03d4:                ;XREF[1]:     1000:03c2(j)
+.LAB_LOC_7:
     AND         BX,BX
-    JGE         LAB_1000_03dc
+    JGE         .LAB_LOC_8
     NEG         BX
-LAB_1000_03dc:                ;XREF[1]:     1000:03d6(j)
+.LAB_LOC_8:
     ADD         BX,0x1030
     MOV         CX,word [SI + 0xc]
     SAR         CX,0x9
     AND         CX,CX
-    JGE         LAB_1000_03ee
+    JGE         .LAB_LOC_9
     NEG         CX
-LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
+.LAB_LOC_9:
     ADD         CX,0x2c
     MOV         AL,0x0
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
@@ -356,30 +356,30 @@ LAB_1000_03ee:                ;XREF[1]:     1000:03e8(j)
     ADD         EBX,dword [SI + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
-    JZ          LAB_1000_0494
+    JZ          .LAB_LOC_11
     DEC         CX
-    JZ          LAB_1000_0491
+    JZ          .LAB_LOC_10
     ADD         EAX,EBX
     SAR         EAX,0x1
-LAB_1000_0491:                ;XREF[1]:     1000:0487(j)
+.LAB_LOC_10:
     MOV         EBX,EAX
-LAB_1000_0494:                ;XREF[1]:     1000:0482(j)
+.LAB_LOC_11:
     AND         BX,BX
-    JGE         LAB_1000_049c
+    JGE         .LAB_LOC_12
     NEG         BX
-LAB_1000_049c:                ;XREF[1]:     1000:0496(j)
+.LAB_LOC_12:
     ADD         BX,0x1030
     MOV         CX,word [SI + 0xc]
     SAR         CX,0x9
     AND         CX,CX
-    JGE         LAB_1000_04ae
+    JGE         .LAB_LOC_13
     NEG         CX
-LAB_1000_04ae:                ;XREF[1]:     1000:04a8(j)
+.LAB_LOC_13:
     ADD         CX,0x2c
     MOV         AL,0x1
                               ; FWD[2]:     1000:5b01(c),15cd:006f(R)
     CALL        FUN_1000_5831 ;was indirect
-LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
+.LAB_LOC_14:
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -407,120 +407,120 @@ LAB_1000_04b7:                ;XREF[1]:     1000:032b(j)
 
     CALL        FUN_1000_2baa
     TEST        byte [CSD_DAT_keys_571e + 78],0x80
-    JS          LAB_1000_0513
+    JS          .LAB_LOC_15
     CMP         word [0x11c],0x3e8   ;= 0100h
-    JG          LAB_1000_0513
+    JG          .LAB_LOC_15
     ADD         word [0x11c],0x14    ;= 0100h
-LAB_1000_0513:                ;XREF[2]:     1000:0500(j),1000:050a(j)
+.LAB_LOC_15:
     TEST        byte [CSD_DAT_keys_571e + 74],0x80
-    JS          LAB_1000_052b
+    JS          .LAB_LOC_16
     CMP         word [0x11c],0x32    ;= 0100h
-    JL          LAB_1000_052b
+    JL          .LAB_LOC_16
     SUB         word [0x11c],0x14    ;= 0100h
-LAB_1000_052b:                ;XREF[2]:     1000:0519(j),1000:0522(j)
+.LAB_LOC_16:
     TEST        byte [CSD_DAT_keys_571e + 53],0x80
-    JS          LAB_1000_0544
+    JS          .LAB_LOC_17
     CMP         word [0x11e],0x1000  ;= 0400h
-    JG          LAB_1000_0544
+    JG          .LAB_LOC_17
     ADD         word [0x11e],0x28    ;= 0400h
-LAB_1000_0544:                ;XREF[2]:     1000:0531(j),1000:053b(j)
+.LAB_LOC_17:
     TEST        byte [CSD_DAT_keys_571e + 55],0x80
-    JS          LAB_1000_055d
+    JS          .LAB_LOC_18
     CMP         word [0x11e],0x100   ;= 0400h
-    JL          LAB_1000_055d
+    JL          .LAB_LOC_18
     SUB         word [0x11e],0x28    ;= 0400h
-LAB_1000_055d:                ;XREF[2]:     1000:054a(j),1000:0554(j)
+.LAB_LOC_18:
     MOV         AL,[CSD_DAT_keys_571e]
     CMP         AL,0x1
-    JZ          LAB_1000_0654
+    JZ          .LAB_LOC_33
     CMP         AL,0xf
-    JZ          LAB_1000_05f4
+    JZ          .LAB_LOC_28
     CMP         AL,0x10
-    JZ          LAB_1000_0609
+    JZ          .LAB_LOC_30
     CMP         AL,0x3b
-    JZ          LAB_1000_05b5
+    JZ          .LAB_LOC_20
     CMP         AL,0x3c
-    JZ          LAB_1000_05bd
+    JZ          .LAB_LOC_21
     CMP         AL,0x3d
-    JZ          LAB_1000_05c5
+    JZ          .LAB_LOC_22
     CMP         AL,0x3e
-    JZ          LAB_1000_05cd
+    JZ          .LAB_LOC_23
     CMP         AL,0x3f
-    JZ          LAB_1000_05d5
+    JZ          .LAB_LOC_24
     CMP         AL,0x40
-    JZ          CYCLE_2ND_CAM
+    JZ          .CYCLE_2ND_CAM
     CMP         AL,0x1a
-    JZ          LAB_1000_05e4
+    JZ          .LAB_LOC_26
     CMP         AL,0x1b
-    JZ          LAB_1000_05ec
+    JZ          .LAB_LOC_27
     CMP         AL,0x44
-    JZ          LAB_1000_061e
+    JZ          .LAB_LOC_32
     CMP         AL,0x43
-    JZ          LAB_1000_05dd
+    JZ          .LAB_LOC_25
     mov ax, 0
     ret
-LAB_1000_05ac:                ;XREF[11]:    1000:05bb(j),1000:05c3(j),1000:05cb(j),1000:05d3(j),
+.LAB_LOC_19:
                               ;             1000:05db(j),1000:05e2(j),1000:05ea(j),1000:05f2(j),
                               ;             1000:0607(j),1000:061c(j),1000:0624(j)
     MOV         byte [CSD_DAT_keys_571e],0x0
     mov ax, 0
     ret
-LAB_1000_05b5:                ;XREF[1]:     1000:0575(j)
+.LAB_LOC_20:
     MOV         byte [0x7e],0x0     ;= 03h
-    JMP         LAB_1000_05ac
-LAB_1000_05bd:                ;XREF[1]:     1000:057b(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_21:
     MOV         byte [0x7e],0x1     ;= 03h
-    JMP         LAB_1000_05ac
-LAB_1000_05c5:                ;XREF[1]:     1000:0581(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_22:
     MOV         byte [0x7e],0x2     ;= 03h
-    JMP         LAB_1000_05ac
-LAB_1000_05cd:                ;XREF[1]:     1000:0587(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_23:
     MOV         byte [0x7e],0x3     ;= 03h
-    JMP         LAB_1000_05ac
-LAB_1000_05d5:                ;XREF[1]:     1000:058d(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_24:
     MOV         byte [0x7e],0x4     ;= 03h
-    JMP         LAB_1000_05ac
-LAB_1000_05dd:                ;XREF[1]:     1000:05a5(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_25:
     XOR         byte [0x7d],0x1
-    JMP         LAB_1000_05ac
-LAB_1000_05e4:                ;XREF[1]:     1000:0593(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_26:
     ADD         dword [0x6a],0x32   ;= 00000C00h
-    JMP         LAB_1000_05ac
-LAB_1000_05ec:                ;XREF[1]:     1000:0599(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_27:
     SUB         dword [0x6a],0x32   ;= 00000C00h
-    JMP         LAB_1000_05ac
-LAB_1000_05f4:                ;XREF[1]:     1000:0569(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_28:
     MOV         SI,word [0xa4]
     INC         SI
     CMP         SI,word [0x5bba]      ;= 0001h
-    JC          LAB_1000_0603
+    JC          .LAB_LOC_29
     XOR         SI,SI
-LAB_1000_0603:                ;XREF[1]:     1000:05fd(j)
+.LAB_LOC_29:
     MOV         word [0xa4],SI
-    JMP         LAB_1000_05ac
-LAB_1000_0609:                ;XREF[1]:     1000:056f(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_30:
     MOV         SI,word [0xa6]
     INC         SI
     CMP         SI,word [0x5bba]      ;= 0001h
-    JC          LAB_1000_0618
+    JC          .LAB_LOC_31
     XOR         SI,SI
-LAB_1000_0618:                ;XREF[1]:     1000:0612(j)
+.LAB_LOC_31:
     MOV         word [0xa6],SI
-    JMP         LAB_1000_05ac
-LAB_1000_061e:                ;XREF[1]:     1000:059f(j)
+    JMP         .LAB_LOC_19
+.LAB_LOC_32:
     XOR         word [0x5f5],0x600   ;= 0600h
-    JMP         LAB_1000_05ac
+    JMP         .LAB_LOC_19
 
-CYCLE_2ND_CAM:
+.CYCLE_2ND_CAM:
     INC   byte [0x7f]
     CMP   byte [0x7f], 5
-    JL    LAB_1000_05ac
+    JL    .LAB_LOC_19
     MOV   byte [0x7f], 0
-    JL    LAB_1000_05ac
+    JL    .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
-LAB_1000_0654:                ;XREF[1]:     1000:0563(j)
+.LAB_LOC_33:
     mov ax, 1
     ret
 
