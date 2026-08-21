@@ -4067,13 +4067,19 @@ FUN_1000_2b08:
                               ;             1000:0a20(c),1000:1841(c),1000:26df(c),1000:4a43(c),
                               ;             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
     AND         AX,AX
-    JS          LAB_1000_2b61
+    JS          .LAB_LOC_2
     JNZ         FUN_1000_2b1f
     MOV         AX,0x0
     TEST        BX,BX
-    JNS         LAB_1000_2b1e
+    JNS         .LAB_LOC_1
     ADD         AX,0x8000
-LAB_1000_2b1e:                ;XREF[1]:     1000:2b17(j)
+.LAB_LOC_1:
+    RET
+
+.LAB_LOC_2:
+    NOT         AX
+    CALL        FUN_1000_2b1f
+    NEG         AX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -4081,9 +4087,16 @@ LAB_1000_2b1e:                ;XREF[1]:     1000:2b17(j)
 FUN_1000_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
     AND         BX,BX
-    JS          LAB_1000_2b56
+    JS          .LAB_LOC_1
     JNZ         FUN_1000_2b2d
     MOV         AX,0x4000
+    RET
+
+.LAB_LOC_1:
+    NOT         BX
+    CALL        FUN_1000_2b2d
+    NEG         AX
+    ADD         AX,0x8000
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -4091,9 +4104,16 @@ FUN_1000_2b1f:
 FUN_1000_2b2d:
                               ;XREF[2]:     1000:2b25(j),1000:2b58(c)
     CMP         AX,BX
-    JG          LAB_1000_2b4c
+    JG          .LAB_LOC_1
     JL          FUN_1000_2b3b
     MOV         AX,0x2000
+    RET
+
+.LAB_LOC_1:
+    XCHG        AX,BX
+    CALL        FUN_1000_2b3b
+    NEG         AX
+    ADD         AX,0x4000
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -4107,23 +4127,6 @@ FUN_1000_2b3b:
     XOR         BH,BH
     SHL         BX,0x1
     MOV         AX,word [BX + 0xd90e]
-    RET
-LAB_1000_2b4c:                ;XREF[1]:     1000:2b2f(j)
-    XCHG        AX,BX
-    CALL        FUN_1000_2b3b
-    NEG         AX
-    ADD         AX,0x4000
-    RET
-LAB_1000_2b56:                ;XREF[1]:     1000:2b21(j)
-    NOT         BX
-    CALL        FUN_1000_2b2d
-    NEG         AX
-    ADD         AX,0x8000
-    RET
-LAB_1000_2b61:                ;XREF[1]:     1000:2b0a(j)
-    NOT         AX
-    CALL        FUN_1000_2b1f
-    NEG         AX
     RET
 
  ; 1000:2b6f [UNDEFINED BYTES REMOVED]
@@ -8954,20 +8957,20 @@ FUN_1000_5acf:
     MOV         AX,0x0
     MOV         CX,word [0xef82]
     CMP         CX,0x100
-    JLE         LAB_1000_5ae8
+    JLE         .LAB_LOC_1
     MOV         CX,0x100
-LAB_1000_5ae8:                ;XREF[2]:     1000:5ae1(j),1000:5b22(j)
+.LAB_LOC_1:
     PUSH        CX
     XOR         CX,CX
-LAB_1000_5aeb:                ;XREF[1]:     1000:5b1f(j)
+.LAB_LOC_2:
     AND         AH,AH
-    JZ          LAB_1000_5af6
+    JZ          .LAB_LOC_3
     DEC         AH
-    JMP         LAB_1000_5b11
+    JMP         .LAB_LOC_4
 
  ; 1000:5af5 [UNDEFINED BYTES REMOVED]
 
-LAB_1000_5af6:                ;XREF[1]:     1000:5aed(j)
+.LAB_LOC_3:
     CALL        FUN_1000_5b26
     MOV         AH,AL
     AND         AH,0xc0
@@ -8975,24 +8978,24 @@ LAB_1000_5af6:                ;XREF[1]:     1000:5aed(j)
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
-FUN_1000_5b01:
+.WHY_1000_5b01: ; this is never called as a function, but it was labeled as one
                               ;XREF[3]:     1000:0327(c),1000:03f3(c),1000:04b3(c)
     MOV         AH,0x0
-    JNZ         LAB_1000_5b11
+    JNZ         .LAB_LOC_4
     MOV         AH,AL
     AND         AH,0x3f
     CALL        FUN_1000_5b26
     DEC         AH
-LAB_1000_5b11:                ;XREF[2]:     1000:5af3(j),1000:5b03(j)
+.LAB_LOC_4:
     CMP         CX,0x100
-    JNC         LAB_1000_5b1a
+    JNC         .LAB_LOC_5
     STOSB 
-LAB_1000_5b1a:                ;XREF[1]:     1000:5b15(j)
+.LAB_LOC_5:
     INC         CX
     CMP         CX,word [0xef80]
-    JC          LAB_1000_5aeb
+    JC          .LAB_LOC_2
     POP         CX
-    LOOP        LAB_1000_5ae8
+    LOOP        .LAB_LOC_1
     CLC
     RET
 ;************************************************************************************************
