@@ -2361,7 +2361,8 @@ FUN_1000_1965:
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
     TEST        AH,0x60
-    JNP         LAB_1000_1f8e
+    ;jumping to another function, some kind of tail call optimization
+    JNP         FUN_1965_NP
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
     MOV         AX, word [0xc6]
@@ -2912,28 +2913,29 @@ FUN_1000_1e3a:
     POP         FS
     RET
 
-FUN_FAKE:
-LAB_1000_1f8e:                ;XREF[1]:     1000:1977(j)
+;seems like a alternative version of FUN_1000_1965, what it does? who knows?
+FUN_1965_NP:
+.LAB_LOC_1:
     MOV         byte [0x5fb],0x1
     CALL        FUN_1000_41b2
     MOV         AX, word [0xc6]
     TEST        AH,0xc0
-    JNS         LAB_1000_214b
+    JNS         .LAB_LOC_13
     MOV         DI,0x5bbc
     MOV         CX,word [0x5bba]
-LAB_1000_1fa8:                ;XREF[1]:     1000:1fb2(j)
+.LAB_LOC_2:
     PUSH        CX
     MOV         SI,word [DI]
     CALL        FUN_1000_2384
     ADD         DI,0x2
     POP         CX
-    LOOP        LAB_1000_1fa8
+    LOOP        .LAB_LOC_2
     MOV         SI,0xe590
     MOV         AX, word [0xe58c]
     MOV         BL,AL
     SHL         AX,0x2
     ADD         SI,AX
-LAB_1000_1fc1:                ;XREF[1]:     1000:2147(j)
+.LAB_LOC_3:
     PUSH        BX
     MOV         BH,byte [SI]
     MOVZX       DX,BH
@@ -2943,7 +2945,7 @@ LAB_1000_1fc1:                ;XREF[1]:     1000:2147(j)
     ADD         DI,DX
     ADD         DI,0x5ff
     ADD         DI,word [0x19ff]
-LAB_1000_1fd8:                ;XREF[1]:     1000:2076(j)
+.LAB_LOC_4:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xfeff]
@@ -2963,23 +2965,23 @@ LAB_1000_1fd8:                ;XREF[1]:     1000:2076(j)
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CMP         BX,word [0x120]
-    JL          LAB_1000_2029
+    JL          .LAB_LOC_5
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
-LAB_1000_2029:                ;XREF[1]:     1000:2012(j)
+.LAB_LOC_5:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58c]
-    JZ          LAB_1000_2068
+    JZ          .LAB_LOC_6
     CMP         DH,byte [SI]
-    JZ          LAB_1000_2068
+    JZ          .LAB_LOC_6
     CMP         DH,byte [SI + -0x4]
-    JBE         LAB_1000_2068
+    JBE         .LAB_LOC_6
     CMP         DH,byte [SI + -0x2]
-    JA          LAB_1000_2068
+    JA          .LAB_LOC_6
     PUSH        SI
     PUSH        DI
     SUB         DI,0xa
@@ -2992,14 +2994,14 @@ LAB_1000_2029:                ;XREF[1]:     1000:2012(j)
     CALL        FUN_1000_194c
     POP         DI
     POP         SI
-LAB_1000_2068:                ;XREF[4]:     1000:2031(j),1000:2037(j),1000:203e(j),1000:2045(j)
+.LAB_LOC_6:
     POP         BX
     CMP         BH,byte [0xb1]
-    JNC         LAB_1000_2079
+    JNC         .LAB_LOC_7
     INC         BH
     ADD         DI,0xa
-    JMP         LAB_1000_1fd8
-LAB_1000_2079:                ;XREF[1]:     1000:206d(j)
+    JMP         .LAB_LOC_4
+.LAB_LOC_7:
     MOV         BH,byte [SI + 0x2]
     MOVZX       DX,BH
     SHL         DX,0x1
@@ -3008,7 +3010,7 @@ LAB_1000_2079:                ;XREF[1]:     1000:206d(j)
     ADD         DI,DX
     ADD         DI,0x5ff
     ADD         DI,word [0x19ff]
-LAB_1000_2090:                ;XREF[1]:     1000:212a(j)
+.LAB_LOC_8:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + -0x1]
@@ -3028,23 +3030,23 @@ LAB_1000_2090:                ;XREF[1]:     1000:212a(j)
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CMP         BX,word [0x120]
-    JL          LAB_1000_20e0
+    JL          .LAB_LOC_9
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
-LAB_1000_20e0:                ;XREF[1]:     1000:20c9(j)
+.LAB_LOC_9:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58c]
-    JZ          LAB_1000_211c
+    JZ          .LAB_LOC_10
     CMP         DH,byte [SI + 0x2]
-    JZ          LAB_1000_211c
+    JZ          .LAB_LOC_10
     CMP         DH,byte [SI + -0x4]
-    JC          LAB_1000_211c
+    JC          .LAB_LOC_10
     CMP         DH,byte [SI + -0x2]
-    JNC         LAB_1000_211c
+    JNC         .LAB_LOC_10
     PUSH        SI
     PUSH        DI
     MOV         SI,DI
@@ -3056,40 +3058,40 @@ LAB_1000_20e0:                ;XREF[1]:     1000:20c9(j)
     CALL        FUN_1000_194c
     POP         DI
     POP         SI
-LAB_1000_211c:                ;XREF[4]:     1000:20e8(j),1000:20ef(j),1000:20f6(j),1000:20fd(j)
+.LAB_LOC_10:
     POP         BX
     CMP         BH,byte [0xb1]
-    JBE         LAB_1000_212d
+    JBE         .LAB_LOC_11
     DEC         BH
     SUB         DI,0xa
-    JMP         LAB_1000_2090
-LAB_1000_212d:                ;XREF[1]:     1000:2121(j)
+    JMP         .LAB_LOC_8
+.LAB_LOC_11:
     POP         BX
     CMP         BL,byte [0xe58e]
-    JNC         LAB_1000_214a
+    JNC         .LAB_LOC_12
     INC         BL
     ADD         SI,0x4
     XOR         word [0x19ff],0xa00
     XOR         word [0x1a01],0xa00
-    JMP         LAB_1000_1fc1
-LAB_1000_214a:                ;XREF[1]:     1000:2132(j)
+    JMP         .LAB_LOC_3
+.LAB_LOC_12:
     RET
-LAB_1000_214b:                ;XREF[1]:     1000:1f9d(j)
+.LAB_LOC_13:
     MOV         DI,0x5bbc
     MOV         CX,word [0x5bba]
-LAB_1000_2152:                ;XREF[1]:     1000:215c(j)
+.LAB_LOC_14:
     PUSH        CX
     MOV         SI,word [DI]
     CALL        FUN_1000_23cf
     ADD         DI,0x2
     POP         CX
-    LOOP        LAB_1000_2152
+    LOOP        .LAB_LOC_14
     MOV         SI,0xe590
     MOV         AX, word [0xe58e]
     MOV         BL,AL
     SHL         AX,0x2
     ADD         SI,AX
-LAB_1000_216b:                ;XREF[1]:     1000:22ec(j)
+.LAB_LOC_15:
     PUSH        BX
     MOV         BH,byte [SI]
     MOVZX       DX,BH
@@ -3099,7 +3101,7 @@ LAB_1000_216b:                ;XREF[1]:     1000:22ec(j)
     ADD         DI,DX
     ADD         DI,0x5ff
     ADD         DI,word [0x19ff]
-LAB_1000_2182:                ;XREF[1]:     1000:221f(j)
+.LAB_LOC_16:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX + 0xff00]
@@ -3119,23 +3121,23 @@ LAB_1000_2182:                ;XREF[1]:     1000:221f(j)
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CMP         BX,word [0x120]
-    JL          LAB_1000_21d3
+    JL          .LAB_LOC_17
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
-LAB_1000_21d3:                ;XREF[1]:     1000:21bc(j)
+.LAB_LOC_17:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58e]
-    JZ          LAB_1000_2211
+    JZ          .LAB_LOC_18
     CMP         DH,byte [SI]
-    JZ          LAB_1000_2211
+    JZ          .LAB_LOC_18
     CMP         DH,byte [SI + 0x4]
-    JBE         LAB_1000_2211
+    JBE         .LAB_LOC_18
     CMP         DH,byte [SI + 0x6]
-    JA          LAB_1000_2211
+    JA          .LAB_LOC_18
     PUSH        SI
     PUSH        DI
     SUB         DI,0xa
@@ -3148,14 +3150,14 @@ LAB_1000_21d3:                ;XREF[1]:     1000:21bc(j)
     CALL        FUN_1000_194c
     POP         DI
     POP         SI
-LAB_1000_2211:                ;XREF[4]:     1000:21db(j),1000:21e1(j),1000:21e8(j),1000:21ef(j)
+.LAB_LOC_18:
     POP         BX
     CMP         BH,byte [0xb1]
-    JNC         LAB_1000_2222
+    JNC         .LAB_LOC_19
     INC         BH
     ADD         DI,0xa
-    JMP         LAB_1000_2182
-LAB_1000_2222:                ;XREF[1]:     1000:2216(j)
+    JMP         .LAB_LOC_16
+.LAB_LOC_19:
     MOV         BH,byte [SI + 0x2]
     MOVZX       DX,BH
     SHL         DX,0x1
@@ -3164,7 +3166,7 @@ LAB_1000_2222:                ;XREF[1]:     1000:2216(j)
     ADD         DI,DX
     ADD         DI,0x5ff
     ADD         DI,word [0x19ff]
-LAB_1000_2239:                ;XREF[1]:     1000:22cf(j)
+.LAB_LOC_20:
     MOV         word [0x5fd],BX
     PUSH        BX
     MOV         AL,byte FS:[BX]
@@ -3184,23 +3186,23 @@ LAB_1000_2239:                ;XREF[1]:     1000:22cf(j)
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CMP         BX,word [0x120]
-    JL          LAB_1000_2288
+    JL          .LAB_LOC_21
     CALL        FUN_1000_2760
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
-LAB_1000_2288:                ;XREF[1]:     1000:2271(j)
+.LAB_LOC_21:
     MOV         DX,word [0x5fd]
     CMP         DL,byte [0xe58e]
-    JZ          LAB_1000_22c1
+    JZ          .LAB_LOC_22
     CMP         DH,byte [SI + 0x2]
-    JZ          LAB_1000_22c1
+    JZ          .LAB_LOC_22
     CMP         DH,byte [SI + 0x4]
-    JC          LAB_1000_22c1
+    JC          .LAB_LOC_22
     CMP         DH,byte [SI + 0x6]
-    JNC         LAB_1000_22c1
+    JNC         .LAB_LOC_22
     PUSH        SI
     PUSH        DI
     MOV         SI,DI
@@ -3211,24 +3213,25 @@ LAB_1000_2288:                ;XREF[1]:     1000:2271(j)
     CALL        FUN_1000_194c
     POP         DI
     POP         SI
-LAB_1000_22c1:                ;XREF[4]:     1000:2290(j),1000:2297(j),1000:229e(j),1000:22a5(j)
+.LAB_LOC_22:
     POP         BX
     CMP         BH,byte [0xb1]
-    JBE         LAB_1000_22d2
+    JBE         .LAB_LOC_23
     DEC         BH
     SUB         DI,0xa
-    JMP         LAB_1000_2239
-LAB_1000_22d2:                ;XREF[1]:     1000:22c6(j)
+    JMP         .LAB_LOC_20
+.LAB_LOC_23:
     POP         BX
     CMP         BL,byte [0xe58c]
-    JBE         LAB_1000_22ef
+    JBE         .LAB_LOC_24
     DEC         BL
     SUB         SI,0x4
     XOR         word [0x19ff],0xa00
     XOR         word [0x1a01],0xa00
-    JMP         LAB_1000_216b
-LAB_1000_22ef:                ;XREF[1]:     1000:22d7(j)
+    JMP         .LAB_LOC_15
+.LAB_LOC_24:
     RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
