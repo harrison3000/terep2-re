@@ -3818,74 +3818,67 @@ FUN_1000_2760:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 ;ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
-;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use the stack
+;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
 FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               ;             1000:21ab(c),1000:2260(c)
-    push bp
-    mov bp, sp
-    sub sp, 4 ;2 vars
-
     XCHG        AX,BX
     XCHG        AX,CX
     PUSH        DI
     MOV         DI,DX
-    MOV         [bp-2],AX
+    MOV         [pseudolocal_a],AX
     MOV         AX,BX
     IMUL        word [DI]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [pseudolocal_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0x6]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX, [bp-2]
+    ADD         [pseudolocal_b],DX
+    MOV         AX, [pseudolocal_a]
     IMUL        word [DI + 0xc]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    PUSH        word [bp-4]
+    ADD         [pseudolocal_b],DX
+    PUSH        word [pseudolocal_b]
     MOV         AX,BX
     IMUL        word [DI + 0x2]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [pseudolocal_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0x8]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX,[bp-2]
+    ADD         [pseudolocal_b],DX
+    MOV         AX,[pseudolocal_a]
     IMUL        word [DI + 0xe]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    PUSH        word [bp-4]
+    ADD         [pseudolocal_b],DX
+    PUSH        word [pseudolocal_b]
     MOV         AX,BX
     IMUL        word [DI + 0x4]
     SHL         AX,0x1
     RCL         DX,0x1
-    MOV         [bp-4],DX
+    MOV         [pseudolocal_b],DX
     MOV         AX,CX
     IMUL        word [DI + 0xa]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         AX,[bp-2]
+    ADD         [pseudolocal_b],DX
+    MOV         AX,[pseudolocal_a]
     IMUL        word [DI + 0x10]
     SHL         AX,0x1
     RCL         DX,0x1
-    ADD         [bp-4],DX
-    MOV         CX,[bp-4]
+    ADD         [pseudolocal_b],DX
+    MOV         CX,[pseudolocal_b]
     POP         BX
     POP         AX
     POP         DI
-
-    mov sp, bp
-    pop bp
 
     RET
 ;************************************************************************************************

@@ -73,6 +73,11 @@ nova_linha:
 giracor:
     db 0
 
+pseudolocal_a:
+    dw 0
+pseudolocal_b:
+    dw 0
+
 
 ;pad to the limit
 times (65534 - ($ - $$)) db 'P'
