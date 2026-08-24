@@ -5,3 +5,4 @@
 *.err
 *.o
 sim.cfg
+raw_c.cpp
