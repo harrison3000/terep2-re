@@ -7,6 +7,8 @@ const superRegex = /INST_(?<opcodeA>[A-Z]{2,5})\((?<things>.+)\)(?<rest_of_line>
 const stats = {};
 var total = 0;
 
+//FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
+
 const fixed = f.replaceAll(superRegex, function(...args){
     const {opcodeA, opcodeB, things, comment} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
@@ -33,10 +35,8 @@ const fixed = f.replaceAll(superRegex, function(...args){
         return `if (${operandA} & ${operandB})`
     }
     
-    if(!["JMP", "JCXZ"].includes(opcodeB)){
-        stats[stk] = stats[stk] ? stats[stk] + 1 : 1;
-        total++;
-    }
+    stats[stk] = stats[stk] ? stats[stk] + 1 : 1;
+    total++;
 
     return args[0];
 });

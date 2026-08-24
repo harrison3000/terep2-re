@@ -1,6 +1,5 @@
-void dummy_first(){
+#include "gpu/gpu.hpp"
 
-}
 
 void f_init(cpu_ctx *cpu){
    MEM_WORD(0x5bba) = -2;
@@ -58,7 +57,7 @@ void f_init(cpu_ctx *cpu){
    MEM_WORD(0x5bba) = 0x0;
    cpu->DI = 0x5bd0;
    MEM_WORD(0x5bbc) = cpu->DI;
-   INST_XOR(cpu->SI, cpu->SI);
+   cpu->SI = 0;
    load_cars_loop:
    cpu->DI = MEM_WORD(cpu->SI + 0x5bbc);
    cpu->AX = cpu->SI;
@@ -108,7 +107,7 @@ void f_init(cpu_ctx *cpu){
    cpu->DI = MEM_WORD(cpu->SI + 0x5bbc);
    MEM_WORD(cpu->DI + 0x1e) = cpu->AX;
    cpu->ES = cpu->AX;
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    FUN_1000_5acf(cpu);
    LAB_LOC_3:
    cpu->AH = 0x3e;
@@ -475,7 +474,7 @@ void FUN_main_render(cpu_ctx *cpu){
    INST_INC(cpu->SI);
    INST_CMP(cpu->SI, MEM_WORD(0x5bba));
    JUMP«JC» goto LAB_LOC_29;
-   INST_XOR(cpu->SI, cpu->SI);
+   cpu->SI = 0;
    LAB_LOC_29:
    MEM_WORD(0xa4) = cpu->SI;
    goto LAB_LOC_19;
@@ -484,7 +483,7 @@ void FUN_main_render(cpu_ctx *cpu){
    INST_INC(cpu->SI);
    INST_CMP(cpu->SI, MEM_WORD(0x5bba));
    JUMP«JC» goto LAB_LOC_31;
-   INST_XOR(cpu->SI, cpu->SI);
+   cpu->SI = 0;
    LAB_LOC_31:
    MEM_WORD(0xa6) = cpu->SI;
    goto LAB_LOC_19;
@@ -501,12 +500,12 @@ void FUN_main_render(cpu_ctx *cpu){
    LAB_LOC_33:
    cpu->AX = 1;
    return;
+}
+
 //; 1000:0692 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void F_0693(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
@@ -567,11 +566,11 @@ void F_0693(cpu_ctx *cpu){
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void F_073f(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
@@ -651,11 +650,11 @@ void F_073f(cpu_ctx *cpu){
    INST_SAR(cpu->AX, 0x2);
    INST_ADD(MEM_WORD(0xc2), cpu->AX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void F_0828(cpu_ctx *cpu){
    cpu->EAX = MEM_DWORD(cpu->DI);
    MEM_DWORD(0xaa) = cpu->EAX;
@@ -688,16 +687,16 @@ void F_0828(cpu_ctx *cpu){
    FUN_1000_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
-   INST_XOR(cpu->AX, cpu->AX);
+   cpu->AX = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xc2));
    INST_ADD(MEM_WORD(0xc2), cpu->AX);
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void F_0893(cpu_ctx *cpu){
 //;XREF[3]:     1000:029a(c),1000:0366(c),1000:042f(c)
    INST_PUSH(cpu->SI);
@@ -766,17 +765,17 @@ void F_0893(cpu_ctx *cpu){
    LAB_LOC_2:
    MEM_WORD(cpu->DI + 0xa) = cpu->BX;
    goto LAB_LOC_1;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void F_0948(cpu_ctx *cpu){
-   INST_XOR(cpu->EAX, cpu->EAX);
-   INST_XOR(cpu->EBX, cpu->EBX);
-   INST_XOR(cpu->EDX, cpu->EDX);
+   cpu->EAX = 0;
+   cpu->EBX = 0;
+   cpu->EDX = 0;
    cpu->CX = MEM_WORD(0x5bba);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    LAB_LOC_1:
    cpu->SI = MEM_WORD(cpu->DI + 0x5bbc);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
@@ -852,11 +851,11 @@ void F_0948(cpu_ctx *cpu){
    LAB_LOC_3:
    MEM_WORD(0xb4) = cpu->BX;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0a3b(cpu_ctx *cpu){
 //;XREF[1]:     1000:56ce(c)
    INST_PUSH(cpu->SI);
@@ -888,11 +887,11 @@ void FUN_1000_0a3b(cpu_ctx *cpu){
    INST_POPF();
    FUN_1000_0a82(cpu);
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0a82(cpu_ctx *cpu){
 //;XREF[2]:     1000:0a66(c),1000:0a7d(c)
    INST_PUSHF();
@@ -927,18 +926,18 @@ void FUN_1000_0a82(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    cpu->DX = cpu->DI;
    goto LAB_LOC_2;
+}
+
 //; 1000:0b24 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: related to smoke, debris, particle effects in general
-}
-
 void FUN_1000_0b25(cpu_ctx *cpu){
 //;XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
    INST_PUSH(cpu->FS);
    cpu->FS = MEM_WORD(0x1a49);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    INST_CMP(cpu->DI, MEM_WORD(0x3e51));
    JUMP«JNC» goto LAB_LOC_4;
    LAB_LOC_1:
@@ -987,14 +986,14 @@ void FUN_1000_0b25(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    goto LAB_LOC_3;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0bb5(cpu_ctx *cpu){
 //;XREF[1]:     1000:56cb(c)
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    INST_CMP(cpu->DI, MEM_WORD(0x3e51));
    JUMP«JNC» goto LAB_LOC_4;
    LAB_LOC_1:
@@ -1078,11 +1077,11 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0x3e6d) = cpu->AX;
    INST_SUB(cpu->SI, 0x1c);
    goto LAB_LOC_3;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0cd3(cpu_ctx *cpu){
 //;XREF[1]:     1000:0ba2(c)
    INST_CMP(cpu->CX, MEM_WORD(0x120));
@@ -1132,11 +1131,11 @@ void FUN_1000_0cd3(cpu_ctx *cpu){
    INST_POP(cpu->ES);
    LAB_LOC_1:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0d2a(cpu_ctx *cpu){
 //;XREF[1]:     1000:56b4(c)
    INST_MOVZX(cpu->BX, MEM_BYTE(cpu->DI));
@@ -1219,18 +1218,18 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    INST_SUB(cpu->BX, cpu->CX);
    LAB_LOC_13:
    MEM_WORD(cpu->SI + 0xa) = cpu->BX;
-   INST_XOR(cpu->AX, cpu->AX);
+   cpu->AX = 0;
    INST_MOVZX(cpu->BX, MEM_BYTE(cpu->DI + 0x4));
    if (MEM_BYTE( !!!!) & 0x80) goto LAB_LOC_14;
    INST_OR(cpu->AX, 0x1);
    LAB_LOC_14:
    MEM_WORD(cpu->SI + 0xe) = cpu->AX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0e28(cpu_ctx *cpu){
 //;XREF[1]:     1000:48db(c)
    cpu->DI = cpu->SI;
@@ -1256,20 +1255,20 @@ void FUN_1000_0e28(cpu_ctx *cpu){
    MEM_WORD(cpu->SI + 0x14) = cpu->AX;
    CSD_WORD_1000_0e67 = 0x0;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0e69(cpu_ctx *cpu){
 //;XREF[1]:     1000:4b6f(c)
    if (cpu->AX == 0x0) goto LAB_LOC_1;
    if (cpu->AX == 0x1) goto LAB_LOC_3;
    if (cpu->AX == 0x2) goto LAB_LOC_5;
    if (cpu->AX == 0x3) goto LAB_LOC_7;
-   INST_XOR(cpu->EAX, cpu->EAX);
-   INST_XOR(cpu->EBX, cpu->EBX);
-   INST_XOR(cpu->ECX, cpu->ECX);
+   cpu->EAX = 0;
+   cpu->EBX = 0;
+   cpu->ECX = 0;
    return;
    LAB_LOC_1:
    if (CSD_WORD_1000_0e67 & 0x1) goto LAB_LOC_2;
@@ -1325,11 +1324,11 @@ void FUN_1000_0e69(cpu_ctx *cpu){
    cpu->ECX = CSD_DWORD_1000_12c7;
    cpu->EDX = MEM_DWORD(cpu->SI + 0x4e);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_0f67(cpu_ctx *cpu){
 //;XREF[1]:     1000:4bd5(c)
    cpu->CX = MEM_WORD(cpu->SI + 0x8);
@@ -1382,19 +1381,19 @@ void FUN_1000_0f67(cpu_ctx *cpu){
    LAB_LOC_8:
    MEM_DWORD(cpu->SI + 0x4e) = cpu->EBX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1003(cpu_ctx *cpu){
 //;XREF[1]:     1000:497a(c)
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1004(cpu_ctx *cpu){
 //;XREF[1]:     1000:56b7(c)
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
@@ -1444,11 +1443,11 @@ void FUN_1000_1004(cpu_ctx *cpu){
    INST_ADD(MEM_DWORD(cpu->SI + 0x42), cpu->EAX);
    INST_ADD(MEM_DWORD(cpu->SI + 0x46), cpu->EAX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1091(cpu_ctx *cpu){
 //;XREF[4]:     1000:06b4(c),1000:0760(c),1000:113c(c),1000:11f6(c)
    cpu->EDX = MEM_DWORD(cpu->SI + 0xc4);
@@ -1460,11 +1459,11 @@ void FUN_1000_1091(cpu_ctx *cpu){
    cpu->EAX = cpu->EDX;
    FUN_1000_2726(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_10b6(cpu_ctx *cpu){
 //;XREF[6]:     1000:06c5(c),1000:0771(c),1000:0ef4(c),1000:0f36(c),
 //;             1000:1150(c),1000:120a(c)
@@ -1483,13 +1482,13 @@ void FUN_1000_10b6(cpu_ctx *cpu){
    cpu->EAX = cpu->EDX;
    FUN_1000_2726(cpu);
    return;
+}
+
 //; 1000:1135 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: related to steering, disabling this function disables steering
-}
-
 void FUN_1000_1136(cpu_ctx *cpu){
 //;XREF[2]:     1000:0e9a(c),1000:0ec4(c)
    INST_PUSH(cpu->SI);
@@ -1536,12 +1535,12 @@ void FUN_1000_1136(cpu_ctx *cpu){
    INST_SHL(cpu->EBX, 0x1);
    CSD_DWORD_1000_12af = cpu->EBX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;also relate do steering maybe, disabling it just makes the game crash
-}
-
 void FUN_1000_11f0(cpu_ctx *cpu){
 //;XREF[1]:     1000:138f(c)
    INST_PUSH(cpu->SI);
@@ -1587,12 +1586,12 @@ void FUN_1000_11f0(cpu_ctx *cpu){
    INST_SHL(cpu->ECX, 0x7);
    INST_POP(cpu->EAX);
    return;
+}
+
 //; 1000:1322 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1323(cpu_ctx *cpu){
 //;XREF[1]:     1000:195c(c)
    INST_PUSHA();
@@ -1613,11 +1612,11 @@ void FUN_1000_1323(cpu_ctx *cpu){
    INST_POP(cpu->FS);
    INST_POPA();
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1347(cpu_ctx *cpu){
 //;XREF[1]:     1000:1335(c)
    INST_PUSH(cpu->SI);
@@ -1671,11 +1670,11 @@ void FUN_1000_1347(cpu_ctx *cpu){
    INST_ADD(cpu->ECX, MEM_DWORD(cpu->SI + 0x8));
    FUN_1000_13cc(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_13cc(cpu_ctx *cpu){
 //;XREF[4]:     1000:135e(c),1000:1385(c),1000:13a8(c),1000:13c8(c)
    INST_SUB(cpu->EAX, MEM_DWORD(0xaa));
@@ -1697,11 +1696,11 @@ void FUN_1000_13cc(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_ADD(cpu->DI, 0xa);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1408(cpu_ctx *cpu){
 //;XREF[21]:    1000:1340(c),1000:1441(c),1000:1447(c),1000:144b(c),
 //;             1000:1452(j),1000:1456(c),1000:145d(j),1000:1461(c),
@@ -1781,7 +1780,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    MEM_BYTE(0x5ee) = cpu->AL;
    goto FUN_1000_1408;
    LAB_LOC_8:
-   INST_XOR(cpu->BX, cpu->BX);
+   cpu->BX = 0;
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
    cpu->DI = cpu->AX;
@@ -1828,7 +1827,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    LAB_LOC_9:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
-   INST_XOR(cpu->BX, cpu->BX);
+   cpu->BX = 0;
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
    cpu->DI = cpu->AX;
@@ -2299,11 +2298,11 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0x4);
    goto FUN_1000_1408;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_194c(cpu_ctx *cpu){
 //;XREF[8]:     1000:1a50(c),1000:1b06(c),1000:1bfa(c),1000:1caa(c),
 //;             1000:2063(c),1000:2117(c),1000:220c(c),1000:22bc(c)
@@ -2317,11 +2316,11 @@ void FUN_1000_194c(cpu_ctx *cpu){
    INST_ADD(cpu->DI, 0x2);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1965(cpu_ctx *cpu){
 //;XREF[3]:     1000:02c9(c),1000:0395(c),1000:0455(c)
    MEM_WORD(0x19ff) = 0x0;
@@ -2367,8 +2366,8 @@ void FUN_1000_1965(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -2430,8 +2429,8 @@ void FUN_1000_1965(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -2519,8 +2518,8 @@ void FUN_1000_1965(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -2582,8 +2581,8 @@ void FUN_1000_1965(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -2637,11 +2636,11 @@ void FUN_1000_1965(cpu_ctx *cpu){
    goto LAB_LOC_14;
    LAB_LOC_23:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1cde(cpu_ctx *cpu){
 //;XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
    cpu->AL = MEM_BYTE(0x5fc);
@@ -2657,7 +2656,7 @@ void FUN_1000_1cde(cpu_ctx *cpu){
    MEM_WORD(0xdb12) = cpu->AX;
    INST_PUSH(cpu->SI);
    cpu->SI = cpu->DI + 0xa; //HARDCODED LEA!
-   INST_XOR(cpu->EBX, cpu->EBX);
+   cpu->EBX = 0;
    FUN_1000_46a0(cpu);
    cpu->SI = cpu->DI;
    FUN_1000_46d3(cpu);
@@ -2674,7 +2673,7 @@ void FUN_1000_1cde(cpu_ctx *cpu){
    FUN_1000_2bec(cpu);
    LAB_LOC_1:
    cpu->SI = cpu->DI + 0xa; //HARDCODED LEA!
-   INST_XOR(cpu->EBX, cpu->EBX);
+   cpu->EBX = 0;
    FUN_1000_46a0(cpu);
    INST_POP(cpu->SI);
    FUN_1000_46d3(cpu);
@@ -2756,11 +2755,11 @@ void FUN_1000_1cde(cpu_ctx *cpu){
    LAB_LOC_6:
    INST_POP(cpu->FS);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_1e3a(cpu_ctx *cpu){
 //;XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
    cpu->AL = MEM_BYTE(0x5fc);
@@ -2776,7 +2775,7 @@ void FUN_1000_1e3a(cpu_ctx *cpu){
    MEM_WORD(0xdb12) = cpu->AX;
    INST_PUSH(cpu->SI);
    cpu->SI = cpu->DI + 0xa; //HARDCODED LEA!
-   INST_XOR(cpu->EBX, cpu->EBX);
+   cpu->EBX = 0;
    FUN_1000_46a0(cpu);
    cpu->SI = cpu->DI;
    FUN_1000_46d3(cpu);
@@ -2873,9 +2872,9 @@ void FUN_1000_1e3a(cpu_ctx *cpu){
    LAB_LOC_6:
    INST_POP(cpu->FS);
    return;
-//;seems like a alternative version of FUN_1000_1965, what it does? who knows?
 }
 
+//;seems like a alternative version of FUN_1000_1965, what it does? who knows?
 void FUN_1965_NP(cpu_ctx *cpu){
    LAB_LOC_1:
    MEM_BYTE(0x5fb) = 0x1;
@@ -2915,8 +2914,8 @@ void FUN_1965_NP(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -2978,8 +2977,8 @@ void FUN_1965_NP(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -3067,8 +3066,8 @@ void FUN_1965_NP(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -3130,8 +3129,8 @@ void FUN_1965_NP(cpu_ctx *cpu){
    INST_MOVZX(cpu->CX, MEM_BYTE(cpu->GS*1024 + cpu->BX));
    INST_SHL(cpu->CX, 0x4);
    cpu->AH = cpu->BL;
-   INST_XOR(cpu->AL, cpu->AL);
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->AL = 0;
+   cpu->BL = 0;
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_SUB(cpu->CX, MEM_WORD(0xb4));
@@ -3185,11 +3184,11 @@ void FUN_1965_NP(cpu_ctx *cpu){
    goto LAB_LOC_15;
    LAB_LOC_24:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_22f0(cpu_ctx *cpu){
 //;XREF[1]:     1000:1998(c)
    INST_PUSH(cpu->SI);
@@ -3229,11 +3228,11 @@ void FUN_1000_22f0(cpu_ctx *cpu){
    cpu->BH = cpu->DH;
    cpu->CH = cpu->AH;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_233b(cpu_ctx *cpu){
 //;XREF[1]:     1000:1b44(c)
    INST_PUSH(cpu->SI);
@@ -3272,11 +3271,11 @@ void FUN_1000_233b(cpu_ctx *cpu){
    cpu->BH = cpu->DH;
    cpu->CH = cpu->AH;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2384(cpu_ctx *cpu){
 //;XREF[1]:     1000:1fab(c)
    INST_PUSH(cpu->SI);
@@ -3316,11 +3315,11 @@ void FUN_1000_2384(cpu_ctx *cpu){
    cpu->BH = cpu->DH;
    cpu->CH = cpu->AH;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_23cf(cpu_ctx *cpu){
 //;XREF[1]:     1000:2155(c)
    INST_PUSH(cpu->SI);
@@ -3359,11 +3358,11 @@ void FUN_1000_23cf(cpu_ctx *cpu){
    cpu->BH = cpu->DH;
    cpu->CH = cpu->AH;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2418(cpu_ctx *cpu){
 //;XREF[2]:     1000:0b8d(c),1000:13f7(c)
    INST_CMP(cpu->BX, MEM_WORD(0x120));
@@ -3377,11 +3376,11 @@ void FUN_1000_2418(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_STC();
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2431(cpu_ctx *cpu){
 //;XREF[1]:     1000:01b8(c)
    cpu->DI = cpu->SI;
@@ -3401,11 +3400,11 @@ void FUN_1000_2431(cpu_ctx *cpu){
    INST_SUB(cpu->DI, cpu->SI);
    MEM_WORD(cpu->SI + 0x20) = cpu->DI;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2454(cpu_ctx *cpu){
 //;XREF[1]:     1000:01a9(c)
    INST_PUSH(cpu->AX);
@@ -3415,7 +3414,7 @@ void FUN_1000_2454(cpu_ctx *cpu){
    INST_PUSH(cpu->DS);
    INST_POP(cpu->ES);
    cpu->CX = 0x82;
-   INST_XOR(cpu->AL, cpu->AL);
+   cpu->AL = 0;
    INST_CLD();
    INST_STOSB();
    INST_POP(cpu->DI);
@@ -3462,22 +3461,22 @@ void FUN_1000_2454(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_24c0(cpu_ctx *cpu){
 //;XREF[1]:     1000:017e(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a03;
    cpu->ES = MEM_WORD(0x1a45);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    FUN_1000_5a60(cpu);
    JUMP«JC» goto LAB_LOC_1;
    cpu->DX = 0x1a20;
    cpu->ES = MEM_WORD(0x1a4b);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    FUN_1000_5a60(cpu);
    JUMP«JC» goto LAB_LOC_1;
    cpu->DX = 0x1a0b;
@@ -3501,7 +3500,7 @@ void FUN_1000_24c0(cpu_ctx *cpu){
    cpu->AX = 0x4200;
    DOS3Call(cpu);
    cpu->ES = MEM_WORD(0x1a47);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    FUN_1000_5acf(cpu);
    JUMP«JC» goto LAB_LOC_1;
    cpu->AH = 0x3e;
@@ -3532,25 +3531,25 @@ void FUN_1000_24c0(cpu_ctx *cpu){
 //;             1000:2520(j)
    INST_POP(cpu->ES);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_255c(cpu_ctx *cpu){
 //;XREF[1]:     1000:0181(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a13;
    cpu->ES = MEM_WORD(0x1a49);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    FUN_1000_5a60(cpu);
    INST_POP(cpu->ES);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_256b(cpu_ctx *cpu){
 //;XREF[2]:     1000:261a(c),1000:265b(c)
    cpu->AX = MEM_WORD(0x5ac1);
@@ -3581,11 +3580,11 @@ void FUN_1000_256b(cpu_ctx *cpu){
    INST_ADC(cpu->DX, cpu->CX);
    INST_IDIV(MEM_WORD(0x5ad7));
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_25c5(cpu_ctx *cpu){
 //;XREF[9]:     1000:07b4(c),1000:07ec(c),1000:0810(c),1000:083e(c),
 //;             1000:08e1(c),1000:09f6(c),1000:0c0d(c),1000:1372(c),
@@ -3644,11 +3643,11 @@ void FUN_1000_25c5(cpu_ctx *cpu){
    INST_ADD(cpu->AX, cpu->CX);
    LAB_LOC_2:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2662(cpu_ctx *cpu){
 //;XREF[13]:    1000:1509(c),1000:156f(c),1000:15e2(c),1000:166e(c),
 //;             1000:16e4(c),1000:1d20(c),1000:1d4c(c),1000:1dd4(c),
@@ -3669,12 +3668,12 @@ void FUN_1000_2662(cpu_ctx *cpu){
    INST_SUB(cpu->AX, cpu->CX);
    INST_SBB(cpu->DX, cpu->BX);
    return;
+}
+
 //; 1000:26dc [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_26dd(cpu_ctx *cpu){
 //;XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
 //;             1000:2722(c)
@@ -3704,22 +3703,22 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    INST_CDQ();
    INST_IDIV(cpu->EBX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_271d(cpu_ctx *cpu){
 //;XREF[4]:     1000:17a4(c),1000:17b7(c),1000:2738(c),1000:57cd(c)
    FUN_1000_26dd(cpu);
    cpu->BX = cpu->CX;
    FUN_1000_26dd(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2726(cpu_ctx *cpu){
 //;XREF[3]:     1000:10b2(c),1000:10f2(c),1000:57d4(c)
    INST_PUSH(cpu->EAX);
@@ -3745,11 +3744,11 @@ void FUN_1000_2726(cpu_ctx *cpu){
    INST_IDIV(cpu->EBX);
    INST_POP(cpu->EBX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2760(cpu_ctx *cpu){
 //;XREF[13]:    1000:1a03(c),1000:1abb(c),1000:1bae(c),1000:1c63(c),
 //;             1000:2016(c),1000:20cd(c),1000:21c0(c),1000:2275(c),
@@ -3760,7 +3759,7 @@ void FUN_1000_2760(cpu_ctx *cpu){
    INST_CBW();
    INST_XCHG(cpu->AX, cpu->DX);
    cpu->AH = cpu->AL;
-   INST_XOR(cpu->AL, cpu->AL);
+   cpu->AL = 0;
    INST_IDIV(cpu->BX);
    INST_XCHG(cpu->AX, cpu->CX);
    cpu->DX = cpu->AX;
@@ -3768,19 +3767,19 @@ void FUN_1000_2760(cpu_ctx *cpu){
    INST_CBW();
    INST_XCHG(cpu->AX, cpu->DX);
    cpu->AH = cpu->AL;
-   INST_XOR(cpu->AL, cpu->AL);
+   cpu->AL = 0;
    INST_IDIV(cpu->BX);
    INST_XCHG(cpu->CX, cpu->BX);
    INST_XCHG(cpu->AX, cpu->BX);
    return;
+}
+
 //; 1000:277d [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
 //;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
-}
-
 void FUN_1000_277e(cpu_ctx *cpu){
 //;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
 //;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
@@ -3842,11 +3841,11 @@ void FUN_1000_277e(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    INST_POP(cpu->DI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_27f1(cpu_ctx *cpu){
 //;XREF[3]:     1000:02bd(c),1000:0389(c),1000:0452(c)
    cpu->AX = MEM_WORD(cpu->DI + 0x2);
@@ -3859,12 +3858,12 @@ void FUN_1000_27f1(cpu_ctx *cpu){
    INST_XCHG(MEM_WORD(cpu->DI + 0xe), cpu->AX);
    MEM_WORD(cpu->DI + 0xa) = cpu->AX;
    return;
+}
+
 //; 1000:2988 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2989(cpu_ctx *cpu){
 //;XREF[3]:     1000:02ba(c),1000:0386(c),1000:044f(c)
    cpu->BX = MEM_WORD(cpu->SI);
@@ -3977,11 +3976,11 @@ void FUN_1000_2989(cpu_ctx *cpu){
    INST_RCL(cpu->DX, 0x1);
    MEM_WORD(cpu->DI + 0x10) = cpu->DX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2aad(cpu_ctx *cpu){
 //;XREF[19]:    1000:02a2(c),1000:036e(c),1000:0437(c),1000:07a9(c),
 //;             1000:07e1(c),1000:0805(c),1000:08b2(c),1000:09c0(c),
@@ -4006,11 +4005,11 @@ void FUN_1000_2aad(cpu_ctx *cpu){
    INST_NEG(cpu->AX);
    LAB_LOC_2:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2ad8(cpu_ctx *cpu){
 //;XREF[19]:    1000:02ab(c),1000:0377(c),1000:0440(c),1000:079c(c),
 //;             1000:07d4(c),1000:07f8(c),1000:08ad(c),1000:09bb(c),
@@ -4039,11 +4038,11 @@ void FUN_1000_2ad8(cpu_ctx *cpu){
    INST_NEG(cpu->AX);
    LAB_LOC_3:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2b08(cpu_ctx *cpu){
 //;XREF[19]:    1000:06e0(c),1000:0701(c),1000:0712(c),1000:0731(c),
 //;             1000:078d(c),1000:07be(c),1000:0819(c),1000:0863(c),
@@ -4064,11 +4063,11 @@ void FUN_1000_2b08(cpu_ctx *cpu){
    FUN_1000_2b1f(cpu);
    INST_NEG(cpu->AX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2b1f(cpu_ctx *cpu){
 //;XREF[2]:     1000:2b0e(j),1000:2b63(c)
    INST_AND(cpu->BX, cpu->BX);
@@ -4082,11 +4081,11 @@ void FUN_1000_2b1f(cpu_ctx *cpu){
    INST_NEG(cpu->AX);
    INST_ADD(cpu->AX, 0x8000);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2b2d(cpu_ctx *cpu){
 //;XREF[2]:     1000:2b25(j),1000:2b58(c)
    INST_CMP(cpu->AX, cpu->BX);
@@ -4100,28 +4099,28 @@ void FUN_1000_2b2d(cpu_ctx *cpu){
    INST_NEG(cpu->AX);
    INST_ADD(cpu->AX, 0x4000);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2b3b(cpu_ctx *cpu){
 //;XREF[2]:     1000:2b33(j),1000:2b4d(c)
    cpu->DX = cpu->AX;
-   INST_XOR(cpu->AX, cpu->AX);
+   cpu->AX = 0;
    INST_DIV(cpu->BX);
    cpu->BL = cpu->AH;
-   INST_XOR(cpu->BH, cpu->BH);
+   cpu->BH = 0;
    INST_SHL(cpu->BX, 0x1);
    cpu->AX = MEM_WORD(cpu->BX + 0xd90e);
    return;
+}
+
 //; 1000:2b6f [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;MODIFIED: now it only alocates and doesnt set vga to mode 13h
-}
-
 void FUN_1000_2b70(cpu_ctx *cpu){
 //;XREF[1]:     1000:021c(c)
    cpu->AH = 0x48;
@@ -4131,39 +4130,39 @@ void FUN_1000_2b70(cpu_ctx *cpu){
    MEM_WORD(0xdb10) = cpu->AX;
    LAB_LOC_1:
    return;
+}
+
 //; 1000:2b97 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: this clears the framebuffer
-}
-
 void FUN_1000_2b98(cpu_ctx *cpu){
 //;XREF[2]:     1000:02c6(c),1000:0392(c)
    INST_PUSH(cpu->ES);
    INST_PUSH(cpu->DI);
    cpu->ES = MEM_WORD(0xdb10);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->CX = 0x3e80;
    INST_CLD();
    INST_STOSD();
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2baa(cpu_ctx *cpu){
 //;XREF[1]:     1000:04f7(c)
 //;REMOVED, was copy to VGA mem
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2bec(cpu_ctx *cpu){
 //;XREF[5]:     1000:157b(c),1000:1d27(c),1000:1d62(c),1000:1e83(c),
 //;             1000:1ebb(c)
@@ -4211,11 +4210,11 @@ void FUN_1000_2bec(cpu_ctx *cpu){
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2c4b(cpu_ctx *cpu){
 //;XREF[6]:     1000:2c2d(c),1000:2c42(c),1000:312f(c),1000:3144(c),
 //;             1000:373f(c),1000:3754(c)
@@ -4271,12 +4270,12 @@ void FUN_1000_2c4b(cpu_ctx *cpu){
    MEM_WORD(cpu->BX) = cpu->AX;
    LAB_LOC_8:
    return;
+}
+
 //; 1000:2d60 [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2d61(cpu_ctx *cpu){
 //;XREF[1]:     1000:2c45(c)
    cpu->BX = MEM_WORD(0xdbc4);
@@ -4345,16 +4344,16 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    JUMP«JNZ» goto LAB_LOC_6;
    INST_POP(cpu->ES);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2df2(cpu_ctx *cpu){
 //;XREF[1]:     1000:2bf4(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4448,16 +4447,16 @@ void FUN_1000_2df2(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2eaf(cpu_ctx *cpu){
 //;XREF[1]:     1000:2bf9(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4551,16 +4550,16 @@ void FUN_1000_2eaf(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_2f6c(cpu_ctx *cpu){
 //;XREF[1]:     1000:2bfe(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4656,16 +4655,16 @@ void FUN_1000_2f6c(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_302d(cpu_ctx *cpu){
 //;XREF[1]:     1000:2c03(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4761,12 +4760,12 @@ void FUN_1000_302d(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;TODO find out when this is called
-}
-
 void FUN_1000_30ee(cpu_ctx *cpu){
 //;XREF[2]:     1000:15ee(c),1000:167a(c)
    INST_PUSH(cpu->SI);
@@ -4836,11 +4835,11 @@ void FUN_1000_30ee(cpu_ctx *cpu){
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_317d(cpu_ctx *cpu){
 //;XREF[2]:     1000:315d(c),1000:3174(c)
    INST_XCHG(cpu->DX, cpu->CX);
@@ -4879,11 +4878,11 @@ void FUN_1000_317d(cpu_ctx *cpu){
    MEM_WORD(cpu->BX) = cpu->AX;
    LAB_LOC_4:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_31d1(cpu_ctx *cpu){
 //;XREF[1]:     1000:3177(c)
    cpu->BX = MEM_WORD(0xdbc4);
@@ -4940,11 +4939,11 @@ void FUN_1000_31d1(cpu_ctx *cpu){
    INST_POP(cpu->ES);
    LAB_LOC_4:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_324f(cpu_ctx *cpu){
 //;XREF[1]:     1000:30f6(c)
    INST_PUSH(cpu->SI);
@@ -5070,11 +5069,11 @@ void FUN_1000_324f(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3376(cpu_ctx *cpu){
 //;XREF[1]:     1000:30fb(c)
    INST_PUSH(cpu->SI);
@@ -5202,11 +5201,11 @@ void FUN_1000_3376(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_34a2(cpu_ctx *cpu){
 //;XREF[1]:     1000:3100(c)
    INST_PUSH(cpu->SI);
@@ -5336,11 +5335,11 @@ void FUN_1000_34a2(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_35cf(cpu_ctx *cpu){
 //;XREF[1]:     1000:3105(c)
    INST_PUSH(cpu->SI);
@@ -5471,12 +5470,12 @@ void FUN_1000_35cf(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: related to textured polygons
-}
-
 void FUN_1000_36fe(cpu_ctx *cpu){
 //;XREF[8]:     1000:0d24(c),1000:16f0(c),1000:175a(c),1000:1907(c),
 //;             1000:1ddb(c),1000:1e34(c),1000:1f2f(c),1000:1f88(c)
@@ -5551,11 +5550,11 @@ void FUN_1000_36fe(cpu_ctx *cpu){
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_379b(cpu_ctx *cpu){
 //;XREF[2]:     1000:3773(c),1000:3792(c)
    INST_PUSH(cpu->SI);
@@ -5615,12 +5614,12 @@ void FUN_1000_379b(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
-}
-
 void FUN_1000_3827(cpu_ctx *cpu){
 //;XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
@@ -5711,12 +5710,12 @@ void FUN_1000_3827(cpu_ctx *cpu){
    INST_XCHG(cpu->AX, cpu->BX);
    MEM_BYTE(cpu->ES*1024 + cpu->DI) = cpu->AL;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: seems to also be related to rendering textured polygons
-}
-
 void FUN_1000_390a(cpu_ctx *cpu){
 //;XREF[1]:     1000:3706(c)
    INST_PUSH(cpu->SI);
@@ -5891,11 +5890,11 @@ void FUN_1000_390a(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3aa3(cpu_ctx *cpu){
 //;XREF[1]:     1000:370b(c)
    INST_PUSH(cpu->SI);
@@ -6070,11 +6069,11 @@ void FUN_1000_3aa3(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3c3c(cpu_ctx *cpu){
 //;XREF[1]:     1000:3710(c)
    INST_PUSH(cpu->SI);
@@ -6253,11 +6252,11 @@ void FUN_1000_3c3c(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3ddb(cpu_ctx *cpu){
 //;XREF[1]:     1000:3715(c)
    INST_PUSH(cpu->SI);
@@ -6436,11 +6435,11 @@ void FUN_1000_3ddb(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_6;
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3f7a(cpu_ctx *cpu){
 //;XREF[21]:    1000:2e4e(c),1000:2e77(c),1000:2f0e(c),1000:2f34(c),
 //;             1000:2fcb(c),1000:2ff6(c),1000:308f(c),1000:30b7(c),
@@ -6466,11 +6465,11 @@ void FUN_1000_3f7a(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_XCHG(cpu->AX, cpu->BX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3f98(cpu_ctx *cpu){
 //;XREF[2]:     1000:1482(c),1000:59ad(c)
    INST_CMP(cpu->AX, MEM_WORD(0xdbc0));
@@ -6483,7 +6482,7 @@ void FUN_1000_3f98(cpu_ctx *cpu){
    JUMP«JG» goto LAB_LOC_1;
    INST_PUSH(cpu->ES);
    cpu->BH = cpu->BL;
-   INST_XOR(cpu->BL, cpu->BL);
+   cpu->BL = 0;
    INST_ADD(cpu->AX, cpu->BX);
    INST_SHR(cpu->BX, 0x1);
    INST_SHR(cpu->BX, 0x1);
@@ -6493,12 +6492,12 @@ void FUN_1000_3f98(cpu_ctx *cpu){
    INST_POP(cpu->ES);
    LAB_LOC_1:
    return;
+}
+
 //; 1000:3fcf [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_3fd0(cpu_ctx *cpu){
 //;XREF[1]:     1000:1981(c)
    MEM_WORD(0xe530) = 0x6;
@@ -6588,11 +6587,11 @@ void FUN_1000_3fd0(cpu_ctx *cpu){
    MEM_WORD(0xe544) = cpu->AX;
    FUN_1000_40c8(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_40c8(cpu_ctx *cpu){
 //;XREF[1]:     1000:40c4(c)
    cpu->SI = 0xe532;
@@ -6634,11 +6633,11 @@ void FUN_1000_40c8(cpu_ctx *cpu){
    FUN_1000_4120(cpu);
    LAB_LOC_2:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4120(cpu_ctx *cpu){
 //;XREF[2]:     1000:4107(c),1000:411c(c)
    INST_XCHG(cpu->DX, cpu->CX);
@@ -6674,7 +6673,7 @@ void FUN_1000_4120(cpu_ctx *cpu){
    INST_PUSH(cpu->DX);
    INST_SUB(cpu->DX, cpu->AX);
    JUMP«JS» goto LAB_LOC_10;
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_7:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
@@ -6692,7 +6691,7 @@ void FUN_1000_4120(cpu_ctx *cpu){
    return;
    LAB_LOC_10:
    INST_NEG(cpu->DX);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_11:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
@@ -6710,11 +6709,11 @@ void FUN_1000_4120(cpu_ctx *cpu){
    return;
    LAB_LOC_14:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_41b2(cpu_ctx *cpu){
 //;XREF[1]:     1000:1f94(c)
    MEM_WORD(0xe530) = 0x6;
@@ -6804,11 +6803,11 @@ void FUN_1000_41b2(cpu_ctx *cpu){
    MEM_WORD(0xe542) = cpu->AX;
    FUN_1000_42aa(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_42aa(cpu_ctx *cpu){
 //;XREF[1]:     1000:42a6(c)
    cpu->SI = 0xe532;
@@ -6850,11 +6849,11 @@ void FUN_1000_42aa(cpu_ctx *cpu){
    FUN_1000_4302(cpu);
    LAB_LOC_2:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4302(cpu_ctx *cpu){
 //;XREF[2]:     1000:42e9(c),1000:42fe(c)
    INST_XCHG(cpu->DX, cpu->CX);
@@ -6890,7 +6889,7 @@ void FUN_1000_4302(cpu_ctx *cpu){
    INST_PUSH(cpu->DX);
    INST_SUB(cpu->DX, cpu->AX);
    JUMP«JS» goto LAB_LOC_10;
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_7:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
@@ -6908,7 +6907,7 @@ void FUN_1000_4302(cpu_ctx *cpu){
    return;
    LAB_LOC_10:
    INST_NEG(cpu->DX);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_11:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
@@ -6926,16 +6925,16 @@ void FUN_1000_4302(cpu_ctx *cpu){
    return;
    LAB_LOC_14:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4394(cpu_ctx *cpu){
 //;XREF[2]:     1000:40ce(c),1000:42b0(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7027,16 +7026,16 @@ void FUN_1000_4394(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_444d(cpu_ctx *cpu){
 //;XREF[2]:     1000:40d3(c),1000:42b5(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7128,16 +7127,16 @@ void FUN_1000_444d(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4506(cpu_ctx *cpu){
 //;XREF[2]:     1000:40d8(c),1000:42ba(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7231,16 +7230,16 @@ void FUN_1000_4506(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_45c3(cpu_ctx *cpu){
 //;XREF[2]:     1000:40dd(c),1000:42bf(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->BP, cpu->BP);
+   cpu->BP = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7334,11 +7333,11 @@ void FUN_1000_45c3(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    MEM_WORD(cpu->DI + -0x2) = cpu->BP;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4680(cpu_ctx *cpu){
 //;XREF[8]:     1000:43ec(c),1000:4415(c),1000:44a8(c),1000:44ce(c),
 //;             1000:4561(c),1000:458c(c),1000:4621(c),1000:4649(c)
@@ -7360,19 +7359,19 @@ void FUN_1000_4680(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_XCHG(cpu->AX, cpu->BX);
    return;
+}
+
 //; 1000:469f [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_46a0(cpu_ctx *cpu){
 //;XREF[13]:    1000:14bf(c),1000:152a(c),1000:159b(c),1000:1617(c),
 //;             1000:1699(c),1000:1d04(c),1000:1d30(c),1000:1d97(c),
 //;             1000:1ded(c),1000:1e60(c),1000:1e89(c),1000:1eeb(c),
 //;             1000:1f41(c)
    INST_PUSH(cpu->DI);
-   INST_XOR(cpu->DI, cpu->DI);
+   cpu->DI = 0;
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
    INST_SUB(cpu->AX, MEM_WORD(0x120));
    MEM_WORD(0xe992) = cpu->AX;
@@ -7389,11 +7388,11 @@ void FUN_1000_46a0(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(cpu->SI + 0x4);
    MEM_WORD(0xe994) = cpu->AX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_46d3(cpu_ctx *cpu){
 //;XREF[21]:    1000:14d4(c),1000:14e9(c),1000:1541(c),1000:15b5(c),
 //;             1000:1639(c),1000:1d09(c),1000:1d0d(c),1000:1d34(c),
@@ -7507,11 +7506,11 @@ void FUN_1000_46d3(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(cpu->SI + 0x4);
    MEM_WORD(0xe994) = cpu->AX;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_47ec(cpu_ctx *cpu){
 //;XREF[13]:    1000:1500(c),1000:1559(c),1000:15d0(c),1000:165c(c),
 //;             1000:16d2(c),1000:1d14(c),1000:1d40(c),1000:1dc8(c),
@@ -7603,12 +7602,12 @@ void FUN_1000_47ec(cpu_ctx *cpu){
    INST_SHR(cpu->AX, 0x3);
    MEM_WORD(0xdb14) = cpu->AX;
    return;
+}
+
 //; 1000:48cf [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_48d0(cpu_ctx *cpu){
 //;XREF[1]:     1000:56ba(c)
    INST_PUSH(cpu->SI);
@@ -7618,11 +7617,11 @@ void FUN_1000_48d0(cpu_ctx *cpu){
    FUN_1000_48db(cpu);
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_48db(cpu_ctx *cpu){
 //;XREF[1]:     1000:48d6(c)
    FUN_1000_0e28(cpu);
@@ -7746,11 +7745,11 @@ void FUN_1000_48db(cpu_ctx *cpu){
    MEM_WORD(0xe9ae) = cpu->AX;
    FUN_1000_4a71(cpu);
    goto LAB_LOC_2;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4a71(cpu_ctx *cpu){
 //;XREF[5]:     1000:499c(c),1000:49bf(c),1000:49e3(c),1000:4a07(c),
 //;             1000:4a6b(c)
@@ -7773,7 +7772,7 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    MEM_DWORD(0xe9c8) = cpu->EBX;
    INST_CMP(cpu->EBX, 0xfffa0000);
    JUMP«JG» goto LAB_LOC_1;
-   INST_XOR(cpu->AX, cpu->AX);
+   cpu->AX = 0;
    FUN_1000_5864(cpu);
    LAB_LOC_1:
    cpu->ECX = MEM_DWORD(0xe9c8);
@@ -7877,11 +7876,11 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    MEM_DWORD(0xe9d0) = cpu->EBX;
    FUN_1000_4cc3(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4c26(cpu_ctx *cpu){
 //;XREF[1]:     1000:4b88(c)
    INST_PUSH(cpu->ECX);
@@ -7907,11 +7906,11 @@ void FUN_1000_4c26(cpu_ctx *cpu){
    cpu->AX = cpu->CX;
    FUN_1000_2b08(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4c68(cpu_ctx *cpu){
 //;XREF[2]:     1000:4cc3(c),1000:4d0e(c)
    cpu->EAX = MEM_DWORD(0xe9cc);
@@ -7944,11 +7943,11 @@ void FUN_1000_4c68(cpu_ctx *cpu){
    INST_SAR(cpu->ECX, 0x1);
    INST_CMP(cpu->EAX, cpu->EBX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4cc3(cpu_ctx *cpu){
 //;XREF[1]:     1000:4c22(c)
    FUN_1000_4c68(cpu);
@@ -7976,11 +7975,11 @@ void FUN_1000_4cc3(cpu_ctx *cpu){
    INST_SUB(MEM_DWORD(cpu->DI + 0x10), cpu->EDX);
    INST_SUB(MEM_DWORD(cpu->DI + 0x4), cpu->EDX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4d0e(cpu_ctx *cpu){
 //;XREF[1]:     1000:4bc7(c)
    FUN_1000_4c68(cpu);
@@ -8021,11 +8020,11 @@ void FUN_1000_4d0e(cpu_ctx *cpu){
    INST_SUB(MEM_DWORD(cpu->DI + 0x10), cpu->EDX);
    INST_SUB(MEM_DWORD(cpu->DI + 0x4), cpu->EDX);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4d96(cpu_ctx *cpu){
 //;XREF[3]:     1000:4ccc(c),1000:4d17(c),1000:52b7(c)
    INST_PUSH(cpu->SI);
@@ -8058,11 +8057,11 @@ void FUN_1000_4d96(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_4e0a(cpu_ctx *cpu){
 //;XREF[1]:     1000:48d1(c)
    cpu->AX = cpu->SI;
@@ -8229,11 +8228,11 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    MEM_WORD(cpu->SI + 0x4) = cpu->AX;
    MEM_WORD(cpu->SI + 0x6) = cpu->AX;
    goto LAB_LOC_4;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_500b(cpu_ctx *cpu){
 //;XREF[1]:     1000:56c8(c)
    MEM_BYTE(0xea28) = 0x0;
@@ -8294,12 +8293,12 @@ void FUN_1000_500b(cpu_ctx *cpu){
    INST_ADD(cpu->DI, 0x2);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 //;ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
-}
-
 void FUN_1000_5091(cpu_ctx *cpu){
 //;XREF[1]:     1000:501c(c)
    INST_PUSH(cpu->SI);
@@ -8397,11 +8396,11 @@ void FUN_1000_5091(cpu_ctx *cpu){
    JUMP«JNZ» goto LAB_LOC_1;
    INST_POP(cpu->SI);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_51bd(cpu_ctx *cpu){
 //;XREF[1]:     1000:507a(c)
    INST_PUSH(cpu->DI);
@@ -8411,7 +8410,7 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    INST_ADD(cpu->DI, 0x2);
    LAB_LOC_1:
    INST_PUSH(cpu->CX);
-   INST_XOR(cpu->SI, cpu->SI);
+   cpu->SI = 0;
    cpu->BX = cpu->SI;
    cpu->ECX = 0x80000000;
    LAB_LOC_2:
@@ -8508,11 +8507,11 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    cpu->DX = cpu->BX;
    cpu->BP = cpu->SI;
    goto LAB_LOC_8;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_52d4(cpu_ctx *cpu){
 //;XREF[2]:     1000:5393(c),1000:53e4(c)
    cpu->AX = MEM_WORD(0xea0c);
@@ -8543,11 +8542,11 @@ void FUN_1000_52d4(cpu_ctx *cpu){
    INST_ADC(cpu->DX, cpu->CX);
    INST_IDIV(MEM_WORD(0xea22));
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_532e(cpu_ctx *cpu){
 //;XREF[1]:     1000:4910(c)
    MEM_WORD(0xea1c) = cpu->CX;
@@ -8619,11 +8618,11 @@ void FUN_1000_532e(cpu_ctx *cpu){
 
 void dummy_ifunc(cpu_ctx *cpu){
    INST_IRET();
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_timer_5680(cpu_ctx *cpu){
    INST_PUSHAD();
    INST_PUSH(cpu->DS);
@@ -8666,11 +8665,11 @@ void FUN_timer_5680(cpu_ctx *cpu){
    INST_POP(cpu->DS);
    INST_POPAD();
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_keyboard_56df(cpu_ctx *cpu){
    unknown ->
    unknown ->movbx,
@@ -8686,11 +8685,11 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
    INST_AND(MEM_BYTE( !!!!), 0x7f);
    CSD_DAT_keys_571e = cpu->BL;
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_int_f1_579e(cpu_ctx *cpu){
    if (cpu->AL == 0x0) goto LAB_LOC_1;
    if (cpu->AL == 0x1) goto LAB_LOC_2;
@@ -8716,12 +8715,12 @@ void FUN_int_f1_579e(cpu_ctx *cpu){
    cpu->EAX = cpu->EDX;
    FUN_1000_2726(cpu);
    INST_IRET();
+}
+
 //; 1000:57df [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_57e0(cpu_ctx *cpu){
 //;XREF[1]:     1000:022c(c)
    cpu->AX = 0x120;
@@ -8757,11 +8756,11 @@ void FUN_1000_57e0(cpu_ctx *cpu){
    unknown ->
    unknown ->MOVAX,
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5831(cpu_ctx *cpu){
    cpu->CH = cpu->AL;
    cpu->DX = 0x388;
@@ -8785,11 +8784,11 @@ void FUN_1000_5831(cpu_ctx *cpu){
    INST_ADD(cpu->AH, MEM_BYTE( !!!!));
    FUN_1000_58fc(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5864(cpu_ctx *cpu){
 //;XREF[1]:     1000:4abf(c)
    INST_PUSH(cpu->SI);
@@ -8816,11 +8815,11 @@ void FUN_1000_5864(cpu_ctx *cpu){
 void FUN_dummy_1000_588b(cpu_ctx *cpu){
    INST_UD2();
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_589b(cpu_ctx *cpu){
 //;XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
    INST_MOVZX(cpu->BX, cpu->AL);
@@ -8870,11 +8869,11 @@ void FUN_1000_589b(cpu_ctx *cpu){
    INST_LODSB();
    FUN_1000_58fc(cpu);
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_58fc(cpu_ctx *cpu){
 //;XREF[21]:    1000:57e3(c),1000:57e9(c),1000:57ef(c),1000:57f6(c),
 //;             1000:5814(c),1000:581e(c),1000:5827(c),1000:5874(c),
@@ -8888,12 +8887,12 @@ void FUN_1000_58fc(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    return;
+}
+
 //; 1000:592b [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5940_render_text(cpu_ctx *cpu){
 //;XREF[2]:     1000:04e6(c),1000:04f4(c)
    CSD_BYTE_1000_59c1 = cpu->CL;
@@ -8960,12 +8959,12 @@ void FUN_1000_5940_render_text(cpu_ctx *cpu){
    cpu->CX = cpu->AX;
    INST_INC(cpu->CX);
    goto LAB_LOC_1;
+}
+
 //; 1000:5a5f [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5a60(cpu_ctx *cpu){
 //;XREF[3]:     1000:24ca(c),1000:24da(c),1000:2566(c)
    cpu->DX = cpu->DX;
@@ -8990,11 +8989,11 @@ void FUN_1000_5a60(cpu_ctx *cpu){
    LAB_LOC_1:
 //;             1000:5a8f(j)
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5a95(cpu_ctx *cpu){
 //;XREF[3]:     1000:01d3(c),1000:24ec(c),1000:5a6e(c)
    cpu->DX = 0xef88;
@@ -9015,11 +9014,11 @@ void FUN_1000_5a95(cpu_ctx *cpu){
    return;
    LAB_LOC_1:
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5acf(cpu_ctx *cpu){
 //;XREF[3]:     1000:01ff(c),1000:251d(c),1000:5a84(c)
    INST_CLD();
@@ -9032,7 +9031,7 @@ void FUN_1000_5acf(cpu_ctx *cpu){
    cpu->CX = 0x100;
    LAB_LOC_1:
    INST_PUSH(cpu->CX);
-   INST_XOR(cpu->CX, cpu->CX);
+   cpu->CX = 0;
    LAB_LOC_2:
    INST_AND(cpu->AH, cpu->AH);
    JUMP«JZ» goto LAB_LOC_3;
@@ -9067,11 +9066,11 @@ void FUN_1000_5acf(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_CLC();
    return;
+}
+
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
-}
-
 void FUN_1000_5b26(cpu_ctx *cpu){
 //;XREF[2]:     1000:5af6(c),1000:5b0c(c)
    if (cpu->SI != 0xf308) goto LAB_LOC_1;
@@ -9090,3 +9089,4 @@ void FUN_1000_5b26(cpu_ctx *cpu){
    return;
 //; 1000:5cce [UNDEFINED BYTES REMOVED]
 //;FIM:
+}
