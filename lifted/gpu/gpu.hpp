@@ -21,5 +21,22 @@ struct cpu_ctx {
     uint16_t CS; //should never be used
     uint16_t ES, FS, GS;
 
+    uintptr_t mem_base;
+
     //TODO flags! that cant be done with last res
 };
+
+#define MEM_BYTE(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint8_t *)displ; \
+})[0]
+
+#define MEM_WORD(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint16_t *)displ; \
+})[0]
+
+#define MEM_DWORD(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint32_t *)displ; \
+})[0]
