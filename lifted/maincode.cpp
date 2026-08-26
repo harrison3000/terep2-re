@@ -139,7 +139,16 @@ void f_init(cpu_ctx *cpu){
 
 void f_cam_select(cpu_ctx *cpu){
    INST_SHL(cpu->BX, 1);
-//;VAI SER AQUI
+//;
+   switch(cpu->BX){
+      case 0: goto CAMERA_1;
+      case 2: goto CAMERA_2;
+      case 4: goto CAMERA_3;
+      case 6: goto CAMERA_4;
+      case 8: goto CAMERA_5;
+      default: __builtin_trap();
+   }
+
    CAMERA_1:
    F_0693(cpu);
    return;
@@ -1686,7 +1695,32 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_LODSB();
    INST_MOVZX(cpu->BX, cpu->AL);
    INST_SHL(cpu->BX, 1);
-//;VAI SER AQUI
+//;
+   switch(cpu->BX){
+      case 0: goto LAB_LOC_1;
+      case 2: goto LAB_LOC_6;
+      case 4: goto LAB_LOC_7;
+      case 6: goto LAB_LOC_8;
+      case 8: goto LAB_LOC_9;
+      case 10: goto LAB_LOC_11;
+      case 12: goto LAB_LOC_12;
+      case 14: goto LAB_LOC_14;
+      case 16: goto LAB_LOC_16;
+      case 18: goto LAB_LOC_18;
+      case 20: goto LAB_LOC_20;
+      case 22: goto LAB_LOC_1;
+      case 24: goto LAB_LOC_1;
+      case 26: goto LAB_LOC_1;
+      case 28: goto LAB_LOC_1;
+      case 30: goto LAB_LOC_1;
+      case 32: goto LAB_LOC_24;
+      case 34: goto LAB_LOC_2;
+      case 36: goto LAB_LOC_3;
+      case 38: goto LAB_LOC_4;
+      case 40: goto LAB_LOC_5;
+      default: __builtin_trap();
+   }
+
    LAB_LOC_1:
 //;             1000:142f(*),1000:1431(*)
    return;

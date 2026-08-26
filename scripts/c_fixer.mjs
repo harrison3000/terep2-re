@@ -10,7 +10,7 @@ var total = 0;
 
 //FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
 
-const fixed = f.replaceAll(superRegex, function(...args){
+const fixedJmps = f.replaceAll(superRegex, function(...args){
     const {opcodeA, opcodeB, things, comment} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
 
@@ -61,6 +61,22 @@ var falta = Object.entries(stats)
     });
 console.table(falta);
 console.log("Total: ", total);
+
+
+const fixed = fixedJmps.replaceAll(/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, function(a, b){
+
+    const u = [""];
+    u.push("   switch(cpu->BX){")
+
+    const lbs = Array.from(b.matchAll(/VAL_DW«(.+)»/g)).map((v, i) => `      case ${i*2}: goto ${v[1]};`);
+    u.push(...lbs);
+
+    u.push("      default: __builtin_trap();");
+    u.push("   }");
+    u.push("");
+
+    return u.join("\n");
+});
 
 //TODO pegar quais operacoes precisam setar o last_res
 
