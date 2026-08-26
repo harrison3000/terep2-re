@@ -1,4 +1,5 @@
 import {readFile, writeFile} from "node:fs/promises";
+import { cmp_sig_map, cmp_unsig_map, tamanhador } from "./utils.mjs";
 
 const f = (await readFile("raw_c.cpp")).toString();
 
@@ -6,23 +7,6 @@ const superRegex = /INST_(?<opcodeA>[A-Z]{2,5})\((?<things>.*)\)(?<rest_of_line>
 
 const stats = {};
 var total = 0;
-
-
-const cmp_sig_map = {
-    "JG":  ">",
-    "JGE": ">=",
-    "JL":  "<",
-    "JLE": "<=",
-};
-
-const cmp_unsig_map = {
-    "JZ":  "==",
-    "JNZ": "!=",
-    "JC":  "<",
-    "JNC": ">=",
-    "JBE": "<=",
-    "JA":  ">",
-}
 
 //FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
 
@@ -32,16 +16,21 @@ const fixed = f.replaceAll(superRegex, function(...args){
 
     const stk = `${opcodeA}_${opcodeB}_${(operandA === operandB)}`;
 
-    const opB_is_value = /(0x[a-fA-F,0-9]+)|([0-9]+)/.test(operandB);
-
     if(opcodeA == "CMP" && opcodeB in cmp_unsig_map){
         let op = cmp_unsig_map[opcodeB];
         return `if (${operandA} ${op} ${operandB})`;
     }
 
-    if(opcodeA == "CMP" && opcodeB in cmp_sig_map && !opB_is_value){
+    if(opcodeA == "CMP" && opcodeB in cmp_sig_map){
         let op = cmp_sig_map[opcodeB];
-        return `if (SIGNED(${operandA}) ${op} SIGNED(${operandB}))`;
+        let opb = `SIGNED(${operandB})`;
+        const opB_is_value = /^(0x[a-fA-F,0-9]+)|([0-9]+)$/.test(operandB);
+        if(opB_is_value){
+            let t = tamanhador(operandA);
+            opb = `(${t})(${operandB})`;
+        }
+
+        return `if (SIGNED(${operandA}) ${op} ${opb})`;
     }
 
     if(stk === "TEST_JZ_true"){
