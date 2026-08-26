@@ -139,12 +139,7 @@ void f_init(cpu_ctx *cpu){
 
 void f_cam_select(cpu_ctx *cpu){
    INST_SHL(cpu->BX, 1);
-   INST_AND(cpu->BX, 15);
-   INST_JMP(MEM_UUUU(cpu->CS*1024 +  !!!!));
-   JMP_TABLE_CAMERAS:
-
-   LAB_RUIM:
-   INST_UD2();
+//;VAI SER AQUI
    CAMERA_1:
    F_0693(cpu);
    return;
@@ -1146,6 +1141,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    if (cpu->AX & 0x8080) goto LAB_LOC_6;
    cpu->CX = 0x12c;
    if (cpu->BX == 0) goto LAB_LOC_6;
+   INST_TEST(cpu->BX, cpu->BX);
    JUMP«JNS» goto LAB_LOC_5;
    INST_NEG(cpu->CX);
    LAB_LOC_5:
@@ -1188,6 +1184,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    if (cpu->AX & 0x8080) goto LAB_LOC_13;
    cpu->CX = 0x50;
    if (cpu->BX == 0) goto LAB_LOC_13;
+   INST_TEST(cpu->BX, cpu->BX);
    JUMP«JNS» goto LAB_LOC_12;
    INST_NEG(cpu->CX);
    LAB_LOC_12:
@@ -1684,43 +1681,40 @@ void FUN_1000_1408(cpu_ctx *cpu){
 //;             1000:15ea(j),1000:1666(j),1000:1676(j),1000:16dc(j),
 //;             1000:16ec(j),1000:191f(c),1000:1929(c),1000:1939(c),
 //;             1000:1942(c)
+   INST_NOP();
+   L_1408_START:
    INST_LODSB();
    INST_MOVZX(cpu->BX, cpu->AL);
    INST_SHL(cpu->BX, 1);
-   INST_AND(cpu->BX, 63);
-   INST_JMP(MEM_UUUU(cpu->CS*1024 +  !!!!));
-   JMP_TABLE_1413:
-//;addr[21]
-   LAB_RUIM:
-   INST_UD2();
+//;VAI SER AQUI
    LAB_LOC_1:
 //;             1000:142f(*),1000:1431(*)
    return;
    LAB_LOC_2:
    INST_LODSW();
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_3:
    INST_LODSW();
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, cpu->AX);
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_4:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
    INST_LODSW();
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_5:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
    INST_LODSW();
-   JUMP«JNS» goto FUN_1000_1408;
+   JUMP«JNS» goto L_1408_START;
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_6:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -1732,11 +1726,11 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_CMP(MEM_WORD(cpu->DI + 0x2), cpu->AX);
    INST_LODSW();
    cpu->CL = cpu->AL;
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    cpu->AX = MEM_WORD(cpu->DI + 0x6);
    cpu->BX = MEM_WORD(cpu->DI + 0x8);
    FUN_1000_3f98(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_7:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -1754,7 +1748,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_CMP(cpu->BX, cpu->AX);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_8:
    cpu->BX = 0;
    INST_LODSW();
@@ -1799,7 +1793,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_9:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -1839,18 +1833,18 @@ void FUN_1000_1408(cpu_ctx *cpu){
    cpu->BL = cpu->AL;
    INST_LODSW();
    MEM_WORD(0xdb12) = cpu->AX;
-   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto FUN_1000_1408;
+   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_2bec(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_11:
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_12:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -1893,16 +1887,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_47ec(cpu);
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
-   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto FUN_1000_1408;
+   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_30ee(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_14:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -1953,16 +1947,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_47ec(cpu);
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
-   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto FUN_1000_1408;
+   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_30ee(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_16:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -2005,16 +1999,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_47ec(cpu);
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
-   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto FUN_1000_1408;
+   if (SIGNED(cpu->BL) < (int8_t)(0x3)) goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_36fe(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_18:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -2065,10 +2059,10 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_POP(cpu->ES);
    MEM_WORD(0xdb14) = 0x4;
    FUN_1000_36fe(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_19:
    INST_ADD(cpu->SI, 0x12);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_20:
    INST_PUSH(cpu->SI);
    INST_LODSW();
@@ -2237,7 +2231,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    LAB_LOC_23:
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0xba);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_24:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
@@ -2253,7 +2247,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0x4);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_25:
    INST_PUSH(cpu->SI);
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
@@ -2266,7 +2260,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0x4);
-   goto FUN_1000_1408;
+   goto L_1408_START;
 }
 
 //;************************************************************************************************
@@ -3330,7 +3324,7 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->CX = 0x82;
    cpu->AL = 0;
    INST_CLD();
-   INST_STOSB();
+   REP_STOSB();
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    cpu->DX = cpu->DX;
@@ -4002,7 +3996,7 @@ void FUN_1000_2b1f(cpu_ctx *cpu){
 void FUN_1000_2b2d(cpu_ctx *cpu){
 //;XREF[2]:     1000:2b25(j),1000:2b58(c)
    if (SIGNED(cpu->AX) > SIGNED(cpu->BX)) goto LAB_LOC_1;
-   JUMP«JL» goto FUN_1000_2b3b;
+   if (SIGNED(cpu->AX) < SIGNED(cpu->BX)) goto FUN_1000_2b3b;
    cpu->AX = 0x2000;
    return;
    LAB_LOC_1:
@@ -4057,7 +4051,7 @@ void FUN_1000_2b98(cpu_ctx *cpu){
    cpu->DI = 0;
    cpu->CX = 0x3e80;
    INST_CLD();
-   INST_STOSD();
+   REP_STOSD();
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
@@ -4211,7 +4205,7 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    INST_SHR(cpu->CX, 0x1);
-   INST_STOSW();
+   REP_STOSW();
    JUMP«JNC» goto LAB_LOC_3;
    INST_STOSB();
    LAB_LOC_3:
@@ -8441,8 +8435,7 @@ void FUN_timer_5680(cpu_ctx *cpu){
    INST_PUSH(cpu->ES);
    INST_PUSH(cpu->FS);
    INST_PUSH(cpu->GS);
-   unknown ->
-   unknown ->MOVAX,
+   cpu->AX = def_datareg;
    cpu->DS = cpu->AX;
    cpu->ES = cpu->AX;
    if (MEM_BYTE(0x6e) != 0x1) goto LAB_LOC_2;
@@ -8483,8 +8476,7 @@ void FUN_timer_5680(cpu_ctx *cpu){
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
 void FUN_keyboard_56df(cpu_ctx *cpu){
-   unknown ->
-   unknown ->movbx,
+   cpu->BX = def_datareg;
    cpu->DS = cpu->BX;
    cpu->BL = cpu->AL;
    INST_AND(cpu->BX, 0x7f);
