@@ -1739,6 +1739,8 @@ FUN_1000_1408:
                               ;             1000:15ea(j),1000:1666(j),1000:1676(j),1000:16dc(j),
                               ;             1000:16ec(j),1000:191f(c),1000:1929(c),1000:1939(c),
                               ;             1000:1942(c)
+    NOP
+    .L_1408_START:                     
     LODSB 
     MOVZX       BX,AL
     SHL         BX, 1
@@ -1779,28 +1781,28 @@ FUN_1000_1408:
 .LAB_LOC_2:
     LODSW 
     ADD         SI,AX
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_3:
     LODSW 
     PUSH        SI
     ADD         SI,AX
     CALL        FUN_1000_1408
     POP         SI
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_4:
     MOV         AL, byte [0x5ee]
     SAHF
     LODSW 
-    JS          FUN_1000_1408
+    JS     .L_1408_START
     ADD         SI,AX
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_5:
     MOV         AL, byte [0x5ee]
     SAHF
     LODSW 
-    JNS         FUN_1000_1408
+    JNS    .L_1408_START
     ADD         SI,AX
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_6:
     LODSW 
     SHL         AX,0x1
@@ -1812,11 +1814,11 @@ FUN_1000_1408:
     CMP         word [DI + 0x2],AX
     LODSW 
     MOV         CL,AL
-    JL          FUN_1000_1408
+    JL     .L_1408_START
     MOV         AX,word [DI + 0x6]
     MOV         BX,word [DI + 0x8]
     CALL        FUN_1000_3f98
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_7:
     LODSW 
     SHL         AX,0x1
@@ -1834,7 +1836,7 @@ FUN_1000_1408:
     CMP         BX,AX
     LAHF
     MOV         byte [0x5ee],AL
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_8:
     XOR         BX,BX
     LODSW 
@@ -1879,7 +1881,7 @@ FUN_1000_1408:
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_9:
     LODSB 
     MOVZX       CX,AL
@@ -1920,18 +1922,18 @@ FUN_1000_1408:
     LODSW 
     MOV         word [0xdb12],AX
     CMP         BL,0x3
-    JL          FUN_1000_1408
+    JL     .L_1408_START
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
-    JS          FUN_1000_1408
+    JS     .L_1408_START
     CALL        FUN_1000_2bec
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_11:
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_12:
     LODSB 
     MOVZX       CX,AL
@@ -1975,16 +1977,16 @@ FUN_1000_1408:
     XCHG        DI,SI
     MOV         BL,AL
     CMP         BL,0x3
-    JL          FUN_1000_1408
+    JL     .L_1408_START
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
-    JS          FUN_1000_1408
+    JS     .L_1408_START
     CALL        FUN_1000_30ee
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_14:
     LODSB 
     MOVZX       CX,AL
@@ -2036,16 +2038,16 @@ FUN_1000_1408:
     XCHG        DI,SI
     MOV         BL,AL
     CMP         BL,0x3
-    JL          FUN_1000_1408
+    JL     .L_1408_START
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
-    JS          FUN_1000_1408
+    JS     .L_1408_START
     CALL        FUN_1000_30ee
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_16:
     LODSB 
     MOVZX       CX,AL
@@ -2089,16 +2091,16 @@ FUN_1000_1408:
     XCHG        DI,SI
     MOV         BL,AL
     CMP         BL,0x3
-    JL          FUN_1000_1408
+    JL     .L_1408_START
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
-    JS          FUN_1000_1408
+    JS     .L_1408_START
     CALL        FUN_1000_36fe
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_18:
     LODSW 
     SHL         AX,0x1
@@ -2150,10 +2152,10 @@ FUN_1000_1408:
     POP         ES
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_19:
     ADD         SI,0x12
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_20:
     PUSH        SI
     LODSW 
@@ -2324,7 +2326,7 @@ FUN_1000_1408:
 .LAB_LOC_23:
     POP         SI
     ADD         SI,0xba
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_24:
     MOV         AL, byte [0x5ee]
     SAHF
@@ -2340,7 +2342,7 @@ FUN_1000_1408:
     CALL        FUN_1000_1408
     POP         SI
     ADD         SI,0x4
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 .LAB_LOC_25:
     PUSH        SI
     MOV         AX,word [SI + 0x2]
@@ -2353,7 +2355,7 @@ FUN_1000_1408:
     CALL        FUN_1000_1408
     POP         SI
     ADD         SI,0x4
-    JMP         FUN_1000_1408
+    JMP    .L_1408_START
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
