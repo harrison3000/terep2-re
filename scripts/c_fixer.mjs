@@ -10,7 +10,7 @@ var total = 0;
 
 //FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
 
-const fixedJmps = f.replaceAll(superRegex, function(...args){
+const fixed = f.replaceAll(superRegex, function(...args){
     const {opcodeA, opcodeB, things, comment} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
 
@@ -49,21 +49,7 @@ const fixedJmps = f.replaceAll(superRegex, function(...args){
     total++;
 
     return args[0];
-});
-
-
-var falta = Object.entries(stats)
-    .toSorted((a,b) => b[1] - a[1])
-    .map(function([comb, qtd]){
-        var [inst, jump, eq_operands] = comb.split("_");
-        var percent = (qtd/total * 100).toFixed(1) + "%";
-        return {inst, jump, eq_operands, qtd, percent};
-    });
-console.table(falta);
-console.log("Total: ", total);
-
-
-const fixed = fixedJmps.replaceAll(/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, function(a, b){
+}).replaceAll(/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, function(a, b){
 
     const u = [""];
     u.push("   switch(cpu->BX){")
@@ -77,6 +63,19 @@ const fixed = fixedJmps.replaceAll(/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, functio
 
     return u.join("\n");
 });
+
+var falta = Object.entries(stats)
+    .toSorted((a,b) => b[1] - a[1])
+    .map(function([comb, qtd]){
+        var [inst, jump, eq_operands] = comb.split("_");
+        var percent = (qtd/total * 100).toFixed(1) + "%";
+        return {inst, jump, eq_operands, qtd, percent};
+    });
+console.table(falta);
+console.log("Total: ", total);
+
+
+
 
 //TODO pegar quais operacoes precisam setar o last_res
 
