@@ -1195,6 +1195,7 @@ FUN_1000_0d2a:
     MOV         CX,0x12c
     TEST        BX,BX
     JZ          .LAB_LOC_6
+    TEST        BX,BX
     JNS         .LAB_LOC_5
     NEG         CX
 .LAB_LOC_5:
@@ -1241,6 +1242,7 @@ FUN_1000_0d2a:
     MOV         CX,0x50
     TEST        BX,BX
     JZ          .LAB_LOC_13
+    TEST        BX,BX
     JNS         .LAB_LOC_12
     NEG         CX
 .LAB_LOC_12:
@@ -4128,6 +4130,7 @@ FUN_1000_2b2d:
                               ;XREF[2]:     1000:2b25(j),1000:2b58(c)
     CMP         AX,BX
     JG          .LAB_LOC_1
+    CMP         AX,BX
     JL          FUN_1000_2b3b
     MOV         AX,0x2000
     RET
