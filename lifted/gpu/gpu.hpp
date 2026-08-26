@@ -1,6 +1,11 @@
 //GPU stands for Gambiarra Processing Unit :)
 
 #include <cstdint>
+#include <vector>
+
+struct stackItem {
+    uint32_t value;  uint16_t line; uint16_t size;
+};
 
 struct cpu_ctx {
     // GPRs
@@ -23,8 +28,22 @@ struct cpu_ctx {
 
     uintptr_t mem_base;
 
+    std::vector<stackItem> stack;
+
+
     //TODO flags! that cant be done with last res
 };
+
+
+#define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE, .size = sizeof(reg)});
+
+#define INST_POP(reg) ({        \
+    auto it = cpu->stack.back();\
+    if(sizeof(reg) != it.size){__builtin_trap();}\
+    cpu->stack.pop_back();      \
+    reg = it.value;             \
+})
+
 
 #define MEM_BYTE(addr) ({ \
     uintptr_t displ = cpu->mem_base + addr; \
@@ -40,3 +59,7 @@ struct cpu_ctx {
     uintptr_t displ = cpu->mem_base + addr; \
     (uint32_t *)displ; \
 })[0]
+
+inline int8_t SIGNED(uint8_t v) { return v; }
+inline int16_t SIGNED(uint16_t v) { return v; }
+inline int32_t SIGNED(uint32_t v) { return v; } 
