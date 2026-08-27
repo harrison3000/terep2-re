@@ -422,7 +422,7 @@ FUN_main_render:
     JL          .LAB_LOC_18
     SUB         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_18:
-    MOV         AL,[CSD_DAT_keys_571e]
+    MOV         AL,[CSD_DAT_keys_571e + 0]
     ;Esc
     CMP         AL,0x1
     JZ          .LAB_LOC_33
@@ -479,7 +479,7 @@ FUN_main_render:
 .LAB_LOC_19:
                               ;             1000:05db(j),1000:05e2(j),1000:05ea(j),1000:05f2(j),
                               ;             1000:0607(j),1000:061c(j),1000:0624(j)
-    MOV         byte [CSD_DAT_keys_571e],0x0
+    MOV         byte [CSD_DAT_keys_571e + 0],0x0
     mov ax, 0
     ret
 .LAB_LOC_20:
@@ -1167,9 +1167,9 @@ FUN_1000_0cd3:
 FUN_1000_0d2a:
                               ;XREF[1]:     1000:56b4(c)
     MOVZX       BX,byte [DI]
-    MOV         AL,byte [BX + CSD_DAT_keys_571e]
+    MOV         AL,byte [CSD_DAT_keys_571e + BX]
     MOVZX       BX,byte [DI + 0x1]
-    MOV         AH,byte [BX + CSD_DAT_keys_571e]
+    MOV         AH,byte [CSD_DAT_keys_571e + BX]
     MOV         BX,word [SI + 0xc]
     MOV         CX,0x32
     TEST        AL,0x80
@@ -1206,9 +1206,9 @@ FUN_1000_0d2a:
 .LAB_LOC_6:
     MOV         word [SI + 0xc],BX
     MOVZX       BX,byte [DI + 0x2]
-    MOV         AL,byte [BX + CSD_DAT_keys_571e]
+    MOV         AL,byte [CSD_DAT_keys_571e + BX]
     MOVZX       BX,byte [DI + 0x3]
-    MOV         AH,byte [BX + CSD_DAT_keys_571e]
+    MOV         AH,byte [CSD_DAT_keys_571e + BX]
     MOV         BX,word [SI + 0xa]
     MOV         ECX,dword [SI + 0x42]
     ADD         ECX,dword [SI + 0x46]
@@ -1254,7 +1254,7 @@ FUN_1000_0d2a:
     MOV         word [SI + 0xa],BX
     XOR         AX,AX
     MOVZX       BX,byte [DI + 0x4]
-    TEST        byte [BX + CSD_DAT_keys_571e],0x80
+    TEST        byte [CSD_DAT_keys_571e + BX],0x80
     JNZ         .LAB_LOC_14
     OR          AX,0x1
 .LAB_LOC_14:
@@ -8643,13 +8643,13 @@ FUN_keyboard_56df:
     AND         BX,0x7f
     AND         AL,0x80
     JNS         .LAB_LOC_1
-    MOV         byte [BX + CSD_DAT_keys_571e],0xff
-    MOV         byte [CSD_DAT_keys_571e],0x0
+    MOV         byte [CSD_DAT_keys_571e + BX],0xff
+    MOV         byte [CSD_DAT_keys_571e + 0],0x0
     ret
 
 .LAB_LOC_1:
-    AND         byte [BX + CSD_DAT_keys_571e],0x7f
-    MOV         byte [CSD_DAT_keys_571e],BL
+    AND         byte [CSD_DAT_keys_571e + BX],0x7f
+    MOV         byte [CSD_DAT_keys_571e + 0],BL
     ret
 
 ;************************************************************************************************
@@ -8749,7 +8749,7 @@ FUN_1000_5831:
 .LAB_LOC_1:
     MOV         AH,0x43
     MOVZX       BX,CH
-    ADD         AH,byte [BX + CSD_DAT_unk_592c]
+    ADD         AH,byte [CSD_DAT_unk_592c + BX]
     CALL        FUN_1000_58fc
     RET
 
@@ -8789,7 +8789,7 @@ FUN_dummy_1000_588b:
 FUN_1000_589b:
                               ;XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
     MOVZX       BX,AL
-    MOV         BL,byte [BX + CSD_DAT_unk_592c]
+    MOV         BL,byte [CSD_DAT_unk_592c + BX]
     MOV         AH,0x20
     ADD         AH,BL
     LODSB 
