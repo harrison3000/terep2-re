@@ -3,15 +3,17 @@ import { cmp_sig_map, cmp_unsig_map, tamanhador } from "./utils.mjs";
 
 const f = (await readFile("raw_c.cpp")).toString();
 
-const superRegex = /INST_(?<opcodeA>[A-Z]{2,5})\((?<things>.*)\)(?<rest_of_line>;[^\n]*)?\n\s*JUMP«(?<opcodeB>.+)»/g;
+const superRegex = /(?<whole_inst>INST_(?<opcodeA>[A-Z]{2,5})\((?<things>.*)\)(;[^\n]*)?)\n\s*JUMP«(?<opcodeB>.+)»/g;
 
 const stats = {};
 var total = 0;
 
 //FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
 
+let cnt = 0;
+
 const fixed = f.replaceAll(superRegex, function(...args){
-    const {opcodeA, opcodeB, things, comment} = args.at(-1);
+    const {opcodeA, opcodeB, things, whole_inst} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
 
     const stk = `${opcodeA}_${opcodeB}_${(operandA === operandB)}`;
@@ -33,16 +35,39 @@ const fixed = f.replaceAll(superRegex, function(...args){
         return `if (SIGNED(${operandA}) ${op} ${opb})`;
     }
 
-    if(stk === "TEST_JZ_true"){
-        return `if (${operandA} == 0)`
-    }
-
     if(stk === "TEST_JZ_false"){
         return `if (!(${operandA} & ${operandB}))`
     }
 
     if(stk === "TEST_JNZ_false"){
         return `if (${operandA} & ${operandB})`
+    }
+
+    if(opcodeA == "TEST" && operandA === operandB){
+        //an AND of a register with itself doesnt change the value, its the same as a test
+        //for all intents and purposes
+        switch(opcodeB){
+            case "JZ":  return `if (${operandA} == 0)`;
+            case "JNZ": return `if (${operandA} != 0)`;
+            case "JS": 
+            case "JL":
+                return `if (SIGNED(${operandA}) <  0)`;
+            case "JNS":
+            case "JGE":
+                return `if (SIGNED(${operandA}) >= 0)`;
+        }
+    }
+
+    if(["DEC", "SUB", "ADD", "AND", "TEST", "CMP"].includes(opcodeA)){
+        let vname = "jTmp_" + (cnt++).toString(32)
+        let wl = `auto ${vname} = ` + whole_inst + "\n   ";
+
+        switch(opcodeB){
+            case "JZ":  return wl + `if (${vname} == 0)`;
+            case "JNZ": return wl + `if (${vname} != 0)`;
+            case "JS":  return wl + `if (SIGNED(${vname}) <  0)`;
+            case "JNS": return wl + `if (SIGNED(${vname}) >= 0)`;
+        }
     }
     
     stats[stk] = stats[stk] ? stats[stk] + 1 : 1;
