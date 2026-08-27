@@ -1935,6 +1935,7 @@ FUN_1000_1408:
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
+    test  dx,dx
     JS     .L_1408_START
     CALL        FUN_1000_2bec
     JMP    .L_1408_START
@@ -1990,6 +1991,7 @@ FUN_1000_1408:
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
+    test  dx,dx
     JS     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
@@ -2051,6 +2053,7 @@ FUN_1000_1408:
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
+    test  dx,dx
     JS     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
@@ -2104,6 +2107,7 @@ FUN_1000_1408:
     LAHF
     MOV         byte [0x5ee],AL
     POP         SI
+    test  dx,dx
     JS     .L_1408_START
     CALL        FUN_1000_36fe
     JMP    .L_1408_START
@@ -2736,6 +2740,7 @@ FUN_1000_1cde:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JNS         .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
@@ -2752,6 +2757,7 @@ FUN_1000_1cde:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JNS         .LAB_LOC_3
     MOV         AX, word [0xdb12]
     TEST        AL,0xf
@@ -2795,6 +2801,7 @@ FUN_1000_1cde:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JNS         .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
@@ -2818,6 +2825,7 @@ FUN_1000_1cde:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JNS         .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
@@ -2854,6 +2862,7 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JS          .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
@@ -2869,6 +2878,7 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JS          .LAB_LOC_3
     MOV         AX, word [0xdb12]
     TEST        AL,0xf
@@ -2911,6 +2921,7 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JS          .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
@@ -2934,6 +2945,7 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
+    test  dx,dx
     JS          .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
