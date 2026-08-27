@@ -7924,33 +7924,31 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0xc));
    MEM_DWORD(0xe9f8) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9ec) = cpu->EAX;
+   float tmp_ec = SIGNED(cpu->EAX);
    cpu->EAX = MEM_DWORD(cpu->SI + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x10);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x10));
    MEM_DWORD(0xe9fc) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9f0) = cpu->EAX;
+   float tmp_f0 = SIGNED(cpu->EAX);
    cpu->EAX = MEM_DWORD(cpu->SI + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x14);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x14));
    MEM_DWORD(0xea00) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9f4) = cpu->EAX;
-   INST_FINIT();
-   INST_FILD(MEM_DWORD(0xe9ec));
-   INST_FMUL(cpu->ST0);
-   INST_FILD(MEM_DWORD(0xe9f0));
-   INST_FMUL(cpu->ST0);
-   INST_FILD(MEM_DWORD(0xe9f4));
-   INST_FMUL(cpu->ST0);
-   INST_FADDP();
-   INST_FADDP();
-   INST_FSQRT();
-   INST_FISTP(MEM_DWORD(0xe9e8));
-   cpu->EAX = MEM_DWORD(0xe9e8);
+   float tmp_f4 = SIGNED(cpu->EAX);
+   
+   tmp_ec *= tmp_ec;
+   tmp_f0 *= tmp_f0;
+   tmp_f4 *= tmp_f4;
+
+
+   float ressq = __builtin_sqrtf(tmp_ec + tmp_f0 + tmp_f4);
+   cpu->EAX = (int32_t)ressq;
+    
+   
    INST_SAR(cpu->EAX, 0xa);
    INST_MOVSX(cpu->EBX, MEM_WORD(cpu->DS*1024 + cpu->BP + 0x4));
    if (SIGNED(cpu->BX) <  0) goto LAB_LOC_10;

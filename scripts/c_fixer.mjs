@@ -49,7 +49,7 @@ const fixed = f.replaceAll(superRegex, function(...args){
         switch(opcodeB){
             case "JZ":  return `if (${operandA} == 0)`;
             case "JNZ": return `if (${operandA} != 0)`;
-            case "JS": 
+            case "JS":
             case "JL":
                 return `if (SIGNED(${operandA}) <  0)`;
             case "JNS":
@@ -69,7 +69,7 @@ const fixed = f.replaceAll(superRegex, function(...args){
             case "JNS": return wl + `if (SIGNED(${vname}) >= 0)`;
         }
     }
-    
+   
     stats[stk] = stats[stk] ? stats[stk] + 1 : 1;
     total++;
 
@@ -87,7 +87,22 @@ const fixed = f.replaceAll(superRegex, function(...args){
     u.push("");
 
     return u.join("\n");
-});
+}).replaceAll(/^ +MEM_DWORD\(0xe9(ec|f0|f4).+$/gm, function(a, b){
+    return `   float tmp_${b} = SIGNED(cpu->EAX);`;
+}).replaceAll(/INST_FINIT.+$/gm, function(){
+    return `
+   tmp_ec *= tmp_ec;
+   tmp_f0 *= tmp_f0;
+   tmp_f4 *= tmp_f4;
+
+
+   float ressq = __builtin_sqrtf(tmp_ec + tmp_f0 + tmp_f4);
+   cpu->EAX = (int32_t)ressq;
+    `;
+
+
+}).replaceAll(/   INST_F.+\n/g, "")
+.replace("cpu->EAX = MEM_DWORD(0xe9e8);", "");
 
 var falta = Object.entries(stats)
     .toSorted((a,b) => b[1] - a[1])
