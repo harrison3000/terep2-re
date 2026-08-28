@@ -89,6 +89,8 @@ let fixed = f.replaceAll(superRegex, function(...args){
     u.push("");
 
     return u.join("\n");
+}).replaceAll(/JUMP«(.+)»/g, function(_a, b){
+    return `if(false /*untranslated jump ${b}*/)`;
 }).replaceAll(/^ +MEM_DWORD\(0xe9(ec|f0|f4).+$/gm, function(a, b){
     return `   float tmp_${b} = SIGNED(cpu->EAX);`;
 }).replaceAll(/INST_FINIT.+$/gm, function(){
