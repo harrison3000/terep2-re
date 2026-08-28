@@ -2125,14 +2125,14 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_SUB(cpu->AX, MEM_WORD(cpu->SI + 0x128));
    INST_CWD();
    INST_IMUL(MEM_WORD(cpu->SI + 0x128));
-   INST_ADD(cpu->BX, cpu->AX);
-   INST_ADC(cpu->CX, cpu->DX);
+   MERGED_ADD_ADC(cpu->BX, cpu->AX, cpu->CX, cpu->DX);
+
    cpu->AX = MEM_WORD(cpu->DI + 0x12a);
    INST_SUB(cpu->AX, MEM_WORD(cpu->SI + 0x12a));
    INST_CWD();
    INST_IMUL(MEM_WORD(cpu->SI + 0x12a));
-   INST_ADD(cpu->AX, cpu->BX);
-   INST_ADC(cpu->DX, cpu->CX);
+   MERGED_ADD_ADC(cpu->AX, cpu->BX, cpu->DX, cpu->CX);
+
    INST_XCHG(cpu->AX, cpu->DX);
    INST_ROR(cpu->EAX, 0x10);
    cpu->AX = cpu->DX;
@@ -2171,16 +2171,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI);
    INST_IMUL(cpu->BX);
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    INST_CWD();
    INST_IDIV(cpu->CX);
    MEM_WORD(0x5d8) = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI);
    INST_IMUL(cpu->BP);
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    INST_CWD();
    INST_IDIV(cpu->CX);
@@ -2188,16 +2188,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_ADD(cpu->SI, 0x2);
    cpu->AX = MEM_WORD(cpu->SI);
    INST_IMUL(cpu->BX);
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    INST_CWD();
    INST_IDIV(cpu->CX);
    MEM_WORD(0x5dc) = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI);
    INST_IMUL(cpu->BP);
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    INST_CWD();
    INST_IDIV(cpu->CX);
@@ -3500,8 +3500,8 @@ void FUN_1000_256b(cpu_ctx *cpu){
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0x5acb);
    INST_IMUL(MEM_WORD(0x5ad5));
-   INST_ADD(cpu->AX, cpu->BX);
-   INST_ADC(cpu->DX, cpu->CX);
+   MERGED_ADD_ADC(cpu->AX, cpu->BX, cpu->DX, cpu->CX);
+
    INST_IDIV(MEM_WORD(0x5ad7));
    return;
 }
@@ -3588,8 +3588,8 @@ void FUN_1000_2662(cpu_ctx *cpu){
    cpu->DX = MEM_WORD(cpu->SI + 0x2);
    INST_SUB(cpu->DX, MEM_WORD(cpu->SI + 0xa));
    INST_IMUL(cpu->DX);
-   INST_SUB(cpu->AX, cpu->CX);
-   INST_SBB(cpu->DX, cpu->BX);
+   MERGED_SUB_SBB(cpu->AX, cpu->CX, cpu->DX, cpu->BX);
+
    return;
 }
 
@@ -3714,50 +3714,50 @@ void FUN_1000_277e(cpu_ctx *cpu){
    pseudolocal_a = cpu->AX;
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    pseudolocal_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x6));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    cpu->AX = pseudolocal_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0xc));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    INST_PUSH(pseudolocal_b);
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x2));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    pseudolocal_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x8));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    cpu->AX = pseudolocal_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0xe));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    INST_PUSH(pseudolocal_b);
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x4));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    pseudolocal_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0xa));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    cpu->AX = pseudolocal_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0x10));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(pseudolocal_b, cpu->DX);
    cpu->CX = pseudolocal_b;
    INST_POP(cpu->BX);
@@ -3807,13 +3807,13 @@ void FUN_1000_2989(cpu_ctx *cpu){
    MEM_WORD(0xd10a) = cpu->AX;
    cpu->AX = MEM_WORD(0xd100);
    INST_IMUL(MEM_WORD(0xd104));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    cpu->BX = cpu->AX;
    INST_IMUL(MEM_WORD(0xd108));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    if (cpu->DX != 0x8000) goto LAB_LOC_1;
    INST_INC(cpu->DX);
    LAB_LOC_1:
@@ -3821,20 +3821,20 @@ void FUN_1000_2989(cpu_ctx *cpu){
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xd102);
    INST_IMUL(MEM_WORD(0xd10a));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->AX = cpu->DX;
    INST_ADD(cpu->DX, cpu->CX);
    MEM_WORD(cpu->DI) = cpu->DX;
    INST_XCHG(cpu->AX, cpu->BX);
    INST_IMUL(MEM_WORD(0xd10a));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xd108);
    INST_IMUL(MEM_WORD(0xd102));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_XCHG(cpu->DX, cpu->CX);
    INST_ADD(cpu->DX, cpu->CX);
    if (cpu->DX != 0x8000) goto LAB_LOC_2;
@@ -3844,8 +3844,8 @@ void FUN_1000_2989(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0x2) = cpu->DX;
    cpu->AX = MEM_WORD(0xd100);
    INST_IMUL(MEM_WORD(0xd106));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    if (cpu->DX != 0x8000) goto LAB_LOC_3;
    INST_INC(cpu->DX);
    LAB_LOC_3:
@@ -3853,13 +3853,13 @@ void FUN_1000_2989(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0x4) = cpu->DX;
    cpu->AX = MEM_WORD(0xd108);
    INST_IMUL(MEM_WORD(0xd106));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    MEM_WORD(cpu->DI + 0x6) = cpu->DX;
    cpu->AX = MEM_WORD(0xd10a);
    INST_IMUL(MEM_WORD(0xd106));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    MEM_WORD(cpu->DI + 0x8) = cpu->DX;
    cpu->DX = MEM_WORD(0xd104);
    if (cpu->DX != 0x8000) goto LAB_LOC_4;
@@ -3869,24 +3869,24 @@ void FUN_1000_2989(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0xa) = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(0xd104));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xd10a);
    INST_IMUL(MEM_WORD(0xd100));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    INST_ADD(cpu->DX, cpu->CX);
    MEM_WORD(cpu->DI + 0xc) = cpu->DX;
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(0xd104));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xd100);
    INST_IMUL(MEM_WORD(0xd108));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    if (cpu->DX != 0x8000) goto LAB_LOC_5;
    INST_INC(cpu->DX);
    LAB_LOC_5:
@@ -3895,8 +3895,8 @@ void FUN_1000_2989(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0xe) = cpu->DX;
    cpu->AX = MEM_WORD(0xd102);
    INST_IMUL(MEM_WORD(0xd106));
-   INST_SHL(cpu->AX, 0x1);
-   INST_RCL(cpu->DX, 0x1);
+   MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
+
    MEM_WORD(cpu->DI + 0x10) = cpu->DX;
    return;
 }
@@ -6326,8 +6326,8 @@ void FUN_1000_3f7a(cpu_ctx *cpu){
    INST_XCHG(cpu->DX, cpu->BX);
    INST_XCHG(cpu->AX, cpu->CX);
    INST_IMUL(cpu->DX);
-   INST_ADD(cpu->AX, cpu->CX);
-   INST_ADC(cpu->DX, cpu->BX);
+   MERGED_ADD_ADC(cpu->AX, cpu->CX, cpu->DX, cpu->BX);
+
    INST_POP(cpu->CX);
    INST_POP(cpu->BX);
    INST_SUB(cpu->CX, cpu->BX);
@@ -7192,8 +7192,8 @@ void FUN_1000_4680(cpu_ctx *cpu){
    INST_XCHG(cpu->DX, cpu->BX);
    INST_XCHG(cpu->AX, cpu->CX);
    INST_IMUL(cpu->DX);
-   INST_ADD(cpu->AX, cpu->CX);
-   INST_ADC(cpu->DX, cpu->BX);
+   MERGED_ADD_ADC(cpu->AX, cpu->CX, cpu->DX, cpu->BX);
+
    INST_POP(cpu->CX);
    INST_POP(cpu->BX);
    INST_SUB(cpu->CX, cpu->BX);
@@ -8348,8 +8348,8 @@ void FUN_1000_52d4(cpu_ctx *cpu){
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xea16);
    INST_IMUL(MEM_WORD(0xea20));
-   INST_ADD(cpu->AX, cpu->BX);
-   INST_ADC(cpu->DX, cpu->CX);
+   MERGED_ADD_ADC(cpu->AX, cpu->BX, cpu->DX, cpu->CX);
+
    INST_IDIV(MEM_WORD(0xea22));
    return;
 }

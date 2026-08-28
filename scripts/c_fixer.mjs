@@ -1,5 +1,5 @@
 import {readFile, writeFile} from "node:fs/promises";
-import { cmp_sig_map, cmp_unsig_map, tamanhador } from "./utils.mjs";
+import { cmp_sig_map, cmp_unsig_map, mergetron, tamanhador } from "./utils.mjs";
 
 const f = (await readFile("raw_c.cpp")).toString();
 
@@ -12,7 +12,7 @@ var total = 0;
 
 let cnt = 0;
 
-const fixed = f.replaceAll(superRegex, function(...args){
+let fixed = f.replaceAll(superRegex, function(...args){
     const {opcodeA, opcodeB, things, whole_inst} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
 
@@ -104,6 +104,11 @@ const fixed = f.replaceAll(superRegex, function(...args){
 }).replaceAll(/   INST_F.+\n/g, "")
 .replace("cpu->EAX = MEM_DWORD(0xe9e8);", "");
 
+fixed = mergetron(fixed, "ADD", "ADC");
+fixed = mergetron(fixed, "SUB", "SBB");
+fixed = mergetron(fixed, "SHL", "RCL");
+
+
 var falta = Object.entries(stats)
     .toSorted((a,b) => b[1] - a[1])
     .map(function([comb, qtd]){
@@ -113,8 +118,6 @@ var falta = Object.entries(stats)
     });
 console.table(falta);
 console.log("Total: ", total);
-
-
 
 
 //TODO pegar quais operacoes precisam setar o last_res
