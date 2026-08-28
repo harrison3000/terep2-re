@@ -1,4 +1,5 @@
 #include "gpu/gpu.hpp"
+#include "declrs.hpp"
 
 
 void f_init(cpu_ctx *cpu){

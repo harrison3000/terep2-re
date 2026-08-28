@@ -66,3 +66,6 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 
 //the builtin is the oposite of the x86 flag
 #define PARITY(val) (!__builtin_parity(val))
+
+//TODO implement
+#define DOS3Call(cpu) ({})
