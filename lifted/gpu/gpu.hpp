@@ -72,8 +72,31 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 #define DOS3Call(cpu) ({})
 
 #define INST_ADD(dest, src) ({dest += src;})
+#define INST_SUB(dest, src) ({dest -= src;})
 #define INST_NEG(dest) ({ \
     auto ds = SIGNED(dest);\
     dest = ds; \
 })
 #define INST_SHL(dest, src) ({dest <<= src;})
+#define INST_SHR(dest, src) ({dest >>= src;})
+#define INST_SAR(dest, src) ({ \
+    auto ds = SIGNED(dest);\
+    ds >>= src; \
+    dest = ds; \
+})
+
+#define INST_INC(dest) ({dest += 1;})
+#define INST_DEC(dest) ({dest += 1;})
+
+#define INST_MOVZX(dest, src) ({dest = src;})
+
+#define INST_TEST(dest, src) ({(typeof(dest))(dest & src);})
+
+#define INST_XOR(dest, src) ({dest ^= src;})
+#define INST_AND(dest, src) ({dest &= src;})
+
+#define INST_XCHG(dest, src) ({ \
+    auto tmp = src; \
+    src = dest;     \
+    dest = tmp;     \
+})
