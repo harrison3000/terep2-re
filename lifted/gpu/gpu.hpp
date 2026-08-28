@@ -1,4 +1,5 @@
 //GPU stands for Gambiarra Processing Unit :)
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -35,7 +36,7 @@ struct cpu_ctx {
 };
 
 
-#define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE, .size = sizeof(reg)});
+#define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
 #define INST_POP(reg) ({        \
     auto it = cpu->stack.back();\
@@ -69,3 +70,10 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 
 //TODO implement
 #define DOS3Call(cpu) ({})
+
+#define INST_ADD(dest, src) ({dest += src;})
+#define INST_NEG(dest) ({ \
+    auto ds = SIGNED(dest);\
+    dest = ds; \
+})
+#define INST_SHL(dest, src) ({dest <<= src;})

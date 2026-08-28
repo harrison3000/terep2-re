@@ -1,3 +1,7 @@
+#pragma once
+
+#include "gpu/gpu.hpp"
+
 void f_init(cpu_ctx *cpu);
 void f_cam_select(cpu_ctx *cpu);
 void FUN_main_render(cpu_ctx *cpu);
