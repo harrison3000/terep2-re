@@ -58,7 +58,7 @@ let fixed = f.replaceAll(superRegex, function(...args){
         }
     }
 
-    if(["DEC", "SUB", "ADD", "AND", "TEST", "CMP"].includes(opcodeA)){
+    if(["DEC", "SUB", "ADD", "AND", "TEST", "CMP", "SAR"].includes(opcodeA)){
         let vname = "jTmp_" + (cnt++).toString(32)
         let wl = `auto ${vname} = ` + whole_inst + "\n   ";
 
@@ -67,6 +67,8 @@ let fixed = f.replaceAll(superRegex, function(...args){
             case "JNZ": return wl + `if (${vname} != 0)`;
             case "JS":  return wl + `if (SIGNED(${vname}) <  0)`;
             case "JNS": return wl + `if (SIGNED(${vname}) >= 0)`;
+            case "JP":  return wl + `if ( PARITY(${vname}))`;
+            case "JNP": return wl + `if (!PARITY(${vname}))`;
         }
     }
    
