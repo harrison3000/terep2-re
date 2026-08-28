@@ -533,7 +533,7 @@ FUN_main_render:
     CMP   byte [0x7f], 5
     JL    .LAB_LOC_19
     MOV   byte [0x7f], 0
-    JL    .LAB_LOC_19
+    JMP   .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
@@ -1089,6 +1089,7 @@ FUN_1000_0bb5:
     MOV         SI,word [0x3e51]
     SUB         SI,0x1c
     MOV         word [0x3e51],SI
+    test si,si
     JZ          .LAB_LOC_5
     MOV         EAX,dword [SI + 0x3e53]
     MOV         dword [DI + 0x3e53],EAX
@@ -9027,11 +9028,6 @@ FUN_1000_5acf:
     MOV         AH,AL
     AND         AH,0xc0
     CMP         AH,0xc0
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-.WHY_1000_5b01: ; this is never called as a function, but it was labeled as one
-                              ;XREF[3]:     1000:0327(c),1000:03f3(c),1000:04b3(c)
     MOV         AH,0x0
     JNZ         .LAB_LOC_4
     MOV         AH,AL
