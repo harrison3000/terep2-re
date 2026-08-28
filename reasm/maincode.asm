@@ -920,6 +920,7 @@ FUN_1000_0a3b:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: related to the flying car thing, disabling this disables the magic force when we press 1 or 2
 FUN_1000_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
     PUSHF
@@ -2392,8 +2393,8 @@ FUN_1000_1965:
     MOV         word [0x19ff],0x0
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
-    TEST        AH,0x60
     ;jumping to another function, some kind of tail call optimization
+    TEST        AH,0x60
     JNP         FUN_1965_NP
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0

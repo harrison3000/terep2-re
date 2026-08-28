@@ -63,3 +63,6 @@ struct cpu_ctx {
 inline int8_t SIGNED(uint8_t v) { return v; }
 inline int16_t SIGNED(uint16_t v) { return v; }
 inline int32_t SIGNED(uint32_t v) { return v; } 
+
+//the builtin is the oposite of the x86 flag
+#define PARITY(val) (!__builtin_parity(val))
