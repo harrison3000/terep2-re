@@ -3387,7 +3387,10 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->CX = 0x82;
    cpu->AL = 0;
    INST_CLD();
-   REP_STOSB();
+   while(cpu->CX){
+    INST_STOSB();
+    cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    cpu->DX = cpu->DX;
@@ -4115,7 +4118,10 @@ void FUN_1000_2b98(cpu_ctx *cpu){
    cpu->DI = 0;
    cpu->CX = 0x3e80;
    INST_CLD();
-   REP_STOSD();
+   while(cpu->CX){
+    INST_STOSD();
+    cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
@@ -4274,7 +4280,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    INST_SHR(cpu->CX, 0x1);
-   REP_STOSW();
+   while(cpu->CX){
+    INST_STOSW();
+    cpu->CX--;
+   }
    if(false /*untranslated jump JNC*/) goto LAB_LOC_3;
    INST_STOSB();
    LAB_LOC_3:
@@ -8649,37 +8658,6 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
    return;
 }
 
-//;************************************************************************************************
-//;*                                           FUNCTION                                           *
-//;************************************************************************************************
-void FUN_int_f1_579e(cpu_ctx *cpu){
-   if (cpu->AL == 0x0) goto LAB_LOC_1;
-   if (cpu->AL == 0x1) goto LAB_LOC_2;
-   if (cpu->AL == 0x2) goto LAB_LOC_3;
-   if (cpu->AL == 0x10) goto LAB_LOC_4;
-   if (cpu->AL == 0x11) goto LAB_LOC_5;
-   INST_IRET();
-   LAB_LOC_1:
-   FUN_1000_2aad(cpu);
-   INST_IRET();
-   LAB_LOC_2:
-   FUN_1000_2ad8(cpu);
-   INST_IRET();
-   LAB_LOC_3:
-   cpu->AX = cpu->CX;
-   FUN_1000_2b08(cpu);
-   INST_IRET();
-   LAB_LOC_4:
-   cpu->AX = cpu->DX;
-   FUN_1000_271d(cpu);
-   INST_IRET();
-   LAB_LOC_5:
-   cpu->EAX = cpu->EDX;
-   FUN_1000_2726(cpu);
-   INST_IRET();
-}
-
-//; 1000:57df [UNDEFINED BYTES REMOVED]
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************

@@ -106,12 +106,17 @@ inline int32_t SIGNED(uint32_t v) { return v; }
     auto tmp = dest; \
     tmp &= src;      \
 })
+#define INST_CMP(dest, src) ({ \
+    auto tmp = dest; \
+    tmp -= src;      \
+})
 
 #define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
 
 #define INST_XOR(dest, src) ({dest ^= src;})
 #define INST_AND(dest, src) ({dest &= src;})
 #define INST_OR(dest, src)  ({dest |= src;})
+#define INST_NOT(dest)  ({dest = ~dest;})
 
 #define INST_XCHG(dest, src) ({ \
     auto tmp = src; \
