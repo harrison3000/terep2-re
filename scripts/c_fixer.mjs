@@ -10,8 +10,6 @@ var total = 0;
 
 //FIXME sometimes a single test can set the flags for 2 jumps! it happens for example in function FUN_1000_0d2a
 
-let cnt = 0;
-
 let fixed = f.replaceAll(superRegex, function(...args){
     const {opcodeA, opcodeB, things, whole_inst} = args.at(-1);
     const [operandA, operandB] = things.split(",").map(x => x.trim());
@@ -59,16 +57,16 @@ let fixed = f.replaceAll(superRegex, function(...args){
     }
 
     if(["DEC", "SUB", "ADD", "AND", "TEST", "CMP", "SAR"].includes(opcodeA)){
-        let vname = "jTmp_" + (cnt++).toString(32)
-        let wl = `auto ${vname} = ` + whole_inst + "\n   ";
+        let vname = "jTmp";
+        let wl = `{\n    auto ${vname} = ` + whole_inst + "\n    ";
 
         switch(opcodeB){
-            case "JZ":  return wl + `if (${vname} == 0)`;
-            case "JNZ": return wl + `if (${vname} != 0)`;
-            case "JS":  return wl + `if (SIGNED(${vname}) <  0)`;
-            case "JNS": return wl + `if (SIGNED(${vname}) >= 0)`;
-            case "JP":  return wl + `if ( PARITY(${vname}))`;
-            case "JNP": return wl + `if (!PARITY(${vname}))`;
+            case "JZ":  return wl + `if (${vname} == 0)ß`;
+            case "JNZ": return wl + `if (${vname} != 0)ß`;
+            case "JS":  return wl + `if (SIGNED(${vname}) <  0)ß`;
+            case "JNS": return wl + `if (SIGNED(${vname}) >= 0)ß`;
+            case "JP":  return wl + `if ( PARITY(${vname}))ß`;
+            case "JNP": return wl + `if (!PARITY(${vname}))ß`;
         }
     }
    
@@ -76,6 +74,9 @@ let fixed = f.replaceAll(superRegex, function(...args){
     total++;
 
     return args[0];
+}).replaceAll(/ß(.+)$/gm, function(a, b){
+    //you either die a clean coder or live enough to become a gambiarreiro
+    return b + "\n   }";
 }).replaceAll(/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, function(a, b){
 
     const u = [""];
@@ -106,7 +107,9 @@ let fixed = f.replaceAll(superRegex, function(...args){
 
 
 }).replaceAll(/   INST_F.+\n/g, "")
-.replace("cpu->EAX = MEM_DWORD(0xe9e8);", "");
+.replace("cpu->EAX = MEM_DWORD(0xe9e8);", "")
+.replaceAll("INST_ADD(cpu->SP, 0x2);", "DUMMY_POP_WORD();")
+;
 
 fixed = mergetron(fixed, "ADD", "ADC");
 fixed = mergetron(fixed, "SUB", "SBB");

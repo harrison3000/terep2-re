@@ -212,8 +212,10 @@ void FUN_main_render(cpu_ctx *cpu){
    INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
    INST_SAR(cpu->EBX, 0xe);
    if (cpu->CX == 0) goto LAB_LOC_2;
-   auto jTmp_0 = INST_DEC(cpu->CX);
-   if (jTmp_0 == 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp == 0) goto LAB_LOC_1;
+   }
    INST_ADD(cpu->EAX, cpu->EBX);
    INST_SAR(cpu->EAX, 0x1);
    LAB_LOC_1:
@@ -273,8 +275,10 @@ void FUN_main_render(cpu_ctx *cpu){
    INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
    INST_SAR(cpu->EBX, 0xe);
    if (cpu->CX == 0) goto LAB_LOC_7;
-   auto jTmp_1 = INST_DEC(cpu->CX);
-   if (jTmp_1 == 0) goto LAB_LOC_6;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp == 0) goto LAB_LOC_6;
+   }
    INST_ADD(cpu->EAX, cpu->EBX);
    INST_SAR(cpu->EAX, 0x1);
    LAB_LOC_6:
@@ -329,8 +333,10 @@ void FUN_main_render(cpu_ctx *cpu){
    INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
    INST_SAR(cpu->EBX, 0xe);
    if (cpu->CX == 0) goto LAB_LOC_11;
-   auto jTmp_2 = INST_DEC(cpu->CX);
-   if (jTmp_2 == 0) goto LAB_LOC_10;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp == 0) goto LAB_LOC_10;
+   }
    INST_ADD(cpu->EAX, cpu->EBX);
    INST_SAR(cpu->EAX, 0x1);
    LAB_LOC_10:
@@ -376,23 +382,31 @@ void FUN_main_render(cpu_ctx *cpu){
    FUN_1000_5940_render_text(cpu);
    INST_INC(giracor);
    FUN_1000_2baa(cpu);
-   auto jTmp_3 = INST_TEST(CSD_DAT_keys_571e[78], 0x80);
-   if (SIGNED(jTmp_3) <  0) goto LAB_LOC_15;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[78], 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_15;
+   }
    if (SIGNED(MEM_WORD(0x11c)) > (int16_t)(0x3e8)) goto LAB_LOC_15;
    INST_ADD(MEM_WORD(0x11c), 0x14);
    LAB_LOC_15:
-   auto jTmp_4 = INST_TEST(CSD_DAT_keys_571e[74], 0x80);
-   if (SIGNED(jTmp_4) <  0) goto LAB_LOC_16;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[74], 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_16;
+   }
    if (SIGNED(MEM_WORD(0x11c)) < (int16_t)(0x32)) goto LAB_LOC_16;
    INST_SUB(MEM_WORD(0x11c), 0x14);
    LAB_LOC_16:
-   auto jTmp_5 = INST_TEST(CSD_DAT_keys_571e[53], 0x80);
-   if (SIGNED(jTmp_5) <  0) goto LAB_LOC_17;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[53], 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_17;
+   }
    if (SIGNED(MEM_WORD(0x11e)) > (int16_t)(0x1000)) goto LAB_LOC_17;
    INST_ADD(MEM_WORD(0x11e), 0x28);
    LAB_LOC_17:
-   auto jTmp_6 = INST_TEST(CSD_DAT_keys_571e[55], 0x80);
-   if (SIGNED(jTmp_6) <  0) goto LAB_LOC_18;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[55], 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_18;
+   }
    if (SIGNED(MEM_WORD(0x11e)) < (int16_t)(0x100)) goto LAB_LOC_18;
    INST_SUB(MEM_WORD(0x11e), 0x28);
    LAB_LOC_18:
@@ -850,11 +864,15 @@ void FUN_1000_0a3b(cpu_ctx *cpu){
 //;XREF[1]:     1000:56ce(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   auto jTmp_7 = INST_TEST(CSD_DAT_keys_571e[2], 0xc0);
-   if (SIGNED(jTmp_7) >= 0) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[2], 0xc0);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_3;
+   }
    LAB_LOC_1:
-   auto jTmp_8 = INST_TEST(CSD_DAT_keys_571e[3], 0xc0);
-   if (SIGNED(jTmp_8) >= 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_TEST(CSD_DAT_keys_571e[3], 0xc0);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_4;
+   }
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
@@ -980,8 +998,10 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
    cpu->DI = 0;
    if (cpu->DI >= MEM_WORD(0x3e51)) goto LAB_LOC_4;
    LAB_LOC_1:
-   auto jTmp_9 = INST_SUB(MEM_WORD(cpu->DI + 0x3e6b), 0x2);
-   if (SIGNED(jTmp_9) <  0) goto LAB_LOC_8;
+   {
+    auto jTmp = INST_SUB(MEM_WORD(cpu->DI + 0x3e6b), 0x2);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_8;
+   }
    cpu->EAX = MEM_DWORD(cpu->DI + 0x3e5f);
    cpu->EBX = MEM_DWORD(cpu->DI + 0x3e63);
    cpu->ECX = MEM_DWORD(cpu->DI + 0x3e67);
@@ -1125,16 +1145,20 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    cpu->AH = CSD_DAT_keys_571e[cpu->BX];
    cpu->BX = MEM_WORD(cpu->SI + 0xc);
    cpu->CX = 0x32;
-   auto jTmp_a = INST_TEST(cpu->AL, 0x80);
-   if (SIGNED(jTmp_a) <  0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_TEST(cpu->AL, 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_2;
+   }
    if (SIGNED(cpu->BX) > (int16_t)(0x2000)) goto LAB_LOC_2;
    if (SIGNED(cpu->BX) >= 0) goto LAB_LOC_1;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_1:
    INST_ADD(cpu->BX, cpu->CX);
    LAB_LOC_2:
-   auto jTmp_b = INST_TEST(cpu->AH, 0x80);
-   if (SIGNED(jTmp_b) <  0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_4;
+   }
    if (SIGNED(cpu->BX) < (int16_t)(0xe000)) goto LAB_LOC_4;
    if (SIGNED(cpu->BX) <  0) goto LAB_LOC_3;
    INST_SHL(cpu->CX, 0x2);
@@ -1164,16 +1188,20 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    INST_SHR(cpu->ECX, 0x10);
    INST_NEG(cpu->CX);
    INST_ADD(cpu->CX, 0x40);
-   auto jTmp_c = INST_TEST(cpu->AL, 0x80);
-   if (SIGNED(jTmp_c) <  0) goto LAB_LOC_9;
+   {
+    auto jTmp = INST_TEST(cpu->AL, 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_9;
+   }
    if (SIGNED(cpu->BX) < (int16_t)(0xe000)) goto LAB_LOC_9;
    if (SIGNED(cpu->BX) <  0) goto LAB_LOC_8;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_8:
    INST_SUB(cpu->BX, cpu->CX);
    LAB_LOC_9:
-   auto jTmp_d = INST_TEST(cpu->AH, 0x80);
-   if (SIGNED(jTmp_d) <  0) goto LAB_LOC_11;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0x80);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_11;
+   }
    if (SIGNED(cpu->BX) > (int16_t)(0x2000)) goto LAB_LOC_11;
    if (SIGNED(cpu->BX) >= 0) goto LAB_LOC_10;
    INST_SHL(cpu->CX, 0x2);
@@ -1397,8 +1425,10 @@ void FUN_1000_1004(cpu_ctx *cpu){
    INST_MOVSX(cpu->EAX, cpu->DX);
    cpu->BX = MEM_WORD(cpu->SI + 0x8);
    if (cpu->BX == 0) goto LAB_LOC_4;
-   auto jTmp_e = INST_DEC(cpu->BX);
-   if (jTmp_e == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_DEC(cpu->BX);
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_ROL(cpu->EAX, 0x3);
    INST_ADD(MEM_DWORD(cpu->SI + 0x42), cpu->EAX);
    INST_ADD(MEM_DWORD(cpu->SI + 0x46), cpu->EAX);
@@ -2313,13 +2343,17 @@ void FUN_1000_1965(cpu_ctx *cpu){
    MEM_WORD(0x1a01) = 0xa00;
    cpu->AX = MEM_WORD(0xc6);
 //;jumping to another function, some kind of tail call optimization
-   auto jTmp_f = INST_TEST(cpu->AH, 0x60);
-   if (!PARITY(jTmp_f)) goto FUN_1965_NP;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0x60);
+    if (!PARITY(jTmp)) goto FUN_1965_NP;
+   }
    MEM_BYTE(0x5fb) = 0x0;
    FUN_1000_3fd0(cpu);
    cpu->AX = MEM_WORD(0xc6);
-   auto jTmp_g = INST_TEST(cpu->AH, 0xa0);
-   if (!PARITY(jTmp_g)) goto LAB_LOC_12;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0xa0);
+    if (!PARITY(jTmp)) goto LAB_LOC_12;
+   }
    cpu->DI = 0x5bbc;
    cpu->CX = MEM_WORD(0x5bba);
    LAB_LOC_1:
@@ -2838,8 +2872,10 @@ void FUN_1965_NP(cpu_ctx *cpu){
    MEM_BYTE(0x5fb) = 0x1;
    FUN_1000_41b2(cpu);
    cpu->AX = MEM_WORD(0xc6);
-   auto jTmp_h = INST_TEST(cpu->AH, 0xc0);
-   if (SIGNED(jTmp_h) >= 0) goto LAB_LOC_13;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0xc0);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_13;
+   }
    cpu->DI = 0x5bbc;
    cpu->CX = MEM_WORD(0x5bba);
    LAB_LOC_2:
@@ -3152,8 +3188,10 @@ void FUN_1000_22f0(cpu_ctx *cpu){
    if (SIGNED(cpu->AH) < SIGNED(cpu->CH)) goto LAB_LOC_6;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0x1c);
-   auto jTmp_i = INST_DEC(cpu->BP);
-   if (jTmp_i != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->BP);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    MEM_WORD(cpu->SI + 0x1a) = cpu->BX;
    return;
@@ -3192,8 +3230,10 @@ void FUN_1000_233b(cpu_ctx *cpu){
    if (SIGNED(cpu->AH) < SIGNED(cpu->CH)) goto LAB_LOC_6;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0x1c);
-   auto jTmp_j = INST_DEC(cpu->BP);
-   if (jTmp_j != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->BP);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    MEM_WORD(cpu->SI + 0x1a) = cpu->BX;
    return;
@@ -3233,8 +3273,10 @@ void FUN_1000_2384(cpu_ctx *cpu){
    if (SIGNED(cpu->AH) < SIGNED(cpu->CH)) goto LAB_LOC_6;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0x1c);
-   auto jTmp_k = INST_DEC(cpu->BP);
-   if (jTmp_k != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->BP);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    MEM_WORD(cpu->SI + 0x1a) = cpu->BX;
    return;
@@ -3273,8 +3315,10 @@ void FUN_1000_23cf(cpu_ctx *cpu){
    if (SIGNED(cpu->AH) < SIGNED(cpu->CH)) goto LAB_LOC_6;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0x1c);
-   auto jTmp_l = INST_DEC(cpu->BP);
-   if (jTmp_l != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->BP);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    MEM_WORD(cpu->SI + 0x1a) = cpu->BX;
    return;
@@ -3606,8 +3650,10 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
    FUN_1000_2b08(cpu);
-   auto jTmp_m = INST_TEST(cpu->AH, 0x60);
-   if ( PARITY(jTmp_m)) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_TEST(cpu->AH, 0x60);
+    if ( PARITY(jTmp)) goto LAB_LOC_1;
+   }
    cpu->BX = cpu->AX;
    FUN_1000_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
@@ -3959,8 +4005,10 @@ void FUN_1000_2ad8(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    cpu->AX = MEM_WORD(cpu->BX + 0xd10c);
    INST_POP(cpu->BX);
-   auto jTmp_n = INST_TEST(cpu->BH, 0xc0);
-   if ( PARITY(jTmp_n)) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_TEST(cpu->BH, 0xc0);
+    if ( PARITY(jTmp)) goto LAB_LOC_3;
+   }
    INST_NEG(cpu->AX);
    LAB_LOC_3:
    return;
@@ -4196,8 +4244,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
 //;XREF[1]:     1000:2c45(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
-   auto jTmp_o = INST_SUB(cpu->DX, cpu->BX);
-   if (jTmp_o == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->DX, cpu->BX);
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_INC(cpu->DX);
    INST_SHL(cpu->BX, 0x2);
    INST_PUSH(cpu->ES);
@@ -4211,8 +4261,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_SHL(cpu->DI, 0x4);
    cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
-   auto jTmp_p = INST_SUB(cpu->CX, cpu->AX);
-   if (SIGNED(jTmp_p) >= 0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_SUB(cpu->CX, cpu->AX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_2;
+   }
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    LAB_LOC_2:
@@ -4226,8 +4278,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_STOSB();
    LAB_LOC_3:
    INST_ADD(cpu->SI, 0x4);
-   auto jTmp_q = INST_DEC(cpu->DX);
-   if (jTmp_q != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->DX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->ES);
    LAB_LOC_4:
    return;
@@ -4241,8 +4295,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_SHL(cpu->DI, 0x4);
    cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
-   auto jTmp_r = INST_SUB(cpu->CX, cpu->AX);
-   if (SIGNED(jTmp_r) >= 0) goto LAB_LOC_7;
+   {
+    auto jTmp = INST_SUB(cpu->CX, cpu->AX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_7;
+   }
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    LAB_LOC_7:
@@ -4255,8 +4311,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_STOSB();
    if (--cpu->CX != 0) goto LAB_LOC_8;
    INST_ADD(cpu->SI, 0x4);
-   auto jTmp_s = INST_DEC(cpu->DX);
-   if (jTmp_s != 0) goto LAB_LOC_6;
+   {
+    auto jTmp = INST_DEC(cpu->DX);
+    if (jTmp != 0) goto LAB_LOC_6;
+   }
    INST_POP(cpu->ES);
    return;
 }
@@ -4304,8 +4362,10 @@ void FUN_1000_2df2(cpu_ctx *cpu){
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
-   auto jTmp_t = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
-   if (jTmp_t == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc0));
    FUN_1000_3f7a(cpu);
    cpu->BX = cpu->AX;
@@ -4406,8 +4466,10 @@ void FUN_1000_2eaf(cpu_ctx *cpu){
    INST_PUSH(cpu->BX);
    INST_XCHG(cpu->AX, cpu->CX);
    INST_XCHG(cpu->DX, cpu->BX);
-   auto jTmp_u = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
-   if (jTmp_u == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc2));
    FUN_1000_3f7a(cpu);
    cpu->BX = cpu->AX;
@@ -4506,8 +4568,10 @@ void FUN_1000_2f6c(cpu_ctx *cpu){
    INST_PUSH(cpu->BX);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_v = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
-   if (jTmp_v == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbc));
    FUN_1000_3f7a(cpu);
    cpu->BX = MEM_WORD(0xdbbc);
@@ -4610,8 +4674,10 @@ void FUN_1000_302d(cpu_ctx *cpu){
    INST_XCHG(cpu->DX, cpu->BX);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_10 = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
-   if (jTmp_10 == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbe));
    FUN_1000_3f7a(cpu);
    cpu->BX = MEM_WORD(0xdbbe);
@@ -4788,8 +4854,10 @@ void FUN_1000_31d1(cpu_ctx *cpu){
 //;XREF[1]:     1000:3177(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
-   auto jTmp_11 = INST_SUB(cpu->DX, cpu->BX);
-   if (jTmp_11 == 0) goto LAB_LOC_4;
+   {
+    auto jTmp = INST_SUB(cpu->DX, cpu->BX);
+    if (jTmp == 0) goto LAB_LOC_4;
+   }
    INST_INC(cpu->DX);
    INST_SHL(cpu->BX, 0x2);
    INST_PUSH(cpu->ES);
@@ -4806,8 +4874,10 @@ void FUN_1000_31d1(cpu_ctx *cpu){
    cpu->BP = MEM_WORD(cpu->BX + 0xdee8);
    cpu->DX = MEM_WORD(cpu->BX + 0xdeea);
    INST_SUB(cpu->DX, cpu->BP);
-   auto jTmp_12 = INST_SUB(cpu->CX, cpu->AX);
-   if (SIGNED(jTmp_12) >= 0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_SUB(cpu->CX, cpu->AX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_2;
+   }
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    INST_ADD(cpu->BP, cpu->DX);
@@ -4835,8 +4905,10 @@ void FUN_1000_31d1(cpu_ctx *cpu){
    INST_POP(cpu->DX);
    INST_POP(cpu->BX);
    INST_ADD(cpu->BX, 0x4);
-   auto jTmp_13 = INST_DEC(cpu->DX);
-   if (jTmp_13 != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->DX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->ES);
    LAB_LOC_4:
    return;
@@ -4929,8 +5001,10 @@ void FUN_1000_324f(cpu_ctx *cpu){
    cpu->DX = cpu->BX;
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   auto jTmp_14 = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
-   if (jTmp_14 == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc0));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -5047,8 +5121,10 @@ void FUN_1000_3376(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_15 = INST_DEC(cpu->CX);
-   if (jTmp_15 == 0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp == 0) goto LAB_LOC_2;
+   }
    goto LAB_LOC_1;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -5058,8 +5134,10 @@ void FUN_1000_3376(cpu_ctx *cpu){
    cpu->DX = cpu->BX;
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   auto jTmp_16 = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
-   if (jTmp_16 == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc2));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -5189,8 +5267,10 @@ void FUN_1000_34a2(cpu_ctx *cpu){
    INST_ROR(cpu->EBX, 0x10);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_17 = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
-   if (jTmp_17 == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbc));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -5308,8 +5388,10 @@ void FUN_1000_35cf(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_18 = INST_DEC(cpu->CX);
-   if (jTmp_18 == 0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp == 0) goto LAB_LOC_2;
+   }
    goto LAB_LOC_1;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -5321,8 +5403,10 @@ void FUN_1000_35cf(cpu_ctx *cpu){
    INST_ROR(cpu->EBX, 0x10);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_19 = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
-   if (jTmp_19 == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbe));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -5511,8 +5595,10 @@ void FUN_1000_3827(cpu_ctx *cpu){
 //;XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
    cpu->DI = MEM_WORD(0xdbc6);
-   auto jTmp_1a = INST_SUB(cpu->DI, cpu->SI);
-   if (jTmp_1a == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->DI, cpu->SI);
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_INC(cpu->DI);
    INST_SHL(cpu->SI, 0x2);
    INST_PUSH(cpu->ES);
@@ -5532,8 +5618,10 @@ void FUN_1000_3827(cpu_ctx *cpu){
    cpu->SI = MEM_WORD(cpu->SI + 0xe20a);
    INST_SUB(cpu->SI, cpu->BP);
    INST_SUB(cpu->DX, cpu->BX);
-   auto jTmp_1b = INST_SUB(cpu->CX, cpu->AX);
-   if (SIGNED(jTmp_1b) >= 0) goto LAB_LOC_2;
+   {
+    auto jTmp = INST_SUB(cpu->CX, cpu->AX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_2;
+   }
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    INST_ADD(cpu->BX, cpu->DX);
@@ -5577,13 +5665,17 @@ void FUN_1000_3827(cpu_ctx *cpu){
    INST_ROL(cpu->EBP, 0x10);
    INST_ADD(cpu->EBX, cpu->ECX);
    INST_ADD(cpu->EBP, cpu->EDX);
-   auto jTmp_1c = INST_DEC(cpu->SI);
-   if (jTmp_1c != 0) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_DEC(cpu->SI);
+    if (jTmp != 0) goto LAB_LOC_3;
+   }
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
    INST_ADD(cpu->SI, 0x4);
-   auto jTmp_1d = INST_DEC(cpu->DI);
-   if (jTmp_1d != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->DI);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->ES);
    LAB_LOC_5:
    return;
@@ -5701,8 +5793,10 @@ void FUN_1000_390a(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_1e = INST_DEC(cpu->CX);
-   if (jTmp_1e != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    goto LAB_LOC_2;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -5715,8 +5809,10 @@ void FUN_1000_390a(cpu_ctx *cpu){
    cpu->DX = cpu->BX;
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   auto jTmp_1f = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
-   if (jTmp_1f == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc0));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc0));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -5879,8 +5975,10 @@ void FUN_1000_3aa3(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_1g = INST_DEC(cpu->CX);
-   if (jTmp_1g != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    goto LAB_LOC_2;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -5891,8 +5989,10 @@ void FUN_1000_3aa3(cpu_ctx *cpu){
    cpu->DX = cpu->BX;
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   auto jTmp_1h = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
-   if (jTmp_1h == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbc2));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbc2));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -6055,8 +6155,10 @@ void FUN_1000_3c3c(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_1i = INST_DEC(cpu->CX);
-   if (jTmp_1i != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    goto LAB_LOC_2;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -6071,8 +6173,10 @@ void FUN_1000_3c3c(cpu_ctx *cpu){
    INST_ROR(cpu->EBX, 0x10);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_1j = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
-   if (jTmp_1j == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbc));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbc));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -6237,8 +6341,10 @@ void FUN_1000_3ddb(cpu_ctx *cpu){
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
-   auto jTmp_1k = INST_DEC(cpu->CX);
-   if (jTmp_1k != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    goto LAB_LOC_2;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -6251,8 +6357,10 @@ void FUN_1000_3ddb(cpu_ctx *cpu){
    INST_ROR(cpu->EBX, 0x10);
    INST_XCHG(cpu->AX, cpu->BX);
    INST_XCHG(cpu->DX, cpu->CX);
-   auto jTmp_1l = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
-   if (jTmp_1l == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_SUB(cpu->CX, MEM_WORD(0xdbbe));
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    INST_SUB(cpu->AX, MEM_WORD(0xdbbe));
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->CX);
@@ -6535,19 +6643,25 @@ void FUN_1000_4120(cpu_ctx *cpu){
    LAB_LOC_6:
    if (cpu->CX == 0) goto LAB_LOC_14;
    INST_PUSH(cpu->DX);
-   auto jTmp_1m = INST_SUB(cpu->DX, cpu->AX);
-   if (SIGNED(jTmp_1m) <  0) goto LAB_LOC_10;
+   {
+    auto jTmp = INST_SUB(cpu->DX, cpu->AX);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_10;
+   }
    cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_7:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
-   auto jTmp_1n = INST_SUB(cpu->DI, cpu->DX);
-   if (SIGNED(jTmp_1n) >= 0) goto LAB_LOC_9;
+   {
+    auto jTmp = INST_SUB(cpu->DI, cpu->DX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_9;
+   }
    LAB_LOC_8:
    INST_INC(cpu->AX);
-   auto jTmp_1o = INST_ADD(cpu->DI, cpu->SI);
-   if (SIGNED(jTmp_1o) <  0) goto LAB_LOC_8;
+   {
+    auto jTmp = INST_ADD(cpu->DI, cpu->SI);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_8;
+   }
    LAB_LOC_9:
    if (--cpu->CX != 0) goto LAB_LOC_7;
    INST_POP(cpu->AX);
@@ -6560,12 +6674,16 @@ void FUN_1000_4120(cpu_ctx *cpu){
    LAB_LOC_11:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
-   auto jTmp_1p = INST_SUB(cpu->DI, cpu->DX);
-   if (SIGNED(jTmp_1p) >= 0) goto LAB_LOC_13;
+   {
+    auto jTmp = INST_SUB(cpu->DI, cpu->DX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_13;
+   }
    LAB_LOC_12:
    INST_DEC(cpu->AX);
-   auto jTmp_1q = INST_ADD(cpu->DI, cpu->SI);
-   if (SIGNED(jTmp_1q) <  0) goto LAB_LOC_12;
+   {
+    auto jTmp = INST_ADD(cpu->DI, cpu->SI);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_12;
+   }
    LAB_LOC_13:
    if (--cpu->CX != 0) goto LAB_LOC_11;
    INST_POP(cpu->AX);
@@ -6745,19 +6863,25 @@ void FUN_1000_4302(cpu_ctx *cpu){
    LAB_LOC_6:
    if (cpu->CX == 0) goto LAB_LOC_14;
    INST_PUSH(cpu->DX);
-   auto jTmp_1r = INST_SUB(cpu->DX, cpu->AX);
-   if (SIGNED(jTmp_1r) <  0) goto LAB_LOC_10;
+   {
+    auto jTmp = INST_SUB(cpu->DX, cpu->AX);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_10;
+   }
    cpu->DI = 0;
    cpu->SI = cpu->CX;
    LAB_LOC_7:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
-   auto jTmp_1s = INST_SUB(cpu->DI, cpu->DX);
-   if (SIGNED(jTmp_1s) >= 0) goto LAB_LOC_9;
+   {
+    auto jTmp = INST_SUB(cpu->DI, cpu->DX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_9;
+   }
    LAB_LOC_8:
    INST_INC(cpu->AX);
-   auto jTmp_1t = INST_ADD(cpu->DI, cpu->SI);
-   if (SIGNED(jTmp_1t) <  0) goto LAB_LOC_8;
+   {
+    auto jTmp = INST_ADD(cpu->DI, cpu->SI);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_8;
+   }
    LAB_LOC_9:
    if (--cpu->CX != 0) goto LAB_LOC_7;
    INST_POP(cpu->AX);
@@ -6770,12 +6894,16 @@ void FUN_1000_4302(cpu_ctx *cpu){
    LAB_LOC_11:
    MEM_WORD(cpu->BX + 0xe590) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
-   auto jTmp_1u = INST_SUB(cpu->DI, cpu->DX);
-   if (SIGNED(jTmp_1u) >= 0) goto LAB_LOC_13;
+   {
+    auto jTmp = INST_SUB(cpu->DI, cpu->DX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_13;
+   }
    LAB_LOC_12:
    INST_DEC(cpu->AX);
-   auto jTmp_1v = INST_ADD(cpu->DI, cpu->SI);
-   if (SIGNED(jTmp_1v) <  0) goto LAB_LOC_12;
+   {
+    auto jTmp = INST_ADD(cpu->DI, cpu->SI);
+    if (SIGNED(jTmp) <  0) goto LAB_LOC_12;
+   }
    LAB_LOC_13:
    if (--cpu->CX != 0) goto LAB_LOC_11;
    INST_POP(cpu->AX);
@@ -7489,8 +7617,10 @@ void FUN_1000_48db(cpu_ctx *cpu){
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, MEM_WORD(cpu->DI + 0x18));
    MEM_WORD(0xe9c6) = cpu->AX;
-   auto jTmp_24 = INST_CMP(cpu->AX, cpu->CX);
-   if (SIGNED(jTmp_24) >= 0) goto LAB_LOC_11;
+   {
+    auto jTmp = INST_CMP(cpu->AX, cpu->CX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_11;
+   }
    LAB_LOC_2:
    cpu->AX = MEM_WORD(cpu->DI + 0x2);
    INST_SUB(cpu->AX, MEM_WORD(cpu->DI + 0x18));
@@ -7516,8 +7646,10 @@ void FUN_1000_48db(cpu_ctx *cpu){
    INST_ADD(MEM_DWORD(cpu->DI + 0x8), cpu->ECX);
    INST_ADD(cpu->DI, 0x1c);
    INST_INC(MEM_WORD(0xe9d6));
-   auto jTmp_25 = INST_DEC(MEM_WORD(0xe9d4));
-   if (jTmp_25 != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(MEM_WORD(0xe9d4));
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    FUN_1000_1003(cpu);
    return;
    LAB_LOC_7:
@@ -7607,8 +7739,10 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    cpu->EAX = MEM_DWORD(cpu->DI + 0x10);
    INST_IMUL(MEM_DWORD(0xe9a8));
    INST_SHL(cpu->EDX, 0x1);
-   auto jTmp_26 = INST_SUB(cpu->EBX, cpu->EDX);
-   if (SIGNED(jTmp_26) >= 0) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_SUB(cpu->EBX, cpu->EDX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_3;
+   }
    MEM_DWORD(0xe9c8) = cpu->EBX;
    if (SIGNED(cpu->EBX) > (int32_t)(0xfffa0000)) goto LAB_LOC_1;
    cpu->AX = 0;
@@ -7957,13 +8091,17 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    if (SIGNED(cpu->BX) <  0) goto LAB_LOC_10;
    INST_MOVZX(cpu->ECX, MEM_WORD(cpu->DS*1024 + cpu->BP + 0x8));
    MEM_WORD(0xea04) = cpu->CX;
-   auto jTmp_27 = INST_AND(cpu->CX, 0xff);
-   if (jTmp_27 == 0) goto LAB_LOC_5;
+   {
+    auto jTmp = INST_AND(cpu->CX, 0xff);
+    if (jTmp == 0) goto LAB_LOC_5;
+   }
    if(false /*untranslated jump JS*/) goto LAB_LOC_3;
    if (SIGNED(cpu->CX) > (int16_t)(0x1)) goto LAB_LOC_6;
    cpu->ECX = cpu->EBX;
-   auto jTmp_28 = INST_SUB(cpu->ECX, cpu->EAX);
-   if (jTmp_28 == 0) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_SUB(cpu->ECX, cpu->EAX);
+    if (jTmp == 0) goto LAB_LOC_3;
+   }
    if (SIGNED(cpu->CX) > SIGNED(MEM_WORD(0xe9e2))) goto LAB_LOC_8;
    if (SIGNED(cpu->CX) < SIGNED(MEM_WORD(0xe9e4))) goto LAB_LOC_9;
    cpu->EBX = cpu->EAX;
@@ -8004,8 +8142,10 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    cpu->SI = cpu->BP;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0xe);
-   auto jTmp_29 = INST_DEC(MEM_WORD(0xe9e6));
-   if (jTmp_29 != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(MEM_WORD(0xe9e6));
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    return;
    LAB_LOC_5:
    INST_MOVZX(cpu->EDX, MEM_WORD(cpu->DS*1024 + cpu->BP + 0xc));
@@ -8033,8 +8173,10 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    LAB_LOC_7:
    cpu->ECX = cpu->EDX;
    INST_SUB(cpu->ECX, cpu->EAX);
-   auto jTmp_2a = INST_SAR(cpu->ECX, 0x1);
-   if (jTmp_2a == 0) goto LAB_LOC_3;
+   {
+    auto jTmp = INST_SAR(cpu->ECX, 0x1);
+    if (jTmp == 0) goto LAB_LOC_3;
+   }
    cpu->EBX = cpu->EAX;
    MEM_WORD(cpu->DS*1024 + cpu->BP + 0x6) = cpu->BX;
    goto LAB_LOC_2;
@@ -8211,8 +8353,10 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_POP(cpu->SI);
    INST_ADD(MEM_WORD(0xea99), 0xc);
    INST_POP(cpu->CX);
-   auto jTmp_2b = INST_DEC(cpu->CX);
-   if (jTmp_2b != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    return;
 }
@@ -8247,8 +8391,10 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0xeb63));
    INST_SAR(cpu->EAX, 0x10);
    INST_IMUL(cpu->EAX, MEM_DWORD(cpu->SI + 0xeaa3));
-   auto jTmp_2c = INST_ADD(cpu->EDX, cpu->EAX);
-   if (SIGNED(jTmp_2c) >= 0) goto LAB_LOC_9;
+   {
+    auto jTmp = INST_ADD(cpu->EDX, cpu->EAX);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_9;
+   }
    if (SIGNED(cpu->EDX) > SIGNED(cpu->ECX)) goto LAB_LOC_10;
    LAB_LOC_3:
    INST_ADD(cpu->SI, 0xc);
@@ -8307,8 +8453,10 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    LAB_LOC_9:
    INST_ADD(cpu->DI, 0x1c);
    INST_POP(cpu->CX);
-   auto jTmp_2d = INST_DEC(cpu->CX);
-   if (jTmp_2d != 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_DEC(cpu->CX);
+    if (jTmp != 0) goto LAB_LOC_1;
+   }
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
    return;
@@ -8486,8 +8634,10 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
    cpu->DS = cpu->BX;
    cpu->BL = cpu->AL;
    INST_AND(cpu->BX, 0x7f);
-   auto jTmp_2e = INST_AND(cpu->AL, 0x80);
-   if (SIGNED(jTmp_2e) >= 0) goto LAB_LOC_1;
+   {
+    auto jTmp = INST_AND(cpu->AL, 0x80);
+    if (SIGNED(jTmp) >= 0) goto LAB_LOC_1;
+   }
    CSD_DAT_keys_571e[cpu->BX] = 0xff;
    CSD_DAT_keys_571e[0] = 0x0;
    return;
