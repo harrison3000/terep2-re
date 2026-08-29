@@ -3611,7 +3611,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    FUN_1000_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   INST_ADD(cpu->SP, 0x2);
+   DUMMY_POP_WORD();
    INST_POP(cpu->AX);
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
@@ -3623,7 +3623,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    FUN_1000_2ad8(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
    INST_POP(cpu->AX);
-   INST_ADD(cpu->SP, 0x2);
+   DUMMY_POP_WORD();
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();

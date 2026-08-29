@@ -20,7 +20,6 @@ struct cpu_ctx {
     union {uint32_t EDI;  uint16_t DI; };
     
     union {uint32_t EBP;  uint16_t BP; };
-    union {uint32_t ESP;  uint16_t SP; };
 
     //segment registers, will be used with a multiplier (1024, not 16 like in the original real mode) to fake segments
     uint16_t DS; //should ALWAYS be zero
@@ -45,6 +44,10 @@ struct cpu_ctx {
     reg = it.value;             \
 })
 
+#define DUMMY_POP_WORD() ({ \
+    int16_t dummy;   \
+    INST_POP(dummy); \
+})
 
 #define MEM_BYTE(addr) ({ \
     uintptr_t displ = cpu->mem_base + addr; \
