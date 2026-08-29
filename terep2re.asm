@@ -78,6 +78,8 @@ pseudolocal_a:
 pseudolocal_b:
     dw 0
 
+retval_2418:
+    db 0 
 
 ;pad to the limit
 times (65534 - ($ - $$)) db 'P'

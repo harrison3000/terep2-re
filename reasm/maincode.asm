@@ -999,7 +999,8 @@ FUN_1000_0b25:
     CALL        FUN_1000_277e
     NEG         BX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_3
+    CMP   byte [retval_2418], 1
+    JZ          .LAB_LOC_3
     MOVZX       SI,byte [DI + 0x3e6d]
     SHR         SI,0x4
     SHL         SI,0x1
@@ -1728,7 +1729,8 @@ FUN_1000_13cc:
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_1
+    CMP   byte [retval_2418], 1
+    JZ          .LAB_LOC_1
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
 .LAB_LOC_1:
@@ -3453,10 +3455,10 @@ FUN_1000_2418:
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    CLC
+    MOV  byte [retval_2418], 0
     RET
 .LAB_LOC_1:
-    STC
+    MOV  byte [retval_2418], 1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
