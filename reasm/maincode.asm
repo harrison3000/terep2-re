@@ -3472,7 +3472,7 @@ FUN_1000_2431:
     ADD         DI,CX
     MOV         CX,word [DI]
 .LAB_LOC_1:
-    CMP         word [DI + 0x1a],-0x1
+    CMP         word [DI + 0x1a], 0xffff
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1
