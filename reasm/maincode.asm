@@ -2388,14 +2388,17 @@ FUN_1000_194c:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: something to do with the painter's algorithm or something (???) needs checking
 FUN_1000_1965:
                               ;XREF[3]:     1000:02c9(c),1000:0395(c),1000:0455(c)
     MOV         word [0x19ff],0x0
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
-    ;jumping to another function, some kind of tail call optimization
     TEST        AH,0x60
-    JNP         FUN_1965_NP
+    JP   .CONTINUE_THIS
+    CALL         FUN_1965_NP
+    RET
+    .CONTINUE_THIS:
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
     MOV         AX, word [0xc6]

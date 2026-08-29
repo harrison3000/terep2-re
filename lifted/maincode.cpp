@@ -2337,16 +2337,19 @@ void FUN_1000_194c(cpu_ctx *cpu){
 //;************************************************************************************************
 //;*                                           FUNCTION                                           *
 //;************************************************************************************************
+//;ANALYSIS: something to do with the painter's algorithm or something (???) needs checking
 void FUN_1000_1965(cpu_ctx *cpu){
 //;XREF[3]:     1000:02c9(c),1000:0395(c),1000:0455(c)
    MEM_WORD(0x19ff) = 0x0;
    MEM_WORD(0x1a01) = 0xa00;
    cpu->AX = MEM_WORD(0xc6);
-//;jumping to another function, some kind of tail call optimization
    {
     auto jTmp = INST_TEST(cpu->AH, 0x60);
-    if (!PARITY(jTmp)) goto FUN_1965_NP;
+    if ( PARITY(jTmp)) goto CONTINUE_THIS;
    }
+   FUN_1965_NP(cpu);
+   return;
+   CONTINUE_THIS:
    MEM_BYTE(0x5fb) = 0x0;
    FUN_1000_3fd0(cpu);
    cpu->AX = MEM_WORD(0xc6);
