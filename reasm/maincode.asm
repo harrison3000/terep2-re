@@ -4120,6 +4120,7 @@ FUN_1000_2b08:
                               ;             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
     TEST        AX,AX
     JS          .LAB_LOC_2
+    TEST        AX,AX
     JNZ         FUN_1000_2b1f
     MOV         AX,0x0
     TEST        BX,BX
@@ -4140,6 +4141,7 @@ FUN_1000_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
     TEST        BX,BX
     JS          .LAB_LOC_1
+    TEST        BX,BX
     JNZ         FUN_1000_2b2d
     MOV         AX,0x4000
     RET
@@ -8119,6 +8121,8 @@ FUN_1000_4e0a:
     MOV         word [0xea04],CX
     AND         CX,0xff
     JZ          .LAB_LOC_5
+    ;probably a bug, this js will never be true
+    test cx, cx
     JS          .LAB_LOC_3
     CMP         CX,0x1
     JG          .LAB_LOC_6
@@ -8927,6 +8931,7 @@ FUN_1000_5940_render_text:
 .LAB_LOC_8:
     SHR         DL,0x1
     JC          .LAB_LOC_9
+    test dl, dl
     JZ          .LAB_LOC_10
     INC         BX
     JMP         .LAB_LOC_8
