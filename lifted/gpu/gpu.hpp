@@ -71,6 +71,8 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 //TODO implement
 #define DOS3Call(cpu) ({})
 
+#define INST_NOP() ({})
+
 #define INST_ADD(dest, src) ({dest += src;})
 #define INST_SUB(dest, src) ({dest -= src;})
 #define INST_NEG(dest) ({ \
@@ -94,9 +96,51 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 
 #define INST_XOR(dest, src) ({dest ^= src;})
 #define INST_AND(dest, src) ({dest &= src;})
+#define INST_OR(dest, src)  ({dest |= src;})
 
 #define INST_XCHG(dest, src) ({ \
     auto tmp = src; \
     src = dest;     \
     dest = tmp;     \
 })
+
+#define INST_MOVSX(dest, src) ({dest = SIGNED(src);})
+
+// we just ignore the direction flag, the code never sets it to reverse, thank God
+#define INST_LODSB() ({ \
+    cpu->AL = MEM_BYTE(cpu->SI); \
+    cpu->SI += 1;                \
+})
+#define INST_LODSW() ({ \
+    cpu->AX = MEM_WORD(cpu->SI); \
+    cpu->SI += 2;                \
+})
+#define INST_LODSD() ({   \
+    cpu->EAX = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4;                  \
+})
+
+#define INST_STOSB() ({ \
+    MEM_BYTE(cpu->DI) = cpu->AL; \
+    cpu->DI += 1;                \
+})
+#define INST_STOSW() ({ \
+    MEM_WORD(cpu->DI) = cpu->AX; \
+    cpu->DI += 2;                \
+})
+#define INST_STOSD() ({   \
+    MEM_DWORD(cpu->DI) = cpu->EAX; \
+    cpu->DI += 4;                  \
+})
+
+#define INST_CWD() ({ \
+    if(cpu->AX & 0x8000){ \
+        cpu->DX = 0xFFFF; \
+    }else{                \
+        cpu->DX = 0;      \
+    }                     \
+})
+
+#define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
+
+
