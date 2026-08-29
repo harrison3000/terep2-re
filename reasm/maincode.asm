@@ -2397,10 +2397,7 @@ FUN_1000_1965:
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
     TEST        AH,0x60
-    JP   .CONTINUE_THIS
-    CALL         FUN_1965_NP
-    RET
-    .CONTINUE_THIS:
+    JNP         FUN_1965_NP
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
     MOV         AX, word [0xc6]
@@ -4340,6 +4337,7 @@ FUN_1000_2c4b:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS somewhat related to flat polygons rendering
 FUN_1000_2d61:
                               ;XREF[1]:     1000:2c45(c)
     MOV         BX,word [0xdbc4]

@@ -109,6 +109,7 @@ let fixed = f.replaceAll(superRegex, function(...args){
 }).replaceAll(/   INST_F.+\n/g, "")
 .replace("cpu->EAX = MEM_DWORD(0xe9e8);", "")
 .replaceAll("INST_ADD(cpu->SP, 0x2);", "DUMMY_POP_WORD();")
+.replaceAll(/goto (F.+);/g, "{$1(cpu); return;}")
 ;
 
 fixed = mergetron(fixed, "ADD", "ADC");
