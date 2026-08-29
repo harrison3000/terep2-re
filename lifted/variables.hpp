@@ -34,3 +34,5 @@ uint8_t giracor = 0;
 
 uint16_t pseudolocal_a = 0;
 uint16_t pseudolocal_b = 0;
+
+int retval_2418;
