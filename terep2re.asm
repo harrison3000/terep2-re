@@ -81,5 +81,10 @@ pseudolocal_b:
 retval_2418:
     db 0 
 
+mu_b_tmp:
+mu_w_tmp:
+mu_d_tmp:
+    dd 0
+
 ;pad to the limit
 times (65534 - ($ - $$)) db 'P'

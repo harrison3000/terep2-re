@@ -8999,8 +8999,9 @@ FUN_1000_5acf:
     CALL        FUN_1000_5b26
     MOV         AH,AL
     AND         AH,0xc0
-    CMP         AH,0xc0
+    MOV         [mu_b_tmp], AH
     MOV         AH,0x0
+    CMP         byte [mu_b_tmp],0xc0
     JNZ         .LAB_LOC_4
     MOV         AH,AL
     AND         AH,0x3f

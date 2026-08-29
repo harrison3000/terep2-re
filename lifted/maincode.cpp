@@ -8974,9 +8974,9 @@ void FUN_1000_5acf(cpu_ctx *cpu){
    FUN_1000_5b26(cpu);
    cpu->AH = cpu->AL;
    INST_AND(cpu->AH, 0xc0);
-   INST_CMP(cpu->AH, 0xc0);
+   mu_b_tmp = cpu->AH;
    cpu->AH = 0x0;
-   if(false /*untranslated jump JNZ*/) goto LAB_LOC_4;
+   if (mu_b_tmp != 0xc0) goto LAB_LOC_4;
    cpu->AH = cpu->AL;
    INST_AND(cpu->AH, 0x3f);
    FUN_1000_5b26(cpu);
