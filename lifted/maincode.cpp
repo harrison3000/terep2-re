@@ -20,7 +20,7 @@ void f_init(cpu_ctx *cpu){
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->DX = 0xe9e2;
    cpu->CX = 0x2;
    cpu->AH = 0x3f;
@@ -35,24 +35,24 @@ void f_init(cpu_ctx *cpu){
    cpu->AH = 0x48;
    cpu->BX = 0x1000;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_6;
+   if (cpu->CF) goto LAB_LOC_6;
    MEM_WORD(0x1a45) = cpu->AX;
    cpu->GS = cpu->AX;
    cpu->AH = 0x48;
    cpu->BX = 0x1000;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_6;
+   if (cpu->CF) goto LAB_LOC_6;
    MEM_WORD(0x1a47) = cpu->AX;
    cpu->FS = cpu->AX;
    cpu->AH = 0x48;
    cpu->BX = 0x1000;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_6;
+   if (cpu->CF) goto LAB_LOC_6;
    MEM_WORD(0x1a49) = cpu->AX;
    cpu->AH = 0x48;
    cpu->BX = 0x1000;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_6;
+   if (cpu->CF) goto LAB_LOC_6;
    MEM_WORD(0x1a4b) = cpu->AX;
    FUN_1000_24c0(cpu);
    FUN_1000_255c(cpu);
@@ -71,7 +71,7 @@ void f_init(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    FUN_1000_2454(cpu);
    INST_POP(cpu->SI);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_5;
+   if (cpu->CF) goto LAB_LOC_5;
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->DI);
    INST_PUSH(cpu->SI);
@@ -89,7 +89,7 @@ void f_init(cpu_ctx *cpu){
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
-   if(false /*untranslated jump JC*/) goto LAB_LOC_4;
+   if (cpu->CF) goto LAB_LOC_4;
    FUN_1000_5a95(cpu);
    INST_PUSH(cpu->BX);
    if (SIGNED(cpu->AX) <= (int16_t)(0x100)) goto LAB_LOC_2;
@@ -102,7 +102,7 @@ void f_init(cpu_ctx *cpu){
    cpu->AH = 0x48;
    DOS3Call(cpu);
    INST_POP(cpu->BX);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_3;
+   if (cpu->CF) goto LAB_LOC_3;
    INST_POP(cpu->SI);
    INST_PUSH(cpu->SI);
    cpu->DI = MEM_WORD(cpu->SI + 0x5bbc);
@@ -126,7 +126,7 @@ void f_init(cpu_ctx *cpu){
    goto load_cars_loop;
    LAB_LOC_5:
    FUN_1000_2b70(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_6;
+   if (cpu->CF) goto LAB_LOC_6;
 //;CALL        FUN_1000_57e0 ;FIXME restore sound!
    MEM_WORD(0x6f) = cpu->DX;
    MEM_WORD(0x71) = cpu->AX;
@@ -3398,7 +3398,7 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
-   if(false /*untranslated jump JC*/) goto LAB_LOC_2;
+   if (cpu->CF) goto LAB_LOC_2;
    cpu->DX = cpu->DI;
    cpu->CX = 0x2710;
    cpu->AH = 0x3f;
@@ -3447,24 +3447,24 @@ void FUN_1000_24c0(cpu_ctx *cpu){
    cpu->ES = MEM_WORD(0x1a45);
    cpu->DI = 0;
    FUN_1000_5a60(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->DX = 0x1a20;
    cpu->ES = MEM_WORD(0x1a4b);
    cpu->DI = 0;
    FUN_1000_5a60(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->DX = 0x1a0b;
    cpu->AL = 0x0;
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
    FUN_1000_5a95(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->CX = 0xffff;
    cpu->DX = 0xfd00;
    cpu->AX = 0x4202;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->DX = 0x1a4d;
    cpu->CX = 0x300;
    cpu->AH = 0x3f;
@@ -3476,7 +3476,7 @@ void FUN_1000_24c0(cpu_ctx *cpu){
    cpu->ES = MEM_WORD(0x1a47);
    cpu->DI = 0;
    FUN_1000_5acf(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->AH = 0x3e;
    DOS3Call(cpu);
    cpu->DX = 0x1a2b;
@@ -4099,7 +4099,7 @@ void FUN_1000_2b70(cpu_ctx *cpu){
    cpu->AH = 0x48;
    cpu->BX = 0xfa0;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    MEM_WORD(0xdb10) = cpu->AX;
    LAB_LOC_1:
    return;
@@ -4284,7 +4284,7 @@ void FUN_1000_2d61(cpu_ctx *cpu){
     INST_STOSW();
     cpu->CX--;
    }
-   if(false /*untranslated jump JNC*/) goto LAB_LOC_3;
+   if (!cpu->CF) goto LAB_LOC_3;
    INST_STOSB();
    LAB_LOC_3:
    INST_ADD(cpu->SI, 0x4);
@@ -8869,7 +8869,7 @@ void FUN_1000_5940_render_text(cpu_ctx *cpu){
    if (cpu->DL == 0) goto LAB_LOC_11;
    LAB_LOC_8:
    INST_SHR(cpu->DL, 0x1);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_9;
+   if (cpu->CF) goto LAB_LOC_9;
    if (cpu->DL == 0) goto LAB_LOC_10;
    INST_INC(cpu->BX);
    goto LAB_LOC_8;
@@ -8906,19 +8906,19 @@ void FUN_1000_5a60(cpu_ctx *cpu){
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    FUN_1000_5a95(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->CX = 0x0;
    cpu->DX = 0x80;
    cpu->AX = 0x4200;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    FUN_1000_5acf(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->AH = 0x3e;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    return;
    LAB_LOC_1:
 //;             1000:5a8f(j)
@@ -8934,7 +8934,7 @@ void FUN_1000_5a95(cpu_ctx *cpu){
    cpu->CX = 0x80;
    cpu->AH = 0x3f;
    DOS3Call(cpu);
-   if(false /*untranslated jump JC*/) goto LAB_LOC_1;
+   if (cpu->CF) goto LAB_LOC_1;
    cpu->AX = MEM_WORD(0xef90);
    INST_SUB(cpu->AX, MEM_WORD(0xef8c));
    INST_INC(cpu->AX);

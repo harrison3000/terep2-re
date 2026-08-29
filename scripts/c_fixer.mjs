@@ -90,11 +90,11 @@ let fixed = f.replaceAll(superRegex, function(...args){
     u.push("");
 
     return u.join("\n");
-}).replaceAll(/JUMP«(.+)»/g, function(_a, b){
-    return `if(false /*untranslated jump ${b}*/)`;
-}).replaceAll(/^ +MEM_DWORD\(0xe9(ec|f0|f4).+$/gm, function(a, b){
-    return `   float tmp_${b} = SIGNED(cpu->EAX);`;
-}).replaceAll(/INST_FINIT.+$/gm, function(){
+}).replaceAll("JUMP«JC»", "if (cpu->CF)")
+.replaceAll("JUMP«JNC»", "if (!cpu->CF)")
+.replaceAll(/JUMP«(.+)»/g, `if(false /*untranslated jump $1*/)`)
+.replaceAll(/^ +MEM_DWORD\(0xe9(ec|f0|f4).+$/gm, `   float tmp_$1 = SIGNED(cpu->EAX);`)
+.replaceAll(/INST_FINIT.+$/gm, function(){
     return `
    tmp_ec *= tmp_ec;
    tmp_f0 *= tmp_f0;

@@ -10,7 +10,7 @@
 
 //each segment is already 64k, so we only need to increment the segments by 1
 //TODO add a 4k buffer zone so we can fault on writes beyond 64k?
-#define SEGM 0x10000
+#define SEGM 0x400
 
 #define def_datareg 0
 
@@ -203,8 +203,7 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
 
 #define INST_UD2() ({__builtin_trap();})
 
-#define INST_CLC INST_UD2
-#define INST_CLC INST_UD2
+#define INST_CLC() ({cpu->CF = 0;})
 
 #define INST_PUSHA INST_UD2
 #define INST_PUSHAD INST_UD2
