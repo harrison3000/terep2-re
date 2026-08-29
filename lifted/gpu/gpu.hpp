@@ -22,7 +22,8 @@ struct cpu_ctx {
     
     union {uint32_t EBP;  uint16_t BP; };
 
-    //segment registers, will be used with a multiplier (1024, not 16 like in the original real mode) to fake segments
+    //segment registers, will be used with a multiplier to emulate segments
+    //(defined below, not exactly 16 like in the original real mode) 
     uint16_t DS; //should ALWAYS be zero
     uint16_t CS; //should never be used
     uint16_t ES, FS, GS;
@@ -35,7 +36,9 @@ struct cpu_ctx {
     //TODO flags! that cant be done with last res
 };
 
-#define SEGM 1024
+//each segment is already 64k, so we only need to increment the segments by 1
+//TODO add a 4k buffer zone so we can fault on writes beyond 64k?
+#define SEGM 0x10000
 
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
@@ -99,7 +102,12 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 
 #define INST_MOVZX(dest, src) ({dest = src;})
 
-#define INST_TEST(dest, src) ({(typeof(dest))(dest & src);})
+#define INST_TEST(dest, src) ({ \
+    auto tmp = dest; \
+    tmp &= src;      \
+})
+
+#define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
 
 #define INST_XOR(dest, src) ({dest ^= src;})
 #define INST_AND(dest, src) ({dest &= src;})
@@ -154,6 +162,19 @@ inline int32_t SIGNED(uint32_t v) { return v; }
     }                     \
 })
 
+#define INST_CDQ() ({ \
+    if(cpu->EAX & 0x80000000){ \
+        cpu->EDX = 0xFFFFFFFF; \
+    }else{                \
+        cpu->EDX = 0;     \
+    }                     \
+})
+
 #define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
 
-
+#define INST_MUL(op) ({    \
+    _Static_assert(sizeof(op) == 2, "We only support 16bit for this instructions"); \
+    uint32_t res = (uint32_t)cpu->AX * (uint32_t)op; \
+    cpu->AX = res & 0xffff; \
+    cpu->DX = res >> 16;    \
+})
