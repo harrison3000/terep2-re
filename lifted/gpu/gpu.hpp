@@ -4,37 +4,9 @@
 #include <cstdint>
 #include <vector>
 #include <bit>
+#include <cstdio>
 
-struct stackItem {
-    uint32_t value;  uint16_t line; uint16_t size;
-};
-
-struct cpu_ctx {
-    // GPRs
-    union {uint32_t EAX;  uint16_t AX;  struct { uint8_t AL, AH; }; };
-    union {uint32_t EBX;  uint16_t BX;  struct { uint8_t BL, BH; }; };
-    union {uint32_t ECX;  uint16_t CX;  struct { uint8_t CL, CH; }; };
-    union {uint32_t EDX;  uint16_t DX;  struct { uint8_t DL, DH; }; };
-
-
-    union {uint32_t ESI;  uint16_t SI; };
-    union {uint32_t EDI;  uint16_t DI; };
-    
-    union {uint32_t EBP;  uint16_t BP; };
-
-    //segment registers, will be used with a multiplier to emulate segments
-    //(defined below, not exactly 16 like in the original real mode) 
-    uint16_t DS; //should ALWAYS be zero
-    uint16_t CS; //should never be used
-    uint16_t ES, FS, GS;
-
-    uintptr_t mem_base;
-
-    std::vector<stackItem> stack;
-
-
-    //TODO flags! that cant be done with last res
-};
+#include "types.hpp"
 
 //each segment is already 64k, so we only need to increment the segments by 1
 //TODO add a 4k buffer zone so we can fault on writes beyond 64k?
@@ -78,8 +50,7 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 //the builtin is the oposite of the x86 flag
 #define PARITY(val) (!__builtin_parity(val))
 
-//TODO implement
-#define DOS3Call(cpu) ({})
+void DOS3Call(cpu_ctx*);
 
 #define INST_NOP() ({})
 
@@ -180,7 +151,7 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 #define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
 
 #define INST_MUL(op) ({    \
-    _Static_assert(sizeof(op) == 2, "We only support 16bit for this instructions"); \
+    static_assert(sizeof(op) == 2, "We only support 16bit for this instructions"); \
     uint32_t res = (uint32_t)cpu->AX * (uint32_t)op; \
     cpu->AX = res & 0xffff; \
     cpu->DX = res >> 16;    \
@@ -205,3 +176,37 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
 }
 
 #define INST_IMUL(...) inner_imul(cpu,__VA_ARGS__)
+
+
+
+
+#define INST_CLD INST_NOP
+
+#define MERGED_SHL_RCL(a,b,c,d) ({ \
+    static_assert(b == 1 && d == 1, "We only support shifts by 1 here"); \
+    __builtin_trap();\
+    /* TODO continue implementation */ \
+})
+
+#define MERGED_ADD_ADC(a,b,c,d) ({__builtin_trap();})
+#define MERGED_SUB_SBB(a,b,c,d) ({__builtin_trap();})
+
+//FIXME actually implement
+#define INST_PUSHF() ({__builtin_trap();})
+#define INST_POPF() ({__builtin_trap();})
+
+#define INST_IDIV(a) ({__builtin_trap();})
+#define INST_DIV(a) ({__builtin_trap();})
+
+#define INST_SAHF() ({__builtin_trap();})
+#define INST_LAHF() ({__builtin_trap();})
+
+#define INST_UD2() ({__builtin_trap();})
+
+#define INST_CLC INST_UD2
+#define INST_CLC INST_UD2
+
+#define INST_PUSHA INST_UD2
+#define INST_PUSHAD INST_UD2
+#define INST_POPA INST_UD2
+#define INST_POPAD INST_UD2

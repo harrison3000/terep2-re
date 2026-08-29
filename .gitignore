@@ -6,3 +6,4 @@
 *.o
 sim.cfg
 raw_c.cpp
+terep2re
