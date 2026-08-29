@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <bit>
 
 struct stackItem {
     uint32_t value;  uint16_t line; uint16_t size;
@@ -34,6 +35,7 @@ struct cpu_ctx {
     //TODO flags! that cant be done with last res
 };
 
+#define SEGM 1024
 
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
@@ -89,6 +91,8 @@ inline int32_t SIGNED(uint32_t v) { return v; }
     ds >>= src; \
     dest = ds; \
 })
+#define INST_ROL(dest, src) ({dest = std::rotl(dest, src);})
+#define INST_ROR(dest, src) ({dest = std::rotr(dest, src);})
 
 #define INST_INC(dest) ({dest += 1;})
 #define INST_DEC(dest) ({dest += 1;})
@@ -124,16 +128,22 @@ inline int32_t SIGNED(uint32_t v) { return v; }
 })
 
 #define INST_STOSB() ({ \
-    MEM_BYTE(cpu->DI) = cpu->AL; \
-    cpu->DI += 1;                \
+    MEM_BYTE(cpu->ES*SEGM + cpu->DI) = cpu->AL; \
+    cpu->DI += 1;       \
 })
 #define INST_STOSW() ({ \
-    MEM_WORD(cpu->DI) = cpu->AX; \
-    cpu->DI += 2;                \
+    MEM_WORD(cpu->ES*SEGM + cpu->DI) = cpu->AX; \
+    cpu->DI += 2;       \
 })
 #define INST_STOSD() ({   \
-    MEM_DWORD(cpu->DI) = cpu->EAX; \
-    cpu->DI += 4;                  \
+    MEM_DWORD(cpu->ES*SEGM + cpu->DI) = cpu->EAX; \
+    cpu->DI += 4;         \
+})
+
+#define INST_MOVSD() ({ \
+    MEM_DWORD(cpu->ES*SEGM + cpu->DI) = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4; \
+    cpu->DI += 4; \
 })
 
 #define INST_CWD() ({ \
