@@ -40,6 +40,8 @@ struct cpu_ctx {
 //TODO add a 4k buffer zone so we can fault on writes beyond 64k?
 #define SEGM 0x10000
 
+#define def_datareg 0
+
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
 #define INST_POP(reg) ({        \
@@ -183,3 +185,23 @@ inline int32_t SIGNED(uint32_t v) { return v; }
     cpu->AX = res & 0xffff; \
     cpu->DX = res >> 16;    \
 })
+
+
+static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
+    auto as = SIGNED(a);
+    auto sax = SIGNED(cpu->AX);
+
+    auto res = (int32_t)sax * (int32_t)as;
+    cpu->AX = res & 0xffff;
+    cpu->DX = res >> 16;
+}
+static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
+    auto as = SIGNED(a);
+    auto bs = SIGNED(b);
+
+    auto res = (int64_t)as * (int64_t)bs;
+    cpu->EAX = res & 0xffffffff;
+    cpu->EDX = res >> 32;
+}
+
+#define INST_IMUL(...) inner_imul(cpu,__VA_ARGS__)
