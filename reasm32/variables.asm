@@ -49,8 +49,7 @@
 
 %define pseudolocal_b  var_offset(17)
 
-;TODO preencher
-%define nova_linha  var_offset(17)
+%define nova_linha  0xF700
 
 ;TODO ver se esse eh o codigo do segmento mesmo
 %define _DATA2 0x17

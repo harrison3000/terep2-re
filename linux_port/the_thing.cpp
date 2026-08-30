@@ -17,8 +17,8 @@
 
 #include <SDL3/SDL.h>
 
-#define W 400
-#define H 300
+#define W 320
+#define H 200
 
 #define DEFAULT_LEN (1 << 16)
 
@@ -175,12 +175,16 @@ int main(int argc, char **argv){
         basedir = argv[1];
     }
 
+    strcpy(&((char*)datamem)[0xf700], "GAMBIARRA FOREVER 32!");
+
     auto datawindow = (volatile uint16_t*)((uintptr_t)datamem + 0xff00);
 
     printf("lets go\n");
 
     call_init(datamem, datawindow);
 
+    auto videoSeg = (uint8_t *)global_descr.getMem(datawindow[0x50/2]);
+    printf("video data: %04x, %08x\n", datawindow[0x50/2], videoSeg);
     
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);
@@ -190,31 +194,55 @@ int main(int argc, char **argv){
     SDL_Texture *tex = SDL_CreateTexture(ren, SDL_PIXELFORMAT_INDEX8, SDL_TEXTUREACCESS_STREAMING, W, H);
 
     // Paleta de 256 cores (exemplo: 0 = Preto, 1 = Vermelho, 2 = Verde...)
+    SDL_Color colors[256];
+    uint8_t *ptr = &((uint8_t*)datamem)[0x1a4d];
+    for(int i = 0;i<256;i++){
+        colors[i].r = ptr[0];
+        colors[i].g = ptr[1];
+        colors[i].b = ptr[2];
+        colors[i].a = 255;
+        ptr += 3;
+    }
+
     SDL_Palette *pal = SDL_CreatePalette(256);
-    SDL_Color colors[256] = { {0,0,0,255}, {255,0,0,255}, {0,255,0,255}, {0,0,255,255} };
-    SDL_SetPaletteColors(pal, colors, 0, 4);
+    SDL_SetPaletteColors(pal, colors, 0, 256);
     SDL_SetTexturePalette(tex, pal);
 
     uint8_t pixels[W * H] = {0}; // Pixeldata 8-bit
-    pixels[100 * W + 150] = 1;   // Ponto vermelho
-    pixels[100 * W + 151] = 2;   // Ponto verde (lá ele)
 
     bool running = true;
     SDL_Event e;
 
+    const Uint64 ns_per_frame = 1000000000 / 60; // ~16.6 ms em nanossegundos
     while (running) {
+        Uint64 start = SDL_GetTicksNS();
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_EVENT_QUIT) running = false;
             if (e.type == SDL_EVENT_KEY_DOWN) {
                 if (e.key.key == SDLK_ESCAPE) running = false;
-                if (e.key.key == SDLK_SPACE) pixels[100 * W + 152] = 3; // Desenha ponto azul
+                //TODO do the keys thing
             }
+        }
+
+        asm_render();
+        for(int i = 0; i < W*H; i++){
+            pixels[i] = videoSeg[i];
         }
 
         SDL_UpdateTexture(tex, NULL, pixels, W);
         SDL_RenderClear(ren);
         SDL_RenderTexture(ren, tex, NULL, NULL);
         SDL_RenderPresent(ren);
+
+        //physics run at 120 ticks per sec
+        asm_physics();
+        asm_physics();
+
+        // Limita a 60 FPS
+        Uint64 elapsed = SDL_GetTicksNS() - start;
+        if (elapsed < ns_per_frame) {
+            SDL_DelayNS(ns_per_frame - elapsed);
+        }
     }
 
     SDL_DestroyPalette(pal);

@@ -26,24 +26,43 @@ DOS3Call:
 
 
 global asm_f_init
+global asm_render
+global asm_physics
+global asm_keys
 
 asm_f_init:
-    PUSHAD
-    PUSH FS
-    PUSH GS
-    PUSH DS
-    PUSH ES
-
-    MOV AX, _DATA2
-    MOV DS, AX
+    airlock_prologue
 
     call f_init
-
     MOV word [0xff00], 0xbeef
+    push word [0xdb10]
+    pop word [0xff50]
 
-    POP ES
-    POP DS
-    POP GS
-    POP FS
-    POPAD
+    airlock_epilogue
+    ret
+
+asm_render:
+    airlock_prologue
+
+    call FUN_main_render
+
+    airlock_epilogue
+    ret
+
+
+asm_physics:
+    airlock_prologue
+
+    call FUN_timer_5680
+
+    airlock_epilogue
+    ret
+
+asm_keys:
+    airlock_prologue
+
+    ;TODO get keys from the window
+    call FUN_keyboard_56df
+
+    airlock_epilogue
     ret
