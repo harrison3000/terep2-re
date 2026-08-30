@@ -9,12 +9,16 @@
 #include <cstdio>
 #include <cstdint>
 #include <map>
-#include <ucontext.h>
 #include <sys/mman.h>
 #include <linux/prctl.h> 
 #include <sys/prctl.h>
 #include <fcntl.h>
 #include <string>
+
+#include <SDL3/SDL.h>
+
+#define W 400
+#define H 300
 
 #define DEFAULT_LEN (1 << 16)
 
@@ -156,7 +160,7 @@ void call_init(void *datamem, volatile uint16_t* datawindow){
     }
 
     printf("init ");
-
+    
     ch.join();
 
     printf("ended!\n");
@@ -177,6 +181,47 @@ int main(int argc, char **argv){
 
     call_init(datamem, datawindow);
 
+    
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);
+    SDL_Renderer *ren = SDL_CreateRenderer(win, NULL);
+    
+    // Textura de 8 bits indexados (paletizada)
+    SDL_Texture *tex = SDL_CreateTexture(ren, SDL_PIXELFORMAT_INDEX8, SDL_TEXTUREACCESS_STREAMING, W, H);
+
+    // Paleta de 256 cores (exemplo: 0 = Preto, 1 = Vermelho, 2 = Verde...)
+    SDL_Palette *pal = SDL_CreatePalette(256);
+    SDL_Color colors[256] = { {0,0,0,255}, {255,0,0,255}, {0,255,0,255}, {0,0,255,255} };
+    SDL_SetPaletteColors(pal, colors, 0, 4);
+    SDL_SetTexturePalette(tex, pal);
+
+    uint8_t pixels[W * H] = {0}; // Pixeldata 8-bit
+    pixels[100 * W + 150] = 1;   // Ponto vermelho
+    pixels[100 * W + 151] = 2;   // Ponto verde (lá ele)
+
+    bool running = true;
+    SDL_Event e;
+
+    while (running) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_EVENT_QUIT) running = false;
+            if (e.type == SDL_EVENT_KEY_DOWN) {
+                if (e.key.key == SDLK_ESCAPE) running = false;
+                if (e.key.key == SDLK_SPACE) pixels[100 * W + 152] = 3; // Desenha ponto azul
+            }
+        }
+
+        SDL_UpdateTexture(tex, NULL, pixels, W);
+        SDL_RenderClear(ren);
+        SDL_RenderTexture(ren, tex, NULL, NULL);
+        SDL_RenderPresent(ren);
+    }
+
+    SDL_DestroyPalette(pal);
+    SDL_DestroyTexture(tex);
+    SDL_DestroyRenderer(ren);
+    SDL_DestroyWindow(win);
+    SDL_Quit();    
+
     return 0;
 }
-
