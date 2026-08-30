@@ -1,7 +1,7 @@
 #include <asm/ldt.h>
 #include <asm/unistd.h>
-#include <csignal>
 #include <errno.h>
+#include <stdint.h>
 #include <sys/syscall.h>
 #include <thread>
 #include <unistd.h>
@@ -19,6 +19,9 @@
 #define DEFAULT_LEN (1 << 16)
 
 extern "C" void asm_f_init();
+extern "C" void asm_render();
+extern "C" void asm_physics();
+extern "C" void asm_keys();
 
 struct descritron {
   unsigned int current = 0;
@@ -133,26 +136,10 @@ bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile u
     return false;
 }
 
-int main(int argc, char **argv){
-    auto data = global_descr.new_descriptor("the main data");
-    auto datamem = global_descr.getMem(data);
-    readfile("memdumps/data.bin", datamem);
-    
-    if(argc > 1){
-        basedir = argv[1];
-    }
-    
-    printf("lets go\n");
-
+void call_init(void *datamem, volatile uint16_t* datawindow){
     std::thread ch([](){
         asm_f_init();
-        printf("init returned (asm thread)\n");
-        fflush(stdout);
     });
-    
-    auto datawindow = (volatile uint16_t*)((uintptr_t)datamem + 0xff00);
-
-    printf("\n");
 
     while(1){
         if(datawindow[0] == 0xd3ca){
@@ -163,17 +150,32 @@ int main(int argc, char **argv){
             continue;
         }
         if(datawindow[0] == 0xbeef){
-            printf("init return detected (main thread)\n");
-            fflush(stdout);
             break;
         }
-        //TODO remove
-        usleep(1000);
+        //TODO some kind of timeout
     }
 
-    printf("\ninit ended\n");
+    printf("init ");
 
     ch.join();
+
+    printf("ended!\n");
+}
+
+int main(int argc, char **argv){
+    auto data = global_descr.new_descriptor("the main data");
+    auto datamem = global_descr.getMem(data);
+    readfile("memdumps/data.bin", datamem);
+    
+    if(argc > 1){
+        basedir = argv[1];
+    }
+
+    auto datawindow = (volatile uint16_t*)((uintptr_t)datamem + 0xff00);
+
+    printf("lets go\n");
+
+    call_init(datamem, datawindow);
 
     return 0;
 }
