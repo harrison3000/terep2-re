@@ -1,8 +1,4 @@
 
-%include "variables.asm"
-%include "macros.asm"
-
-extern DOS3Call
 
 f_init:
     MOV         word [0x5bba], -2     ;just to be sure
