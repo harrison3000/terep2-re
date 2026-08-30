@@ -3733,7 +3733,7 @@ FUN_1000_26dd:
     MOV         BX,AX
     CALL        FUN_1000_2aad
     a16 MOVSX       EBX,AX
-    ADD         SP,0x2
+    ADD         ESP,0x2
     POP         AX
     SHL         EAX,0x10
     SAR         EAX,0x1
@@ -3745,7 +3745,7 @@ FUN_1000_26dd:
     CALL        FUN_1000_2ad8
     a16 MOVSX       EBX,AX
     POP         AX
-    ADD         SP,0x2
+    ADD         ESP,0x2
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
