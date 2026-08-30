@@ -15,7 +15,6 @@
 
 %define CSD_DWORD_1000_129f  var_offset(2)
 
-;TODO needs to be set to 7FFF0000h
 %define CSD_DWORD_1000_12a3  var_offset(3)
 
 %define CSD_DWORD_1000_12a7  var_offset(4)
@@ -51,5 +50,4 @@
 
 %define nova_linha  0xF700
 
-;TODO ver se esse eh o codigo do segmento mesmo
 %define _DATA2 0x17

@@ -33,6 +33,10 @@ global asm_keys
 asm_f_init:
     airlock_prologue
 
+    ;dont know how much difference does this make, but better safe than sorry
+    MOV dword [CSD_DWORD_1000_12a3], 0x7FFF0000
+    MOV byte[CSD_BYTE_1000_59c1], 0xf
+
     call f_init
     MOV word [0xff00], 0xbeef
     push word [0xdb10]
