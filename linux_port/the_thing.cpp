@@ -33,7 +33,9 @@ struct descritron {
         exit(1);
     }
     if(name != NULL){
-        prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, backingData, DEFAULT_LEN, name);
+        char nome[64];
+        snprintf(nome,63,"%s, num: %d", name, current);
+        prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, backingData, DEFAULT_LEN, nome);
     }
 
     auto theaddr = (uint64_t)backingData;
@@ -66,6 +68,8 @@ struct descritron {
   }
 };
 
+descritron global_descr;
+
 std::string basedir;
 
 void readfile(const char *name, void * dest){
@@ -88,11 +92,38 @@ bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile u
             auto fullpath = basedir + filename;
 
             auto fd = open(fullpath.c_str(), O_RDONLY);
-            printf("trying to open: %s, returned: %d\n", filename, fd);
+            printf("* trying to open: %s, returned: %d\n", filename, fd);
             ax = fd;
             return fd >= 0;
         }
+        case 0x4800:{
+            auto seletor = global_descr.new_descriptor("dos alloc");
+            printf("* game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", bx, bx * 16);
+            ax = seletor;
+            return true;
+        }
+        case 0x3f00:{
+            auto fd = bx;
+            auto addr = memchar + dx;
+            auto r = read(fd, (void *)addr, cx);
+            ax = r;
+            printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, dx);
+            return r >= 0;
+        }
+        case 0x4200:{
+            int off = cx;
+            off <<= 16;
+            off += dx;
 
+            auto offset = lseek(bx, off, ax & 0xf);
+            dx = offset >> 16;
+            ax = offset;
+            return offset >= 0; 
+        }
+        case 0x3e00:{
+            auto ok = close(bx);
+            return ok == 0;
+        }
     }
 
     printf("\nunhandled Dos call: %04x\n", ax);
@@ -103,9 +134,8 @@ bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile u
 }
 
 int main(int argc, char **argv){
-    auto a = new descritron;
-    auto data = a->new_descriptor("the main data");
-    auto datamem = a->getMem(data);
+    auto data = global_descr.new_descriptor("the main data");
+    auto datamem = global_descr.getMem(data);
     readfile("memdumps/data.bin", datamem);
     
     if(argc > 1){
@@ -116,6 +146,8 @@ int main(int argc, char **argv){
 
     std::thread ch([](){
         asm_f_init();
+        printf("init returned (asm thread)\n");
+        fflush(stdout);
     });
     
     auto datawindow = (volatile uint16_t*)((uintptr_t)datamem + 0xff00);
@@ -131,11 +163,15 @@ int main(int argc, char **argv){
             continue;
         }
         if(datawindow[0] == 0xbeef){
+            printf("init return detected (main thread)\n");
+            fflush(stdout);
             break;
         }
-        printf("\r0: %04x, 1: %04x    ", datawindow[0], datawindow[1]);
-        usleep(100000);
+        //TODO remove
+        usleep(1000);
     }
+
+    printf("\ninit ended\n");
 
     ch.join();
 
