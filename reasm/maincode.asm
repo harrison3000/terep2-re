@@ -8571,9 +8571,6 @@ FUN_1000_532e:
     RET
 
 
-dummy_ifunc:
-    iret
-
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8641,41 +8638,6 @@ FUN_keyboard_56df:
     MOV         byte [CSD_DAT_keys_571e],BL
     ret
 
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-FUN_int_f1_579e:
-    CMP         AL,0x0
-    JZ          .LAB_LOC_1
-    CMP         AL,0x1
-    JZ          .LAB_LOC_2
-    CMP         AL,0x2
-    JZ          .LAB_LOC_3
-    CMP         AL,0x10
-    JZ          .LAB_LOC_4
-    CMP         AL,0x11
-    JZ          .LAB_LOC_5
-    IRET
-.LAB_LOC_1:
-    CALL        FUN_1000_2aad
-    IRET
-.LAB_LOC_2:
-    CALL        FUN_1000_2ad8
-    IRET
-.LAB_LOC_3:
-    MOV         AX,CX
-    CALL        FUN_1000_2b08
-    IRET
-.LAB_LOC_4:
-    MOV         AX,DX
-    CALL        FUN_1000_271d
-    IRET
-.LAB_LOC_5:
-    MOV         EAX,EDX
-    CALL        FUN_1000_2726
-    IRET
-
- ; 1000:57df [UNDEFINED BYTES REMOVED]
 
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -9004,11 +8966,6 @@ FUN_1000_5acf:
     MOV         AH,AL
     AND         AH,0xc0
     CMP         AH,0xc0
-;************************************************************************************************
-;*                                           FUNCTION                                           *
-;************************************************************************************************
-.WHY_1000_5b01: ; this is never called as a function, but it was labeled as one
-                              ;XREF[3]:     1000:0327(c),1000:03f3(c),1000:04b3(c)
     MOV         AH,0x0
     JNZ         .LAB_LOC_4
     MOV         AH,AL
