@@ -146,16 +146,16 @@ f_init:
 
 f_cam_select:
     SHL BX, 1
-    AND BX, 15
-    JMP         [CS:BX + .JMP_TABLE_CAMERAS]
+    AND EBX, 15
+    JMP         [CS:EBX * 2 + .JMP_TABLE_CAMERAS]
     .JMP_TABLE_CAMERAS:
-        dw  .CAMERA_1
-        dw  .CAMERA_2
-        dw  .CAMERA_3
-        dw  .CAMERA_4
-        dw  .CAMERA_5
+        dd  .CAMERA_1
+        dd  .CAMERA_2
+        dd  .CAMERA_3
+        dd  .CAMERA_4
+        dd  .CAMERA_5
             
-        times 3 dw .LAB_RUIM
+        times 3 dd .LAB_RUIM
 
     .LAB_RUIM:
     ud2
@@ -1747,33 +1747,33 @@ FUN_1000_1408:
     a16 LODSB 
     MOVZX       BX,AL
     SHL         BX, 1
-    AND BX, 63
-    JMP         [CS:BX + .JMP_TABLE_1413]
+    AND EBX, 63
+    JMP         [CS:EBX * 2 + .JMP_TABLE_1413]
 .JMP_TABLE_1413:
     ;addr[21]
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_6
-         dw  .LAB_LOC_7
-         dw  .LAB_LOC_8
-         dw  .LAB_LOC_9
-         dw  .LAB_LOC_11
-         dw  .LAB_LOC_12
-         dw  .LAB_LOC_14
-         dw  .LAB_LOC_16
-         dw  .LAB_LOC_18
-         dw  .LAB_LOC_20
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_1
-         dw  .LAB_LOC_24
-         dw  .LAB_LOC_2
-         dw  .LAB_LOC_3
-         dw  .LAB_LOC_4
-         dw  .LAB_LOC_5
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_6
+         dd  .LAB_LOC_7
+         dd  .LAB_LOC_8
+         dd  .LAB_LOC_9
+         dd  .LAB_LOC_11
+         dd  .LAB_LOC_12
+         dd  .LAB_LOC_14
+         dd  .LAB_LOC_16
+         dd  .LAB_LOC_18
+         dd  .LAB_LOC_20
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_1
+         dd  .LAB_LOC_24
+         dd  .LAB_LOC_2
+         dd  .LAB_LOC_3
+         dd  .LAB_LOC_4
+         dd  .LAB_LOC_5
 
-         times 11 dw .LAB_RUIM
+         times 11 dd .LAB_RUIM
 
 .LAB_RUIM:
     ud2
