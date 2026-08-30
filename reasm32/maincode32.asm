@@ -1,4 +1,9 @@
 
+%include "variables.asm"
+%include "macros.asm"
+
+extern DOS3Call
+
 f_init:
     MOV         word [0x5bba], -2     ;just to be sure
 
@@ -15,40 +20,40 @@ f_init:
     MOV         DX,0x1a3d
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     JC          .LAB_LOC_1
     MOV         DX,0xe9e2
     MOV         CX,0x2
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         DX,0xe9e4
     MOV         CX,0x2
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
 .LAB_LOC_1:
     MOV         AH,0x48
     MOV         BX,0x1000
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [0x1a45],AX
     MOV         GS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [0x1a47],AX
     MOV         FS,AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [0x1a49],AX
     MOV         AH,0x48
     MOV         BX,0x1000
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [0x1a4b],AX
     CALL        FUN_1000_24c0
@@ -84,7 +89,7 @@ f_init:
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     JC          .LAB_LOC_4
     CALL        FUN_1000_5a95
@@ -98,7 +103,7 @@ f_init:
     INC         AX
     MOV         BX,AX
     MOV         AH,0x48
-    call far DOS3Call
+    call DOS3Call
     POP         BX
     JC          .LAB_LOC_3
     POP         SI
@@ -110,7 +115,7 @@ f_init:
     CALL        FUN_1000_5acf
 .LAB_LOC_3:
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
 .LAB_LOC_4:
     POP         SI
     POP         DI
@@ -815,7 +820,7 @@ F_0948:
     MOVZX       EBP,word [SI + 0xa]
     ADD         EDX,EBP
     ADD         DI,0x2
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         ECX,EDX
     MOVZX       EBP,word [0x5bba]
     CDQ
@@ -941,7 +946,7 @@ FUN_1000_0a82:
     JL          .LAB_LOC_4
 .LAB_LOC_2:
     ADD         DI,0x1c
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         word [SI + 0x22],DX
 .LAB_LOC_3:
     MOV         DI,word [SI + 0x22]
@@ -1115,7 +1120,7 @@ FUN_1000_0cd3:
     JL          .LAB_LOC_1
     MOV         BP,BX
     MOV         BX,AX
-    LODSW 
+    a16 LODSW 
     CWD
     IDIV        CX
     MOV         DX,AX
@@ -1126,32 +1131,32 @@ FUN_1000_0cd3:
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     SUB         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
     POP         DI
@@ -1445,7 +1450,7 @@ FUN_1000_1004:
     SAR         EAX,0x7
     SUB         dword [BX + SI + 0x42],EAX
     ADD         BX,0x4
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     TEST        word [SI + 0xe],0x1
     JZ          .LAB_LOC_3
     MOV         CX,0x10
@@ -1455,13 +1460,13 @@ FUN_1000_1004:
     SAR         EAX,0x2
     SUB         dword [BX + SI + 0x42],EAX
     ADD         BX,0x4
-    LOOP        .LAB_LOC_2
+    L_LOOP      .LAB_LOC_2
 .LAB_LOC_3:
     MOV         AX,word [SI + 0x18]
     CWD
     MOV         CX,0x4000
     IMUL        CX
-    MOVSX       EAX,DX
+    a16 MOVSX       EAX,DX
     MOV         BX,word [SI + 0x8]
     TEST        BX,BX
     JZ          .LAB_LOC_4
@@ -1679,7 +1684,7 @@ FUN_1000_1347:
     CALL        FUN_1000_13cc
     ADD         SI,0x1c
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         SI
     CALL        FUN_1000_11f0
     PUSH        EAX
@@ -1739,7 +1744,7 @@ FUN_1000_1408:
                               ;             1000:1942(c)
     NOP
     .L_1408_START:                     
-    LODSB 
+    a16 LODSB 
     MOVZX       BX,AL
     SHL         BX, 1
     AND BX, 63
@@ -1777,11 +1782,11 @@ FUN_1000_1408:
                               ;             1000:142f(*),1000:1431(*)
     RET
 .LAB_LOC_2:
-    LODSW 
+    a16 LODSW 
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_3:
-    LODSW 
+    a16 LODSW 
     PUSH        SI
     ADD         SI,AX
     CALL        FUN_1000_1408
@@ -1790,19 +1795,19 @@ FUN_1000_1408:
 .LAB_LOC_4:
     MOV         AL, byte [0x5ee]
     SAHF
-    LODSW 
+    a16 LODSW 
     JS     .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_5:
     MOV         AL, byte [0x5ee]
     SAHF
-    LODSW 
+    a16 LODSW 
     JNS    .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_6:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1810,7 +1815,7 @@ FUN_1000_1408:
     ADD         DI,0x126
     MOV         AX, word [0x120]
     CMP         word [DI + 0x2],AX
-    LODSW 
+    a16 LODSW 
     MOV         CL,AL
     JL     .L_1408_START
     MOV         AX,word [DI + 0x6]
@@ -1818,26 +1823,26 @@ FUN_1000_1408:
     CALL        FUN_1000_3f98
     JMP    .L_1408_START
 .LAB_LOC_7:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     MOV         BX,word [DI + 0x128]
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     MOV         AX,word [DI + 0x128]
-    LODSW 
+    a16 LODSW 
     CMP         BX,AX
     LAHF
     MOV         byte [0x5ee],AL
     JMP    .L_1408_START
 .LAB_LOC_8:
     XOR         BX,BX
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1846,7 +1851,7 @@ FUN_1000_1408:
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1855,7 +1860,7 @@ FUN_1000_1408:
     XCHG        DI,SI
     CALL        FUN_1000_46d3
     XCHG        DI,SI
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1881,10 +1886,10 @@ FUN_1000_1408:
     POP         SI
     JMP    .L_1408_START
 .LAB_LOC_9:
-    LODSB 
+    a16 LODSB 
     MOVZX       CX,AL
     XOR         BX,BX
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1895,7 +1900,7 @@ FUN_1000_1408:
     XCHG        DI,SI
     DEC         CX
 .LAB_LOC_10:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1906,8 +1911,8 @@ FUN_1000_1408:
     CALL        FUN_1000_46d3
     XCHG        DI,SI
     POP         CX
-    LOOP        .LAB_LOC_10
-    LODSW 
+    L_LOOP      .LAB_LOC_10
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -1917,7 +1922,7 @@ FUN_1000_1408:
     CALL        FUN_1000_47ec
     XCHG        DI,SI
     MOV         BL,AL
-    LODSW 
+    a16 LODSW 
     MOV         word [0xdb12],AX
     CMP         BL,0x3
     JL     .L_1408_START
@@ -1933,42 +1938,42 @@ FUN_1000_1408:
 .LAB_LOC_11:
     JMP    .L_1408_START
 .LAB_LOC_12:
-    LODSB 
+    a16 LODSB 
     MOVZX       CX,AL
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
     DEC         CX
 .LAB_LOC_13:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     PUSH        CX
     XCHG        DI,SI
     CALL        FUN_1000_46d3
     XCHG        DI,SI
     POP         CX
-    LOOP        .LAB_LOC_13
-    LODSW 
+    L_LOOP      .LAB_LOC_13
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     XCHG        DI,SI
     CALL        FUN_1000_47ec
@@ -1986,17 +1991,17 @@ FUN_1000_1408:
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_14:
-    LODSB 
+    a16 LODSB 
     MOVZX       CX,AL
-    LODSW 
+    a16 LODSW 
     MOV         word [0xdb12],AX
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2005,13 +2010,13 @@ FUN_1000_1408:
     XCHG        DI,SI
     DEC         CX
 .LAB_LOC_15:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2020,14 +2025,14 @@ FUN_1000_1408:
     CALL        FUN_1000_46d3
     XCHG        DI,SI
     POP         CX
-    LOOP        .LAB_LOC_15
-    LODSW 
+    L_LOOP      .LAB_LOC_15
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     MOV         BX,word [BX + 0x50e]
     ADD         BX,word [0xdb12]
@@ -2047,42 +2052,42 @@ FUN_1000_1408:
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_16:
-    LODSB 
+    a16 LODSB 
     MOVZX       CX,AL
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD 
+    a16 LODSD 
     MOV         EBX,EAX
     XCHG        DI,SI
     CALL        FUN_1000_46a0
     XCHG        DI,SI
     DEC         CX
 .LAB_LOC_17:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD 
+    a16 LODSD 
     MOV         EBX,EAX
     PUSH        CX
     XCHG        DI,SI
     CALL        FUN_1000_46d3
     XCHG        DI,SI
     POP         CX
-    LOOP        .LAB_LOC_17
-    LODSW 
+    L_LOOP      .LAB_LOC_17
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
     ADD         DI,0x126
-    LODSD 
+    a16 LODSD 
     MOV         EBX,EAX
     XCHG        DI,SI
     CALL        FUN_1000_47ec
@@ -2100,7 +2105,7 @@ FUN_1000_1408:
     CALL        FUN_1000_36fe
     JMP    .L_1408_START
 .LAB_LOC_18:
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
@@ -2111,7 +2116,7 @@ FUN_1000_1408:
     JL          .LAB_LOC_19
     MOV         BX,word [DI + 0x6]
     MOV         BP,word [DI + 0x8]
-    LODSW 
+    a16 LODSW 
     CWD
     IDIV        CX
     MOV         DX,AX
@@ -2121,32 +2126,32 @@ FUN_1000_1408:
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     SUB         AX,DX
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,DX
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     POP         ES
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
@@ -2156,7 +2161,7 @@ FUN_1000_1408:
     JMP    .L_1408_START
 .LAB_LOC_20:
     PUSH        SI
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         BX,AX
     SHL         AX,0x2
@@ -2164,12 +2169,12 @@ FUN_1000_1408:
     MOV         AX,word [BX + 0x128]
     CMP         AX,word [0x120]
     JL          .LAB_LOC_23
-    LODSW 
+    a16 LODSW 
     SHL         AX,0x1
     MOV         DI,AX
     SHL         AX,0x2
     ADD         DI,AX
-    LODSW 
+    a16 LODSW 
     PUSH        BX
     PUSH        SI
     MOV         SI,BX
@@ -2180,7 +2185,7 @@ FUN_1000_1408:
     SUB         BX,word [DI + 0x128]
     SUB         CX,word [DI + 0x12a]
     CALL        FUN_1000_271d
-    MOVSX       EBP,AX
+    a16 MOVSX       EBP,AX
     MOV         AX,word [SI + 0x126]
     MOV         BX,word [SI + 0x128]
     MOV         CX,word [SI + 0x12a]
@@ -2219,7 +2224,7 @@ FUN_1000_1408:
     CMP         AX,word [BX]
     JL          .LAB_LOC_22
     ADD         BX,0x2
-    LOOP        .LAB_LOC_21
+    L_LOOP      .LAB_LOC_21
 .LAB_LOC_22:
     POP         SI
     POP         BX
@@ -2285,39 +2290,39 @@ FUN_1000_1408:
     MOV         AX,BX
     SUB         AX,word [0x5d8]
     SUB         AX,word [0x5da]
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     SUB         AX,word [0x5d8]
     ADD         AX,word [0x5da]
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     ADD         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     ADD         AX,word [0x5da]
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,word [0x5d6]
     ADD         AX,word [0x5dc]
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     MOV         AX,BX
     ADD         AX,word [0x5d8]
     SUB         AX,word [0x5da]
-    STOSW 
+    a16 STOSW 
     MOV         AX,BP
     SUB         AX,word [0x5d6]
     SUB         AX,word [0x5dc]
-    STOSW 
-    MOVSD 
+    a16 STOSW 
+    a16 MOVSD 
     POP         ES
     MOV         word [0xdb14],0x4
     CALL        FUN_1000_36fe
@@ -2369,7 +2374,7 @@ FUN_1000_194c:
     CALL        FUN_1000_1323
 .LAB_LOC_2:
     ADD         DI,0x2
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -2395,7 +2400,7 @@ FUN_1000_1965:
     CALL        FUN_1000_22f0
     ADD         DI,0x2
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         SI,0xe590
     MOV         AX, word [0xe58c]
     MOV         BH,AL
@@ -2551,7 +2556,7 @@ FUN_1000_1965:
     CALL        FUN_1000_233b
     ADD         DI,0x2
     POP         CX
-    LOOP        .LAB_LOC_13
+    L_LOOP      .LAB_LOC_13
     MOV         SI,0xe590
     MOV         AX, word [0xe58e]
     MOV         BH,AL
@@ -2710,7 +2715,7 @@ FUN_1000_1cde:
     CMP         CX,word [0x5f5]
     JL          .LAB_LOC_4
     ADD         BH,CH
-    XLAT      
+    a16 XLAT      
     MOV         AH,AL
     MOV         word [0xdb12],AX
     PUSH        SI
@@ -2828,7 +2833,7 @@ FUN_1000_1e3a:
     CMP         CX,word [0x5f5]
     JL          .LAB_LOC_4
     ADD         BH,CH
-    XLAT     
+    a16 XLAT     
     MOV         AH,AL
     MOV         word [0xdb12],AX
     PUSH        SI
@@ -2948,7 +2953,7 @@ FUN_1965_NP:
     CALL        FUN_1000_2384
     ADD         DI,0x2
     POP         CX
-    LOOP        .LAB_LOC_2
+    L_LOOP      .LAB_LOC_2
     MOV         SI,0xe590
     MOV         AX, word [0xe58c]
     MOV         BL,AL
@@ -3104,7 +3109,7 @@ FUN_1965_NP:
     CALL        FUN_1000_23cf
     ADD         DI,0x2
     POP         CX
-    LOOP        .LAB_LOC_14
+    L_LOOP      .LAB_LOC_14
     MOV         SI,0xe590
     MOV         AX, word [0xe58e]
     MOV         BL,AL
@@ -3450,7 +3455,7 @@ FUN_1000_2431:
     CMP         word [DI + 0x1a],-0x1
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     RET
 .LAB_LOC_2:
     SUB         DI,SI
@@ -3471,22 +3476,22 @@ FUN_1000_2454:
     MOV         CX,0x82
     XOR         AL,AL
     CLD
-    REP STOSB 
+    a16 REP STOSB 
     POP         DI
     POP         ES
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     JC          .LAB_LOC_2
     MOV         DX,DI
     MOV         CX,0x2710
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         BP,AX
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
     POP         BX
     POP         AX
     PUSH        AX
@@ -3509,7 +3514,7 @@ FUN_1000_2454:
     ADD         dword [SI + 0x4],EBX
     ADD         dword [SI + 0x8],EDX
     ADD         SI,0x1c
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,BP
 
     RET
@@ -3537,51 +3542,51 @@ FUN_1000_24c0:
     MOV         DX,0x1a0b
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     CALL        FUN_1000_5a95
     JC          .LAB_LOC_1
     MOV         CX,0xffff
     MOV         DX,0xfd00
     MOV         AX,0x4202
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_1
     MOV         DX,0x1a4d
     MOV         CX,0x300
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         CX,0x0
     MOV         DX,0x80
     MOV         AX,0x4200
-    call far DOS3Call
+    call DOS3Call
     MOV         ES,word [0x1a47]
     XOR         DI,DI
     CALL        FUN_1000_5acf
     JC          .LAB_LOC_1
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
     MOV         DX,0x1a2b
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     MOV         DX,0x1d51
     MOV         CX,0x1100
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
     MOV         DX,0x1a33
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     MOV         DX,0x2e51
     MOV         CX,0x1000
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
 .LAB_LOC_1:
                               ;             1000:2520(j)
     POP         ES
@@ -3731,7 +3736,7 @@ FUN_1000_26dd:
     JP          .LAB_LOC_1
     MOV         BX,AX
     CALL        FUN_1000_2aad
-    MOVSX       EBX,AX
+    a16 MOVSX       EBX,AX
     ADD         SP,0x2
     POP         AX
     SHL         EAX,0x10
@@ -3742,7 +3747,7 @@ FUN_1000_26dd:
 .LAB_LOC_1:
     MOV         BX,AX
     CALL        FUN_1000_2ad8
-    MOVSX       EBX,AX
+    a16 MOVSX       EBX,AX
     POP         AX
     ADD         SP,0x2
     SHL         EAX,0x10
@@ -4164,7 +4169,7 @@ FUN_1000_2b70:
                               ;XREF[1]:     1000:021c(c)
     MOV         AH,0x48
     MOV         BX,0xfa0
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_1
     MOV         word [0xdb10],AX
 .LAB_LOC_1:
@@ -4184,7 +4189,7 @@ FUN_1000_2b98:
     XOR         DI,DI
     MOV         CX,0x3e80
     CLD
-    REP STOSD 
+    a16 REP STOSD 
     POP         DI
     POP         ES
     RET
@@ -4234,7 +4239,7 @@ FUN_1000_2bec:
     POP         SI
     POP         CX
     ADD         SI,0x8
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -4282,13 +4287,13 @@ FUN_1000_2c4b:
     SHL         BX,0x2
     ADD         BX,0xdbc8
 .LAB_LOC_6:
-    JCXZ        .LAB_LOC_8
+    L_JCXZ      .LAB_LOC_8
     PUSH        AX
     SUB         DX,AX
     MOV         AX,DX
     SHL         EAX,0x10
     CDQ
-    MOVSX       ECX,CX
+    a16 MOVSX       ECX,CX
     IDIV        ECX
     MOV         EDX,EAX
     POP         AX
@@ -4299,7 +4304,7 @@ FUN_1000_2c4b:
     ADD         BX,0x4
     ROL         EAX,0x10
     ADD         EAX,EDX
-    LOOP        .LAB_LOC_7
+    L_LOOP      .LAB_LOC_7
     ROR         EAX,0x10
     MOV         word [BX],AX
 .LAB_LOC_8:
@@ -4340,9 +4345,9 @@ FUN_1000_2d61:
     CLD
     MOV         AX, word [0xdb12]
     SHR         CX,0x1
-    REP STOSW 
+    a16 REP STOSW 
     JNC         .LAB_LOC_3
-    STOSB 
+    a16 STOSB 
 .LAB_LOC_3:
     ADD         SI,0x4
     DEC         DX
@@ -4371,8 +4376,8 @@ FUN_1000_2d61:
 .LAB_LOC_8:
     MOV         BL,byte ES:[DI]
     MOV         AL,byte [BX + 0x2e51]
-    STOSB 
-    LOOP        .LAB_LOC_8
+    a16 STOSB 
+    L_LOOP      .LAB_LOC_8
     ADD         SI,0x4
     DEC         DX
     JNZ         .LAB_LOC_6
@@ -4387,7 +4392,7 @@ FUN_1000_2df2:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -4414,7 +4419,7 @@ FUN_1000_2df2:
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -4437,7 +4442,7 @@ FUN_1000_2df2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4459,7 +4464,7 @@ FUN_1000_2df2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4474,7 +4479,7 @@ FUN_1000_2df2:
     CMP         AX,word [0xdbc0]
     JGE         .LAB_LOC_5
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4488,7 +4493,7 @@ FUN_1000_2eaf:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -4515,7 +4520,7 @@ FUN_1000_2eaf:
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -4540,7 +4545,7 @@ FUN_1000_2eaf:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4560,7 +4565,7 @@ FUN_1000_2eaf:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4575,7 +4580,7 @@ FUN_1000_2eaf:
     CMP         AX,word [0xdbc2]
     JLE         .LAB_LOC_5
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4589,7 +4594,7 @@ FUN_1000_2f6c:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -4616,7 +4621,7 @@ FUN_1000_2f6c:
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -4640,7 +4645,7 @@ FUN_1000_2f6c:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4663,7 +4668,7 @@ FUN_1000_2f6c:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4678,7 +4683,7 @@ FUN_1000_2f6c:
     CMP         BX,word [0xdbbc]
     JGE         .LAB_LOC_5
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4692,7 +4697,7 @@ FUN_1000_302d:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -4719,7 +4724,7 @@ FUN_1000_302d:
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -4745,7 +4750,7 @@ FUN_1000_302d:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4766,7 +4771,7 @@ FUN_1000_302d:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4781,7 +4786,7 @@ FUN_1000_302d:
     CMP         BX,word [0xdbbe]
     JLE         .LAB_LOC_5
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -4825,7 +4830,7 @@ FUN_1000_30ee:
     POP         SI
     POP         CX
     ADD         SI,0x8
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -4847,7 +4852,7 @@ FUN_1000_30ee:
     POP         SI
     POP         CX
     ADD         SI,0x8
-    LOOP        .LAB_LOC_2
+    L_LOOP      .LAB_LOC_2
     MOV         AX,word [SI + 0x4]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -4878,13 +4883,13 @@ FUN_1000_317d:
     SHL         BX,0x2
     ADD         BX,0xdee8
 .LAB_LOC_2:
-    JCXZ        .LAB_LOC_4
+    L_JCXZ      .LAB_LOC_4
     PUSH        AX
     SUB         DX,AX
     MOV         AX,DX
     SHL         EAX,0x10
     CDQ
-    MOVSX       ECX,CX
+    a16 MOVSX       ECX,CX
     IDIV        ECX
     MOV         EDX,EAX
     POP         AX
@@ -4895,7 +4900,7 @@ FUN_1000_317d:
     ADD         BX,0x4
     ROL         EAX,0x10
     ADD         EAX,EDX
-    LOOP        .LAB_LOC_3
+    L_LOOP      .LAB_LOC_3
     ROR         EAX,0x10
     MOV         word [BX],AX
 .LAB_LOC_4:
@@ -4935,22 +4940,22 @@ FUN_1000_31d1:
     PUSH        BP
     INC         CX
     ADD         DI,AX
-    MOVSX       EAX,DX
+    a16 MOVSX       EAX,DX
     SHL         EAX,0x8
     CDQ
     MOVZX       ECX,CX
     IDIV        ECX
     MOV         EBX,EAX
     POP         AX
-    MOVSX       EAX,AX
+    a16 MOVSX       EAX,AX
     SHL         EAX,0x8
     CLD
 .LAB_LOC_3:
     ROR         EAX,0x10
-    STOSB 
+    a16 STOSB 
     ROL         EAX,0x10
     ADD         EAX,EBX
-    LOOP        .LAB_LOC_3
+    L_LOOP      .LAB_LOC_3
     POP         DX
     POP         BX
     ADD         BX,0x4
@@ -4968,7 +4973,7 @@ FUN_1000_324f:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5000,7 +5005,7 @@ FUN_1000_324f:
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -5036,7 +5041,7 @@ FUN_1000_324f:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
     PUSH        AX
@@ -5071,7 +5076,7 @@ FUN_1000_324f:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -5085,7 +5090,7 @@ FUN_1000_324f:
     CMP         AX,word [0xdbc0]
     JGE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5096,7 +5101,7 @@ FUN_1000_3376:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5128,7 +5133,7 @@ FUN_1000_3376:
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -5201,7 +5206,7 @@ FUN_1000_3376:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -5215,7 +5220,7 @@ FUN_1000_3376:
     CMP         AX,word [0xdbc2]
     JLE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5226,7 +5231,7 @@ FUN_1000_34a2:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5258,7 +5263,7 @@ FUN_1000_34a2:
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -5296,7 +5301,7 @@ FUN_1000_34a2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
     PUSH        AX
@@ -5333,7 +5338,7 @@ FUN_1000_34a2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -5347,7 +5352,7 @@ FUN_1000_34a2:
     CMP         BX,word [0xdbbc]
     JGE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5358,7 +5363,7 @@ FUN_1000_35cf:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5390,7 +5395,7 @@ FUN_1000_35cf:
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -5466,7 +5471,7 @@ FUN_1000_35cf:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -5480,7 +5485,7 @@ FUN_1000_35cf:
     CMP         BX,word [0xdbbe]
     JLE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5521,7 +5526,7 @@ FUN_1000_36fe:
     POP         SI
     POP         CX
     ADD         SI,0x8
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -5545,7 +5550,7 @@ FUN_1000_36fe:
     POP         SI
     POP         CX
     ADD         SI,0x8
-    LOOP        .LAB_LOC_2
+    L_LOOP      .LAB_LOC_2
     MOV         AX,word [SI + 0x4]
     MOV         BX,word [SI + 0x6]
     MOV         BP,word [SI + 0x2]
@@ -5583,7 +5588,7 @@ FUN_1000_379b:
 .LAB_LOC_2:
     TEST        DI,DI
     JZ          .LAB_LOC_4
-    MOVSX       EDI,DI
+    a16 MOVSX       EDI,DI
     SUB         CX,AX
     SUB         DX,BX
     PUSH        AX
@@ -5614,7 +5619,7 @@ FUN_1000_379b:
     ROL         EBX,0x10
     ADD         EAX,EDI
     ADD         EBX,EDX
-    LOOP        .LAB_LOC_3
+    L_LOOP      .LAB_LOC_3
     ROR         EAX,0x10
     ROR         EBX,0x10
     MOV         word [SI],AX
@@ -5664,12 +5669,12 @@ FUN_1000_3827:
     ADD         DI,AX
     INC         CX
     MOVZX       ECX,CX
-    MOVSX       EAX,DX
+    a16 MOVSX       EAX,DX
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
     XCHG        EAX,ESI
-    MOVSX       EAX,AX
+    a16 MOVSX       EAX,AX
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
@@ -5728,7 +5733,7 @@ FUN_1000_390a:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5770,7 +5775,7 @@ FUN_1000_390a:
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -5876,7 +5881,7 @@ FUN_1000_390a:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -5894,7 +5899,7 @@ FUN_1000_390a:
     CMP         AX,word [0xdbc0]
     JGE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5905,7 +5910,7 @@ FUN_1000_3aa3:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5947,7 +5952,7 @@ FUN_1000_3aa3:
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -6053,7 +6058,7 @@ FUN_1000_3aa3:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -6071,7 +6076,7 @@ FUN_1000_3aa3:
     CMP         AX,word [0xdbc2]
     JLE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6082,7 +6087,7 @@ FUN_1000_3c3c:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -6124,7 +6129,7 @@ FUN_1000_3c3c:
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -6234,7 +6239,7 @@ FUN_1000_3c3c:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -6252,7 +6257,7 @@ FUN_1000_3c3c:
     CMP         BX,word [0xdbbc]
     JGE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6263,7 +6268,7 @@ FUN_1000_3ddb:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -6305,7 +6310,7 @@ FUN_1000_3ddb:
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -6415,7 +6420,7 @@ FUN_1000_3ddb:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 .LAB_LOC_6:
     PUSH        CX
@@ -6433,7 +6438,7 @@ FUN_1000_3ddb:
     CMP         BX,word [0xdbbe]
     JLE         .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_6
+    L_LOOP      .LAB_LOC_6
     JMP         .LAB_LOC_2
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -6619,7 +6624,7 @@ FUN_1000_40c8:
     POP         SI
     POP         CX
     ADD         SI,0x4
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -6662,7 +6667,7 @@ FUN_1000_4120:
     SUB         CX,BX
     SHL         BX,0x2
 .LAB_LOC_6:
-    JCXZ        .LAB_LOC_14
+    L_JCXZ      .LAB_LOC_14
     PUSH        DX
     SUB         DX,AX
     JS          .LAB_LOC_10
@@ -6678,7 +6683,7 @@ FUN_1000_4120:
     ADD         DI,SI
     JS          .LAB_LOC_8
 .LAB_LOC_9:
-    LOOP        .LAB_LOC_7
+    L_LOOP      .LAB_LOC_7
     POP         AX
     MOV         word [BX + 0xe590],AX
     RET
@@ -6696,7 +6701,7 @@ FUN_1000_4120:
     ADD         DI,SI
     JS          .LAB_LOC_12
 .LAB_LOC_13:
-    LOOP        .LAB_LOC_11
+    L_LOOP      .LAB_LOC_11
     POP         AX
     MOV         word [BX + 0xe590],AX
     RET
@@ -6829,7 +6834,7 @@ FUN_1000_42aa:
     POP         SI
     POP         CX
     ADD         SI,0x4
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     POP         SI
@@ -6872,7 +6877,7 @@ FUN_1000_4302:
     SHL         BX,0x2
     ADD         BX,0x2
 .LAB_LOC_6:
-    JCXZ        .LAB_LOC_14
+    L_JCXZ      .LAB_LOC_14
     PUSH        DX
     SUB         DX,AX
     JS          .LAB_LOC_10
@@ -6888,7 +6893,7 @@ FUN_1000_4302:
     ADD         DI,SI
     JS          .LAB_LOC_8
 .LAB_LOC_9:
-    LOOP        .LAB_LOC_7
+    L_LOOP      .LAB_LOC_7
     POP         AX
     MOV         word [BX + 0xe590],AX
     RET
@@ -6906,7 +6911,7 @@ FUN_1000_4302:
     ADD         DI,SI
     JS          .LAB_LOC_12
 .LAB_LOC_13:
-    LOOP        .LAB_LOC_11
+    L_LOOP      .LAB_LOC_11
     POP         AX
     MOV         word [BX + 0xe590],AX
     RET
@@ -6921,7 +6926,7 @@ FUN_1000_4394:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
@@ -6948,7 +6953,7 @@ FUN_1000_4394:
     CMP         AX,word [0xe588]
     JL          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -6969,7 +6974,7 @@ FUN_1000_4394:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -6991,7 +6996,7 @@ FUN_1000_4394:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7006,7 +7011,7 @@ FUN_1000_4394:
     CMP         AX,word [0xe588]
     JGE         .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7020,7 +7025,7 @@ FUN_1000_444d:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
@@ -7047,7 +7052,7 @@ FUN_1000_444d:
     CMP         AX,word [0xe58a]
     JG          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -7070,7 +7075,7 @@ FUN_1000_444d:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7090,7 +7095,7 @@ FUN_1000_444d:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7105,7 +7110,7 @@ FUN_1000_444d:
     CMP         AX,word [0xe58a]
     JLE         .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7119,7 +7124,7 @@ FUN_1000_4506:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
@@ -7146,7 +7151,7 @@ FUN_1000_4506:
     CMP         BX,word [0xe584]
     JL          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -7168,7 +7173,7 @@ FUN_1000_4506:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7191,7 +7196,7 @@ FUN_1000_4506:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7206,7 +7211,7 @@ FUN_1000_4506:
     CMP         BX,word [0xe584]
     JGE         .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7220,7 +7225,7 @@ FUN_1000_45c3:
     PUSH        DI
     XOR         BP,BP
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x2
@@ -7247,7 +7252,7 @@ FUN_1000_45c3:
     CMP         BX,word [0xe586]
     JG          .LAB_LOC_3
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -7271,7 +7276,7 @@ FUN_1000_45c3:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7292,7 +7297,7 @@ FUN_1000_45c3:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7307,7 +7312,7 @@ FUN_1000_45c3:
     CMP         BX,word [0xe586]
     JLE         .LAB_LOC_4
     POP         CX
-    LOOP        .LAB_LOC_5
+    L_LOOP      .LAB_LOC_5
     POP         DI
     POP         SI
     MOV         word [DI + -0x2],BP
@@ -7399,7 +7404,7 @@ FUN_1000_46d3:
     RET
 .LAB_LOC_1:
     PUSH        AX
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     MOV         BX,word [SI]
     MOV         DX,word [0xe990]
     PUSH        AX
@@ -7502,7 +7507,7 @@ FUN_1000_47ec:
     MOV         word [0xdb14],AX
     RET
 .LAB_LOC_1:
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,word [0xe996]
     MOV         BX,word [SI]
@@ -7688,7 +7693,7 @@ FUN_1000_48db:
     MOVZX       BX,byte [0xea28]
     SHR         BX,0x4
     MOVZX       CX,byte [BX + 0xea49]
-    JCXZ        .LAB_LOC_12
+    L_JCXZ      .LAB_LOC_12
     MOV         EAX,dword [DI + 0xc]
     SAR         EAX,CL
     SUB         dword [DI + 0xc],EAX
@@ -8089,7 +8094,7 @@ FUN_1000_4e0a:
     cvtss2si eax, xmm3
 
     SAR         EAX,0xa
-    MOVSX       EBX,word DS:[BP + 0x4]
+    a16 MOVSX       EBX,word DS:[BP + 0x4]
     TEST        BX,BX
     JS          .LAB_LOC_10
     MOVZX       ECX,word DS:[BP + 0x8]
@@ -8257,11 +8262,11 @@ FUN_1000_500b:
     POP         DI
     POP         CX
     ADD         DI,0x2
-    LOOP        .LAB_LOC_2
+    L_LOOP      .LAB_LOC_2
     POP         DI
     POP         CX
     ADD         DI,0x2
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -8274,24 +8279,24 @@ FUN_1000_5091:
     ADD         DX,word [SI]
     ADD         DX,0x2
     MOV         SI,0xec1b
-    LODSW 
+    a16 LODSW 
     MOV         CX,AX
     MOV         word [0xea99],0x0
 .LAB_LOC_1:
     PUSH        CX
-    LODSW 
+    a16 LODSW 
     MOV         BX,AX
     SHL         BX,0x3
     SUB         BX,AX
     SHL         BX,0x2
     ADD         BX,DX
-    LODSW 
+    a16 LODSW 
     MOV         BP,AX
     SHL         BP,0x3
     SUB         BP,AX
     SHL         BP,0x2
     ADD         BP,DX
-    LODSW 
+    a16 LODSW 
     MOV         DI,AX
     SHL         DI,0x3
     SUB         DI,AX
@@ -8441,7 +8446,7 @@ FUN_1000_51bd:
     JL          .LAB_LOC_11
 .LAB_LOC_8:
     ADD         SI,0x1c
-    LOOP        .LAB_LOC_4
+    L_LOOP      .LAB_LOC_4
     MOV         SI,BP
     POP         BX
     MOV         EAX,dword [BX + 0xea9b]
@@ -8613,7 +8618,7 @@ FUN_timer_5680:
     POP         CX
     ADD         DI,0x2
     ADD         BP,0x6
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     CALL        FUN_1000_500b
     CALL        FUN_1000_0bb5
     CALL        FUN_1000_0a3b
@@ -8726,10 +8731,10 @@ FUN_1000_5864:
     CALL        FUN_1000_58fc
     MOV         AL,0x8
     CALL        FUN_1000_589b
-    LODSB 
+    a16 LODSB 
     MOV         AH,0xa8
     CALL        FUN_1000_58fc
-    LODSB 
+    a16 LODSB 
     MOV         AH,0xb8
     CALL        FUN_1000_58fc
     POP         DX
@@ -8750,47 +8755,47 @@ FUN_1000_589b:
     MOV         BL,byte [BX + CSD_DAT_unk_592c]
     MOV         AH,0x20
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x40
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x60
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x80
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0xe0
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x23
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x43
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x63
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0x83
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0xe3
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     MOV         AH,0xc0
     ADD         AH,BL
-    LODSB 
+    a16 LODSB 
     CALL        FUN_1000_58fc
     RET
 ;************************************************************************************************
@@ -8823,7 +8828,7 @@ FUN_1000_5940_render_text:
     MOV         CX,AX
     CLD
 .LAB_LOC_1:
-    LODSB 
+    a16 LODSB 
     CMP         AL,0x0
     JNZ         .LAB_LOC_2
     RET
@@ -8839,7 +8844,7 @@ FUN_1000_5940_render_text:
 .LAB_LOC_4:
     CMP         AL,0x1b
     JNZ         .LAB_LOC_5
-    LODSB 
+    a16 LODSB 
     MOV         [CSD_BYTE_1000_59c1],AL                  ;= Fh
     JMP         .LAB_LOC_1
 .LAB_LOC_5:
@@ -8900,7 +8905,7 @@ FUN_1000_5a60:
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
-    call far DOS3Call
+    call DOS3Call
     MOV         BX,AX
     JC          .LAB_LOC_1
     CALL        FUN_1000_5a95
@@ -8908,12 +8913,12 @@ FUN_1000_5a60:
     MOV         CX,0x0
     MOV         DX,0x80
     MOV         AX,0x4200
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_1
     CALL        FUN_1000_5acf
     JC          .LAB_LOC_1
     MOV         AH,0x3e
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_1
     RET
 .LAB_LOC_1:
@@ -8927,7 +8932,7 @@ FUN_1000_5a95:
     MOV         DX,0xef88
     MOV         CX,0x80
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     JC          .LAB_LOC_1
     MOV         AX, word [0xef90]
     SUB         AX,word [0xef8c]
@@ -8982,13 +8987,13 @@ FUN_1000_5acf:
 .LAB_LOC_4:
     CMP         CX,0x100
     JNC         .LAB_LOC_5
-    STOSB 
+    a16 STOSB 
 .LAB_LOC_5:
     INC         CX
     CMP         CX,word [0xef80]
     JC          .LAB_LOC_2
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     CLC
     RET
 ;************************************************************************************************
@@ -9004,12 +9009,12 @@ FUN_1000_5b26:
     MOV         DX,0xf008
     MOV         CX,CX
     MOV         AH,0x3f
-    call far DOS3Call
+    call DOS3Call
     POP         CX
     POP         AX
     MOV         SI,0xf008
 .LAB_LOC_1:
-    LODSB 
+    a16 LODSB 
     RET
 
  ; 1000:5cce [UNDEFINED BYTES REMOVED]
