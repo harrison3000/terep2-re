@@ -46,3 +46,4 @@ asm_f_init:
     POP GS
     POP FS
     POPAD
+    ret
