@@ -147,22 +147,16 @@ void f_init(cpu_ctx *cpu){
 
 void f_cam_select(cpu_ctx *cpu){
    INST_SHL(cpu->BX, 1);
-    //JUMPTABLE!CAMERA
-   INST_AND(cpu->BX, 15);
-   INST_JMP(MEM_UUUU(cpu->CS*SEGM + cpu->BX + ZZZZ));
-   JMP_TABLE_CAMERAS:
-   VAL_DW«CAMERA_1» 
-   VAL_DW«CAMERA_2» 
-   VAL_DW«CAMERA_3» 
-   VAL_DW«CAMERA_4» 
-   VAL_DW«CAMERA_5» 
+    
+   switch(cpu->BX){
+      case 0: goto CAMERA_1;
+      case 2: goto CAMERA_2;
+      case 4: goto CAMERA_3;
+      case 6: goto CAMERA_4;
+      case 8: goto CAMERA_5;
+      default: __builtin_trap();
+   }
 
-//pseudops times3dw.LAB_RUIM
-
-
-   LAB_RUIM:
-   INST_UD2();
-    //FIMJUMPTABLE
 
    CAMERA_1:
    F_0693(cpu); //= 0693h
@@ -1797,42 +1791,37 @@ void FUN_1000_1408(cpu_ctx *cpu){
                               //             1000:15ea(j),1000:1666(j),1000:1676(j),1000:16dc(j),
                               //             1000:16ec(j),1000:191f(c),1000:1929(c),1000:1939(c),
                               //             1000:1942(c)
+   INST_NOP();
+   L_1408_START:
    INST_LODSB();
    INST_MOVZX(cpu->BX, cpu->AL);
    INST_SHL(cpu->BX, 1);
-    //JUMPTABLE!CAMERA
-   INST_AND(cpu->BX, 63);
-   INST_JMP(MEM_UUUU(cpu->CS*SEGM + cpu->BX + ZZZZ));
-   JMP_TABLE_1413:
-    //addr[21]
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_6» 
-   VAL_DW«LAB_LOC_7» 
-   VAL_DW«LAB_LOC_8» 
-   VAL_DW«LAB_LOC_9» 
-   VAL_DW«LAB_LOC_11» 
-   VAL_DW«LAB_LOC_12» 
-   VAL_DW«LAB_LOC_14» 
-   VAL_DW«LAB_LOC_16» 
-   VAL_DW«LAB_LOC_18» 
-   VAL_DW«LAB_LOC_20» 
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_1» 
-   VAL_DW«LAB_LOC_24» 
-   VAL_DW«LAB_LOC_2» 
-   VAL_DW«LAB_LOC_3» 
-   VAL_DW«LAB_LOC_4» 
-   VAL_DW«LAB_LOC_5» 
+    
+   switch(cpu->BX){
+      case 0: goto LAB_LOC_1;
+      case 2: goto LAB_LOC_6;
+      case 4: goto LAB_LOC_7;
+      case 6: goto LAB_LOC_8;
+      case 8: goto LAB_LOC_9;
+      case 10: goto LAB_LOC_11;
+      case 12: goto LAB_LOC_12;
+      case 14: goto LAB_LOC_14;
+      case 16: goto LAB_LOC_16;
+      case 18: goto LAB_LOC_18;
+      case 20: goto LAB_LOC_20;
+      case 22: goto LAB_LOC_1;
+      case 24: goto LAB_LOC_1;
+      case 26: goto LAB_LOC_1;
+      case 28: goto LAB_LOC_1;
+      case 30: goto LAB_LOC_1;
+      case 32: goto LAB_LOC_24;
+      case 34: goto LAB_LOC_2;
+      case 36: goto LAB_LOC_3;
+      case 38: goto LAB_LOC_4;
+      case 40: goto LAB_LOC_5;
+      default: __builtin_trap();
+   }
 
-//pseudops times11dw.LAB_RUIM
-
-
-   LAB_RUIM:
-   INST_UD2();
-    //FIMJUMPTABLE
 
    LAB_LOC_1:
                               //             1000:142f(*),1000:1431(*)
@@ -1840,28 +1829,28 @@ void FUN_1000_1408(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_LODSW();
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_3:
    INST_LODSW();
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, cpu->AX);
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_4:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
    INST_LODSW();
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_5:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
    INST_LODSW();
-   JUMP«JNS» goto FUN_1000_1408;
+   JUMP«JNS» goto L_1408_START;
    INST_ADD(cpu->SI, cpu->AX);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_6:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -1873,11 +1862,11 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_CMP(MEM_WORD(cpu->DI + 0x2), cpu->AX);
    INST_LODSW();
    cpu->CL = cpu->AL;
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    cpu->AX = MEM_WORD(cpu->DI + 0x6);
    cpu->BX = MEM_WORD(cpu->DI + 0x8);
    FUN_1000_3f98(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_7:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -1895,7 +1884,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_CMP(cpu->BX, cpu->AX);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_8:
    cpu->BX = 0; //was a XOR
    INST_LODSW();
@@ -1940,7 +1929,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_9:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -1981,18 +1970,18 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_LODSW();
    MEM_WORD(0xdb12) = cpu->AX;
    INST_CMP(cpu->BL, 0x3);
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_2bec(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_11:
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_12:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -2036,16 +2025,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
    INST_CMP(cpu->BL, 0x3);
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_30ee(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_14:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -2097,16 +2086,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
    INST_CMP(cpu->BL, 0x3);
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_30ee(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_16:
    INST_LODSB();
    INST_MOVZX(cpu->CX, cpu->AL);
@@ -2150,16 +2139,16 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_XCHG(cpu->DI, cpu->SI);
    cpu->BL = cpu->AL;
    INST_CMP(cpu->BL, 0x3);
-   JUMP«JL» goto FUN_1000_1408;
+   JUMP«JL» goto L_1408_START;
    INST_PUSH(cpu->SI);
    cpu->SI = 0xdb16;
    FUN_1000_2662(cpu);
    INST_LAHF();
    MEM_BYTE(0x5ee) = cpu->AL;
    INST_POP(cpu->SI);
-   JUMP«JS» goto FUN_1000_1408;
+   JUMP«JS» goto L_1408_START;
    FUN_1000_36fe(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_18:
    INST_LODSW();
    INST_SHL(cpu->AX, 0x1);
@@ -2211,10 +2200,10 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_POP(cpu->ES);
    MEM_WORD(0xdb14) = 0x4;
    FUN_1000_36fe(cpu);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_19:
    INST_ADD(cpu->SI, 0x12);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_20:
    INST_PUSH(cpu->SI);
    INST_LODSW();
@@ -2385,7 +2374,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    LAB_LOC_23:
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0xba);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_24:
    cpu->AL = MEM_BYTE(0x5ee);
    INST_SAHF();
@@ -2401,7 +2390,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0x4);
-   goto FUN_1000_1408;
+   goto L_1408_START;
    LAB_LOC_25:
    INST_PUSH(cpu->SI);
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
@@ -2414,7 +2403,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    FUN_1000_1408(cpu);
    INST_POP(cpu->SI);
    INST_ADD(cpu->SI, 0x4);
-   goto FUN_1000_1408;
+   goto L_1408_START;
 }
 
 //************************************************************************************************
@@ -3829,7 +3818,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    FUN_1000_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   INST_ADD(cpu->SP, 0x2);
+   DUMMY_POP_WORD();
    INST_POP(cpu->AX);
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
@@ -3841,7 +3830,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    FUN_1000_2ad8(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
    INST_POP(cpu->AX);
-   INST_ADD(cpu->SP, 0x2);
+   DUMMY_POP_WORD();
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();
@@ -8275,33 +8264,31 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0xc));
    MEM_DWORD(0xe9f8) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9ec) = cpu->EAX;
+   float tmp_ec = SIGNED(cpu->EAX);
    cpu->EAX = MEM_DWORD(cpu->SI + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x10);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x10));
    MEM_DWORD(0xe9fc) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9f0) = cpu->EAX;
+   float tmp_f0 = SIGNED(cpu->EAX);
    cpu->EAX = MEM_DWORD(cpu->SI + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x14);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x14));
    MEM_DWORD(0xea00) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   MEM_DWORD(0xe9f4) = cpu->EAX;
-   INST_FINIT();
-   INST_FILD(MEM_DWORD(0xe9ec));
-   INST_FMUL(cpu->ST0);
-   INST_FILD(MEM_DWORD(0xe9f0));
-   INST_FMUL(cpu->ST0);
-   INST_FILD(MEM_DWORD(0xe9f4));
-   INST_FMUL(cpu->ST0);
-   INST_FADDP();
-   INST_FADDP();
-   INST_FSQRT();
-   INST_FISTP(MEM_DWORD(0xe9e8));
-   cpu->EAX = MEM_DWORD(0xe9e8);
+   float tmp_f4 = SIGNED(cpu->EAX);
+   
+   tmp_ec *= tmp_ec;
+   tmp_f0 *= tmp_f0;
+   tmp_f4 *= tmp_f4;
+
+
+   float ressq = __builtin_sqrtf(tmp_ec + tmp_f0 + tmp_f4);
+   cpu->EAX = (int32_t)ressq;
+    
+   
    INST_SAR(cpu->EAX, 0xa);
    INST_MOVSX(cpu->EBX, MEM_WORD(cpu->DS*SEGM + cpu->BP + 0x4));
    INST_TEST(cpu->BX, cpu->BX);
