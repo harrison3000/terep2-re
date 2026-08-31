@@ -3,7 +3,7 @@ import {readFile, writeFile} from "node:fs/promises";
 const f = (await readFile("raw_c.cpp")).toString();
 
 const fixed = f.replaceAll(/JUMP«(.+)»/g, function(_tudo, opcode){
-    var opcodemap = {
+    var jumpMap = {
         "JZ":  "cpu->ZF",
         "JNZ": "!cpu->ZF",
         "JC":  "cpu->CF",
@@ -12,9 +12,20 @@ const fixed = f.replaceAll(/JUMP«(.+)»/g, function(_tudo, opcode){
         "JNS": "!cpu->SF",
         "JP":  "cpu->PF",
         "JNP": "!cpu->PF",
+        "JLE": " cpu->ZF || (cpu->SF != cpu->OF) /*JLE*/",
+        "JG" : "!cpu->ZF && (cpu->SF == cpu->OF) /*JG*/",
+        "JGE": "cpu->SF == cpu->OF /*JGE*/",
+        "JL" : "cpu->SF != cpu->OF /*JL*/",
+        "JBE": "cpu->CF || cpu->ZF /*JBE*/",
+        "JA" : "!cpu->CF && !cpu->ZF /*JA*/",
     };
 
-    return `if (${opcodemap[opcode]})`;
+    var op = jumpMap[opcode];
+    if(!op){
+        throw "cant do dat";
+    }
+
+    return `if (${op})`;
 }).replaceAll(/\/\/JUMPTABLE((.*\n)+?).+FIMJUMPTABLE/g, function(a, b){
 
     const u = [""];
