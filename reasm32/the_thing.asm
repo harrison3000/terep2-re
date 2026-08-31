@@ -37,6 +37,16 @@ asm_f_init:
     MOV dword [CSD_DWORD_1000_12a3], 0x7FFF0000
     MOV byte[CSD_BYTE_1000_59c1], 0xf
 
+    ;turns ou the code needs these values to be initialized to 0xff otherwise some hell breaks loose in the
+    ;flying car magic force thing
+    cld
+    push ds
+    pop  es
+    mov ecx, 128
+    mov al, 0xff
+    mov edi, CSD_DAT_keys_571e
+    rep stosb
+
     call f_init
     MOV word [0xff00], 0xbeef
     push word [0xdb10]
