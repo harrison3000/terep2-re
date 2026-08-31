@@ -51,7 +51,26 @@ static inline int msbset(uint32_t v) { return (v & 0x80000000) != 0 ; }
     cpu->ZF = val == 0;   \
     cpu->SF = msbset(val);\
     /*the builtin is the oposite of the x86 flag*/ \
-    cpu->PF = !__builtin_parity(val); \
+    cpu->PF = !__builtin_parity(val & 0xff); \
 })
 
 
+void DOS3Call(cpu_ctx*);
+
+#define INST_NOP() ({})
+
+#define INST_ADD(dest, src) ({ \
+    auto res = dest;        \
+    res = dest + src;       \
+    cpu->CF = (res < dest); \
+    cpu->OF = msbset(~(dest ^ src) & (dest ^ res));\
+    UPDATE_ZPF(res);       \
+    dest = res;            \
+})
+#define INST_SUB(dest, src) ({                  \
+    auto res = dest - src;                      \
+    cpu->CF = (dest < src);                     \
+    cpu->OF = msbset((dest ^ src) & (dest ^ res)); \
+    UPDATE_ZPF(res);                            \
+    dest = res;                                 \
+})
