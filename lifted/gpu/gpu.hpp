@@ -78,6 +78,26 @@ void DOS3Call(cpu_ctx*);
 })
 #define INST_MOVZX(dest, src) ({dest = src;})
 
+#define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
+
+#define BITWISATRON(_dest, src, op) ({ \
+    auto &dest = (_dest);   \
+    dest op (src);          \
+    cpu->CF = 0;            \
+    cpu->OF = 0;            \
+    UPDATE_ZPF(dest);      \
+})
+
+#define INST_XOR(dest, src) BITWISATRON(dest, src, ^=)
+#define INST_AND(dest, src) BITWISATRON(dest, src, &=)
+#define INST_OR(dest, src)  BITWISATRON(dest, src, |=)
+#define INST_TEST(dest, src) ({\
+    auto tmp = (dest);           \
+    BITWISATRON(tmp, src, &=); \
+})
+
+#define INST_NOT(dest)  ({(dest) = ~(dest);})
+
 #define INST_XCHG(dest, src) ({ \
     auto tmp = src; \
     src = dest;     \
