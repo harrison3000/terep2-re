@@ -84,6 +84,38 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_MOVSX(dest, src) ({dest = SIGNED(src);})
 
+// we just ignore the direction flag, the code never sets it to reverse, thank God
+#define INST_LODSB() ({ \
+    cpu->AL = MEM_BYTE(cpu->SI); \
+    cpu->SI += 1;                \
+})
+#define INST_LODSW() ({ \
+    cpu->AX = MEM_WORD(cpu->SI); \
+    cpu->SI += 2;                \
+})
+#define INST_LODSD() ({   \
+    cpu->EAX = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4;                  \
+})
+
+#define INST_STOSB() ({ \
+    MEM_BYTE(cpu->ES*SEGM + cpu->DI) = cpu->AL; \
+    cpu->DI += 1;       \
+})
+#define INST_STOSW() ({ \
+    MEM_WORD(cpu->ES*SEGM + cpu->DI) = cpu->AX; \
+    cpu->DI += 2;       \
+})
+#define INST_STOSD() ({   \
+    MEM_DWORD(cpu->ES*SEGM + cpu->DI) = cpu->EAX; \
+    cpu->DI += 4;         \
+})
+
+#define INST_MOVSD() ({ \
+    MEM_DWORD(cpu->ES*SEGM + cpu->DI) = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4; \
+    cpu->DI += 4; \
+})
 
 #define INST_CWD() ({ \
     if(msbset(cpu->AX)){ \
