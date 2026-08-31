@@ -18,6 +18,30 @@
     reg = it.value;             \
 })
 
+#define DUMMY_POP_WORD() ({ \
+    int16_t dummy;   \
+    INST_POP(dummy); \
+})
+
+#define MEM_BYTE(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint8_t *)displ; \
+})[0]
+
+#define MEM_WORD(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint16_t *)displ; \
+})[0]
+
+#define MEM_DWORD(addr) ({ \
+    uintptr_t displ = cpu->mem_base + addr; \
+    (uint32_t *)displ; \
+})[0]
+
+static inline int8_t SIGNED(uint8_t v) { return v; }
+static inline int16_t SIGNED(uint16_t v) { return v; }
+static inline int32_t SIGNED(uint32_t v) { return v; }
+
 static inline int msbset(uint8_t v)  { return (v & 0x80) != 0 ; }
 static inline int msbset(uint16_t v) { return (v & 0x8000) != 0 ; }
 static inline int msbset(uint32_t v) { return (v & 0x80000000) != 0 ; }
