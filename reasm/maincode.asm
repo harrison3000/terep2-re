@@ -141,6 +141,7 @@ f_init:
 
 f_cam_select:
     SHL BX, 1
+    ;JUMPTABLE!CAMERA
     AND BX, 15
     JMP         [CS:BX + .JMP_TABLE_CAMERAS]
     .JMP_TABLE_CAMERAS:
@@ -154,6 +155,7 @@ f_cam_select:
 
     .LAB_RUIM:
     ud2
+    ;FIMJUMPTABLE
 
     .CAMERA_1:
     call F_0693  ;= 0693h
@@ -1740,6 +1742,7 @@ FUN_1000_1408:
     LODSB 
     MOVZX       BX,AL
     SHL         BX, 1
+    ;JUMPTABLE!CAMERA
     AND BX, 63
     JMP         [CS:BX + .JMP_TABLE_1413]
 .JMP_TABLE_1413:
@@ -1770,6 +1773,7 @@ FUN_1000_1408:
 
 .LAB_RUIM:
     ud2
+    ;FIMJUMPTABLE
 
 .LAB_LOC_1:
                               ;             1000:142f(*),1000:1431(*)
