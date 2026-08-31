@@ -76,7 +76,23 @@ void DOS3Call(cpu_ctx*);
     UPDATE_ZPF(res);             \
     dest = res;                  \
 })
+#define INST_INC(dest) ({\
+    auto tmp = cpu->CF;  \
+    INST_ADD(dest, 1);   \
+    cpu->CF = tmp;       \
+})
+#define INST_DEC(dest) ({\
+    auto tmp = cpu->CF;  \
+    INST_SUB(dest, 1);   \
+    cpu->CF = tmp;       \
+})
+
 #define INST_MOVZX(dest, src) ({dest = src;})
+
+#define INST_CMP(dest, src) ({ \
+    auto tmp = (dest);  \
+    INST_SUB(tmp, src); \
+})
 
 #define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
 
