@@ -5,7 +5,7 @@
 
 #include "types.hpp"
 
-#define SEGM 0x400
+#define SEGM 1024
 
 #define def_datareg 0
 
@@ -17,3 +17,17 @@
     cpu->stack.pop_back();      \
     reg = it.value;             \
 })
+
+static inline int msbset(uint8_t v)  { return (v & 0x80) != 0 ; }
+static inline int msbset(uint16_t v) { return (v & 0x8000) != 0 ; }
+static inline int msbset(uint32_t v) { return (v & 0x80000000) != 0 ; }
+
+#define UPDATE_ZPF(val)({ \
+    cpu->flagtrio = 0;    \
+    cpu->ZF = val == 0;   \
+    cpu->SF = msbset(val);\
+    /*the builtin is the oposite of the x86 flag*/ \
+    cpu->PF = !__builtin_parity(val); \
+})
+
+

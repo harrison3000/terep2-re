@@ -26,7 +26,18 @@ struct cpu_ctx {
     uint16_t CS; //should never be used
     uint16_t ES, FS, GS;
 
-    uint8_t CF;
+    union {
+        struct {
+            uint8_t ZF : 1;
+            uint8_t PF : 1;
+            uint8_t SF : 1;
+            uint8_t OF;
+            uint8_t CF;
+        };
+
+        uint8_t flagtrio; //alias to the zpf trio, will be updated as one most of the times
+        uint32_t rawFlags;
+    };
 
     uintptr_t mem_base;
 
