@@ -74,3 +74,32 @@ void DOS3Call(cpu_ctx*);
     UPDATE_ZPF(res);                            \
     dest = res;                                 \
 })
+#define INST_MOVZX(dest, src) ({dest = src;})
+
+#define INST_XCHG(dest, src) ({ \
+    auto tmp = src; \
+    src = dest;     \
+    dest = tmp;     \
+})
+
+#define INST_MOVSX(dest, src) ({dest = SIGNED(src);})
+
+
+#define INST_CWD() ({ \
+    if(msbset(cpu->AX)){ \
+        cpu->DX = 0xFFFF; \
+    }else{                \
+        cpu->DX = 0;      \
+    }                     \
+})
+
+#define INST_CDQ() ({ \
+    if(msbset(cpu->EAX)){ \
+        cpu->EDX = 0xFFFFFFFF; \
+    }else{                \
+        cpu->EDX = 0;     \
+    }                     \
+})
+
+#define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
+
