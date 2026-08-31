@@ -59,20 +59,22 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_NOP() ({})
 
-#define INST_ADD(dest, src) ({ \
+#define INST_ADD(_dest, src) ({ \
+    auto &dest = (_dest);   \
     auto res = dest;        \
     res = dest + src;       \
     cpu->CF = (res < dest); \
     cpu->OF = msbset(~(dest ^ src) & (dest ^ res));\
-    UPDATE_ZPF(res);       \
-    dest = res;            \
+    UPDATE_ZPF(res);        \
+    dest = res;             \
 })
-#define INST_SUB(dest, src) ({                  \
-    auto res = dest - src;                      \
-    cpu->CF = (dest < src);                     \
+#define INST_SUB(_dest, src) ({  \
+    auto &dest = (_dest);        \
+    auto res = dest - src;       \
+    cpu->CF = (dest < src);      \
     cpu->OF = msbset((dest ^ src) & (dest ^ res)); \
-    UPDATE_ZPF(res);                            \
-    dest = res;                                 \
+    UPDATE_ZPF(res);             \
+    dest = res;                  \
 })
 #define INST_MOVZX(dest, src) ({dest = src;})
 
