@@ -11,7 +11,8 @@
 
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
-#define INST_POP(reg) ({        \
+#define INST_POP(_reg) ({       \
+    auto &reg = (_reg);         \
     auto it = cpu->stack.back();\
     if(sizeof(reg) != it.size){__builtin_trap();}\
     cpu->stack.pop_back();      \
@@ -46,7 +47,7 @@ static inline int msbset(uint8_t v)  { return (v & 0x80) != 0 ; }
 static inline int msbset(uint16_t v) { return (v & 0x8000) != 0 ; }
 static inline int msbset(uint32_t v) { return (v & 0x80000000) != 0 ; }
 
-#define UPDATE_ZPF(val)({ \
+#define UPDATE_ZPS(val)({ \
     cpu->flagtrio = 0;    \
     cpu->ZF = val == 0;   \
     cpu->SF = msbset(val);\
@@ -59,22 +60,25 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_NOP() ({})
 
-#define INST_ADD(_dest, src) ({ \
-    auto &dest = (_dest);   \
-    auto res = dest;        \
-    res = dest + src;       \
-    cpu->CF = (res < dest); \
-    cpu->OF = msbset(~(dest ^ src) & (dest ^ res));\
-    UPDATE_ZPF(res);        \
-    dest = res;             \
+#define INST_ADD(_dest, _src) ({ \
+    auto &dest = (_dest);      \
+    typeof(dest) src = (_src); \
+    typeof(dest) res;          \
+    res = dest + src;          \
+    cpu->CF = (res < dest);    \
+    cpu->OF = msbset((typeof(dest))(~(dest ^ src) & (dest ^ res)));\
+    UPDATE_ZPS(res);           \
+    dest = res;                \
 })
-#define INST_SUB(_dest, src) ({  \
-    auto &dest = (_dest);        \
-    auto res = dest - src;       \
-    cpu->CF = (dest < src);      \
-    cpu->OF = msbset((dest ^ src) & (dest ^ res)); \
-    UPDATE_ZPF(res);             \
-    dest = res;                  \
+#define INST_SUB(_dest, _src) ({ \
+    auto &dest = (_dest);      \
+    typeof(dest) src = (_src); \
+    typeof(dest) res;          \
+    res = dest - src;          \
+    cpu->CF = (dest < src);    \
+    cpu->OF = msbset((typeof(dest))((dest ^ src) & (dest ^ res)));\
+    UPDATE_ZPS(res);           \
+    dest = res;                \
 })
 #define INST_INC(dest) ({\
     auto tmp = cpu->CF;  \
@@ -101,14 +105,14 @@ void DOS3Call(cpu_ctx*);
     dest op (src);          \
     cpu->CF = 0;            \
     cpu->OF = 0;            \
-    UPDATE_ZPF(dest);      \
+    UPDATE_ZPS(dest);       \
 })
 
 #define INST_XOR(dest, src) BITWISATRON(dest, src, ^=)
 #define INST_AND(dest, src) BITWISATRON(dest, src, &=)
 #define INST_OR(dest, src)  BITWISATRON(dest, src, |=)
 #define INST_TEST(dest, src) ({\
-    auto tmp = (dest);           \
+    auto tmp = (dest);         \
     BITWISATRON(tmp, src, &=); \
 })
 
@@ -156,20 +160,11 @@ void DOS3Call(cpu_ctx*);
 })
 
 #define INST_CWD() ({ \
-    if(msbset(cpu->AX)){ \
-        cpu->DX = 0xFFFF; \
-    }else{                \
-        cpu->DX = 0;      \
-    }                     \
+    cpu->DX = msbset(cpu->AX) ? 0xFFFF : 0; \
 })
 
 #define INST_CDQ() ({ \
-    if(msbset(cpu->EAX)){ \
-        cpu->EDX = 0xFFFFFFFF; \
-    }else{                \
-        cpu->EDX = 0;     \
-    }                     \
+    cpu->EDX = msbset(cpu->EAX) ? 0xFFFFFFFF : 0; \
 })
 
 #define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
-
