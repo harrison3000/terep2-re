@@ -82,6 +82,14 @@ void DOS3Call(cpu_ctx*);
     UPDATE_ZPS(res);           \
     dest = res;                \
 })
+
+#define INST_NEG(dest) ({ \
+    auto val = (dest);    \
+    typeof(val) tmp = 0;  \
+    INST_SUB(tmp, val);   \
+    dest = tmp;           \
+})
+
 #define INST_INC(dest) ({\
     auto tmp = cpu->CF;  \
     INST_ADD(dest, 1);   \
