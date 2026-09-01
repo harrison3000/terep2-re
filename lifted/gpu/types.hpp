@@ -35,7 +35,7 @@ struct cpu_ctx {
             uint8_t CF;
         };
 
-        uint8_t flagtrio; //alias to the zpf trio, will be updated as one most of the times
+        uint8_t flagtrio; //alias to the zps trio, will be updated as one most of the times
         uint32_t rawFlags;
     };
 

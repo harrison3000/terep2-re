@@ -19,6 +19,9 @@
     reg = it.value;             \
 })
 
+#define INST_PUSHF() INST_PUSH(cpu->rawFlags)
+#define INST_POPF()  INST_POP(cpu->rawFlags)
+
 #define DUMMY_POP_WORD() ({ \
     int16_t dummy;   \
     INST_POP(dummy); \
