@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include "fcntl.h"
 
-#include "lifted/gpu/gpu.hpp"
 #include "lifted/gpu/types.hpp"
 
 void f_init(cpu_ctx *cpu);

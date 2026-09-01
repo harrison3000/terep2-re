@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdio>
 
 #include "types.hpp"
 
@@ -101,6 +102,23 @@ void DOS3Call(cpu_ctx*);
     cpu->CF = tmp;       \
 })
 
+#define INST_SHL(dest, count) ({ \
+    dest <<= count;        \
+    cpu->rawFlags = 0xbad; \
+})
+
+#define INST_SHR(dest, count) ({ \
+    dest >>= count;        \
+    cpu->rawFlags = 0xbad; \
+})
+
+#define CHECK_FLAGS() ({ \
+    if(cpu->rawFlags == 0xbad) { \
+        printf("next branch needs good flags! line: %d\n", __LINE__);\
+        __builtin_trap(); \
+    } \
+})
+
 #define INST_MOVZX(dest, src) ({dest = src;})
 
 #define INST_CMP(dest, src) ({ \
@@ -177,3 +195,75 @@ void DOS3Call(cpu_ctx*);
 })
 
 #define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
+
+
+static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
+    auto as = SIGNED(a);
+    auto sax = SIGNED(cpu->AX);
+
+    auto res = (int32_t)sax * (int32_t)as;
+    cpu->AX = res & 0xffff;
+    cpu->DX = res >> 16;
+}
+static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
+    auto as = SIGNED(a);
+    auto bs = SIGNED(b);
+
+    auto res = (int64_t)as * (int64_t)bs;
+    cpu->EAX = res & 0xffffffff;
+    cpu->EDX = res >> 32;
+}
+
+#define INST_IMUL(...) ({  \
+    cpu->rawFlags = 0xbad; \
+    inner_imul(cpu,__VA_ARGS__); \
+})
+
+static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
+    int32_t num = (int32_t)(((uint32_t)cpu->DX << 16) | cpu->AX);
+    int16_t den = SIGNED(a);
+    
+    cpu->AX = (uint16_t)(num / den);
+    cpu->DX = (uint16_t)(num % den);
+}
+
+static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
+    int64_t num = (int64_t)(((uint64_t)cpu->EDX << 32) | cpu->EAX);
+    int32_t den = SIGNED(a);
+    
+    cpu->EAX = (uint32_t)(num / den);
+    cpu->EDX = (uint32_t)(num % den);
+}
+
+#define INST_IDIV(a) ({    \
+    cpu->rawFlags = 0xbad; \
+    inner_idiv(cpu, a);    \
+})
+
+static inline void inner_mul(cpu_ctx *cpu, uint16_t a) {
+    uint32_t res = (uint32_t)cpu->AX * (uint32_t)a;
+    cpu->AX = (uint16_t)res;
+    cpu->DX = (uint16_t)(res >> 16);
+}
+
+static inline void inner_mul(cpu_ctx *cpu, uint32_t a) {
+    uint64_t res = (uint64_t)cpu->EAX * (uint64_t)a;
+    cpu->EAX = (uint32_t)res;
+    cpu->EDX = (uint32_t)(res >> 32);
+}
+
+#define INST_MUL(op) ({    \
+    cpu->rawFlags = 0xbad; \
+    inner_mul(cpu, op);    \
+})
+
+#define INST_ADC(dest, src) ({ \
+    static_assert(sizeof(dest) == 2, "ADC so aceita operando de 16 bits, mermão!"); \
+    uint16_t s = (src); \
+    dest += s + (cpu->CF ? 1 : 0); \
+    cpu->rawFlags = 0xbad; \
+})
+
+
+//we dont care about the direction flag, always forward
+#define INST_CLD INST_NOP
