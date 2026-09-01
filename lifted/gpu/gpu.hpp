@@ -11,8 +11,7 @@
 
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
-#define INST_POP(_reg) ({       \
-    auto &reg = (_reg);         \
+#define INST_POP(reg) ({        \
     auto it = cpu->stack.back();\
     if(sizeof(reg) != it.size){__builtin_trap();}\
     cpu->stack.pop_back();      \
@@ -63,23 +62,23 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_NOP() ({})
 
-#define INST_ADD(_dest, _src) ({ \
-    auto &dest = (_dest);      \
-    typeof(dest) src = (_src); \
-    typeof(dest) res;          \
-    res = dest + src;          \
-    cpu->CF = (res < dest);    \
-    cpu->OF = msbset((typeof(dest))(~(dest ^ src) & (dest ^ res)));\
+#define INST_ADD(dest, src) ({ \
+    auto valL = (dest);        \
+    typeof(valL) valR = (src); \
+    typeof(valL) res;          \
+    res = valL + valR;         \
+    cpu->CF = (res < valL);    \
+    cpu->OF = msbset((typeof(valL))(~(valL ^ valR) & (valL ^ res)));\
     UPDATE_ZPS(res);           \
     dest = res;                \
 })
-#define INST_SUB(_dest, _src) ({ \
-    auto &dest = (_dest);      \
-    typeof(dest) src = (_src); \
-    typeof(dest) res;          \
-    res = dest - src;          \
-    cpu->CF = (dest < src);    \
-    cpu->OF = msbset((typeof(dest))((dest ^ src) & (dest ^ res)));\
+#define INST_SUB(dest, src) ({ \
+    auto valL = (dest);        \
+    typeof(valL) valR = (src); \
+    typeof(valL) res;          \
+    res = valL - valR;         \
+    cpu->CF = (valL < valR);   \
+    cpu->OF = msbset((typeof(valL))((valL ^ valR) & (valL ^ res)));\
     UPDATE_ZPS(res);           \
     dest = res;                \
 })
@@ -103,8 +102,7 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
 
-#define BITWISATRON(_dest, src, op) ({ \
-    auto &dest = (_dest);   \
+#define BITWISATRON(dest, src, op) ({ \
     dest op (src);          \
     cpu->CF = 0;            \
     cpu->OF = 0;            \
