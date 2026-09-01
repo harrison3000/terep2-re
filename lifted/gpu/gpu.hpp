@@ -111,6 +111,13 @@ void DOS3Call(cpu_ctx*);
     dest >>= count;        \
     cpu->rawFlags = 0xbad; \
 })
+#define INST_SAR(dest, count) ({ \
+    auto tmp = SIGNED(dest);    \
+    tmp >>= count;              \
+    dest = tmp;                 \
+    cpu->rawFlags = 0xbad;      \
+})
+
 
 #define CHECK_FLAGS() ({ \
     if(cpu->rawFlags == 0xbad) { \
@@ -214,10 +221,7 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
     cpu->EDX = res >> 32;
 }
 
-#define INST_IMUL(...) ({  \
-    cpu->rawFlags = 0xbad; \
-    inner_imul(cpu,__VA_ARGS__); \
-})
+#define INST_IMUL(...)  inner_imul(cpu,__VA_ARGS__);
 
 static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
     int32_t num = (int32_t)(((uint32_t)cpu->DX << 16) | cpu->AX);
@@ -235,10 +239,7 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
     cpu->EDX = (uint32_t)(num % den);
 }
 
-#define INST_IDIV(a) ({    \
-    cpu->rawFlags = 0xbad; \
-    inner_idiv(cpu, a);    \
-})
+#define INST_IDIV(a) inner_idiv(cpu, a);
 
 static inline void inner_mul(cpu_ctx *cpu, uint16_t a) {
     uint32_t res = (uint32_t)cpu->AX * (uint32_t)a;
@@ -252,10 +253,7 @@ static inline void inner_mul(cpu_ctx *cpu, uint32_t a) {
     cpu->EDX = (uint32_t)(res >> 32);
 }
 
-#define INST_MUL(op) ({    \
-    cpu->rawFlags = 0xbad; \
-    inner_mul(cpu, op);    \
-})
+#define INST_MUL(op) inner_mul(cpu, op); 
 
 #define INST_ADC(dest, src) ({ \
     static_assert(sizeof(dest) == 2, "ADC so aceita operando de 16 bits, mermão!"); \
@@ -263,6 +261,21 @@ static inline void inner_mul(cpu_ctx *cpu, uint32_t a) {
     dest += s + (cpu->CF ? 1 : 0); \
     cpu->rawFlags = 0xbad; \
 })
+
+static inline void inner_div(cpu_ctx *cpu, uint16_t a) {
+    uint32_t num = ((uint32_t)cpu->DX << 16) | cpu->AX;
+    cpu->AX = (uint16_t)(num / a);
+    cpu->DX = (uint16_t)(num % a);
+}
+
+static inline void inner_div(cpu_ctx *cpu, uint32_t a) {
+    uint64_t num = ((uint64_t)cpu->EDX << 32) | cpu->EAX;
+    cpu->EAX = (uint32_t)(num / a);
+    cpu->EDX = (uint32_t)(num % a);
+}
+
+#define INST_DIV(op) inner_div(cpu, op)
+
 
 
 //we dont care about the direction flag, always forward
