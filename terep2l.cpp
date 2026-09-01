@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
 #include <string>
 #include <unistd.h>
@@ -13,14 +14,15 @@ void f_init(cpu_ctx *cpu);
 
 std::string basedir;
 
+const uint8_t initData[] = {
+    #embed "memdumps/data.bin"
+};
+
 int main(int argc, char **argv){
     auto cpu = new cpu_ctx;
     auto memory = malloc(2 * 1024 * 1024);
 
-    auto f = open("memdumps/data.bin",O_RDONLY);
-    int rd = read(f, memory, 64 * 1024);
-    printf("read: %d bytes of data\n", rd);
-    close(f);
+    memcpy(memory, initData, sizeof(initData));
 
     cpu->mem_base = (uintptr_t)memory;
 
