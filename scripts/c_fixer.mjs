@@ -61,6 +61,8 @@ const fixed = f.replaceAll(/JUMP«(.+)»/g, function(_tudo, opcode){
     INST_$1();
     cpu->CX--;
    }`)
+.replaceAll(`INST_SHL(cpu->AX, 0x1);
+   INST_RCL(cpu->DX, 0x1);`, "SPECIAL_CASE_SHL_RCL();")
 ;
 
 

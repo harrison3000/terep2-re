@@ -10,6 +10,9 @@
 #include "lifted/gpu/types.hpp"
 
 void f_init(cpu_ctx *cpu);
+void FUN_main_render(cpu_ctx *cpu);
+void FUN_timer_5680(cpu_ctx *cpu);
+void FUN_keyboard_56df(cpu_ctx *cpu);
 
 std::string basedir;
 
@@ -31,6 +34,8 @@ int main(int argc, char **argv){
 
     f_init(cpu);
 
+    FUN_main_render(cpu);
+    FUN_timer_5680(cpu);
 
     return 0;
 }

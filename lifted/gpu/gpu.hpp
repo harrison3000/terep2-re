@@ -117,6 +117,13 @@ void DOS3Call(cpu_ctx*);
     dest = tmp;                 \
     cpu->rawFlags = 0xbad;      \
 })
+#define SPECIAL_CASE_SHL_RCL() ({ \
+    uint32_t paired = ((uint32_t)cpu->DX << 16) | cpu->AX; \
+    paired <<= 1; \
+    cpu->AX = (uint16_t)paired; \
+    cpu->DX = (uint16_t)(paired >> 16); \
+    cpu->rawFlags = 0xbad;      \
+})
 
 
 #define CHECK_FLAGS() ({ \
