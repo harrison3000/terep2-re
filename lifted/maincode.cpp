@@ -2435,7 +2435,7 @@ void FUN_1000_1965(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(0xc6);
    INST_TEST(cpu->AH, 0x60);
     //jumping to another function, some kind of tail call optimization
-   if (!cpu->PF) goto FUN_1965_NP;
+   if (!cpu->PF) {FUN_1965_NP(cpu); return;} //was tailcall
    MEM_BYTE(0x5fb) = 0x0;
    FUN_1000_3fd0(cpu);
    cpu->AX = MEM_WORD(0xc6);
@@ -3545,7 +3545,10 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->CX = 0x82;
    cpu->AL = 0; //was a XOR
    INST_CLD();
-   REP«STOSB»
+   while(cpu->CX){
+    INST_STOSB();
+    cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    cpu->DX = cpu->DX;
@@ -4197,7 +4200,7 @@ void FUN_1000_2b08(cpu_ctx *cpu){
                               //             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
    INST_AND(cpu->AX, cpu->AX);
    if (cpu->SF) goto LAB_LOC_2;
-   if (!cpu->ZF) goto FUN_1000_2b1f;
+   if (!cpu->ZF) {FUN_1000_2b1f(cpu); return;} //was tailcall
    cpu->AX = 0x0;
    INST_TEST(cpu->BX, cpu->BX);
    if (!cpu->SF) goto LAB_LOC_1;
@@ -4219,7 +4222,7 @@ void FUN_1000_2b1f(cpu_ctx *cpu){
                               //XREF[2]:     1000:2b0e(j),1000:2b63(c)
    INST_AND(cpu->BX, cpu->BX);
    if (cpu->SF) goto LAB_LOC_1;
-   if (!cpu->ZF) goto FUN_1000_2b2d;
+   if (!cpu->ZF) {FUN_1000_2b2d(cpu); return;} //was tailcall
    cpu->AX = 0x4000;
    return;
 
@@ -4238,7 +4241,7 @@ void FUN_1000_2b2d(cpu_ctx *cpu){
                               //XREF[2]:     1000:2b25(j),1000:2b58(c)
    INST_CMP(cpu->AX, cpu->BX);
    if (!cpu->ZF && (cpu->SF == cpu->OF) /*JG*/) goto LAB_LOC_1;
-   if (cpu->SF != cpu->OF /*JL*/) goto FUN_1000_2b3b;
+   if (cpu->SF != cpu->OF /*JL*/) {FUN_1000_2b3b(cpu); return;} //was tailcall
    cpu->AX = 0x2000;
    return;
 
@@ -4298,7 +4301,10 @@ void FUN_1000_2b98(cpu_ctx *cpu){
    cpu->DI = 0; //was a XOR
    cpu->CX = 0x3e80;
    INST_CLD();
-   REP«STOSD»
+   while(cpu->CX){
+    INST_STOSD();
+    cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
@@ -4462,7 +4468,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    INST_SHR(cpu->CX, 0x1);
-   REP«STOSW»
+   while(cpu->CX){
+    INST_STOSW();
+    cpu->CX--;
+   }
    if (!cpu->CF) goto LAB_LOC_3;
    INST_STOSB();
    LAB_LOC_3:
@@ -8789,11 +8798,6 @@ void FUN_1000_532e(cpu_ctx *cpu){
    return;
 
 
-}
-
-void dummy_ifunc(cpu_ctx *cpu){
-   INST_IRET();
-
 
 }
 
@@ -8864,42 +8868,6 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
    INST_AND(CSD_DAT_keys_571e[cpu->BX], 0x7f);
    CSD_DAT_keys_571e[0] = cpu->BL;
    return;
-
-}
-
-//************************************************************************************************
-//*                                           FUNCTION                                           *
-//************************************************************************************************
-void FUN_int_f1_579e(cpu_ctx *cpu){
-   INST_CMP(cpu->AL, 0x0);
-   if (cpu->ZF) goto LAB_LOC_1;
-   INST_CMP(cpu->AL, 0x1);
-   if (cpu->ZF) goto LAB_LOC_2;
-   INST_CMP(cpu->AL, 0x2);
-   if (cpu->ZF) goto LAB_LOC_3;
-   INST_CMP(cpu->AL, 0x10);
-   if (cpu->ZF) goto LAB_LOC_4;
-   INST_CMP(cpu->AL, 0x11);
-   if (cpu->ZF) goto LAB_LOC_5;
-   INST_IRET();
-   LAB_LOC_1:
-   FUN_1000_2aad(cpu);
-   INST_IRET();
-   LAB_LOC_2:
-   FUN_1000_2ad8(cpu);
-   INST_IRET();
-   LAB_LOC_3:
-   cpu->AX = cpu->CX;
-   FUN_1000_2b08(cpu);
-   INST_IRET();
-   LAB_LOC_4:
-   cpu->AX = cpu->DX;
-   FUN_1000_271d(cpu);
-   INST_IRET();
-   LAB_LOC_5:
-   cpu->EAX = cpu->EDX;
-   FUN_1000_2726(cpu);
-   INST_IRET();
 
  // 1000:57df [UNDEFINED BYTES REMOVED]
 

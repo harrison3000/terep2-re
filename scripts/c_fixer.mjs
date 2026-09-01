@@ -56,8 +56,8 @@ const fixed = f.replaceAll(/JUMP«(.+)»/g, function(_tudo, opcode){
 }).replaceAll(/   INST_F.+\n/g, "")
 .replace("cpu->EAX = MEM_DWORD(0xe9e8);", "")
 .replaceAll("INST_ADD(cpu->SP, 0x2);", "DUMMY_POP_WORD();")
-//.replaceAll(/goto (F.+);/g, "{$1(cpu); return;} //was tailcall") // needs more testing
-.replaceAll(/REP_([A-Z]+)\(\);/g, `while(cpu->CX){
+.replaceAll(/goto (F.+);/g, "{$1(cpu); return;} //was tailcall") // needs more testing
+.replaceAll(/REP«([A-Z]+)»/g, `while(cpu->CX){
     INST_$1();
     cpu->CX--;
    }`)
