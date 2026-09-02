@@ -95,11 +95,16 @@ bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile u
     switch(op){
         case 0x3d00:{
             //open
-            char *filename = &memchar[dx];
+            std::string filename(&memchar[dx]);
+            if(filename == ""){
+                printf("Tried to load a empty filename, probably better to bail out\n");
+                return false;
+            }
+
             auto fullpath = basedir + filename;
 
             auto fd = open(fullpath.c_str(), O_RDONLY);
-            printf("* trying to open: %s, returned: %d\n", filename, fd);
+            printf("* trying to open: %s, returned: %d\n", filename.c_str(), fd);
             ax = fd;
             return fd >= 0;
         }
