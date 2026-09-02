@@ -4203,6 +4203,7 @@ FUN_1000_2baa:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: this has something to do with flat shaded polygons, disabling this function makes only the textured ones render
 FUN_1000_2bec:
                               ;XREF[5]:     1000:157b(c),1000:1d27(c),1000:1d62(c),1000:1e83(c),
                               ;             1000:1ebb(c)
@@ -8041,7 +8042,7 @@ FUN_1000_4e0a:
     MOV         word [0xe9e6],AX
     ADD         SI,0x2
 .LAB_LOC_1:
-    MOV         BP,SI
+    MOV         BX,SI
     MOV         DI,word [SI + 0x2]
     MOV         AX,DI
     SHL         DI,0x3
@@ -8093,33 +8094,33 @@ FUN_1000_4e0a:
     cvtss2si eax, xmm3
 
     SAR         EAX,0xa
-    MOVSX       EBX,word DS:[BP + 0x4]
-    TEST        BX,BX
+    movsx_m2m   dword [mitemp_BeX], word [BX + 0x4]
+    TEST        dword [mitemp_BeX], 0x80000000
     JS          .LAB_LOC_10
-    MOVZX       ECX,word DS:[BP + 0x8]
+    MOVZX       ECX,word [BX + 0x8]
     MOV         word [0xea04],CX
     AND         CX,0xff
     JZ          .LAB_LOC_5
     JS          .LAB_LOC_3
     CMP         CX,0x1
     JG          .LAB_LOC_6
-    MOV         ECX,EBX
+    MOV         ECX,dword [mitemp_BeX]
     SUB         ECX,EAX
     JZ          .LAB_LOC_3
     CMP         CX,word [0xe9e2]
     JG          .LAB_LOC_8
     CMP         CX,word [0xe9e4]
     JL          .LAB_LOC_9
-    MOV         EBX,EAX
+    MOV         dword [mitemp_BeX],EAX
 .LAB_LOC_2:
     SHL         ECX,0x6
-    SHL         EBX,0x6
+    SHL         dword [mitemp_BeX],0x6
     MOV         dword [mitemp_01],ECX
     MOV         CL,byte [0xea05]
     INC         CL
     MOV         EAX, dword [0xe9f8]
     IMUL        dword [mitemp_01]
-    IDIV        EBX
+    IDIV        dword [mitemp_BeX]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
@@ -8127,7 +8128,7 @@ FUN_1000_4e0a:
     SUB         dword [DI + 0xc],EDX
     MOV         EAX, dword [0xe9fc]
     IMUL        dword [mitemp_01]
-    IDIV        EBX
+    IDIV        dword [mitemp_BeX]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
@@ -8135,7 +8136,7 @@ FUN_1000_4e0a:
     SUB         dword [DI + 0x10],EDX
     MOV         EAX, dword [0xea00]
     IMUL        dword [mitemp_01]
-    IDIV        EBX
+    IDIV        dword [mitemp_BeX]
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
@@ -8143,59 +8144,59 @@ FUN_1000_4e0a:
     SUB         dword [DI + 0x14],EDX
 .LAB_LOC_3:
                               ;             1000:4ffd(j)
-    MOV         SI,BP
+    MOV         SI,BX
 .LAB_LOC_4:
     ADD         SI,0xe
     DEC         word [0xe9e6]
     JNZ         .LAB_LOC_1
     RET
 .LAB_LOC_5:
-    MOVZX       EDX,word DS:[BP + 0xc]
+    MOVZX       EDX,word [BX + 0xc]
     CMP         EAX,EDX
     JG          .LAB_LOC_7
-    MOVZX       EDX,word DS:[BP + 0xa]
+    MOVZX       EDX,word [BX + 0xa]
     CMP         EAX,EDX
     JL          .LAB_LOC_7
     JMP         .LAB_LOC_3
 .LAB_LOC_6:
-    MOVZX       EDX,word DS:[BP + 0xc]
+    MOVZX       EDX,word [BX + 0xc]
     CMP         EAX,EDX
     JG          .LAB_LOC_7
-    MOVZX       EDX,word DS:[BP + 0xa]
+    MOVZX       EDX,word [BX + 0xa]
     CMP         EAX,EDX
     JL          .LAB_LOC_7
-    XCHG        EAX,EBX
-    SUB         EAX,EBX
+    XCHG        EAX,dword [mitemp_BeX]
+    SUB         EAX,dword [mitemp_BeX]
     CDQ
     SHR         ECX,0x1
     IDIV        ECX
     MOV         ECX,EAX
-    MOVZX       EAX,word DS:[BP + 0x6]
-    SUB         EAX,EBX
+    MOVZX       EAX,word [BX + 0x6]
+    SUB         EAX,dword [mitemp_BeX]
     SAR         EAX,0x1
     ADD         ECX,EAX
-    MOV         word DS:[BP + 0x6],BX
+    mov_m2m     word [BX + 0x6], word [mitemp_BeX]
     JMP         .LAB_LOC_2
 .LAB_LOC_7:
     MOV         ECX,EDX
     SUB         ECX,EAX
     SAR         ECX,0x1
     JZ          .LAB_LOC_3
-    MOV         EBX,EAX
-    MOV         word DS:[BP + 0x6],BX
+    MOV         dword [mitemp_BeX],EAX
+    mov_m2m     word [BX + 0x6], word [mitemp_BeX]
     JMP         .LAB_LOC_2
 .LAB_LOC_8:
     SAR         ECX,0x4
-    XCHG        EAX,EBX
+    XCHG        EAX,dword [mitemp_BeX]
     SUB         EAX,ECX
-    MOV         word DS:[BP + 0x4],AX
-    MOV         word DS:[BP + 0x6],AX
+    MOV         word [BX + 0x4],AX
+    MOV         word [BX + 0x6],AX
     JMP         .LAB_LOC_2
 .LAB_LOC_9:
-    OR          word DS:[BP + 0x8],0x80
+    OR          word [BX + 0x8],0x80
     JMP         .LAB_LOC_3
 .LAB_LOC_10:
-    MOV         SI,BP
+    MOV         SI,BX
     MOV         word [SI + 0x4],AX
     MOV         word [SI + 0x6],AX
     JMP         .LAB_LOC_4

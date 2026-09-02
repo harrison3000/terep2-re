@@ -11,3 +11,5 @@ pslc_eb63: dd 0
 pslc_ea9f: dd 0
 pslc_eb5b: dd 0
 pslc_eaa3: dd 0
+
+mitemp_BeX: dd 0
