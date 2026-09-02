@@ -3824,7 +3824,7 @@ FUN_1000_2760:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 ;ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
-;MODIFICATIONS: before ES and word [ye_old_lil_bep] was used as temporary storage, this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
+;MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
 FUN_1000_277e:
                               ;XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               ;             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
@@ -4464,7 +4464,7 @@ FUN_1000_2df2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
@@ -4565,7 +4565,7 @@ FUN_1000_2eaf:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
@@ -4668,7 +4668,7 @@ FUN_1000_2f6c:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
@@ -4771,7 +4771,7 @@ FUN_1000_302d:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
@@ -5041,7 +5041,7 @@ FUN_1000_324f:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
     PUSH        AX
@@ -5301,7 +5301,7 @@ FUN_1000_34a2:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
     PUSH        AX
@@ -5733,7 +5733,7 @@ FUN_1000_390a:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -5910,7 +5910,7 @@ FUN_1000_3aa3:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -6087,7 +6087,7 @@ FUN_1000_3c3c:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -6268,7 +6268,7 @@ FUN_1000_3ddb:
     PUSH        DI
     MOV         word [0xe528],0x0
     MOV         CX,word [SI + -0x2]
-    JCXZ        .LAB_LOC_2
+    L_JCXZ      .LAB_LOC_2
     PUSH        DI
     MOV         DI,CX
     SHL         DI,0x3
@@ -7196,7 +7196,7 @@ FUN_1000_4506:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
@@ -7297,7 +7297,7 @@ FUN_1000_45c3:
     POP         BX
     POP         AX
     POP         CX
-    LOOP        .LAB_LOC_1
+    L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
     mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
