@@ -58,6 +58,8 @@ handlekey_:
     call FUN_keyboard_56df
     retf
 
+    %include "common/macros.asm"
+
     %include "reasm/maincode.asm"
 
 
@@ -78,6 +80,7 @@ pseudolocal_a:
 pseudolocal_b:
     dw 0
 
+%include "common/newvars_defs.asm"
 
 ;pad to the limit
 times (65534 - ($ - $$)) db 'P'

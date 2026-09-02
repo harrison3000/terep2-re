@@ -808,26 +808,30 @@ F_0948:
 .LAB_LOC_1:
     MOV         SI,word [DI + 0x5bbc]
     ADD         SI,word [SI + 0x20]
-    MOVZX       EBP,word [SI + 0x2]
-    ADD         EAX,EBP
-    MOVZX       EBP,word [SI + 0x6]
-    ADD         EBX,EBP
-    MOVZX       EBP,word [SI + 0xa]
-    ADD         EDX,EBP
+    movzx_m2m   dword [mitemp_02],word [SI + 0x2]
+    ADD         EAX,dword [mitemp_02]
+    movzx_m2m   dword [mitemp_02],word [SI + 0x6]
+    ADD         EBX,dword [mitemp_02]
+    movzx_m2m   dword [mitemp_02],word [SI + 0xa]
+    ADD         EDX,dword [mitemp_02]
     ADD         DI,0x2
     LOOP        .LAB_LOC_1
     MOV         ECX,EDX
-    MOVZX       EBP,word [0x5bba]
+    movzx_m2m   dword [mitemp_02],word [0x5bba]
     CDQ
-    DIV         EBP
+    DIV         dword [mitemp_02]
     MOV         word [0xc8],AX
     MOV         EAX,EBX
     CDQ
-    DIV         EBP
+    DIV         dword [mitemp_02]
     MOV         word [0xca],AX
     MOV         EAX,ECX
     CDQ
-    IDIV        EBP
+    IDIV        dword [mitemp_02]
+
+    ; probably unecessary, but better safe than sorry
+    MOV         EBP, dword [mitemp_02]
+
     MOV         word [0xcc],AX
     MOV         AX, word [0xc8]
     MOV         BX,word [0xca]
@@ -8110,12 +8114,11 @@ FUN_1000_4e0a:
 .LAB_LOC_2:
     SHL         ECX,0x6
     SHL         EBX,0x6
-    PUSH        EBP
-    MOV         EBP,ECX
+    MOV         dword [mitemp_01],ECX
     MOV         CL,byte [0xea05]
     INC         CL
     MOV         EAX, dword [0xe9f8]
-    IMUL        EBP
+    IMUL        dword [mitemp_01]
     IDIV        EBX
     MOV         EDX,EAX
     SAR         EAX,CL
@@ -8123,7 +8126,7 @@ FUN_1000_4e0a:
     ADD         dword [SI + 0xc],EAX
     SUB         dword [DI + 0xc],EDX
     MOV         EAX, dword [0xe9fc]
-    IMUL        EBP
+    IMUL        dword [mitemp_01]
     IDIV        EBX
     MOV         EDX,EAX
     SAR         EAX,CL
@@ -8131,14 +8134,13 @@ FUN_1000_4e0a:
     ADD         dword [SI + 0x10],EAX
     SUB         dword [DI + 0x10],EDX
     MOV         EAX, dword [0xea00]
-    IMUL        EBP
+    IMUL        dword [mitemp_01]
     IDIV        EBX
     MOV         EDX,EAX
     SAR         EAX,CL
     SUB         EDX,EAX
     ADD         dword [SI + 0x14],EAX
     SUB         dword [DI + 0x14],EDX
-    POP         EBP
 .LAB_LOC_3:
                               ;             1000:4ffd(j)
     MOV         SI,BP
@@ -8286,11 +8288,11 @@ FUN_1000_5091:
     SHL         BX,0x2
     ADD         BX,DX
     LODSW 
-    MOV         BP,AX
-    SHL         BP,0x3
-    SUB         BP,AX
-    SHL         BP,0x2
-    ADD         BP,DX
+    MOV         word [mitemp_03],AX
+    SHL         word [mitemp_03],0x3
+    SUB         word [mitemp_03],AX
+    SHL         word [mitemp_03],0x2
+    ADD         word [mitemp_03],DX
     LODSW 
     MOV         DI,AX
     SHL         DI,0x3
@@ -8299,10 +8301,10 @@ FUN_1000_5091:
     ADD         DI,DX
     PUSH        SI
     PUSH        DX
-    MOV         SI,BP
-    MOV         BP,word [0xea99]
+    MOV         SI,word [mitemp_03]
+
     MOV         EAX,dword [BX + 0x4]
-    MOV         dword DS:[BP + 0xeb5f],EAX
+    MOV         dword [pslc_eb5f],EAX
     SUB         EAX,dword [SI + 0x4]
     MOV         ECX,dword [BX + 0x8]
     SUB         ECX,dword [DI + 0x8]
@@ -8318,9 +8320,9 @@ FUN_1000_5091:
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
-    MOV         dword DS:[BP + 0xea9b],EDX
+    MOV         dword [pslc_ea9b],EDX
     MOV         EAX,dword [BX + 0x8]
-    MOV         dword DS:[BP + 0xeb63],EAX
+    MOV         dword [pslc_eb63],EAX
     SUB         EAX,dword [DI + 0x8]
     MOV         ECX,dword [BX]
     SUB         ECX,dword [SI]
@@ -8337,9 +8339,9 @@ FUN_1000_5091:
     IMUL        EAX,ECX
     SUB         EDX,EAX
     NEG         EDX
-    MOV         dword DS:[BP + 0xea9f],EDX
+    MOV         dword [pslc_ea9f],EDX
     MOV         EAX,dword [BX]
-    MOV         dword DS:[BP + 0xeb5b],EAX
+    MOV         dword [pslc_eb5b],EAX
     SUB         EAX,dword [DI]
     MOV         ECX,dword [BX + 0x4]
     SUB         ECX,dword [SI + 0x4]
@@ -8355,9 +8357,20 @@ FUN_1000_5091:
     SAR         ECX,0xe
     IMUL        EAX,ECX
     SUB         EDX,EAX
-    MOV         dword DS:[BP + 0xeaa3],EDX
+    MOV         dword [pslc_eaa3],EDX
     POP         DX
     POP         SI
+
+    mov  BX, word [0xea99]
+    mov_m2m  dword [BX + 0xeb5f], dword [pslc_eb5f]
+    mov_m2m  dword [BX + 0xea9b], dword [pslc_ea9b]
+    mov_m2m  dword [BX + 0xeb63], dword [pslc_eb63]
+
+    mov_m2m  dword [BX + 0xea9f], dword [pslc_ea9f]
+    mov_m2m  dword [BX + 0xeb5b], dword [pslc_eb5b]
+    mov_m2m  dword [BX + 0xeaa3], dword [pslc_eaa3]
+    ;no need to restore bx, it will be rewritten next loop
+
     ADD         word [0xea99],0xc
     POP         CX
     DEC         CX
