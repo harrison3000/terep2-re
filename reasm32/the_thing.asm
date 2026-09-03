@@ -1,10 +1,34 @@
 
-%include "variables.asm"
 %include "macros.asm"
+%include "../common/macros.asm"
+
+
+;TODO remove
+%define _DATA2 0x17
+
+
+section .data
+data_start:
+
+incbin "../memdumps/data.bin"
+
+%include "../common/newvars_defs.asm"
+
+
+
+section .text
+
+global asm_f_init
+global asm_render
+global asm_physics
+global asm_keys
+
 %include "maincode32.asm"
+%include "elfunction.asm"
 
 
 DOS3Call:
+    ;FIXME refactor to use vars
     MOV word [0xff00], 0xd3ca
     MOV [0xff02], AX
     MOV [0xff04], BX
@@ -25,32 +49,10 @@ DOS3Call:
     ret
 
 
-global asm_f_init
-global asm_render
-global asm_physics
-global asm_keys
-
 asm_f_init:
     airlock_prologue
 
-    ;dont know how much difference does this make, but better safe than sorry
-    MOV dword [CSD_DWORD_1000_12a3], 0x7FFF0000
-    MOV byte[CSD_BYTE_1000_59c1], 0xf
-
-    ;turns ou the code needs these values to be initialized to 0xff otherwise some hell breaks loose in the
-    ;flying car magic force thing
-    cld
-    push ds
-    pop  es
-    mov ecx, 128
-    mov al, 0xff
-    mov edi, CSD_DAT_keys_571e
-    rep stosb
-
     call f_init
-    MOV word [0xff00], 0xbeef
-    push word [0xdb10]
-    pop word [0xff50]
 
     airlock_epilogue
     ret

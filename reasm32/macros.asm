@@ -18,3 +18,11 @@
     POP FS
     POPAD
 %endmacro
+
+%macro mk_addr 2
+    ud2
+%endmacro
+
+%macro mk_addr_seg 3
+    ud2
+%endmacro
