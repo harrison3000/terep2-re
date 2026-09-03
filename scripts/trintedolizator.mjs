@@ -17,6 +17,67 @@ const fixed = codigos
     ;
 
 
+const linhas = fixed.split("\n");
+
+/**
+ * 
+ * @param {RegExpExecArray} rgrs 
+ * @returns {string}
+ */
+function classifica(rgrs){
+    const mem = rgrs[4].trim();
+    const seg = rgrs[3];
+
+    //TODO alertar sem tamamnho
+
+    if(!seg){
+        if(mem.match(/^0x[0-9a-f]+$/i)){
+            return "SIMPLES";
+        }
+        if(mem.match(/^[a-z]\w+$/i)){
+            return "VAR";
+        }
+    }else{
+        return "SEGMENTED";
+    }
+
+    return "UNK";
+}
+
+for(let i = 0; i < linhas.length; i++){
+    const memRegex = /(dword|word|byte)? *(([D-G]S)\:)?\[(..+?)\]/g;
+    const linha = linhas[i];
+
+    const rgx = Array.from(linha.matchAll(memRegex));
+    if(rgx.length === 0){
+        continue;
+    }
+    if(linha.includes("CS:BX")){
+        //the jump tables
+        continue;
+    }
+
+    const rgrs = rgx.find(function(r){
+        const c = classifica(r);
+        return !(c === "SIMPLES" || c === "VAR");
+    });
+
+    if(!rgrs){
+        //simple and var will be correctly handled by nasm, no need to do anything
+        continue;
+    }
+
+    let uu="    ";
+    if(classifica(rgrs) === "SEGMENTED"){
+        uu += `mk_addr_seg EBP, seg_${rgrs[3]}, [${rgrs[4]}]`;
+    }else{
+        uu += `mk_addr     EBP, [${rgrs[4]}]`;
+    }
+
+    linhas[i] = linha.replace(rgrs[0], `${rgrs[1]} [EBP]`);
+    linhas.splice(i,0,uu);
+    i++;
+}
 
 
-await writeFile("reasm32/maincode32.asm",fixed);
+await writeFile("reasm32/maincode32.asm", linhas.join("\n"));
