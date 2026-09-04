@@ -94,7 +94,7 @@ for(let i = 0; i < linhas.length; i++){
         linhas[i] = linha.replace(`[${rgrs[4]}]`, "[base_mem + " + rgrs[4] + "]");
         continue;
     }
-    const dsegretor = rgrs[3] ? "prt_seg_" + rgrs[3][0] + "eS" : "";
+    const dsegretor = rgrs[3] ? "ptr_seg_" + rgrs[3][0] + "eS" : "";
 
     if(classe.tipo === "REG + OFFSET"){
         sub = rgrs[0].replace(classe.rgg, "EBP");
