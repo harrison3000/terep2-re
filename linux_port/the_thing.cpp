@@ -136,8 +136,9 @@ int main(int argc, char **argv){
 
     call_init(datamem, data_callregs);
 
-    auto videoSeg = (uint8_t *)0;
-    //printf("video data: %04x, %08x\n", datawindow[0x50/2], videoSeg);
+    auto videoSegSel = ((uint16_t *)datamem)[0xdb10 / 2];
+    auto videoSeg = (uint8_t*)all_segments[videoSegSel];
+    printf("video data: %04x, %08x\n", videoSegSel, videoSeg);
     
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);

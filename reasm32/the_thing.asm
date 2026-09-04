@@ -71,6 +71,8 @@ asm_f_init:
 
     call f_init
 
+    MOV word [data_callregs], 0xbeef
+
     airlock_epilogue
     ret
 

@@ -30,3 +30,7 @@
     PUSH dword [EBP*4 + all_segments]
     POP  dword %1
 %endmacro
+
+%macro add_noflags 2
+    LEA %1, [%1 + %2]
+%endmacro
