@@ -1,3 +1,4 @@
+#include <SDL3/SDL_events.h>
 #include <asm/ldt.h>
 #include <asm/unistd.h>
 #include <errno.h>
@@ -17,6 +18,8 @@
 
 #include <SDL3/SDL.h>
 
+#include "keys.hpp"
+
 #define W 320
 #define H 200
 
@@ -25,7 +28,7 @@
 extern "C" void asm_f_init();
 extern "C" void asm_render();
 extern "C" void asm_physics();
-extern "C" void asm_keys();
+extern "C" void asm_keys(int16_t);
 
 extern volatile uint32_t all_segments[];
 extern volatile uint16_t data_callregs[];
@@ -175,6 +178,12 @@ int main(int argc, char **argv){
             if (e.type == SDL_EVENT_KEY_DOWN) {
                 if (e.key.key == SDLK_ESCAPE) running = false;
                 //TODO do the keys thing
+            }
+            if(e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP){
+                auto ec = get_pc_scancode(e);
+                if(ec != 0){
+                    asm_keys(ec);
+                }
             }
         }
 

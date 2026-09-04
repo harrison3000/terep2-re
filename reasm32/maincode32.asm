@@ -9804,8 +9804,8 @@ FUN_timer_5680:
 ;************************************************************************************************
 FUN_keyboard_56df:
 
-    mov bx, _DATA2
-    mov ds, bx
+    MOV BX, _DATA2
+    ld_seg      dword [ptr_seg_DeS], BX
 
     MOV         BL, AL
     AND         BX,0x7f
