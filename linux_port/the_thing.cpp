@@ -27,67 +27,13 @@ extern "C" void asm_render();
 extern "C" void asm_physics();
 extern "C" void asm_keys();
 
-struct descritron {
-  unsigned int current = 0;
-  std::map<int, void*> sels;
+extern volatile uint32_t all_segments[];
+extern volatile uint16_t data_callregs[];
+extern volatile uint16_t base_mem[];
 
-  int new_descriptor(const char* name){
-    current++;
-    
-    void *backingData = mmap(0, DEFAULT_LEN, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_POPULATE|MAP_PRIVATE,-1,0);
-    if(backingData == MAP_FAILED){
-        printf("Impossible error mapping memory: %d\n", errno);
-        exit(1);
-    }
-    if(name != NULL){
-        char nome[64];
-        snprintf(nome,63,"%s, num: %d", name, current);
-        prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, backingData, DEFAULT_LEN, nome);
-    }
-
-    auto theaddr = (uint64_t)backingData;
-    struct user_desc descritor = {
-        .entry_number = current << 1,
-        .base_addr = (unsigned int)theaddr,
-        .limit = DEFAULT_LEN,
-        .seg_32bit = 0,
-        .contents = MODIFY_LDT_CONTENTS_DATA,
-        .limit_in_pages = false,
-        .useable = 1,
-    };
-
-    int a = syscall(SYS_modify_ldt, 1, &descritor, sizeof(descritor));
-    if(a != 0){
-        printf("Error writing ldt: %d\n", errno);
-        exit(1);
-    }
-
-    auto seletor = (current << 4) + 0b111;
-    sels[seletor] = backingData;
-
-    printf("Allocated mem! Name: %s, Entry: %d, Selector: %04x, Addr: %08x\n", name, current, seletor, backingData);
-
-    return seletor;
-  }
-
-  void *getMem(int seletor){
-    return sels[seletor];
-  }
-};
-
-descritron global_descr;
 
 std::string basedir;
 
-void readfile(const char *name, void * dest){
-    auto f = open(name, O_RDONLY);
-    if(f < 0){
-        printf("Error opening: %s\n", name);
-        exit(3);
-    }
-    read(f, dest, DEFAULT_LEN);
-    close(f);
-}
 
 bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile uint16_t &cx, volatile uint16_t &dx){
     int op = ax & 0xff00;
@@ -109,7 +55,11 @@ bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile u
             return fd >= 0;
         }
         case 0x4800:{
-            auto seletor = global_descr.new_descriptor("dos alloc");
+            static int seletor = 0;
+            seletor++;
+            auto mem = malloc(DEFAULT_LEN);
+            all_segments[seletor] = (uint32_t)mem;
+            printf("* Aloc: %d, %08x\n", seletor, mem);
             printf("* game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", bx, bx * 16);
             ax = seletor;
             return true;
@@ -172,24 +122,22 @@ void call_init(void *datamem, volatile uint16_t* datawindow){
 }
 
 int main(int argc, char **argv){
-    auto data = global_descr.new_descriptor("the main data");
-    auto datamem = global_descr.getMem(data);
-    readfile("memdumps/data.bin", datamem);
+    auto datamem = (void *)base_mem;
     
     if(argc > 1){
         basedir = argv[1];
     }
 
-    strcpy(&((char*)datamem)[0xf700], "GAMBIARRA FOREVER 32!");
+    //strcpy(&((char*)datamem)[0xf700], "GAMBIARRA FOREVER 32!");
 
-    auto datawindow = (volatile uint16_t*)((uintptr_t)datamem + 0xff00);
+    
 
     printf("lets go\n");
 
-    call_init(datamem, datawindow);
+    call_init(datamem, data_callregs);
 
-    auto videoSeg = (uint8_t *)global_descr.getMem(datawindow[0x50/2]);
-    printf("video data: %04x, %08x\n", datawindow[0x50/2], videoSeg);
+    auto videoSeg = (uint8_t *)0;
+    //printf("video data: %04x, %08x\n", datawindow[0x50/2], videoSeg);
     
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);

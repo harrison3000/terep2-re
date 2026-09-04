@@ -2,20 +2,9 @@
 
 %macro airlock_prologue 0
     PUSHAD
-    PUSH FS
-    PUSH GS
-    PUSH DS
-    PUSH ES
-
-    MOV AX, _DATA2
-    MOV DS, AX
 %endmacro
 
 %macro airlock_epilogue 0
-    POP ES
-    POP DS
-    POP GS
-    POP FS
     POPAD
 %endmacro
 
@@ -34,4 +23,10 @@
     LEA  %1, %3
     LEA  %1, [%1 + EAX]
     POP  EAX
+%endmacro
+
+%macro ld_seg 2
+    MOVZX EBP, %2
+    PUSH dword [EBP*4 + all_segments]
+    POP  dword %1
 %endmacro
