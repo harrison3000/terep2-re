@@ -14,9 +14,10 @@
 
 %macro movzx_m2m 2
 	;movzx 16 to 32, mem to mem
-	push word  0
-	push word  %2
-	pop  dword %1
+	push  eax
+	movzx eax, word %2
+	mov   %1, eax
+	pop   eax
 %endmacro
 
 %macro movsx_m2m 2
