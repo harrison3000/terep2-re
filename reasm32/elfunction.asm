@@ -13,11 +13,6 @@ F_WRAP_STOSW:
     add_noflags DI, 2
     ret
 
-F_WRAP_STOSD:
-    mk_addr_seg EBP, ptr_seg_EeS, [DI]
-    mov dword [EBP], eax
-    add_noflags DI, 4
-    ret
 
 
 F_WRAP_LODSB:
@@ -51,7 +46,7 @@ F_WRAP_MOVSD:
 F_WRAP_XLAT:
     PUSH EBX
     mk_addr     EBP, [BX]
-    MOVZX EBX, BX
+    MOVZX EBX, AL
     add_noflags EBX, EBP
     MOV AL, byte [EBX]
     POP EBX
