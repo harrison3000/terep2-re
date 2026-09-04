@@ -8,7 +8,7 @@
 
 
 section .data
-data_start:
+base_mem:
 
 incbin "../memdumps/data.bin"
 

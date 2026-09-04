@@ -15,7 +15,7 @@ const fixed = codigos
     .replace("AND BX, 63", "AND EBX, 63")
     .replaceAll(/dw( +)\./g,"dd$1.")
     .replaceAll("ADD         SP,0x2", "ADD         ESP,0x2")
-    .replace("nova_linha", "nova_linha - data_start")
+    .replace("nova_linha", "nova_linha - base_mem")
     ;
 
 //TODO also remove mov segment register
@@ -26,13 +26,22 @@ const linhas = fixed.split("\n");
 /**
  * 
  * @param {RegExpExecArray} rgrs 
- * @returns {string}
  */
 function classifica(rgrs){
     const mem = rgrs[4].trim();
     const seg = rgrs[3];
 
     //TODO alertar sem tamamnho
+    var offsetu = mem.match(/(.+)( \+ -?0x[a-z0-9])/);
+    if(offsetu){
+        return {
+            tipo: "REG + OFFSET",
+            seg,
+            rgg: offsetu[1],
+            off: offsetu[2],
+        };
+    }
+
     if(seg){
         return "SEGMENTED";
     }
@@ -61,6 +70,10 @@ for(let i = 0; i < linhas.length; i++){
 
     const rgrs = rgx.find(function(r){
         const c = classifica(r);
+        if(c.tipo === "REG + OFFSET"){
+            return true;
+        }
+
         return !c.startsWith("VAR");
     });
 
@@ -78,12 +91,20 @@ for(let i = 0; i < linhas.length; i++){
     let classe = classifica(rgrs);
 
     if(classe === "SIMPLES"){
-        linhas[i] = linha.replace(`[${rgrs[4]}]`, "[data_start + " + rgrs[4] + "]");
+        linhas[i] = linha.replace(`[${rgrs[4]}]`, "[base_mem + " + rgrs[4] + "]");
         continue;
     }
+    const dsegretor = rgrs[3] ? "prt_seg_" + rgrs[3][0] + "eS" : "";
 
-    if(classe === "SEGMENTED"){
-        uu = `mk_addr_seg EBP, seg_${rgrs[3]}, [${rgrs[4]}]`;
+    if(classe.tipo === "REG + OFFSET"){
+        sub = rgrs[0].replace(classe.rgg, "EBP");
+        if(classe.seg){
+            uu = `mk_addr_seg EBP, ${dsegretor}, [${classe.rgg}]`;
+        }else{
+            uu = `mk_addr     EBP, [${classe.rgg}]`;
+        }
+    }else if(classe === "SEGMENTED"){
+        uu = `mk_addr_seg EBP, ${dsegretor}, [${rgrs[4]}]`;
     }else if (classe === "BX + VAR"){
         uu = "movsx ebp, BX";
         sub = rgrs[0].replace("BX", "EBP");
