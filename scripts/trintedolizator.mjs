@@ -94,17 +94,17 @@ for(let i = 0; i < linhas.length; i++){
         linhas[i] = linha.replace(`[${rgrs[4]}]`, "[base_mem + " + rgrs[4] + "]");
         continue;
     }
-    const dsegretor = rgrs[3] ? "ptr_seg_" + rgrs[3][0] + "eS" : "";
 
     if(classe.tipo === "REG + OFFSET"){
         sub = rgrs[0].replace(classe.rgg, "EBP");
         if(classe.seg){
-            uu = `mk_addr_seg EBP, ${dsegretor}, [${classe.rgg}]`;
+            uu = `mk_addr_seg EBP, ${desregulador(rgrs[3])}, [${classe.rgg}]`;
+            sub = sub.replace(/[DEFG]S\:/, "");
         }else{
             uu = `mk_addr     EBP, [${classe.rgg}]`;
         }
     }else if(classe === "SEGMENTED"){
-        uu = `mk_addr_seg EBP, ${dsegretor}, [${rgrs[4]}]`;
+        uu = `mk_addr_seg EBP, ${desregulador(rgrs[3])}, [${rgrs[4]}]`;
     }else if (classe === "BX + VAR"){
         uu = "movsx ebp, BX";
         sub = rgrs[0].replace("BX", "EBP");
@@ -118,7 +118,11 @@ for(let i = 0; i < linhas.length; i++){
 }
 
 
-await writeFile("reasm32/maincode32.asm", linhas.join("\n"));
+let lainis  = linhas.join("\n")
+    .replaceAll(/^ +(PUSH|POP )( +)([DEFG]S)/gm, (m,a,b,c) => `    ${a}${b}dword [${desregulador(c)}]`)
+    .replaceAll(/^ +MOV +([DEFG]S),/gm,(m,a) => `    ld_seg      dword [${desregulador(a)}],`)
+
+await writeFile("reasm32/maincode32.asm", lainis);
 
 /**
  * 
@@ -134,4 +138,8 @@ function deveIgnorar(l){
         return true;
     }
     return false;
+}
+
+function desregulador(s){
+    return s ? "ptr_seg_" + s[0] + "eS" : ""
 }

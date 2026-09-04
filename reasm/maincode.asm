@@ -1125,8 +1125,8 @@ FUN_1000_0cd3:
     MOV         DX,AX
     PUSH        ES
     PUSH        DI
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        DS
+    POP         ES
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
@@ -1643,8 +1643,8 @@ FUN_1000_1323:
     MOV         FS,AX
     PUSH        SI
     CALL        FUN_1000_1347
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        DS
+    POP         ES
     POP         SI
     ADD         SI,word [SI + 0x4]
     CALL        FUN_1000_1408
@@ -2120,8 +2120,8 @@ FUN_1000_1408:
     IDIV        CX
     MOV         DX,AX
     PUSH        ES
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        DS
+    POP         ES
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
@@ -2283,8 +2283,8 @@ FUN_1000_1408:
     POP         word [ye_old_lil_bep]
     POP         BX
     PUSH        ES
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        DS
+    POP         ES
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,word [0x5d8]

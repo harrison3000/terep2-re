@@ -34,13 +34,13 @@ f_init:
     call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [base_mem + 0x1a45],AX
-    MOV         GS,AX
+    ld_seg      dword [ptr_seg_GeS],AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call DOS3Call
     JC          .LAB_LOC_6
     MOV         word [base_mem + 0x1a47],AX
-    MOV         FS,AX
+    ld_seg      dword [ptr_seg_FeS],AX
     MOV         AH,0x48
     MOV         BX,0x1000
     call DOS3Call
@@ -111,7 +111,7 @@ f_init:
     MOV         DI,word [EBP + 0x5bbc]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x1e],AX
-    MOV         ES,AX
+    ld_seg      dword [ptr_seg_EeS],AX
     XOR         DI,DI
     CALL        FUN_1000_5acf
 .LAB_LOC_3:
@@ -185,8 +185,8 @@ f_cam_select:
 
 FUN_main_render:
     ;needed now that it runs on paint message
-    MOV         FS, word [base_mem + 0x1a47]
-    MOV         GS, word [base_mem + 0x1a45]
+    ld_seg      dword [ptr_seg_FeS], word [base_mem + 0x1a47]
+    ld_seg      dword [ptr_seg_GeS], word [base_mem + 0x1a45]
 
     TEST        byte [base_mem + 0x7d],0xff
     JNZ         .LAB_LOC_5
@@ -1055,8 +1055,8 @@ FUN_1000_0a82:
 ;ANALYSIS: related to smoke, debris, particle effects in general
 FUN_1000_0b25:
                               ;XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
-    PUSH        FS
-    MOV         FS,word [base_mem + 0x1a49]
+    PUSH        dword [ptr_seg_FeS]
+    ld_seg      dword [ptr_seg_FeS],word [base_mem + 0x1a49]
     XOR         DI,DI
     CMP         DI,word [base_mem + 0x3e51]
     JNC         .LAB_LOC_4
@@ -1108,7 +1108,7 @@ FUN_1000_0b25:
     CMP         DI,word [base_mem + 0x3e51]
     JC          .LAB_LOC_1
 .LAB_LOC_4:
-    POP         FS
+    POP         dword [ptr_seg_FeS]
     RET
 .LAB_LOC_5:
     POP         BX
@@ -1256,10 +1256,10 @@ FUN_1000_0cd3:
     CWD
     IDIV        CX
     MOV         DX,AX
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     PUSH        DI
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        dword [ptr_seg_DeS]
+    POP         dword [ptr_seg_EeS]
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
@@ -1292,7 +1292,7 @@ FUN_1000_0cd3:
     MOV         word [base_mem + 0xdb14],0x4
     CALL        FUN_1000_36fe
     POP         DI
-    POP         ES
+    POP         dword [ptr_seg_EeS]
 .LAB_LOC_1:
     RET
 ;************************************************************************************************
@@ -1860,17 +1860,17 @@ FUN_1000_1323:
     JNZ         .LAB_LOC_1
     MOV         AX, word [base_mem + 0x1a49]
 .LAB_LOC_1:
-    PUSH        FS
-    MOV         FS,AX
+    PUSH        dword [ptr_seg_FeS]
+    ld_seg      dword [ptr_seg_FeS],AX
     PUSH        SI
     CALL        FUN_1000_1347
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        dword [ptr_seg_DeS]
+    POP         dword [ptr_seg_EeS]
     POP         SI
     mk_addr     EBP, [SI]
     ADD         SI,word [EBP + 0x4]
     CALL        FUN_1000_1408
-    POP         FS
+    POP         dword [ptr_seg_FeS]
     POPA
     RET
 ;************************************************************************************************
@@ -2372,9 +2372,9 @@ FUN_1000_1408:
     CWD
     IDIV        CX
     MOV         DX,AX
-    PUSH        ES
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        dword [ptr_seg_EeS]
+    PUSH        dword [ptr_seg_DeS]
+    POP         dword [ptr_seg_EeS]
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,DX
@@ -2404,7 +2404,7 @@ FUN_1000_1408:
     ADD         AX,DX
     CALL  F_WRAP_STOSW 
     CALL  F_WRAP_MOVSD 
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     MOV         word [base_mem + 0xdb14],0x4
     CALL        FUN_1000_36fe
     JMP    .L_1408_START
@@ -2564,9 +2564,9 @@ FUN_1000_1408:
     ADD         SI,0x2
     POP         word [ye_old_lil_bep]
     POP         BX
-    PUSH        ES
-    MOV         AX,DS
-    MOV         ES,AX
+    PUSH        dword [ptr_seg_EeS]
+    PUSH        dword [ptr_seg_DeS]
+    POP         dword [ptr_seg_EeS]
     MOV         DI,0xdb16
     MOV         AX,BX
     SUB         AX,word [base_mem + 0x5d8]
@@ -2604,7 +2604,7 @@ FUN_1000_1408:
     SUB         AX,word [base_mem + 0x5dc]
     CALL  F_WRAP_STOSW 
     CALL  F_WRAP_MOVSD 
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     MOV         word [base_mem + 0xdb14],0x4
     CALL        FUN_1000_36fe
 .LAB_LOC_23:
@@ -2709,7 +2709,7 @@ FUN_1000_1965:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + 0xfeff]
+    MOV         AL,byte [EBP + 0xfeff]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -2785,7 +2785,7 @@ FUN_1000_1965:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + 0xff00]
+    MOV         AL,byte [EBP + 0xff00]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -2888,7 +2888,7 @@ FUN_1000_1965:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + -0x1]
+    MOV         AL,byte [EBP + -0x1]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -3094,8 +3094,8 @@ FUN_1000_1cde:
 .LAB_LOC_3:
     RET
 .LAB_LOC_4:
-    PUSH        FS
-    MOV         FS,word [base_mem + 0x1a4b]
+    PUSH        dword [ptr_seg_FeS]
+    ld_seg      dword [ptr_seg_FeS],word [base_mem + 0x1a4b]
     MOV         AH,byte [base_mem + 0x5fc]
     MOV         BH,AL
     AND         BH,0xf0
@@ -3153,7 +3153,7 @@ FUN_1000_1cde:
     JNS         .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
-    POP         FS
+    POP         dword [ptr_seg_FeS]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3213,8 +3213,8 @@ FUN_1000_1e3a:
 .LAB_LOC_3:
     RET
 .LAB_LOC_4:
-    PUSH        FS
-    MOV         FS,word [base_mem + 0x1a4b]
+    PUSH        dword [ptr_seg_FeS]
+    ld_seg      dword [ptr_seg_FeS],word [base_mem + 0x1a4b]
     MOV         AH,byte [base_mem + 0x5fc]
     MOV         BH,AL
     AND         BH,0xf0
@@ -3271,7 +3271,7 @@ FUN_1000_1e3a:
     JS          .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
-    POP         FS
+    POP         dword [ptr_seg_FeS]
     RET
 
 ;seems like a alternative version of FUN_1000_1965, what it does? who knows?
@@ -3312,7 +3312,7 @@ FUN_1965_NP:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + 0xfeff]
+    MOV         AL,byte [EBP + 0xfeff]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -3388,7 +3388,7 @@ FUN_1965_NP:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + -0x1]
+    MOV         AL,byte [EBP + -0x1]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -3491,7 +3491,7 @@ FUN_1965_NP:
     MOV         word [base_mem + 0x5fd],BX
     PUSH        BX
     mk_addr_seg EBP, ptr_seg_FeS, [BX]
-    MOV         AL,byte FS:[EBP + 0xff00]
+    MOV         AL,byte [EBP + 0xff00]
     MOV         byte [base_mem + 0x5fc],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
     MOVZX       CX,byte [EBP]
@@ -3877,16 +3877,16 @@ FUN_1000_2454:
 
     PUSH        AX
     PUSH        BX
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     PUSH        DI
-    PUSH        DS
-    POP         ES
+    PUSH        dword [ptr_seg_DeS]
+    POP         dword [ptr_seg_EeS]
     MOV         CX,0x41
     XOR         AX,AX
     CLD
 CALL F_WRAP_REP_STOSW
     POP         DI
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     MOV         DX,DX
     MOV         AL,0x0
     MOV         AH,0x3d
@@ -3941,14 +3941,14 @@ CALL F_WRAP_REP_STOSW
 ;************************************************************************************************
 FUN_1000_24c0:
                               ;XREF[1]:     1000:017e(c)
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     MOV         DX,0x1a03
-    MOV         ES,word [base_mem + 0x1a45]
+    ld_seg      dword [ptr_seg_EeS],word [base_mem + 0x1a45]
     XOR         DI,DI
     CALL        FUN_1000_5a60
     JC          .LAB_LOC_1
     MOV         DX,0x1a20
-    MOV         ES,word [base_mem + 0x1a4b]
+    ld_seg      dword [ptr_seg_EeS],word [base_mem + 0x1a4b]
     XOR         DI,DI
     CALL        FUN_1000_5a60
     JC          .LAB_LOC_1
@@ -3972,7 +3972,7 @@ FUN_1000_24c0:
     MOV         DX,0x80
     MOV         AX,0x4200
     call DOS3Call
-    MOV         ES,word [base_mem + 0x1a47]
+    ld_seg      dword [ptr_seg_EeS],word [base_mem + 0x1a47]
     XOR         DI,DI
     CALL        FUN_1000_5acf
     JC          .LAB_LOC_1
@@ -4002,19 +4002,19 @@ FUN_1000_24c0:
     call DOS3Call
 .LAB_LOC_1:
                               ;             1000:2520(j)
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_1000_255c:
                               ;XREF[1]:     1000:0181(c)
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     MOV         DX,0x1a13
-    MOV         ES,word [base_mem + 0x1a49]
+    ld_seg      dword [ptr_seg_EeS],word [base_mem + 0x1a49]
     XOR         DI,DI
     CALL        FUN_1000_5a60
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -4074,12 +4074,12 @@ FUN_1000_25c5:
     SHL         AX,0x4
     MOV         CX,AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x1]
+    MOVZX       AX,byte [EBP + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0x5ac5],AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x100]
+    MOVZX       AX,byte [EBP + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0x5acb],AX
@@ -4097,16 +4097,16 @@ FUN_1000_25c5:
     MOV         byte [base_mem + 0x5acf],BL
     MOV         BL,AH
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x101]
+    MOVZX       AX,byte [EBP + 0x101]
     SHL         AX,0x4
     MOV         CX,AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x1]
+    MOVZX       AX,byte [EBP + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0x5acb],AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x100]
+    MOVZX       AX,byte [EBP + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0x5ac5],AX
@@ -4643,15 +4643,15 @@ FUN_1000_2b70:
 ;ANALYSIS: this clears the framebuffer
 FUN_1000_2b98:
                               ;XREF[2]:     1000:02c6(c),1000:0392(c)
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     PUSH        DI
-    MOV         ES,word [base_mem + 0xdb10]
+    ld_seg      dword [ptr_seg_EeS],word [base_mem + 0xdb10]
     XOR         DI,DI
     MOV         CX,0x7D00
     CLD
 CALL F_WRAP_REP_STOSW
     POP         DI
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -4795,8 +4795,8 @@ FUN_1000_2d61:
     JZ          .LAB_LOC_4
     INC         DX
     SHL         BX,0x2
-    PUSH        ES
-    MOV         ES, word [base_mem + 0xdb10]
+    PUSH        dword [ptr_seg_EeS]
+    ld_seg      dword [ptr_seg_EeS], word [base_mem + 0xdb10]
     MOV         SI,BX
     CMP         word [base_mem + 0xdb12],0xf0f0
     JNC         .LAB_LOC_5
@@ -4826,7 +4826,7 @@ CALL F_WRAP_REP_STOSW
     ADD         SI,0x4
     DEC         DX
     JNZ         .LAB_LOC_1
-    POP         ES
+    POP         dword [ptr_seg_EeS]
 .LAB_LOC_4:
     RET
 .LAB_LOC_5:
@@ -4859,7 +4859,7 @@ CALL F_WRAP_REP_STOSW
     ADD         SI,0x4
     DEC         DX
     JNZ         .LAB_LOC_6
-    POP         ES
+    POP         dword [ptr_seg_EeS]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -5490,8 +5490,8 @@ FUN_1000_31d1:
     JZ          .LAB_LOC_4
     INC         DX
     SHL         BX,0x2
-    PUSH        ES
-    MOV         ES, word [base_mem + 0xdb10]
+    PUSH        dword [ptr_seg_EeS]
+    ld_seg      dword [ptr_seg_EeS], word [base_mem + 0xdb10]
 .LAB_LOC_1:
     MOV         DI,BX
     SHL         DI,0x2
@@ -5539,7 +5539,7 @@ FUN_1000_31d1:
     ADD         BX,0x4
     DEC         DX
     JNZ         .LAB_LOC_1
-    POP         ES
+    POP         dword [ptr_seg_EeS]
 .LAB_LOC_4:
     RET
 ;************************************************************************************************
@@ -6336,8 +6336,8 @@ FUN_1000_3827:
     JZ          .LAB_LOC_5
     INC         DI
     SHL         SI,0x2
-    PUSH        ES
-    MOV         ES, word [base_mem + 0xdb10]
+    PUSH        dword [ptr_seg_EeS]
+    ld_seg      dword [ptr_seg_EeS], word [base_mem + 0xdb10]
 .LAB_LOC_1:
     PUSH        DI
     MOV         DI,SI
@@ -6415,7 +6415,7 @@ FUN_1000_3827:
     ADD         SI,0x4
     DEC         DI
     JNZ         .LAB_LOC_1
-    POP         ES
+    POP         dword [ptr_seg_EeS]
 .LAB_LOC_5:
     RET
 .LAB_LOC_6:
@@ -7309,17 +7309,17 @@ FUN_1000_3f98:
     JL          .LAB_LOC_1
     CMP         BX,word [base_mem + 0xdbbe]
     JG          .LAB_LOC_1
-    PUSH        ES
+    PUSH        dword [ptr_seg_EeS]
     MOV         BH,BL
     XOR         BL,BL
     ADD         AX,BX
     SHR         BX,0x1
     SHR         BX,0x1
     ADD         BX,AX
-    MOV         ES, word [base_mem + 0xdb10]
+    ld_seg      dword [ptr_seg_EeS], word [base_mem + 0xdb10]
     mk_addr_seg EBP, ptr_seg_EeS, [BX]
     MOV         byte [EBP],CL
-    POP         ES
+    POP         dword [ptr_seg_EeS]
 .LAB_LOC_1:
     RET
 
@@ -9699,13 +9699,13 @@ FUN_1000_532e:
     SHL         AX,0x4
     MOV         CX,AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x1]
+    MOVZX       AX,byte [EBP + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0xea10],AX
     MOV         word [base_mem + 0xea24],AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x100]
+    MOVZX       AX,byte [EBP + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0xea16],AX
@@ -9727,18 +9727,18 @@ FUN_1000_532e:
     MOV         AL,byte [EBP]
     MOV         byte [base_mem + 0xea28],AL
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x101]
+    MOVZX       AX,byte [EBP + 0x101]
     SHL         AX,0x4
     MOV         CX,AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x1]
+    MOVZX       AX,byte [EBP + 0x1]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0xea16],AX
     NEG         AX
     MOV         word [base_mem + 0xea26],AX
     mk_addr_seg EBP, ptr_seg_GeS, [BX]
-    MOVZX       AX,byte GS:[EBP + 0x100]
+    MOVZX       AX,byte [EBP + 0x100]
     SHL         AX,0x4
     SUB         AX,CX
     MOV         word [base_mem + 0xea10],AX
@@ -9758,17 +9758,17 @@ FUN_1000_532e:
 ;************************************************************************************************
 FUN_timer_5680:
     PUSHAD
-    PUSH        DS
-    PUSH        ES
-    PUSH        FS
-    PUSH        GS
+    PUSH        dword [ptr_seg_DeS]
+    PUSH        dword [ptr_seg_EeS]
+    PUSH        dword [ptr_seg_FeS]
+    PUSH        dword [ptr_seg_GeS]
     MOV         AX, _DATA2
-    MOV         DS,AX
-    MOV         ES,AX
+    ld_seg      dword [ptr_seg_DeS],AX
+    ld_seg      dword [ptr_seg_EeS],AX
     CMP         byte [base_mem + 0x6e],0x1
     JNZ         .LAB_LOC_2
-    MOV         FS, word [base_mem + 0x1a47]
-    MOV         GS, word [base_mem + 0x1a45]
+    ld_seg      dword [ptr_seg_FeS], word [base_mem + 0x1a47]
+    ld_seg      dword [ptr_seg_GeS], word [base_mem + 0x1a45]
     MOV         DI,0x5bbc
     MOV         CX,word [base_mem + 0x5bba]      ;= 0001h
     MOV         word [ye_old_lil_bep],0x5ad9
@@ -9793,10 +9793,10 @@ FUN_timer_5680:
     CALL        FUN_1000_0bb5
     CALL        FUN_1000_0a3b
 .LAB_LOC_2:
-    POP         GS
-    POP         FS
-    POP         ES
-    POP         DS
+    POP         dword [ptr_seg_GeS]
+    POP         dword [ptr_seg_FeS]
+    POP         dword [ptr_seg_EeS]
+    POP         dword [ptr_seg_DeS]
     POPAD
     RET
 ;************************************************************************************************
