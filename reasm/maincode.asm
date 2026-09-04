@@ -3472,10 +3472,10 @@ FUN_1000_2454:
     PUSH        DI
     PUSH        DS
     POP         ES
-    MOV         CX,0x82
-    XOR         AL,AL
+    MOV         CX,0x41
+    XOR         AX,AX
     CLD
-    REP STOSB 
+    REP STOSW
     POP         DI
     POP         ES
     MOV         DX,DX
@@ -4186,9 +4186,9 @@ FUN_1000_2b98:
     PUSH        DI
     MOV         ES,word [0xdb10]
     XOR         DI,DI
-    MOV         CX,0x3e80
+    MOV         CX,0x7D00
     CLD
-    REP STOSD 
+    REP STOSW
     POP         DI
     POP         ES
     RET

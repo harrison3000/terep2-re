@@ -30,13 +30,6 @@ F_WRAP_XLAT:
     ud2
     ret
 
-F_WRAP_REP_STOSB:
-    ud2
-    ret
-
-F_WRAP_REP_STOSD:
-    ud2
-    ret
 
 F_WRAP_REP_STOSW:
     ud2
