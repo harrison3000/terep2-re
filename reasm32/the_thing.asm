@@ -6,11 +6,15 @@
 
 
 section .data
+_base_mem:
 base_mem:
 
 incbin "../memdumps/data.bin"
 
 %include "../common/newvars_defs.asm"
+
+nova_linha:
+    db "GAMBIARRA FOREVER 32!", 0
 
 ptr_seg_DeS: dd 0
 ptr_seg_EeS: dd 0
@@ -18,24 +22,26 @@ ptr_seg_FeS: dd 0
 ptr_seg_GeS: dd 0
 
 align 8
+_all_segments:
 all_segments:
     times 256 dd 0
 
 
+_data_callregs:
 data_callregs:
     times 8 dd 0
 
-global data_callregs
-global all_segments
-global base_mem
+global _data_callregs
+global _all_segments
+global _base_mem
 
 
 section .text
 
-global asm_f_init
-global asm_render
-global asm_physics
-global asm_keys
+global asm_f_init_
+global asm_render_
+global asm_physics_
+global asm_keys_
 
 %include "maincode32.asm"
 %include "elfunction.asm"
@@ -63,7 +69,7 @@ DOS3Call:
     ret
 
 
-asm_f_init:
+asm_f_init_:
     airlock_prologue
 
     mov dword [all_segments], base_mem

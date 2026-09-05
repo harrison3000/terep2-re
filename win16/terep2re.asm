@@ -67,7 +67,9 @@ segment _DATA2 class=DATA align=16
     incbin "memdumps/data.bin"
 
     db "SEPARATOR", 0
-
+    
+    nova_linha:
+    db "GAMBIARRA FOREVER!", 0
 
 %include "common/newvars_defs.asm"
 

@@ -21,8 +21,6 @@ ye_old_bep:
 
 ;new vars we added
 
-nova_linha:
-    db "GAMBIARRA FOREVER!", 0
 giracor:
     db 0
 
