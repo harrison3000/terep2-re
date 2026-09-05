@@ -22,6 +22,16 @@ extern volatile uint8_t  base_mem[];
 
 void call_init(HWND hwnd, char path[]);
 
+#define HZ_PHYSICS 120 //TODO check if this is right
+#define HZ_DISPLAY 60
+
+typedef struct imageeee {
+    BITMAPINFOHEADER info;
+    RGBQUAD palette[256];
+} st_image;
+
+st_image paleta;
+
 int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -53,6 +63,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             CoTaskMemFree(pidl); /* Limpa a memória alocada pela shell */
         }
     } 
+    else if (msg == WM_PAINT){
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+
+        int videoSegSel = base_mem[0xdb10];
+        char *video = all_segments[videoSegSel];
+
+        StretchDIBits(hdc,
+            0, 50, 320*2, 200*2,
+            0,  0, 320, 200,
+            video, (void *)&paleta,
+            DIB_RGB_COLORS, SRCCOPY
+        );
+        EndPaint(hwnd, &ps);
+        asm_render();
+    }
+    else if (msg == WM_TIMER){
+        if(wParam == 120 && started){
+            asm_physics();
+        }
+        if(wParam == 122){
+            InvalidateRect(hwnd, 0, TRUE);
+        }
+    }
     else if (msg == WM_DESTROY) {
         PostQuitMessage(0);
     }
@@ -83,6 +117,28 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
         DispatchMessage(&msg);
     }
     return msg.wParam;
+}
+
+void load_palette(){
+    BITMAPINFOHEADER bih = {
+        .biSize = sizeof(BITMAPINFOHEADER),
+        .biWidth = 320,
+        .biHeight = -200,
+        .biPlanes = 1,
+        .biBitCount = 8,
+        .biCompression = BI_RGB,
+        .biSizeImage = 320 * 200,
+    };
+
+    paleta.info = bih;
+
+    volatile uint8_t *ptr = &base_mem[0x1a4d];
+    for(int i =0; i<256;i++){
+        paleta.palette[i].rgbRed = ptr[0];
+        paleta.palette[i].rgbGreen = ptr[1];
+        paleta.palette[i].rgbBlue = ptr[2];
+        ptr += 3;
+    }
 }
 
 int mydoscall(HWND hwnd, char path[]);
@@ -117,7 +173,22 @@ void call_init(HWND hwnd, char path[]){
         //TODO some kind of timeout
     }
 
-    MessageBox(NULL, "This is the end", "Nice", MB_OK);
+    if(data_callregs[1]){
+        MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
+        exit(55);
+    }
+
+    uint8_t ncars = base_mem[0x5bba];
+    if(ncars <= 0){
+        MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
+        exit(1);
+    }
+
+    load_palette();
+    asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
+
+    //SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
+    SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
 int mydoscall(HWND hwnd, char path[]){
@@ -154,6 +225,28 @@ int mydoscall(HWND hwnd, char path[]){
             printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
             *ax = seletor;
             return 1;
+        }
+        case 0x3f00:{
+            int fd = bx;
+            volatile char *addr = &base_mem[*dx];
+            auto r = read(fd, (void *)addr, cx);
+            *ax = r;
+            //printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, dx);
+            return r >= 0;
+        }
+        case 0x4200:{
+            int off = cx;
+            off <<= 16;
+            off += *dx;
+
+            int offset = lseek(bx, off, *ax & 0xf);
+            *dx = offset >> 16;
+            *ax = offset;
+            return offset >= 0; 
+        }
+        case 0x3e00:{
+            int ok = close(bx);
+            return ok == 0;
         }
     
     }

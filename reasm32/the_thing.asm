@@ -77,12 +77,13 @@ asm_f_init_:
 
     call f_init
 
+    MOV word [data_callregs + 2], AX
     MOV word [data_callregs], 0xbeef
 
     airlock_epilogue
     ret
 
-asm_render:
+asm_render_:
     airlock_prologue
 
     call FUN_main_render
@@ -91,7 +92,7 @@ asm_render:
     ret
 
 
-asm_physics:
+asm_physics_:
     airlock_prologue
 
     call FUN_timer_5680
