@@ -192,7 +192,7 @@ void call_init(HWND hwnd, char path[]){
         exit(55);
     }
 
-    uint8_t ncars = base_mem[0x5bba];
+    int ncars = base_mem[0x5bba];
     if(ncars <= 0){
         MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
         exit(1);
@@ -212,6 +212,8 @@ int mydoscall(HWND hwnd, char path[]){
     volatile uint16_t *dx = &data_callregs[4];
 
     static FILE* f = 0;
+    static int fidx = 5;
+    static int32_t totalrd = 0;
 
     int op = *ax & 0xff00;
     switch (op) {
@@ -234,10 +236,11 @@ int mydoscall(HWND hwnd, char path[]){
             f = fopen(ultrapath, "rb");
             if(f == NULL){
                 printf("FAILED\n");
-                *ax = -1;
+                *ax = 2;
             }else{
                 printf("OK\n");
-                *ax = 10;
+                fidx++;
+                *ax = fidx;
             }            
             return f != NULL;
         }
@@ -252,16 +255,17 @@ int mydoscall(HWND hwnd, char path[]){
             return 1;
         }
         case 0x3f00:{
-            if(bx != 10){
-                printf(" * wat?");
+            if(bx != fidx){
+                printf(" * WAT?\n");
                 return 0;
             }
             volatile char *addr = &base_mem[*dx];
 
-            int r = fread(addr, 1, cx, f);
+            int32_t r = fread(addr, 1, cx, f);
             if(r != cx){
                 printf("* Short read, %d, %d\n", r, cx);
             }
+            totalrd += r;
             *ax = r;            
             return r >= 0;
         }
@@ -270,14 +274,17 @@ int mydoscall(HWND hwnd, char path[]){
             off <<= 16;
             off += *dx;
 
-            uint32_t offset = fseek(f, off, *ax & 0xf);
+            uint32_t fsok = fseek(f, off, *ax & 0xf);
+            uint32_t offset = ftell(f);
             *dx = offset >> 16;
             *ax = offset;
-            return offset >= 0; 
+            return fsok == 0; 
         }
         case 0x3e00:{
             int ok = fclose(f);
             f = NULL;
+            printf("* Total read: %ld\n", totalrd);
+            totalrd = 0;
             return ok == 0;
         }
     
