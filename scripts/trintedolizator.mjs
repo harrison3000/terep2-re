@@ -32,8 +32,13 @@ function classifica(rgrs){
     const seg = rgrs[3];
 
     //TODO alertar sem tamamnho
-    var offsetu = mem.match(/(.+)( \+ -?0x[a-z0-9])/);
-    if(offsetu){
+    var offsetu = mem.match(/(.+)( \+ (-?0x[a-z0-9]{1,4}))/);
+    if(offsetu && parseInt(offsetu[3]) < 0x1000) {
+        //FIXME this is not a safe optimization.... its not even a full optimization yet
+        //just a pre-pass for some idea I have
+        //it makes the offset be calculated in 32bit, causes some problems with the 0xff00 
+        //offset for example, in 16bit its a negative number, in 32bit its not
+        //so its disabled for big offsets for now
         return {
             tipo: "REG + OFFSET",
             seg,
