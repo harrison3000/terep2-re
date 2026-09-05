@@ -12,7 +12,7 @@
 extern void asm_f_init();
 extern void asm_render();
 extern void asm_physics();
-extern void asm_keys(int16_t);
+extern void asm_keys(uint16_t);
 
 extern volatile uint32_t all_segments[];
 extern volatile uint16_t data_callregs[];
@@ -85,6 +85,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, 0, TRUE);
         }
     }
+    else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
+        WORD keyFlags = HIWORD(lParam);
+        WORD scanCode = keyFlags & 0x7f ;            
+        if(keyFlags & KF_UP){
+            //key released
+            scanCode += 0x80;
+        }else if(scanCode == 1){
+            //esc pressed
+            PostQuitMessage(0);
+        }
+
+        if(started){
+            asm_keys(scanCode);
+        }
+    }
+
     else if (msg == WM_DESTROY) {
         PostQuitMessage(0);
     }
