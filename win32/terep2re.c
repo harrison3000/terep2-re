@@ -61,7 +61,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             CoTaskMemFree(pidl); /* Limpa a memória alocada pela shell */
         }
     } 
-    else if (msg == WM_PAINT){
+    else if (msg == WM_PAINT && started){
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
 
