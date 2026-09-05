@@ -4,8 +4,6 @@
 #include <shlobj.h>
 #include <process.h>
 #include <stdint.h>
-#include <unistd.h>
-#include <fcntl.h>
 
 #define DEFAULT_LEN (1 << 16)
 
@@ -187,7 +185,7 @@ void call_init(HWND hwnd, char path[]){
     load_palette();
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
-    //SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
+    SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
@@ -196,6 +194,8 @@ int mydoscall(HWND hwnd, char path[]){
     uint16_t bx = data_callregs[2];
     uint16_t cx = data_callregs[3];
     volatile uint16_t *dx = &data_callregs[4];
+
+    static FILE* f = 0;
 
     int op = *ax & 0xff00;
     switch (op) {
@@ -207,14 +207,23 @@ int mydoscall(HWND hwnd, char path[]){
                 printf("Tried to load a empty filename, probably better to bail out\n");
                 return 0;
             }
+            if(f != NULL){
+                printf("WARN: trying to open 2 files at once\n");
+            }
             char ultrapath[MAX_PATH];
 
             snprintf(ultrapath, MAX_PATH, "%s\\%s", path, filename);
 
-            int fd = open(ultrapath, O_RDONLY);
-            printf("* trying to open: %s, returning: %d\n", ultrapath, fd);
-            *ax = fd;
-            return fd >= 0;
+            printf("* trying to open: %s...  ", ultrapath);
+            f = fopen(ultrapath, "rb");
+            if(f == NULL){
+                printf("FAILED\n");
+                *ax = -1;
+            }else{
+                printf("OK\n");
+                *ax = 10;
+            }            
+            return f != NULL;
         }
         case 0x4800:{
             static int seletor = 0;
@@ -227,25 +236,32 @@ int mydoscall(HWND hwnd, char path[]){
             return 1;
         }
         case 0x3f00:{
-            int fd = bx;
+            if(bx != 10){
+                printf(" * wat?");
+                return 0;
+            }
             volatile char *addr = &base_mem[*dx];
-            auto r = read(fd, (void *)addr, cx);
-            *ax = r;
-            //printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, dx);
+
+            int r = fread(addr, 1, cx, f);
+            if(r != cx){
+                printf("* Short read, %d, %d\n", r, cx);
+            }
+            *ax = r;            
             return r >= 0;
         }
         case 0x4200:{
-            int off = cx;
+            uint32_t off = cx;
             off <<= 16;
             off += *dx;
 
-            int offset = lseek(bx, off, *ax & 0xf);
+            uint32_t offset = fseek(f, off, *ax & 0xf);
             *dx = offset >> 16;
             *ax = offset;
             return offset >= 0; 
         }
         case 0x3e00:{
-            int ok = close(bx);
+            int ok = fclose(f);
+            f = NULL;
             return ok == 0;
         }
     

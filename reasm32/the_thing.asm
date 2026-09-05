@@ -31,17 +31,29 @@ _data_callregs:
 data_callregs:
     times 8 dd 0
 
-global _data_callregs
-global _all_segments
-global _base_mem
-
+%ifdef WIN32
+    global _data_callregs
+    global _all_segments
+    global _base_mem
+%else
+    global data_callregs
+    global all_segments
+    global base_mem
+%endif
 
 section .text
 
-global asm_f_init_
-global asm_render_
-global asm_physics_
-global asm_keys_
+%ifdef WIN32
+    global asm_f_init_
+    global asm_render_
+    global asm_physics_
+    global asm_keys_
+%else
+    global asm_f_init
+    global asm_render
+    global asm_physics
+    global asm_keys
+%endif
 
 %include "maincode32.asm"
 %include "elfunction.asm"
@@ -69,6 +81,7 @@ DOS3Call:
     ret
 
 
+asm_f_init:
 asm_f_init_:
     airlock_prologue
 
@@ -83,6 +96,7 @@ asm_f_init_:
     airlock_epilogue
     ret
 
+asm_render:
 asm_render_:
     airlock_prologue
 
@@ -92,6 +106,7 @@ asm_render_:
     ret
 
 
+asm_physics:
 asm_physics_:
     airlock_prologue
 
@@ -101,6 +116,7 @@ asm_physics_:
     ret
 
 asm_keys:
+asm_keys_:
     airlock_prologue
 
     ;TODO get keys from the window
