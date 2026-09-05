@@ -1,8 +1,13 @@
 
+#include <stdio.h>
 #include <windows.h>
 #include <shlobj.h>
 #include <process.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#define DEFAULT_LEN (1 << 16)
 
 #define ID_BTN_FOLDER 101
 
@@ -80,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     return msg.wParam;
 }
 
-int mydoscall(HWND hwnd);
+int mydoscall(HWND hwnd, char path[]);
 
 void __watcall GameInitThread(void *param) {
     asm_f_init();
@@ -100,7 +105,7 @@ void call_init(HWND hwnd, char path[]){
 
     while(1){
         if(data_callregs[0] == 0xd3ca){
-            auto ok = mydoscall(hwnd);
+            int ok = mydoscall(hwnd, path);
 
             data_callregs[5] = ok ? 3 : 1;
             data_callregs[0] = 0x1234;
@@ -115,8 +120,51 @@ void call_init(HWND hwnd, char path[]){
     MessageBox(NULL, "This is the end", "Nice", MB_OK);
 }
 
-int mydoscall(HWND hwnd){
-    MessageBox(NULL, "doscall reached!", "Nice", MB_OK);
+int mydoscall(HWND hwnd, char path[]){
+    volatile uint16_t *ax = &data_callregs[1];
+    uint16_t bx = data_callregs[2];
+    uint16_t cx = data_callregs[3];
+    volatile uint16_t *dx = &data_callregs[4];
 
+    int op = *ax & 0xff00;
+    switch (op) {
+        case 0x3d00:{
+            //open
+            volatile char *filename = &base_mem[*dx];
+            if(filename[0] == 0){
+                //empty file name, happens when track has 5 cars
+                printf("Tried to load a empty filename, probably better to bail out\n");
+                return 0;
+            }
+            char ultrapath[MAX_PATH];
+
+            snprintf(ultrapath, MAX_PATH, "%s\\%s", path, filename);
+
+            int fd = open(ultrapath, O_RDONLY);
+            printf("* trying to open: %s, returning: %d\n", ultrapath, fd);
+            *ax = fd;
+            return fd >= 0;
+        }
+        case 0x4800:{
+            static int seletor = 0;
+            seletor++;
+            void* mem = malloc(DEFAULT_LEN);
+            all_segments[seletor] = (uint32_t)mem;
+            printf("* Aloc: %d, %08x\n", seletor, mem);
+            printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
+            *ax = seletor;
+            return 1;
+        }
+    
+    }
+
+    char error[256];
+
+    snprintf(error, 256, "\nERROR: unhandled call: %04x\n", *ax);
+
+    printf("\n%s\n", error);
+    MessageBox(NULL, error, "Error", MB_ICONERROR);
+    exit(69);
     return 0;
 }
+
