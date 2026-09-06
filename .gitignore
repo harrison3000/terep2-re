@@ -5,3 +5,6 @@
 *.err
 *.o
 sim.cfg
+erros.txt
+terep2re
+.vscode/

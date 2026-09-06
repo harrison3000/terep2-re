@@ -58,6 +58,8 @@ handlekey_:
     call FUN_keyboard_56df
     retf
 
+    %include "common/macros.asm"
+
     %include "reasm/maincode.asm"
 
 
@@ -65,14 +67,11 @@ segment _DATA2 class=DATA align=16
     incbin "memdumps/data.bin"
 
     db "SEPARATOR", 0
-
-    %include "reasm/cs_data.asm"
-
-nova_linha:
+    
+    nova_linha:
     db "GAMBIARRA FOREVER!", 0
-giracor:
-    db 0
 
+%include "common/newvars_defs.asm"
 
 ;pad to the limit
 times (65534 - ($ - $$)) db 'P'
