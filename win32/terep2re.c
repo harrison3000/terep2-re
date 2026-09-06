@@ -28,7 +28,7 @@ typedef struct imageeee {
     RGBQUAD palette[256];
 } st_image;
 
-st_image paleta;
+st_image gameImg;
 
 int started = 0;
 
@@ -71,7 +71,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         StretchDIBits(hdc,
             0, 50, 320*2, 200*2,
             0,  0, 320, 200,
-            video, (void *)&paleta,
+            video, (void *)&gameImg,
             DIB_RGB_COLORS, SRCCOPY
         );
         EndPaint(hwnd, &ps);
@@ -82,7 +82,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             asm_physics();
         }
         if(wParam == 122){
-            InvalidateRect(hwnd, 0, TRUE);
+            InvalidateRect(hwnd, 0, FALSE);
         }
     }
     else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
@@ -139,24 +139,25 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     return msg.wParam;
 }
 
-void load_palette(){
+void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette){
     BITMAPINFOHEADER bih = {
         .biSize = sizeof(BITMAPINFOHEADER),
-        .biWidth = 320,
-        .biHeight = -200,
         .biPlanes = 1,
         .biBitCount = 8,
         .biCompression = BI_RGB,
-        .biSizeImage = 320 * 200,
     };
 
-    paleta.info = bih;
+    bih.biWidth = w;
+    bih.biHeight = -h,
+    bih.biSizeImage = w * h;
 
-    volatile uint8_t *ptr = &base_mem[0x1a4d];
+    bminfo->info = bih;
+
+    uint8_t *ptr = palette;
     for(int i =0; i<256;i++){
-        paleta.palette[i].rgbRed = ptr[0];
-        paleta.palette[i].rgbGreen = ptr[1];
-        paleta.palette[i].rgbBlue = ptr[2];
+        bminfo->palette[i].rgbRed   = ptr[0];
+        bminfo->palette[i].rgbGreen = ptr[1];
+        bminfo->palette[i].rgbBlue  = ptr[2];
         ptr += 3;
     }
 }
@@ -213,7 +214,7 @@ void call_init(HWND hwnd, char path[]){
         exit(1);
     }
 
-    load_palette();
+    prepare_bitmap_info(320, 200, &gameImg,&base_mem[0x1a4d]);
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
     SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
