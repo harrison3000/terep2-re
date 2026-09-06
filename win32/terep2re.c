@@ -34,13 +34,13 @@ int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     if (msg == WM_CREATE) {
-        /* Botão no canto superior esquerdo (x:10, y:10, w:120, h:30) */
         CreateWindow("BUTTON", "Select track", 
                      WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                      10, 10, 120, 30, hwnd, (HMENU)ID_BTN_FOLDER, NULL, NULL);
     } 
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
         if(started){
+            //TODO a way to cleanup the specific parts of the memory to restart the game with another track
             MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
             goto end; //behold the root of all evil!
         }
@@ -58,7 +58,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if (SHGetPathFromIDList(pidl, path)) {
                 call_init(hwnd, path);
             }
-            CoTaskMemFree(pidl); /* Limpa a memória alocada pela shell */
+            CoTaskMemFree(pidl); /* Frees da memory */
         }
     } 
     else if (msg == WM_PAINT && started){
@@ -120,10 +120,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
 
     RegisterClass(&wc);
 
+    RECT rc = {0, 0, 640, 400 + 50}; /* Tamanho interno desejado */
+    DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
+
+    AdjustWindowRect(&rc, dwStyle, FALSE);
+
     /* Janela aproximada de 800x600 */
     hwnd = CreateWindow("Terep2Win32", "TeREp2", 
-                        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, 
+                        dwStyle,
+                        CW_USEDEFAULT, CW_USEDEFAULT,
+                        rc.right - rc.left,
+                        rc.bottom - rc.top,
                         NULL, NULL, hInst, NULL);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
