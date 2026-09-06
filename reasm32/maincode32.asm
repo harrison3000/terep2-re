@@ -226,14 +226,11 @@ FUN_main_render:
     MOV         SI,word [EBP]
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         EAX,dword [EBP + 0x42]
-    mk_addr     EBP, [SI]
     ADD         EAX,dword [EBP + 0x46]
     SAR         EAX,0xe
     mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x4a]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
@@ -298,14 +295,11 @@ FUN_main_render:
     MOV         SI,word [EBP]
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         EAX,dword [EBP + 0x42]
-    mk_addr     EBP, [SI]
     ADD         EAX,dword [EBP + 0x46]
     SAR         EAX,0xe
     mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x4a]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
@@ -365,14 +359,11 @@ FUN_main_render:
     MOV         SI,word [EBP]
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         EAX,dword [EBP + 0x42]
-    mk_addr     EBP, [SI]
     ADD         EAX,dword [EBP + 0x46]
     SAR         EAX,0xe
     mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x4a]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x4e]
     SAR         EBX,0xe
     TEST        CX,CX
@@ -809,19 +800,13 @@ F_0893:
     NEG         AX
     mk_addr     EBP, [SI]
     ADD         AX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     ADD         BX,word [EBP + 0x6]
     mk_addr     EBP, [DI]
     SUB         AX,word [EBP + 0x2]
-    mk_addr     EBP, [DI]
     ADD         word [EBP + 0x2],AX
-    mk_addr     EBP, [DI]
     SUB         BX,word [EBP + 0x6]
-    mk_addr     EBP, [DI]
     ADD         word [EBP + 0x6],BX
-    mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x2]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0x6]
     CALL        FUN_1000_25c5
     MOV         BX,AX
@@ -832,7 +817,6 @@ F_0893:
     SAR         AX,0x3
     mk_addr     EBP, [DI]
     ADD         word [EBP + 0xa],AX
-    mk_addr     EBP, [DI]
     CMP         BX,word [EBP + 0xa]
     JA          .LAB_LOC_2
 .LAB_LOC_1:
@@ -847,9 +831,7 @@ F_0893:
     SAR         AX,0x2
     mk_addr     EBP, [DI]
     ADD         word [EBP + 0xe],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x10],0x0
-    mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0xc]
     MOV         word [base_mem + 0xc6],AX
     mk_addr     EBP, [DI]
@@ -1354,9 +1336,7 @@ FUN_1000_0d2a:
     MOV         AH,byte [EBP + CSD_DAT_keys_571e]
     mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0xa]
-    mk_addr     EBP, [SI]
     MOV         ECX,dword [EBP + 0x42]
-    mk_addr     EBP, [SI]
     ADD         ECX,dword [EBP + 0x46]
     AND         CX,CX
     JGE         .LAB_LOC_7
@@ -1420,7 +1400,6 @@ FUN_1000_0e28:
     ADD         DI,0x2
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x72]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0xaa]
     SHR         AX,0x1
     SHR         BX,0x1
@@ -1429,7 +1408,6 @@ FUN_1000_0e28:
     MOV         word [EBP + 0x10],AX
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x76]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0xae]
     SHR         AX,0x1
     SHR         BX,0x1
@@ -1438,7 +1416,6 @@ FUN_1000_0e28:
     MOV         word [EBP + 0x12],AX
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x7a]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0xb2]
     SHR         AX,0x1
     SHR         BX,0x1
@@ -1619,11 +1596,8 @@ FUN_1000_1004:
                               ;XREF[1]:     1000:56b7(c)
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0xa]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x16],AX
-    mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0xc]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x18],AX
     MOV         CX,0x10
     MOV         BX,0x0
@@ -1664,25 +1638,20 @@ FUN_1000_1004:
     ROL         EAX,0x3
     mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x42],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x46],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x4a],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x4e],EAX
     RET
 .LAB_LOC_4:
     ROL         EAX,0x4
     mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x4a],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x4e],EAX
     RET
 .LAB_LOC_5:
     ROL         EAX,0x4
     mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x42],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x46],EAX
     RET
 ;************************************************************************************************
@@ -1692,15 +1661,10 @@ FUN_1000_1091:
                               ;XREF[4]:     1000:06b4(c),1000:0760(c),1000:113c(c),1000:11f6(c)
     mk_addr     EBP, [SI]
     MOV         EDX,dword [EBP + 0xc4]
-    mk_addr     EBP, [SI]
     SUB         EDX,dword [EBP + 0xa8]
-    mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0xc8]
-    mk_addr     EBP, [SI]
     SUB         EBX,dword [EBP + 0xac]
-    mk_addr     EBP, [SI]
     MOV         ECX,dword [EBP + 0xcc]
-    mk_addr     EBP, [SI]
     SUB         ECX,dword [EBP + 0xb0]
     MOV         EAX,EDX
     CALL        FUN_1000_2726
@@ -1713,27 +1677,16 @@ FUN_1000_10b6:
                               ;             1000:1150(c),1000:120a(c)
     mk_addr     EBP, [SI]
     MOV         EDX,dword [EBP + 0x70]
-    mk_addr     EBP, [SI]
     SUB         EDX,dword [EBP + 0xa8]
-    mk_addr     EBP, [SI]
     ADD         EDX,dword [EBP + 0x8c]
-    mk_addr     EBP, [SI]
     SUB         EDX,dword [EBP + 0xc4]
-    mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x74]
-    mk_addr     EBP, [SI]
     SUB         EBX,dword [EBP + 0xac]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x90]
-    mk_addr     EBP, [SI]
     SUB         EBX,dword [EBP + 0xc8]
-    mk_addr     EBP, [SI]
     MOV         ECX,dword [EBP + 0x78]
-    mk_addr     EBP, [SI]
     SUB         ECX,dword [EBP + 0xb0]
-    mk_addr     EBP, [SI]
     ADD         ECX,dword [EBP + 0x94]
-    mk_addr     EBP, [SI]
     SUB         ECX,dword [EBP + 0xcc]
     MOV         EAX,EDX
     CALL        FUN_1000_2726
@@ -1889,14 +1842,11 @@ FUN_1000_1347:
     PUSH        CX
     mk_addr     EBP, [SI]
     MOV         EAX,dword [EBP]
-    mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         ECX,dword [EBP + 0x8]
     CALL        FUN_1000_13cc
     mk_addr     EBP, [SI]
     MOV         EAX,dword [EBP]
-    mk_addr     EBP, [SI]
     MOV         EBX,dword [EBP + 0x4]
     ROR         EAX,0x10
     ROR         EBX,0x10
@@ -1923,9 +1873,7 @@ FUN_1000_1347:
     ADD         SI,0x2
     mk_addr     EBP, [SI]
     ADD         EAX,dword [EBP]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x4]
-    mk_addr     EBP, [SI]
     ADD         ECX,dword [EBP + 0x8]
     CALL        FUN_1000_13cc
     POP         ECX
@@ -1937,9 +1885,7 @@ FUN_1000_1347:
     NEG         ECX
     mk_addr     EBP, [SI]
     ADD         EAX,dword [EBP]
-    mk_addr     EBP, [SI]
     ADD         EBX,dword [EBP + 0x4]
-    mk_addr     EBP, [SI]
     ADD         ECX,dword [EBP + 0x8]
     CALL        FUN_1000_13cc
     RET
@@ -1959,15 +1905,12 @@ FUN_1000_13cc:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CALL        FUN_1000_2418
     JC          .LAB_LOC_1
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_1:
     ADD         DI,0xa
@@ -2061,7 +2004,6 @@ FUN_1000_1408:
     JL     .L_1408_START
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x6]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0x8]
     CALL        FUN_1000_3f98
     JMP    .L_1408_START
@@ -2366,7 +2308,6 @@ FUN_1000_1408:
     JL          .LAB_LOC_19
     mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0x6]
-    mk_addr     EBP, [DI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x8]
     CALL  F_WRAP_LODSW 
     CWD
@@ -2433,23 +2374,17 @@ FUN_1000_1408:
     MOV         SI,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x126]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x128]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x12a]
     mk_addr     EBP, [DI]
     SUB         AX,word [EBP + 0x126]
-    mk_addr     EBP, [DI]
     SUB         BX,word [EBP + 0x128]
-    mk_addr     EBP, [DI]
     SUB         CX,word [EBP + 0x12a]
     CALL        FUN_1000_271d
     movsx_m2m   dword [ye_old_bep],AX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x126]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x128]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x12a]
     CALL        FUN_1000_271d
     IMUL        dword [ye_old_bep]
@@ -2514,7 +2449,6 @@ FUN_1000_1408:
     PUSH        word [ye_old_lil_bep]
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x12c]
-    mk_addr     EBP, [DI]
     MOV         BX,word [EBP + 0x12e]
     SUB         AX,DX
     SUB         BX,word [ye_old_lil_bep]
@@ -2725,9 +2659,7 @@ FUN_1000_1965:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_4
@@ -2737,7 +2669,6 @@ FUN_1000_1965:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_4:
     MOV         DX,word [base_mem + 0x5fd]
@@ -2801,9 +2732,7 @@ FUN_1000_1965:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_8
@@ -2813,7 +2742,6 @@ FUN_1000_1965:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_8:
     MOV         DX,word [base_mem + 0x5fd]
@@ -2904,9 +2832,7 @@ FUN_1000_1965:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_16
@@ -2916,7 +2842,6 @@ FUN_1000_1965:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_16:
     MOV         DX,word [base_mem + 0x5fd]
@@ -2980,9 +2905,7 @@ FUN_1000_1965:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_20
@@ -2992,7 +2915,6 @@ FUN_1000_1965:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_20:
     MOV         DX,word [base_mem + 0x5fd]
@@ -3328,9 +3250,7 @@ FUN_1965_NP:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_5
@@ -3340,7 +3260,6 @@ FUN_1965_NP:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_5:
     MOV         DX,word [base_mem + 0x5fd]
@@ -3404,9 +3323,7 @@ FUN_1965_NP:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_9
@@ -3416,7 +3333,6 @@ FUN_1965_NP:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_9:
     MOV         DX,word [base_mem + 0x5fd]
@@ -3507,9 +3423,7 @@ FUN_1965_NP:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_17
@@ -3519,7 +3433,6 @@ FUN_1965_NP:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_17:
     MOV         DX,word [base_mem + 0x5fd]
@@ -3583,9 +3496,7 @@ FUN_1965_NP:
     NEG         BX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],CX
     CMP         BX,word [base_mem + 0x120]
     JL          .LAB_LOC_21
@@ -3595,7 +3506,6 @@ FUN_1965_NP:
     ADD         BX,word [base_mem + 0xdbba]
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x8],BX
 .LAB_LOC_21:
     MOV         DX,word [base_mem + 0x5fd]
@@ -3655,7 +3565,6 @@ FUN_1000_22f0:
 .LAB_LOC_1:
     mk_addr     EBP, [SI]
     MOV         AH,byte [EBP + 0x7]
-    mk_addr     EBP, [SI]
     MOV         AL,byte [EBP + 0x3]
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
@@ -3702,7 +3611,6 @@ FUN_1000_233b:
 .LAB_LOC_1:
     mk_addr     EBP, [SI]
     MOV         AH,byte [EBP + 0x7]
-    mk_addr     EBP, [SI]
     MOV         AL,byte [EBP + 0x3]
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
@@ -3748,7 +3656,6 @@ FUN_1000_2384:
 .LAB_LOC_1:
     mk_addr     EBP, [SI]
     MOV         AH,byte [EBP + 0x7]
-    mk_addr     EBP, [SI]
     MOV         AL,byte [EBP + 0x3]
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
@@ -3795,7 +3702,6 @@ FUN_1000_23cf:
 .LAB_LOC_1:
     mk_addr     EBP, [SI]
     MOV         AH,byte [EBP + 0x7]
-    mk_addr     EBP, [SI]
     MOV         AL,byte [EBP + 0x3]
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
@@ -3922,9 +3828,7 @@ CALL F_WRAP_REP_STOSW
 .LAB_LOC_1:
     mk_addr     EBP, [SI]
     ADD         dword [EBP],EAX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x4],EBX
-    mk_addr     EBP, [SI]
     ADD         dword [EBP + 0x8],EDX
     ADD         SI,0x1c
     L_LOOP      .LAB_LOC_1
@@ -4126,22 +4030,16 @@ FUN_1000_2662:
                               ;             1000:1f81(c)
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     SUB         AX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x12]
-    mk_addr     EBP, [SI]
     SUB         DX,word [EBP + 0xa]
     IMUL        DX
     MOV         CX,AX
     MOV         BX,DX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x10]
-    mk_addr     EBP, [SI]
     SUB         AX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     SUB         DX,word [EBP + 0xa]
     IMUL        DX
     SUB         AX,CX
@@ -4331,21 +4229,13 @@ FUN_1000_27f1:
                               ;XREF[3]:     1000:02bd(c),1000:0389(c),1000:0452(c)
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x2]
-    mk_addr     EBP, [DI]
     XCHG        word [EBP + 0x6],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],AX
-    mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x4]
-    mk_addr     EBP, [DI]
     XCHG        word [EBP + 0xc],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x4],AX
-    mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0xa]
-    mk_addr     EBP, [DI]
     XCHG        word [EBP + 0xe],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0xa],AX
     RET
 
@@ -4695,11 +4585,8 @@ FUN_1000_2bec:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
@@ -4708,12 +4595,10 @@ FUN_1000_2bec:
     L_LOOP      .LAB_LOC_1
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_2c4b
     CALL        FUN_1000_2d61
@@ -4878,11 +4763,9 @@ FUN_1000_2df2:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x8
@@ -4892,7 +4775,6 @@ FUN_1000_2df2:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -4900,7 +4782,6 @@ FUN_1000_2df2:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc0]
@@ -4924,7 +4805,6 @@ FUN_1000_2df2:
     MOV         AX, word [base_mem + 0xdbc0]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -4950,7 +4830,6 @@ FUN_1000_2df2:
     MOV         AX, word [base_mem + 0xdbc0]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -4969,7 +4848,6 @@ FUN_1000_2df2:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc0]
@@ -4998,11 +4876,9 @@ FUN_1000_2eaf:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x8
@@ -5012,7 +4888,6 @@ FUN_1000_2eaf:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5020,7 +4895,6 @@ FUN_1000_2eaf:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc2]
@@ -5046,7 +4920,6 @@ FUN_1000_2eaf:
     MOV         AX, word [base_mem + 0xdbc2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5070,7 +4943,6 @@ FUN_1000_2eaf:
     MOV         AX, word [base_mem + 0xdbc2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5089,7 +4961,6 @@ FUN_1000_2eaf:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc2]
@@ -5118,11 +4989,9 @@ FUN_1000_2f6c:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x8
@@ -5132,7 +5001,6 @@ FUN_1000_2f6c:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5140,7 +5008,6 @@ FUN_1000_2f6c:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbc]
@@ -5165,7 +5032,6 @@ FUN_1000_2f6c:
     MOV         BX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5192,7 +5058,6 @@ FUN_1000_2f6c:
     MOV         BX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5211,7 +5076,6 @@ FUN_1000_2f6c:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbc]
@@ -5240,11 +5104,9 @@ FUN_1000_302d:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x8
@@ -5254,7 +5116,6 @@ FUN_1000_302d:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5262,7 +5123,6 @@ FUN_1000_302d:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbe]
@@ -5289,7 +5149,6 @@ FUN_1000_302d:
     MOV         BX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5314,7 +5173,6 @@ FUN_1000_302d:
     MOV         BX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x8
     INC         word [ye_old_lil_bep]
@@ -5333,7 +5191,6 @@ FUN_1000_302d:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbe]
@@ -5379,11 +5236,8 @@ FUN_1000_30ee:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
@@ -5392,12 +5246,10 @@ FUN_1000_30ee:
     L_LOOP      .LAB_LOC_1
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_2c4b
     MOV         SI,0xdb16
@@ -5410,11 +5262,8 @@ FUN_1000_30ee:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0xc]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0xa]
     CALL        FUN_1000_317d
     POP         SI
@@ -5423,12 +5272,10 @@ FUN_1000_30ee:
     L_LOOP      .LAB_LOC_2
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_317d
     CALL        FUN_1000_31d1
@@ -5559,15 +5406,11 @@ FUN_1000_324f:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     POP         DI
     ADD         SI,0x8
@@ -5577,9 +5420,7 @@ FUN_1000_324f:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     ADD         DI,0x8
     INC         word [base_mem + 0xe528]
@@ -5588,9 +5429,7 @@ FUN_1000_324f:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc0]
@@ -5620,7 +5459,6 @@ FUN_1000_324f:
     MOV         CX,word [base_mem + 0xdbc0]
     mk_addr     EBP, [DI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -5657,7 +5495,6 @@ FUN_1000_324f:
     MOV         CX,word [base_mem + 0xdbc0]
     mk_addr     EBP, [DI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -5683,9 +5520,7 @@ FUN_1000_324f:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc0]
@@ -5710,15 +5545,11 @@ FUN_1000_3376:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     POP         DI
     ADD         SI,0x8
@@ -5728,9 +5559,7 @@ FUN_1000_3376:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     ADD         DI,0x8
     INC         word [base_mem + 0xe528]
@@ -5739,9 +5568,7 @@ FUN_1000_3376:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc2]
@@ -5774,7 +5601,6 @@ FUN_1000_3376:
     MOV         CX,word [base_mem + 0xdbc2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -5810,7 +5636,6 @@ FUN_1000_3376:
     MOV         CX,word [base_mem + 0xdbc2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -5836,9 +5661,7 @@ FUN_1000_3376:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         AX,word [base_mem + 0xdbc2]
@@ -5863,15 +5686,11 @@ FUN_1000_34a2:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     POP         DI
     ADD         SI,0x8
@@ -5881,9 +5700,7 @@ FUN_1000_34a2:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     ADD         DI,0x8
     INC         word [base_mem + 0xe528]
@@ -5892,9 +5709,7 @@ FUN_1000_34a2:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbc]
@@ -5926,7 +5741,6 @@ FUN_1000_34a2:
     MOV         CX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -5965,7 +5779,6 @@ FUN_1000_34a2:
     MOV         CX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -5991,9 +5804,7 @@ FUN_1000_34a2:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbc]
@@ -6018,15 +5829,11 @@ FUN_1000_35cf:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     POP         DI
     ADD         SI,0x8
@@ -6036,9 +5843,7 @@ FUN_1000_35cf:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
     ADD         DI,0x8
     INC         word [base_mem + 0xe528]
@@ -6047,9 +5852,7 @@ FUN_1000_35cf:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbe]
@@ -6083,7 +5886,6 @@ FUN_1000_35cf:
     MOV         CX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -6121,7 +5923,6 @@ FUN_1000_35cf:
     MOV         CX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -6147,9 +5948,7 @@ FUN_1000_35cf:
     SHL         dword [ye_old_bep],0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     ADD         SI,0x8
     CMP         BX,word [base_mem + 0xdbbe]
@@ -6191,11 +5990,8 @@ FUN_1000_36fe:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x8]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0xa]
     CALL        FUN_1000_2c4b
     POP         SI
@@ -6204,12 +6000,10 @@ FUN_1000_36fe:
     L_LOOP      .LAB_LOC_1
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_2c4b
     MOV         SI,0xdb16
@@ -6222,15 +6016,10 @@ FUN_1000_36fe:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x6]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0xc]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0xe]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0xa]
-    mk_addr     EBP, [SI]
     MOV         SI,word [EBP + 0x2]
     CALL        FUN_1000_379b
     POP         SI
@@ -6239,16 +6028,12 @@ FUN_1000_36fe:
     L_LOOP      .LAB_LOC_2
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x6]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x2]
     MOV         SI,word [ye_old_lil_bep]
     CALL        FUN_1000_379b
@@ -6306,7 +6091,6 @@ FUN_1000_379b:
     ROR         EBX,0x10
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x320],BX
     ADD         SI,0x4
     ROL         EAX,0x10
@@ -6318,7 +6102,6 @@ FUN_1000_379b:
     ROR         EBX,0x10
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x320],BX
 .LAB_LOC_4:
     POP         SI
@@ -6448,19 +6231,13 @@ FUN_1000_390a:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
@@ -6473,11 +6250,8 @@ FUN_1000_390a:
     PUSH        CX
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [SI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x6],DI
     ADD         SI,0x8
     INC         word [base_mem + 0xe528]
@@ -6488,11 +6262,8 @@ FUN_1000_390a:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6524,7 +6295,6 @@ FUN_1000_390a:
     MOV         CX,word [base_mem + 0xdbc0]
     mk_addr     EBP, [SI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -6580,7 +6350,6 @@ FUN_1000_390a:
     MOV         CX,word [base_mem + 0xdbc0]
     mk_addr     EBP, [SI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -6625,11 +6394,8 @@ FUN_1000_390a:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6655,19 +6421,13 @@ FUN_1000_3aa3:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
@@ -6680,11 +6440,8 @@ FUN_1000_3aa3:
     PUSH        CX
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [SI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x6],DI
     ADD         SI,0x8
     INC         word [base_mem + 0xe528]
@@ -6695,11 +6452,8 @@ FUN_1000_3aa3:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6733,7 +6487,6 @@ FUN_1000_3aa3:
     MOV         CX,word [base_mem + 0xdbc2]
     mk_addr     EBP, [SI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -6787,7 +6540,6 @@ FUN_1000_3aa3:
     MOV         CX,word [base_mem + 0xdbc2]
     mk_addr     EBP, [SI]
     MOV         word [EBP],CX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],AX
     POP         CX
     POP         AX
@@ -6832,11 +6584,8 @@ FUN_1000_3aa3:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6862,19 +6611,13 @@ FUN_1000_3c3c:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
@@ -6887,11 +6630,8 @@ FUN_1000_3c3c:
     PUSH        CX
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [SI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x6],DI
     ADD         SI,0x8
     INC         word [base_mem + 0xe528]
@@ -6902,11 +6642,8 @@ FUN_1000_3c3c:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -6940,7 +6677,6 @@ FUN_1000_3c3c:
     MOV         CX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -6998,7 +6734,6 @@ FUN_1000_3c3c:
     MOV         CX,word [base_mem + 0xdbbc]
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -7043,11 +6778,8 @@ FUN_1000_3c3c:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -7073,19 +6805,13 @@ FUN_1000_3ddb:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [DI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
@@ -7098,11 +6824,8 @@ FUN_1000_3ddb:
     PUSH        CX
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],BX
-    mk_addr     EBP, [SI]
     mov_m2m     word [EBP + 0x4],word [ye_old_lil_bep]
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x6],DI
     ADD         SI,0x8
     INC         word [base_mem + 0xe528]
@@ -7113,11 +6836,8 @@ FUN_1000_3ddb:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -7153,7 +6873,6 @@ FUN_1000_3ddb:
     MOV         CX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -7209,7 +6928,6 @@ FUN_1000_3ddb:
     MOV         CX,word [base_mem + 0xdbbe]
     mk_addr     EBP, [SI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x2],CX
     POP         CX
     POP         AX
@@ -7254,11 +6972,8 @@ FUN_1000_3ddb:
     ROR         ESI,0x10
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
     ROR         ESI,0x10
@@ -7447,11 +7162,8 @@ FUN_1000_40c8:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     CALL        FUN_1000_4120
     POP         SI
@@ -7460,12 +7172,10 @@ FUN_1000_40c8:
     L_LOOP      .LAB_LOC_1
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_4120
 .LAB_LOC_2:
@@ -7670,11 +7380,8 @@ FUN_1000_42aa:
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
-    mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0x4]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x6]
     CALL        FUN_1000_4302
     POP         SI
@@ -7683,12 +7390,10 @@ FUN_1000_42aa:
     L_LOOP      .LAB_LOC_1
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     POP         SI
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         DX,word [EBP + 0x2]
     CALL        FUN_1000_4302
 .LAB_LOC_2:
@@ -7788,11 +7493,9 @@ FUN_1000_4394:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x4
@@ -7802,7 +7505,6 @@ FUN_1000_4394:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7810,7 +7512,6 @@ FUN_1000_4394:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         AX,word [base_mem + 0xe588]
@@ -7833,7 +7534,6 @@ FUN_1000_4394:
     MOV         AX, word [base_mem + 0xe588]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7858,7 +7558,6 @@ FUN_1000_4394:
     MOV         AX, word [base_mem + 0xe588]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7877,7 +7576,6 @@ FUN_1000_4394:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         AX,word [base_mem + 0xe588]
@@ -7906,11 +7604,9 @@ FUN_1000_444d:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x4
@@ -7920,7 +7616,6 @@ FUN_1000_444d:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7928,7 +7623,6 @@ FUN_1000_444d:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         AX,word [base_mem + 0xe58a]
@@ -7953,7 +7647,6 @@ FUN_1000_444d:
     MOV         AX, word [base_mem + 0xe58a]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7976,7 +7669,6 @@ FUN_1000_444d:
     MOV         AX, word [base_mem + 0xe58a]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -7995,7 +7687,6 @@ FUN_1000_444d:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         AX,word [base_mem + 0xe58a]
@@ -8024,11 +7715,9 @@ FUN_1000_4506:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x4
@@ -8038,7 +7727,6 @@ FUN_1000_4506:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8046,7 +7734,6 @@ FUN_1000_4506:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         BX,word [base_mem + 0xe584]
@@ -8070,7 +7757,6 @@ FUN_1000_4506:
     MOV         BX,word [base_mem + 0xe584]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8096,7 +7782,6 @@ FUN_1000_4506:
     MOV         BX,word [base_mem + 0xe584]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8115,7 +7800,6 @@ FUN_1000_4506:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         BX,word [base_mem + 0xe584]
@@ -8144,11 +7828,9 @@ FUN_1000_45c3:
     ADD         DI,SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     POP         DI
     ADD         SI,0x4
@@ -8158,7 +7840,6 @@ FUN_1000_45c3:
     PUSH        CX
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8166,7 +7847,6 @@ FUN_1000_45c3:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         BX,word [base_mem + 0xe586]
@@ -8192,7 +7872,6 @@ FUN_1000_45c3:
     MOV         BX,word [base_mem + 0xe586]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8216,7 +7895,6 @@ FUN_1000_45c3:
     MOV         BX,word [base_mem + 0xe586]
     mk_addr     EBP, [DI]
     MOV         word [EBP],AX
-    mk_addr     EBP, [DI]
     MOV         word [EBP + 0x2],BX
     ADD         DI,0x4
     INC         word [ye_old_lil_bep]
@@ -8235,7 +7913,6 @@ FUN_1000_45c3:
     MOV         DX,BX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
-    mk_addr     EBP, [SI]
     MOV         BX,word [EBP + 0x2]
     ADD         SI,0x4
     CMP         BX,word [base_mem + 0xe586]
@@ -8590,9 +8267,7 @@ FUN_1000_48db:
     SUB         dword [EBP + 0x14],EAX
     mk_addr     EBP, [DI]
     MOV         EAX,dword [EBP]
-    mk_addr     EBP, [DI]
     MOV         EBX,dword [EBP + 0x4]
-    mk_addr     EBP, [DI]
     MOV         ECX,dword [EBP + 0x8]
     SHR         EAX,0x10
     SHR         EBX,0x10
@@ -8608,43 +8283,35 @@ FUN_1000_48db:
 .LAB_LOC_2:
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x2]
-    mk_addr     EBP, [DI]
     SUB         AX,word [EBP + 0x18]
     CMP         AX,0x80
     JC          .LAB_LOC_7
 .LAB_LOC_3:
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x6]
-    mk_addr     EBP, [DI]
     SUB         AX,word [EBP + 0x18]
     CMP         AX,0x80
     JC          .LAB_LOC_8
 .LAB_LOC_4:
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x2]
-    mk_addr     EBP, [DI]
     ADD         AX,word [EBP + 0x18]
     CMP         AX,0xfe80
     JA          .LAB_LOC_9
 .LAB_LOC_5:
     mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x6]
-    mk_addr     EBP, [DI]
     ADD         AX,word [EBP + 0x18]
     CMP         AX,0xfe80
     JA          .LAB_LOC_10
 .LAB_LOC_6:
     mk_addr     EBP, [DI]
     MOV         EAX,dword [EBP + 0xc]
-    mk_addr     EBP, [DI]
     MOV         EBX,dword [EBP + 0x10]
-    mk_addr     EBP, [DI]
     MOV         ECX,dword [EBP + 0x14]
     mk_addr     EBP, [DI]
     ADD         dword [EBP],EAX
-    mk_addr     EBP, [DI]
     ADD         dword [EBP + 0x4],EBX
-    mk_addr     EBP, [DI]
     ADD         dword [EBP + 0x8],ECX
     ADD         DI,0x1c
     INC         word [base_mem + 0xe9d6]
@@ -8695,12 +8362,10 @@ FUN_1000_48db:
     SAR         EAX,CL
     mk_addr     EBP, [DI]
     SUB         dword [EBP + 0xc],EAX
-    mk_addr     EBP, [DI]
     MOV         EAX,dword [EBP + 0x10]
     SAR         EAX,CL
     mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x10],EAX
-    mk_addr     EBP, [DI]
     MOV         EAX,dword [EBP + 0x14]
     SAR         EAX,CL
     mk_addr     EBP, [DI]
@@ -8783,7 +8448,6 @@ FUN_1000_4a71:
     SHL         EDX,0x1
     mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x8],EDX
-    mk_addr     EBP, [DI]
     MOV         AX,word [EBP + 0x1a]
     CMP         AX,0x0
     JZ          .LAB_LOC_5
@@ -8973,7 +8637,6 @@ FUN_1000_4cc3:
     IMUL        dword [base_mem + 0xe9ac]
     mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x10],EDX
-    mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x4],EDX
     RET
 ;************************************************************************************************
@@ -9020,7 +8683,6 @@ FUN_1000_4d0e:
     IMUL        dword [base_mem + 0xe9ac]
     mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x10],EDX
-    mk_addr     EBP, [DI]
     SUB         dword [EBP + 0x4],EDX
     RET
 ;************************************************************************************************
@@ -9034,9 +8696,7 @@ FUN_1000_4d96:
     JNC         .LAB_LOC_1
     mk_addr     EBP, [DI]
     MOV         EAX,dword [EBP]
-    mk_addr     EBP, [DI]
     MOV         EBX,dword [EBP + 0x4]
-    mk_addr     EBP, [DI]
     MOV         ECX,dword [EBP + 0x8]
     mk_addr     EBP, [SI + 0x3e53]
     MOV         dword [EBP],EAX
@@ -9277,7 +8937,6 @@ FUN_1000_4e0a:
     MOV         SI,BX
     mk_addr     EBP, [SI]
     MOV         word [EBP + 0x4],AX
-    mk_addr     EBP, [SI]
     MOV         word [EBP + 0x6],AX
     JMP         .LAB_LOC_4
 ;************************************************************************************************

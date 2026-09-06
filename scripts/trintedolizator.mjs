@@ -33,9 +33,8 @@ function classifica(rgrs){
 
     //TODO alertar sem tamamnho
     var offsetu = mem.match(/(.+)( \+ (-?0x[a-z0-9]{1,4}))/);
-    if(offsetu && parseInt(offsetu[3]) < 0x1000) {
-        //FIXME this is not a safe optimization.... its not even a full optimization yet
-        //just a pre-pass for some idea I have
+    if(offsetu && parseInt(offsetu[3]) < 0x600) {
+        //FIXME this is not very  safe optimization.... 
         //it makes the offset be calculated in 32bit, causes some problems with the 0xff00 
         //offset for example, in 16bit its a negative number, in 32bit its not
         //so its disabled for big offsets for now
@@ -91,7 +90,7 @@ for(let i = 0; i < linhas.length; i++){
         continue;
     }
 
-    let uu="";
+    let uu="    ";
     let sub = `${rgrs[1]} [EBP]`;
     let classe = classifica(rgrs);
 
@@ -100,30 +99,61 @@ for(let i = 0; i < linhas.length; i++){
         continue;
     }
 
-    if(classe.tipo === "REG + OFFSET"){
-        sub = rgrs[0].replace(classe.rgg, "EBP");
+    if(typeof classe === "object" && classe.tipo === "REG + OFFSET"){
+        const resistro = classe.rgg;
+        sub = rgrs[0].replace(resistro, "EBP"); 
         if(classe.seg){
-            uu = `mk_addr_seg EBP, ${desregulador(rgrs[3])}, [${classe.rgg}]`;
+            uu = {
+                tipo: "seg", resistro,
+                seg: desregulador(rgrs[3]),
+                toString: otimizavelTS,
+            };
+
             sub = sub.replace(/[DEFG]S\:/, "");
         }else{
-            uu = `mk_addr     EBP, [${classe.rgg}]`;
+            uu = {
+                tipo: "normal", resistro,
+                toString: otimizavelTS,
+            };
         }
     }else if(classe === "SEGMENTED"){
-        uu = `mk_addr_seg EBP, ${desregulador(rgrs[3])}, [${rgrs[4]}]`;
+        uu += `mk_addr_seg EBP, ${desregulador(rgrs[3])}, [${rgrs[4]}]`;
     }else if (classe === "BX + VAR"){
-        uu = "movsx ebp, BX";
+        uu += "movsx ebp, BX";
         sub = rgrs[0].replace("BX", "EBP");
     }else{
-        uu = `mk_addr     EBP, [${rgrs[4]}]`;
+        uu += `mk_addr     EBP, [${rgrs[4]}]`;
     }
 
     linhas[i] = linha.replace(rgrs[0], sub);
-    linhas.splice(i,0,"    " + uu);
+    linhas.splice(i,0, uu);
     i++;
 }
 
 
-let lainis  = linhas.join("\n")
+for(let i = linhas.length - 1; i >= 0; i--){
+    const o = linhas[i];
+    if(o.tipo !== "normal"){
+        continue;
+    }
+    if(["SI", "DI"].includes(o.resistro) == false){
+        continue
+    }
+    if(linhas[i-1].includes(o.resistro)){
+        //previous line modified the reg we are using to calculate
+        //we cant delete this one
+        continue;
+    }
+    const lm2 = linhas[i-2];
+    if((lm2 + "") === (linhas[i] + "")){
+        linhas[i] = false;
+    }
+}
+
+
+let lainis  = linhas
+    .filter(x => x !== false) // actually removes the removed mk_addr's
+    .join("\n")
     .replaceAll(/^ +(PUSH|POP )( +)([DEFG]S)/gm, (m,a,b,c) => `    ${a}${b}dword [${desregulador(c)}]`)
     .replaceAll(/^ +MOV +([DEFG]S),/gm,(m,a) => `    ld_seg      dword [${desregulador(a)}],`)
 
@@ -147,4 +177,12 @@ function deveIgnorar(l){
 
 function desregulador(s){
     return s ? "ptr_seg_" + s[0] + "eS" : ""
+}
+
+function otimizavelTS(){
+    if(this.tipo === "seg"){
+        return `    mk_addr_seg EBP, ${this.seg}, [${this.resistro}]`;
+    }else{
+        return `    mk_addr     EBP, [${this.resistro}]`;
+    }
 }
