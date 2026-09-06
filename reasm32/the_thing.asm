@@ -27,12 +27,20 @@ all_segments:
     times 256 dd 0
 
 
-_data_callregs:
+_call_portal:
 data_callregs:
-    times 8 dd 0
+call_portal:
+    .msg: dw 0
+    .axr: dw 0
+    .bxr: dw 0
+    .cxr: dw 0
+    .dxr: dw 0
+    .cfs: dw 0
+
+;TODO guard value
 
 %ifdef WIN32
-    global _data_callregs
+    global _call_portal
     global _all_segments
     global _base_mem
 %else
@@ -60,23 +68,23 @@ section .text
 
 
 DOS3Call:
-    ;FIXME refactor to use vars
-    MOV word [data_callregs], 0xd3ca
-    MOV [data_callregs + 2], AX
-    MOV [data_callregs + 4], BX
-    MOV [data_callregs + 6], CX
-    MOV [data_callregs + 8], DX
+    MOV word [call_portal.msg], 0xd3ca
+    MOV [call_portal.axr], AX
+    MOV [call_portal.bxr], BX
+    MOV [call_portal.cxr], CX
+    MOV [call_portal.dxr], DX
 
     .mloop:
-    pause
-    cmp word [data_callregs], 0xd3ca
+      ;busy wait until the C side does its thing
+      pause
+      cmp word [call_portal.msg], 0xd3ca
     jz .mloop
 
-    MOV AX, [data_callregs + 2]
-    MOV BX, [data_callregs + 4]
-    MOV CX, [data_callregs + 6]
-    MOV DX, [data_callregs + 8]
-    CMP word [data_callregs + 10], 2 ; 1 to activate the cf, above 2 to clear it
+    MOV AX, [call_portal.axr]
+    MOV BX, [call_portal.bxr]
+    MOV CX, [call_portal.cxr]
+    MOV DX, [call_portal.dxr]
+    CMP word [call_portal.cfs], 2 ; 1 to activate the cf, above 2 to clear it
 
     ret
 
@@ -90,8 +98,8 @@ asm_f_init_:
 
     call f_init
 
-    MOV word [data_callregs + 2], AX
-    MOV word [data_callregs], 0xbeef
+    MOV word [call_portal.axr],  AX
+    MOV word [call_portal.msg], 0xbeef
 
     airlock_epilogue
     ret

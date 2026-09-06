@@ -31,7 +31,7 @@ extern "C" void asm_physics();
 extern "C" void asm_keys(int16_t);
 
 extern volatile uint32_t all_segments[];
-extern volatile uint16_t data_callregs[];
+extern volatile uint16_t data_callregs[]; //TODO portal struct
 extern volatile uint16_t base_mem[];
 
 

@@ -9,13 +9,17 @@
 
 #define ID_BTN_FOLDER 101
 
+typedef struct {
+    uint16_t msg, ax, bx, cx, dx, cf;
+} call_portal_t;
+
 extern void asm_f_init();
 extern void asm_render();
 extern void asm_physics();
 extern void asm_keys(uint16_t);
 
 extern volatile uintptr_t all_segments[];
-extern volatile uint16_t data_callregs[];
+extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
 void call_init(HWND hwnd, char path[]);
@@ -23,7 +27,7 @@ void call_init(HWND hwnd, char path[]);
 #define HZ_PHYSICS 120 //TODO check if this is right
 #define HZ_DISPLAY 60
 
-typedef struct imageeee {
+typedef struct {
     BITMAPINFOHEADER info;
     RGBQUAD palette[256];
 } st_image;
@@ -190,20 +194,20 @@ void call_init(HWND hwnd, char path[]){
     started = 1;
 
     while(1){
-        if(data_callregs[0] == 0xd3ca){
+        if(call_portal->msg == 0xd3ca){
             int ok = mydoscall(hwnd, path);
 
-            data_callregs[5] = ok ? 3 : 1;
-            data_callregs[0] = 0x1234;
+            call_portal->cf = ok ? 3 : 1;
+            call_portal->msg = 0x1234;
             continue;
         }
-        if(data_callregs[0] == 0xbeef){
+        if(call_portal->msg == 0xbeef){
             break;
         }
         //TODO some kind of timeout
     }
 
-    if(data_callregs[1]){
+    if(call_portal->ax){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
         exit(55);
     }
@@ -222,20 +226,20 @@ void call_init(HWND hwnd, char path[]){
 }
 
 int mydoscall(HWND hwnd, char path[]){
-    volatile uint16_t *ax = &data_callregs[1];
-    uint16_t bx = data_callregs[2];
-    uint16_t cx = data_callregs[3];
-    volatile uint16_t *dx = &data_callregs[4];
+    uint16_t ax = call_portal->ax;
+    uint16_t bx = call_portal->bx;
+    uint16_t cx = call_portal->cx;
+    uint16_t dx = call_portal->dx;
 
     static FILE* f = 0;
     static int fidx = 5;
     static int32_t totalrd = 0;
 
-    int op = *ax & 0xff00;
+    int op = ax & 0xff00;
     
     if (op == 0x3d00){
         //open
-        volatile char *filename = &base_mem[*dx];
+        volatile char *filename = &base_mem[dx];
         if(filename[0] == 0){
             //empty file name, happens when track has 5 cars
             printf("Tried to load a empty filename, probably better to bail out\n");
@@ -252,11 +256,11 @@ int mydoscall(HWND hwnd, char path[]){
         f = fopen(ultrapath, "rb");
         if(f == NULL){
             printf("FAILED\n");
-            *ax = 2;
+            call_portal->ax = 2;
         }else{
             printf("OK\n");
             fidx++;
-            *ax = fidx;
+            call_portal->ax = fidx;
         }            
         return f != NULL;
     }
@@ -267,7 +271,7 @@ int mydoscall(HWND hwnd, char path[]){
         all_segments[seletor] = (uintptr_t)mem;
         printf("* Aloc: %d, %08x\n", seletor, mem);
         printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
-        *ax = seletor;
+        call_portal->ax = seletor;
         return 1;
     }
     if (op == 0x3f00){
@@ -275,25 +279,25 @@ int mydoscall(HWND hwnd, char path[]){
             printf(" * WAT?\n");
             return 0;
         }
-        volatile char *addr = &base_mem[*dx];
+        volatile char *addr = &base_mem[dx];
 
         int32_t r = fread(addr, 1, cx, f);
         if(r != cx){
             printf("* Short read, %d, %d\n", r, cx);
         }
         totalrd += r;
-        *ax = r;            
+        call_portal->ax = r;            
         return r >= 0;
     }
     if (op == 0x4200){
         uint32_t off = cx;
         off <<= 16;
-        off += *dx;
+        off += dx;
 
-        uint32_t fsok = fseek(f, off, *ax & 0xf);
+        uint32_t fsok = fseek(f, off, ax & 0xf);
         uint32_t offset = ftell(f);
-        *dx = offset >> 16;
-        *ax = offset;
+        call_portal->dx = offset >> 16;
+        call_portal->ax = offset;
         return fsok == 0; 
     }
     if (op == 0x3e00){
@@ -306,7 +310,7 @@ int mydoscall(HWND hwnd, char path[]){
 
     char error[256];
 
-    snprintf(error, 256, "\nERROR: unhandled call: %04x\n", *ax);
+    snprintf(error, 256, "\nERROR: unhandled call: %04x\n", ax);
 
     printf("\n%s\n", error);
     MessageBox(NULL, error, "Error", MB_ICONERROR);
