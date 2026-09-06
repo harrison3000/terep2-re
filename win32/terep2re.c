@@ -9,6 +9,7 @@
 #define DEFAULT_LEN (1 << 16)
 
 #define ID_BTN_FOLDER 101
+#define ID_CHK_BLINKEN 102
 
 typedef struct {
     uint16_t msg, ax, bx, cx, dx, cf;
@@ -42,10 +43,17 @@ uint32_t ReadTSCHigh();
 int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    static int showblinken = 0;
+    static HWND hCheckblk = NULL;
+
     if (msg == WM_CREATE) {
         CreateWindow("BUTTON", "Select track", 
                      WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                      10, 10, 120, 30, hwnd, (HMENU)ID_BTN_FOLDER, NULL, NULL);
+        
+        hCheckblk = CreateWindow("BUTTON", "Show blinkenlights",
+                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+                     140, 10, 180, 30, hwnd, (HMENU)ID_CHK_BLINKEN, NULL, NULL);
     } 
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
         if(started){
@@ -70,6 +78,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             CoTaskMemFree(pidl); /* Frees da memory */
         }
     } 
+    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_BLINKEN) {
+        showblinken = (SendMessage(hCheckblk, BM_GETCHECK, 0, 0) == BST_CHECKED);
+        if(!showblinken){
+            InvalidateRect(hwnd, 0, TRUE);
+        }
+        SetFocus(hwnd);
+    }
     else if (msg == WM_PAINT && started){
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
@@ -84,22 +99,45 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             DIB_RGB_COLORS, SRCCOPY
         );
 
-        SetDIBitsToDevice(hdc,
-            700, 50, 256, 256,
-            0, 0, 0, 256,
-            all_segments[0], (void *)&blinkenImg,
-            DIB_RGB_COLORS
-        );
+        if(showblinken){
+            SetBkMode(hdc, TRANSPARENT);
+            SetTextColor(hdc, RGB(0, 0, 0));
+            char text[256];
+
+            for(int i = 0; i < 256; i++){
+                char* isds = (i == 0) ? " (DS)" : "";
+                uintptr_t ptr = all_segments[i];
+                if(ptr == 0){
+                    break;
+                }
+
+                RECT rc;
+                rc.left = (i % 4) * 280 + 680;
+                rc.top  = (i / 4) * 300 + 40;
+                rc.right = rc.left + 250;
+                rc.bottom = rc.top + 30;
+
+                snprintf(text, sizeof(text), "Segment: %02d%s, Addr: %08x", i, isds, ptr);
+                DrawText(hdc, text, -1, &rc, DT_LEFT);
+
+                SetDIBitsToDevice(hdc,
+                    rc.left, rc.top + 25, 256, 256,
+                    0, 0, 0, 256,
+                    ptr, (void *)&blinkenImg,
+                    DIB_RGB_COLORS
+                );
+            }
+        }
 
         EndPaint(hwnd, &ps);
-        asm_render();
     }
     else if (msg == WM_TIMER){
         if(wParam == 120 && started){
             asm_physics();
         }
-        if(wParam == 122){
+        if(wParam == 122 && started){
             InvalidateRect(hwnd, 0, FALSE);
+            asm_render();
         }
     }
     else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
