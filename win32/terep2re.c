@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
 #include <shlobj.h>
@@ -33,6 +34,7 @@ typedef struct {
 } st_image;
 
 st_image gameImg;
+st_image blinkenImg;
 
 #pragma aux ReadTSCHigh = "rdtsc" value [edx] modify exact [eax edx];
 uint32_t ReadTSCHigh();
@@ -81,6 +83,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             video, (void *)&gameImg,
             DIB_RGB_COLORS, SRCCOPY
         );
+
+        SetDIBitsToDevice(hdc,
+            700, 50, 256, 256,
+            0, 0, 0, 256,
+            all_segments[0], (void *)&blinkenImg,
+            DIB_RGB_COLORS
+        );
+
         EndPaint(hwnd, &ps);
         asm_render();
     }
@@ -114,6 +124,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
+void blinkenInit();
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     WNDCLASS wc = {0};
     MSG msg;
@@ -138,6 +150,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
                         rc.right - rc.left,
                         rc.bottom - rc.top,
                         NULL, NULL, hInst, NULL);
+
+    blinkenInit();
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -328,3 +342,29 @@ int mydoscall(HWND hwnd, char path[]){
     return 0;
 }
 
+#define SETCOLORR(i, r,g,b) {     \
+    RGBQUAD tmp = {.rgbRed = r, .rgbGreen = g, .rgbBlue = b,};\
+    blinkenImg.palette[i] = tmp;  \
+}
+
+void blinkenInit(){
+    uint8_t pRandom[256*3];
+    for(int i =0; i < 256*3; i++){
+        pRandom[i] = rand();
+    }
+
+    prepare_bitmap_info(256, 256, &blinkenImg, pRandom);
+
+    SETCOLORR(0, 0,     0,   0);
+    SETCOLORR(1, 255,   0,   0);
+    SETCOLORR(2, 255, 128,   0);
+    SETCOLORR(3, 0,   255, 255);
+
+    SETCOLORR(126, 255, 255,   0);
+    SETCOLORR(127,   0,   0, 255);
+    SETCOLORR(128,   0, 255,   0);
+    SETCOLORR(129, 128,   0, 255);
+
+    SETCOLORR(254, 255,   0, 255);
+    SETCOLORR(255, 255, 255, 255);
+}
