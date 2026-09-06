@@ -14,7 +14,7 @@ extern void asm_render();
 extern void asm_physics();
 extern void asm_keys(uint16_t);
 
-extern volatile uint32_t all_segments[];
+extern volatile uintptr_t all_segments[];
 extern volatile uint16_t data_callregs[];
 extern volatile uint8_t  base_mem[];
 
@@ -223,78 +223,76 @@ int mydoscall(HWND hwnd, char path[]){
     static int32_t totalrd = 0;
 
     int op = *ax & 0xff00;
-    switch (op) {
-        case 0x3d00:{
-            //open
-            volatile char *filename = &base_mem[*dx];
-            if(filename[0] == 0){
-                //empty file name, happens when track has 5 cars
-                printf("Tried to load a empty filename, probably better to bail out\n");
-                return 0;
-            }
-            if(f != NULL){
-                printf("WARN: trying to open 2 files at once\n");
-            }
-            char ultrapath[MAX_PATH];
-
-            snprintf(ultrapath, MAX_PATH, "%s\\%s", path, filename);
-
-            printf("* trying to open: %s...  ", ultrapath);
-            f = fopen(ultrapath, "rb");
-            if(f == NULL){
-                printf("FAILED\n");
-                *ax = 2;
-            }else{
-                printf("OK\n");
-                fidx++;
-                *ax = fidx;
-            }            
-            return f != NULL;
-        }
-        case 0x4800:{
-            static int seletor = 0;
-            seletor++;
-            void* mem = malloc(DEFAULT_LEN);
-            all_segments[seletor] = (uint32_t)mem;
-            printf("* Aloc: %d, %08x\n", seletor, mem);
-            printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
-            *ax = seletor;
-            return 1;
-        }
-        case 0x3f00:{
-            if(bx != fidx){
-                printf(" * WAT?\n");
-                return 0;
-            }
-            volatile char *addr = &base_mem[*dx];
-
-            int32_t r = fread(addr, 1, cx, f);
-            if(r != cx){
-                printf("* Short read, %d, %d\n", r, cx);
-            }
-            totalrd += r;
-            *ax = r;            
-            return r >= 0;
-        }
-        case 0x4200:{
-            uint32_t off = cx;
-            off <<= 16;
-            off += *dx;
-
-            uint32_t fsok = fseek(f, off, *ax & 0xf);
-            uint32_t offset = ftell(f);
-            *dx = offset >> 16;
-            *ax = offset;
-            return fsok == 0; 
-        }
-        case 0x3e00:{
-            int ok = fclose(f);
-            f = NULL;
-            printf("* Total read: %ld\n", totalrd);
-            totalrd = 0;
-            return ok == 0;
-        }
     
+    if (op == 0x3d00){
+        //open
+        volatile char *filename = &base_mem[*dx];
+        if(filename[0] == 0){
+            //empty file name, happens when track has 5 cars
+            printf("Tried to load a empty filename, probably better to bail out\n");
+            return 0;
+        }
+        if(f != NULL){
+            printf("WARN: trying to open 2 files at once\n");
+        }
+        char ultrapath[MAX_PATH];
+
+        snprintf(ultrapath, MAX_PATH, "%s\\%s", path, filename);
+
+        printf("* trying to open: %s...  ", ultrapath);
+        f = fopen(ultrapath, "rb");
+        if(f == NULL){
+            printf("FAILED\n");
+            *ax = 2;
+        }else{
+            printf("OK\n");
+            fidx++;
+            *ax = fidx;
+        }            
+        return f != NULL;
+    }
+    if (op == 0x4800){
+        static int seletor = 0;
+        seletor++;
+        void* mem = malloc(DEFAULT_LEN);
+        all_segments[seletor] = (uintptr_t)mem;
+        printf("* Aloc: %d, %08x\n", seletor, mem);
+        printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
+        *ax = seletor;
+        return 1;
+    }
+    if (op == 0x3f00){
+        if(bx != fidx){
+            printf(" * WAT?\n");
+            return 0;
+        }
+        volatile char *addr = &base_mem[*dx];
+
+        int32_t r = fread(addr, 1, cx, f);
+        if(r != cx){
+            printf("* Short read, %d, %d\n", r, cx);
+        }
+        totalrd += r;
+        *ax = r;            
+        return r >= 0;
+    }
+    if (op == 0x4200){
+        uint32_t off = cx;
+        off <<= 16;
+        off += *dx;
+
+        uint32_t fsok = fseek(f, off, *ax & 0xf);
+        uint32_t offset = ftell(f);
+        *dx = offset >> 16;
+        *ax = offset;
+        return fsok == 0; 
+    }
+    if (op == 0x3e00){
+        int ok = fclose(f);
+        f = NULL;
+        printf("* Total read: %ld\n", totalrd);
+        totalrd = 0;
+        return ok == 0;
     }
 
     char error[256];
