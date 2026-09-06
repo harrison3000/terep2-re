@@ -34,6 +34,9 @@ typedef struct {
 
 st_image gameImg;
 
+#pragma aux ReadTSCHigh = "rdtsc" value [edx] modify exact [eax edx];
+uint32_t ReadTSCHigh();
+
 int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -189,9 +192,11 @@ void call_init(HWND hwnd, char path[]){
 
     if (handle == (uintptr_t)-1) {
         MessageBox(NULL, "Error initializing", "Error", MB_ICONERROR);
-        return;
+        exit(1);
     }
+
     started = 1;
+    uint32_t ini = ReadTSCHigh();
 
     while(1){
         if(call_portal->msg == 0xd3ca){
@@ -204,7 +209,12 @@ void call_init(HWND hwnd, char path[]){
         if(call_portal->msg == 0xbeef){
             break;
         }
-        //TODO some kind of timeout
+
+        uint32_t end = ReadTSCHigh();
+        if(end - ini > 2){ //timeout, 2 here should be about 3~4 seconds on modern CPUs, at least it is on my 5825U :)
+            MessageBox(NULL, "Loading took too long", "Error", MB_ICONERROR);
+            exit(1);
+        }
     }
 
     if(call_portal->ax){
