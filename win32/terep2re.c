@@ -100,7 +100,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             asm_keys(scanCode);
         }
     }
-
     else if (msg == WM_DESTROY) {
         PostQuitMessage(0);
     }
@@ -170,7 +169,16 @@ void __watcall GameInitThread(void *param) {
 }
 
 void call_init(HWND hwnd, char path[]){
-    //TODO checar se tem o arquivo mesmo
+    {
+        char ultrapath[MAX_PATH];
+        snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
+        FILE * f = fopen(ultrapath, "rb");
+        if(f == NULL){
+            MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            return;
+        }
+        fclose(f);
+    }
 
     uintptr_t handle = _beginthread(GameInitThread, 0, 0);
 
