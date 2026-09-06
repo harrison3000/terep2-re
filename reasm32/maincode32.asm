@@ -150,7 +150,7 @@ f_init:
 f_cam_select:
     SHL BX, 1
     AND EBX, 15
-    JMP         [CS:EBX * 2 + .JMP_TABLE_CAMERAS]
+    JMP         [EBX * 2 + .JMP_TABLE_CAMERAS]
     .JMP_TABLE_CAMERAS:
         dd  .CAMERA_1
         dd  .CAMERA_2
@@ -1988,7 +1988,7 @@ FUN_1000_1408:
     MOVZX       BX,AL
     SHL         BX, 1
     AND EBX, 63
-    JMP         [CS:EBX * 2 + .JMP_TABLE_1413]
+    JMP         [EBX * 2 + .JMP_TABLE_1413]
 .JMP_TABLE_1413:
     ;addr[21]
          dd  .LAB_LOC_1
