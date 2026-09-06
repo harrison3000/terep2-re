@@ -21,12 +21,12 @@ jobs:
             -v ${{ github.workspace }}:/src \
             -w /src \
             arlaneenalra/watcom-docker:2026-05-02-Build \
-            sh build.sh
+            sh build_win32.sh
           
       - name: Publish it
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            terep2re.exe
+            terep2re32.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,3 +1,6 @@
+#openwatcom needs to be correctly set up for this to run
+#this include is necessary for the github build
+INCLUDE=/opt/watcom/h/nt:/opt/watcom/h
 cd reasm32
     nasm -f win32 -DWIN32 the_thing.asm
 cd ..
