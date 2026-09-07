@@ -32,6 +32,13 @@ pseudolocal_b:
 retval_2418:
     dw 0
 
+some_flag_thing_idk:
+    ;this used to be at 0x5ee, but it was bugged I think, it stored and loaded to AL, but used SAHF/LAHF (they modify AH), so yeah
+    ;and only worked because nothing overwrote AH in the meantime? IDK really
+    ;I will just make something that resembles what was probably intended and hope for the best
+    ;after the changes I didnt notice any rendering bug, so yeah
+    db 0
+
 
 ;All the data that used to be mixed with  code
 
