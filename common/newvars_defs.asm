@@ -29,6 +29,9 @@ pseudolocal_a:
 pseudolocal_b:
     dw 0
 
+retval_2418:
+    dw 0
+
 
 ;All the data that used to be mixed with  code
 
