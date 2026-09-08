@@ -4382,7 +4382,7 @@ FUN_1000_2df2:
                               ;XREF[1]:     1000:2bf4(c)
     PUSH        SI
     PUSH        DI
-    MOV         word [ye_old_lil_bep], 0
+    MOV         word [pseudolocal_2_a], 0
     MOV         CX,word [SI + -0x2]
     JCXZ        .LAB_LOC_2
     PUSH        DI
@@ -4402,7 +4402,7 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         word [ye_old_lil_bep]
+    INC         word [pseudolocal_2_a]
     MOV         CX,AX
     MOV         DX,BX
     MOV         AX,word [SI]
@@ -4415,7 +4415,7 @@ FUN_1000_2df2:
 .LAB_LOC_2:
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
+    mov_m2m     word [DI + -0x2], word [pseudolocal_2_a]
     RET
 .LAB_LOC_3:
     PUSH        AX
@@ -4429,7 +4429,7 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         word [ye_old_lil_bep]
+    INC         word [pseudolocal_2_a]
 .LAB_LOC_4:
     POP         BX
     POP         AX
@@ -4437,7 +4437,7 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
+    mov_m2m     word [DI + -0x2], word [pseudolocal_2_a]
     RET
 .LAB_LOC_5:
     PUSH        AX
@@ -4452,14 +4452,14 @@ FUN_1000_2df2:
     MOV         word [DI],AX
     MOV         word [DI + 0x2],BX
     ADD         DI,0x8
-    INC         word [ye_old_lil_bep]
+    INC         word [pseudolocal_2_a]
     POP         BX
     POP         AX
     POP         CX
     L_LOOP      .LAB_LOC_1
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
+    mov_m2m     word [DI + -0x2], word [pseudolocal_2_a]
     RET
 .LAB_LOC_6:
     PUSH        CX
@@ -4474,7 +4474,7 @@ FUN_1000_2df2:
     LOOP        .LAB_LOC_6
     POP         DI
     POP         SI
-    mov_m2m     word [DI + -0x2],word [ye_old_lil_bep]
+    mov_m2m     word [DI + -0x2], word [pseudolocal_2_a]
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
