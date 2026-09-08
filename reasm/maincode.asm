@@ -892,30 +892,28 @@ FUN_1000_0a3b:
     PUSH        SI
     PUSH        DI
     TEST        byte [CSD_DAT_keys_571e + 2],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_3
 .LAB_LOC_1:
     TEST        byte [CSD_DAT_keys_571e + 3],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_4
 .LAB_LOC_2:
     POP         DI
     POP         SI
     RET
 .LAB_LOC_3:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_1000_0a82
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_1000_0a82
     JMP         .LAB_LOC_2
 ;************************************************************************************************
@@ -923,7 +921,6 @@ FUN_1000_0a3b:
 ;************************************************************************************************
 FUN_1000_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
-    PUSHF
     MOV         DI,SI
     ADD         DI,word [SI]
     MOVZX       EAX,word [DI]
@@ -931,8 +928,8 @@ FUN_1000_0a82:
     SHR         EAX,0x1
     INC         EAX
     IMUL        EAX,dword [0x6a]
-    POPF
-    JP          .LAB_LOC_3
+    CMP    byte [flying_car_tmp], 1
+    JE          .LAB_LOC_3
     INC         DI
     INC         DI
     MOV         DX,DI

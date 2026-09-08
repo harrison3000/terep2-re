@@ -39,6 +39,8 @@ some_flag_thing_idk:
     ;after the changes I didnt notice any rendering bug, so yeah
     db 0
 
+flying_car_tmp:
+    db 0
 
 ;All the data that used to be mixed with  code
 
