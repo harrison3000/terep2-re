@@ -37,8 +37,16 @@ typedef struct {
 st_image gameImg;
 st_image blinkenImg;
 
-#pragma aux ReadTSCHigh = "rdtsc" value [edx] modify exact [eax edx];
-uint32_t ReadTSCHigh();
+LARGE_INTEGER tickfreq;
+
+//get system uptime in uSecs
+int64_t GetTimeee(){
+    LARGE_INTEGER t;
+    QueryPerformanceCounter(&t);
+
+    int64_t ret = (t.QuadPart * 1000000LL) / tickfreq.QuadPart;
+    return ret;
+}
 
 int started = 0;
 
@@ -175,6 +183,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
     RegisterClass(&wc);
+    
+    QueryPerformanceFrequency(&tickfreq);
 
     RECT rc = {0, 0, 640, 400 + 50}; /* Tamanho interno desejado */
     DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
@@ -248,7 +258,7 @@ void call_init(HWND hwnd, char path[]){
     }
 
     started = 1;
-    uint32_t ini = ReadTSCHigh();
+    int64_t ini = GetTimeee();
 
     while(1){
         if(call_portal->msg == 0xd3ca){
@@ -262,8 +272,8 @@ void call_init(HWND hwnd, char path[]){
             break;
         }
 
-        uint32_t end = ReadTSCHigh();
-        if(end - ini > 2){ //timeout, 2 here should be about 3~4 seconds on modern CPUs, at least it is on my 5825U :)
+        int64_t end = GetTimeee();
+        if(end - ini > 2000000LL){ //2 seconds is all we need
             MessageBox(NULL, "Loading took too long", "Error", MB_ICONERROR);
             exit(1);
         }
