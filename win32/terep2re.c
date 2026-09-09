@@ -10,6 +10,8 @@
 
 #define ID_BTN_FOLDER 101
 #define ID_CHK_BLINKEN 102
+#define ID_CHK_RUN_P   103
+#define ID_BTN_SNGLSTP 104
 
 typedef struct {
     uint16_t msg, ax, bx, cx, dx, cf;
@@ -24,9 +26,10 @@ extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
-void call_init(HWND hwnd, char path[]);
+void call_init(HWND hwnd, char path[], int complain);
 
 #define HZ_PHYSICS 120 //TODO check if this is right
+#define USECS_PER_TICK (1000000/HZ_PHYSICS)
 #define HZ_DISPLAY 60
 
 typedef struct {
@@ -37,14 +40,25 @@ typedef struct {
 st_image gameImg;
 st_image blinkenImg;
 
-#pragma aux ReadTSCHigh = "rdtsc" value [edx] modify exact [eax edx];
-uint32_t ReadTSCHigh();
+LARGE_INTEGER tickfreq;
+
+//get system uptime in uSecs
+int64_t GetTimeee(){
+    LARGE_INTEGER t;
+    QueryPerformanceCounter(&t);
+
+    int64_t ret = (t.QuadPart * 1000000LL) / tickfreq.QuadPart;
+    return ret;
+}
 
 int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     static int showblinken = 0;
+    static int run_physics = 1;
     static HWND hCheckblk = NULL;
+    static HWND hCheckrun = NULL;
+    static int64_t last_p_update = -1;
 
     if (msg == WM_CREATE) {
         CreateWindow("BUTTON", "Select track", 
@@ -54,6 +68,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         hCheckblk = CreateWindow("BUTTON", "Show blinkenlights",
                      WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
                      140, 10, 180, 30, hwnd, (HMENU)ID_CHK_BLINKEN, NULL, NULL);
+
+        hCheckrun = CreateWindow("BUTTON", "Run physics",
+                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+                     330, 10, 110, 30, hwnd, (HMENU)ID_CHK_RUN_P, NULL, NULL);
+
+        SendMessage(hCheckrun, BM_SETCHECK, BST_CHECKED, 0);
+
+        CreateWindow("BUTTON", "Single step", 
+                     WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+                     450, 10, 100, 30, hwnd, (HMENU)ID_BTN_SNGLSTP, NULL, NULL);
+
+        call_init(hwnd, ".", 0);
     } 
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
         if(started){
@@ -73,7 +99,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         pidl = SHBrowseForFolder(&bi);
         if (pidl) {
             if (SHGetPathFromIDList(pidl, path)) {
-                call_init(hwnd, path);
+                call_init(hwnd, path, 1);
             }
             CoTaskMemFree(pidl); /* Frees da memory */
         }
@@ -82,6 +108,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         showblinken = (SendMessage(hCheckblk, BM_GETCHECK, 0, 0) == BST_CHECKED);
         if(!showblinken){
             InvalidateRect(hwnd, 0, TRUE);
+        }
+        SetFocus(hwnd);
+    }
+    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_RUN_P) {
+        last_p_update = -1; //pretends we just started
+        run_physics = (SendMessage(hCheckrun, BM_GETCHECK, 0, 0) == BST_CHECKED);
+        SetFocus(hwnd);
+    }
+    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_SNGLSTP) {
+        if(started){
+            asm_physics();
         }
         SetFocus(hwnd);
     }
@@ -131,14 +168,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
         EndPaint(hwnd, &ps);
     }
-    else if (msg == WM_TIMER){
-        if(wParam == 120 && started){
-            asm_physics();
+    else if (msg == WM_TIMER && wParam == 122 && started){
+        if(run_physics){
+            int64_t agora = GetTimeee();
+            if(last_p_update < 0){
+                last_p_update = agora;
+            }
+            int64_t diff = agora - last_p_update;
+            
+            int64_t ticks = diff / USECS_PER_TICK;
+            int64_t sobra = diff % USECS_PER_TICK;
+
+            for(int i = 0; i < ticks; i++){
+                if(i > 5){
+                    //nah, something isnt right here
+                    //maybe the timer was delayed, lets bail
+                    break;
+                }
+                asm_physics();
+            }
+            last_p_update = agora - sobra;
         }
-        if(wParam == 122 && started){
-            InvalidateRect(hwnd, 0, FALSE);
-            asm_render();
-        }
+        
+        InvalidateRect(hwnd, 0, FALSE);
+        asm_render();
     }
     else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
         WORD keyFlags = HIWORD(lParam);
@@ -175,6 +228,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
     RegisterClass(&wc);
+    
+    QueryPerformanceFrequency(&tickfreq);
 
     RECT rc = {0, 0, 640, 400 + 50}; /* Tamanho interno desejado */
     DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
@@ -228,13 +283,15 @@ void __watcall GameInitThread(void *param) {
     _endthread();
 }
 
-void call_init(HWND hwnd, char path[]){
+void call_init(HWND hwnd, char path[], int complain){
     {
         char ultrapath[MAX_PATH];
         snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
         FILE * f = fopen(ultrapath, "rb");
         if(f == NULL){
-            MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            if(complain){
+                MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            }
             return;
         }
         fclose(f);
@@ -248,7 +305,7 @@ void call_init(HWND hwnd, char path[]){
     }
 
     started = 1;
-    uint32_t ini = ReadTSCHigh();
+    int64_t ini = GetTimeee();
 
     while(1){
         if(call_portal->msg == 0xd3ca){
@@ -262,8 +319,8 @@ void call_init(HWND hwnd, char path[]){
             break;
         }
 
-        uint32_t end = ReadTSCHigh();
-        if(end - ini > 2){ //timeout, 2 here should be about 3~4 seconds on modern CPUs, at least it is on my 5825U :)
+        int64_t end = GetTimeee();
+        if(end - ini > 2000000LL){ //2 seconds is all we need
             MessageBox(NULL, "Loading took too long", "Error", MB_ICONERROR);
             exit(1);
         }
@@ -283,7 +340,6 @@ void call_init(HWND hwnd, char path[]){
     prepare_bitmap_info(320, 200, &gameImg,&base_mem[0x1a4d]);
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
-    SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
@@ -338,12 +394,16 @@ int mydoscall(HWND hwnd, char path[]){
     }
     if (op == 0x3f00){
         if(bx != fidx){
-            printf(" * WAT?\n");
+            printf("* WAT?\n");
             return 0;
         }
         volatile char *addr = &base_mem[dx];
 
         int32_t r = fread(addr, 1, cx, f);
+        if(dx != 0xf008){
+            //show this message only for carX.dat loading
+            printf("* Read %ld bytes into address: %08x (%04x relative to DS)!\n", r, addr, dx);
+        }
         if(r != cx){
             printf("* Short read, %d, %d\n", r, cx);
         }

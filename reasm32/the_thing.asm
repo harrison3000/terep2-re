@@ -68,11 +68,14 @@ section .text
 
 
 DOS3Call:
-    MOV word [call_portal.msg], 0xd3ca
     MOV [call_portal.axr], AX
     MOV [call_portal.bxr], BX
     MOV [call_portal.cxr], CX
     MOV [call_portal.dxr], DX
+
+    ;this need to be writen last
+    ;there is actually a small but non-zero chance of the function in the C code getting called in-between the MOVs otherwise
+    MOV word [call_portal.msg], 0xd3ca
 
     .mloop:
       ;busy wait until the C side does its thing
