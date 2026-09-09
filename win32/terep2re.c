@@ -26,7 +26,7 @@ extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
-void call_init(HWND hwnd, char path[]);
+void call_init(HWND hwnd, char path[], int complain);
 
 #define HZ_PHYSICS 120 //TODO check if this is right
 #define USECS_PER_TICK (1000000/HZ_PHYSICS)
@@ -78,6 +78,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         CreateWindow("BUTTON", "Single step", 
                      WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                      450, 10, 100, 30, hwnd, (HMENU)ID_BTN_SNGLSTP, NULL, NULL);
+
+        call_init(hwnd, ".", 0);
     } 
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
         if(started){
@@ -97,7 +99,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         pidl = SHBrowseForFolder(&bi);
         if (pidl) {
             if (SHGetPathFromIDList(pidl, path)) {
-                call_init(hwnd, path);
+                call_init(hwnd, path, 1);
             }
             CoTaskMemFree(pidl); /* Frees da memory */
         }
@@ -281,13 +283,15 @@ void __watcall GameInitThread(void *param) {
     _endthread();
 }
 
-void call_init(HWND hwnd, char path[]){
+void call_init(HWND hwnd, char path[], int complain){
     {
         char ultrapath[MAX_PATH];
         snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
         FILE * f = fopen(ultrapath, "rb");
         if(f == NULL){
-            MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            if(complain){
+                MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            }
             return;
         }
         fclose(f);
