@@ -29,6 +29,7 @@ extern volatile uint8_t  base_mem[];
 void call_init(HWND hwnd, char path[]);
 
 #define HZ_PHYSICS 120 //TODO check if this is right
+#define USECS_PER_TICK (1000000/HZ_PHYSICS)
 #define HZ_DISPLAY 60
 
 typedef struct {
@@ -57,6 +58,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     static int run_physics = 1;
     static HWND hCheckblk = NULL;
     static HWND hCheckrun = NULL;
+    static int64_t last_p_update = -1;
 
     if (msg == WM_CREATE) {
         CreateWindow("BUTTON", "Select track", 
@@ -108,11 +110,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         SetFocus(hwnd);
     }
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_RUN_P) {
+        last_p_update = -1; //pretends we just started
         run_physics = (SendMessage(hCheckrun, BM_GETCHECK, 0, 0) == BST_CHECKED);
         SetFocus(hwnd);
     }
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_SNGLSTP) {
-        asm_physics();
+        if(started){
+            asm_physics();
+        }
         SetFocus(hwnd);
     }
     else if (msg == WM_PAINT && started){
@@ -161,14 +166,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
         EndPaint(hwnd, &ps);
     }
-    else if (msg == WM_TIMER){
-        if(wParam == 120 && started && run_physics){
-            asm_physics();
+    else if (msg == WM_TIMER && wParam == 122 && started){
+        if(run_physics){
+            int64_t agora = GetTimeee();
+            if(last_p_update < 0){
+                last_p_update = agora;
+            }
+            int64_t diff = agora - last_p_update;
+            
+            int64_t ticks = diff / USECS_PER_TICK;
+            int64_t sobra = diff % USECS_PER_TICK;
+
+            for(int i = 0; i < ticks; i++){
+                if(i > 5){
+                    //nah, something isnt right here
+                    //maybe the timer was delayed, lets bail
+                    break;
+                }
+                asm_physics();
+            }
+            last_p_update = agora - sobra;
         }
-        if(wParam == 122 && started){
-            InvalidateRect(hwnd, 0, FALSE);
-            asm_render();
-        }
+        
+        InvalidateRect(hwnd, 0, FALSE);
+        asm_render();
     }
     else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
         WORD keyFlags = HIWORD(lParam);
@@ -315,7 +336,6 @@ void call_init(HWND hwnd, char path[]){
     prepare_bitmap_info(320, 200, &gameImg,&base_mem[0x1a4d]);
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
-    SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
