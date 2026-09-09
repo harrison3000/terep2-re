@@ -390,12 +390,16 @@ int mydoscall(HWND hwnd, char path[]){
     }
     if (op == 0x3f00){
         if(bx != fidx){
-            printf(" * WAT?\n");
+            printf("* WAT?\n");
             return 0;
         }
         volatile char *addr = &base_mem[dx];
 
         int32_t r = fread(addr, 1, cx, f);
+        if(dx != 0xf008){
+            //show this message only for carX.dat loading
+            printf("* Read %ld bytes into address: %08x (%04x relative to DS)!\n", r, addr, dx);
+        }
         if(r != cx){
             printf("* Short read, %d, %d\n", r, cx);
         }
