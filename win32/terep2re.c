@@ -10,6 +10,8 @@
 
 #define ID_BTN_FOLDER 101
 #define ID_CHK_BLINKEN 102
+#define ID_CHK_RUN_P   103
+#define ID_BTN_SNGLSTP 104
 
 typedef struct {
     uint16_t msg, ax, bx, cx, dx, cf;
@@ -52,7 +54,9 @@ int started = 0;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     static int showblinken = 0;
+    static int run_physics = 1;
     static HWND hCheckblk = NULL;
+    static HWND hCheckrun = NULL;
 
     if (msg == WM_CREATE) {
         CreateWindow("BUTTON", "Select track", 
@@ -62,6 +66,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         hCheckblk = CreateWindow("BUTTON", "Show blinkenlights",
                      WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
                      140, 10, 180, 30, hwnd, (HMENU)ID_CHK_BLINKEN, NULL, NULL);
+
+        hCheckrun = CreateWindow("BUTTON", "Run physics",
+                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+                     330, 10, 110, 30, hwnd, (HMENU)ID_CHK_RUN_P, NULL, NULL);
+
+        SendMessage(hCheckrun, BM_SETCHECK, BST_CHECKED, 0);
+
+        CreateWindow("BUTTON", "Single step", 
+                     WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+                     450, 10, 100, 30, hwnd, (HMENU)ID_BTN_SNGLSTP, NULL, NULL);
     } 
     else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
         if(started){
@@ -91,6 +105,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         if(!showblinken){
             InvalidateRect(hwnd, 0, TRUE);
         }
+        SetFocus(hwnd);
+    }
+    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_RUN_P) {
+        run_physics = (SendMessage(hCheckrun, BM_GETCHECK, 0, 0) == BST_CHECKED);
+        SetFocus(hwnd);
+    }
+    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_SNGLSTP) {
+        asm_physics();
         SetFocus(hwnd);
     }
     else if (msg == WM_PAINT && started){
@@ -140,7 +162,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         EndPaint(hwnd, &ps);
     }
     else if (msg == WM_TIMER){
-        if(wParam == 120 && started){
+        if(wParam == 120 && started && run_physics){
             asm_physics();
         }
         if(wParam == 122 && started){
