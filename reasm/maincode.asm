@@ -224,6 +224,7 @@ FUN_main_render:
     TEST        CX,CX
     JZ          .LAB_LOC_2
     DEC         CX
+    CMP    CX, 0
     JZ          .LAB_LOC_1
     ADD         EAX,EBX
     SAR         EAX,0x1
@@ -288,6 +289,7 @@ FUN_main_render:
     TEST        CX,CX
     JZ          .LAB_LOC_7
     DEC         CX
+    CMP    CX, 0
     JZ          .LAB_LOC_6
     ADD         EAX,EBX
     SAR         EAX,0x1
@@ -347,6 +349,7 @@ FUN_main_render:
     TEST        CX,CX
     JZ          .LAB_LOC_11
     DEC         CX
+    CMP    CX, 0
     JZ          .LAB_LOC_10
     ADD         EAX,EBX
     SAR         EAX,0x1
@@ -1024,6 +1027,7 @@ FUN_1000_0bb5:
     JNC         .LAB_LOC_4
 .LAB_LOC_1:
     SUB         word [DI + 0x3e6b],0x2
+    CMP    word [DI + 0x3e6b], 0
     JS          .LAB_LOC_8
     MOV         EAX,dword [DI + 0x3e5f]
     MOV         EBX,dword [DI + 0x3e63]
@@ -1460,6 +1464,7 @@ FUN_1000_1004:
     TEST        BX,BX
     JZ          .LAB_LOC_4
     DEC         BX
+    CMP    BX, 0
     JZ          .LAB_LOC_5
     ROL         EAX,0x3
     ADD         dword [SI + 0x42],EAX
@@ -3275,6 +3280,7 @@ FUN_1000_22f0:
 .LAB_LOC_4:
     ADD         SI,0x1c
     DEC         BP
+    CMP    BP, 0
     JNZ         .LAB_LOC_1
     POP         SI
     MOV         word [SI + 0x1a],BX
@@ -3316,6 +3322,7 @@ FUN_1000_233b:
 .LAB_LOC_4:
     ADD         SI,0x1c
     DEC         BP
+    CMP    BP, 0
     JNZ         .LAB_LOC_1
     POP         SI
     MOV         word [SI + 0x1a],BX
@@ -3358,6 +3365,7 @@ FUN_1000_2384:
 .LAB_LOC_4:
     ADD         SI,0x1c
     DEC         BP
+    CMP    BP, 0
     JNZ         .LAB_LOC_1
     POP         SI
     MOV         word [SI + 0x1a],BX
@@ -3399,6 +3407,7 @@ FUN_1000_23cf:
 .LAB_LOC_4:
     ADD         SI,0x1c
     DEC         BP
+    CMP    BP, 0
     JNZ         .LAB_LOC_1
     POP         SI
     MOV         word [SI + 0x1a],BX
@@ -4313,6 +4322,7 @@ FUN_1000_2d61:
     MOV         BX,word [0xdbc4]
     MOV         DX,word [0xdbc6]
     SUB         DX,BX
+    CMP    DX, 0
     JZ          .LAB_LOC_4
     INC         DX
     SHL         BX,0x2
@@ -4329,6 +4339,7 @@ FUN_1000_2d61:
     MOV         AX,word [SI + 0xdbc8]
     MOV         CX,word [SI + 0xdbca]
     SUB         CX,AX
+    CMP    CX, 0
     JNS         .LAB_LOC_2
     ADD         AX,CX
     NEG         CX
@@ -4344,6 +4355,7 @@ FUN_1000_2d61:
 .LAB_LOC_3:
     ADD         SI,0x4
     DEC         DX
+    CMP    DX, 0
     JNZ         .LAB_LOC_1
     POP         ES
 .LAB_LOC_4:
@@ -4359,6 +4371,7 @@ FUN_1000_2d61:
     MOV         AX,word [SI + 0xdbc8]
     MOV         CX,word [SI + 0xdbca]
     SUB         CX,AX
+    CMP    CX, 0
     JNS         .LAB_LOC_7
     ADD         AX,CX
     NEG         CX
@@ -4373,6 +4386,7 @@ FUN_1000_2d61:
     LOOP        .LAB_LOC_8
     ADD         SI,0x4
     DEC         DX
+    CMP    DX, 0
     JNZ         .LAB_LOC_6
     POP         ES
     RET
@@ -4422,6 +4436,7 @@ FUN_1000_2df2:
     PUSH        AX
     PUSH        BX
     SUB         CX,word [0xdbc0]
+    CMP    CX, 0
     JZ          .LAB_LOC_4
     SUB         AX,word [0xdbc0]
     CALL        FUN_1000_3f7a
@@ -4525,6 +4540,7 @@ FUN_1000_2eaf:
     XCHG        AX,CX
     XCHG        DX,BX
     SUB         CX,word [0xdbc2]
+    CMP    CX, 0
     JZ          .LAB_LOC_4
     SUB         AX,word [0xdbc2]
     CALL        FUN_1000_3f7a
@@ -4626,6 +4642,7 @@ FUN_1000_2f6c:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
+    CMP    CX, 0
     JZ          .LAB_LOC_4
     SUB         AX,word [0xdbbc]
     CALL        FUN_1000_3f7a
@@ -4731,6 +4748,7 @@ FUN_1000_302d:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbe]
+    CMP    CX, 0
     JZ          .LAB_LOC_4
     SUB         AX,word [0xdbbe]
     CALL        FUN_1000_3f7a
@@ -4906,6 +4924,7 @@ FUN_1000_31d1:
     MOV         BX,word [0xdbc4]
     MOV         DX,word [0xdbc6]
     SUB         DX,BX
+    CMP    DX, 0
     JZ          .LAB_LOC_4
     INC         DX
     SHL         BX,0x2
@@ -4924,6 +4943,7 @@ FUN_1000_31d1:
     MOV         DX,word [BX + 0xdeea]
     SUB         DX,BP
     SUB         CX,AX
+    CMP    CX, 0
     JNS         .LAB_LOC_2
     ADD         AX,CX
     NEG         CX
@@ -4953,6 +4973,7 @@ FUN_1000_31d1:
     POP         BX
     ADD         BX,0x4
     DEC         DX
+    CMP    DX, 0
     JNZ         .LAB_LOC_1
     POP         ES
 .LAB_LOC_4:
@@ -5047,6 +5068,7 @@ FUN_1000_324f:
     ROR         EAX,0x10
     ROR         EBX,0x10
     SUB         CX,word [0xdbc0]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc0]
     PUSH        AX
@@ -5166,6 +5188,7 @@ FUN_1000_3376:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JZ          .LAB_LOC_2
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
@@ -5177,6 +5200,7 @@ FUN_1000_3376:
     ROR         EAX,0x10
     ROR         EBX,0x10
     SUB         CX,word [0xdbc2]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc2]
     PUSH        AX
@@ -5309,6 +5333,7 @@ FUN_1000_34a2:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbbc]
     PUSH        AX
@@ -5429,6 +5454,7 @@ FUN_1000_35cf:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JZ          .LAB_LOC_2
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
@@ -5442,6 +5468,7 @@ FUN_1000_35cf:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbe]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbbe]
     PUSH        AX
@@ -5630,6 +5657,7 @@ FUN_1000_3827:
     MOV         SI,word [0xdbc4]
     MOV         DI,word [0xdbc6]
     SUB         DI,SI
+    CMP    DI, 0
     JZ          .LAB_LOC_5
     INC         DI
     SHL         SI,0x2
@@ -5651,6 +5679,7 @@ FUN_1000_3827:
     SUB         SI,BP
     SUB         DX,BX
     SUB         CX,AX
+    CMP    CX, 0
     JNS         .LAB_LOC_2
     ADD         AX,CX
     NEG         CX
@@ -5698,11 +5727,13 @@ FUN_1000_3827:
     ADD         EBX,ECX
     ADD         EBP,EDX
     DEC         SI
+    CMP    SI, 0
     JNZ         .LAB_LOC_3
     POP         SI
     POP         DI
     ADD         SI,0x4
     DEC         DI
+    CMP    DI, 0
     JNZ         .LAB_LOC_1
     POP         ES
 .LAB_LOC_5:
@@ -5822,6 +5853,7 @@ FUN_1000_390a:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
@@ -5836,6 +5868,7 @@ FUN_1000_390a:
     ROR         EAX,0x10
     ROR         EBX,0x10
     SUB         CX,word [0xdbc0]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc0]
     PUSH        AX
@@ -6001,6 +6034,7 @@ FUN_1000_3aa3:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
@@ -6013,6 +6047,7 @@ FUN_1000_3aa3:
     ROR         EAX,0x10
     ROR         EBX,0x10
     SUB         CX,word [0xdbc2]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbc2]
     PUSH        AX
@@ -6178,6 +6213,7 @@ FUN_1000_3c3c:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
@@ -6194,6 +6230,7 @@ FUN_1000_3c3c:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbc]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbbc]
     PUSH        AX
@@ -6361,6 +6398,7 @@ FUN_1000_3ddb:
     POP         AX
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     JMP         .LAB_LOC_2
 .LAB_LOC_4:
@@ -6375,6 +6413,7 @@ FUN_1000_3ddb:
     XCHG        AX,BX
     XCHG        DX,CX
     SUB         CX,word [0xdbbe]
+    CMP    CX, 0
     JZ          .LAB_LOC_5
     SUB         AX,word [0xdbbe]
     PUSH        AX
@@ -6663,6 +6702,7 @@ FUN_1000_4120:
     JCXZ        .LAB_LOC_14
     PUSH        DX
     SUB         DX,AX
+    CMP    DX, 0
     JS          .LAB_LOC_10
     XOR         DI,DI
     MOV         SI,CX
@@ -6670,10 +6710,12 @@ FUN_1000_4120:
     MOV         word [BX + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
+    CMP    DI, 0
     JNS         .LAB_LOC_9
 .LAB_LOC_8:
     INC         AX
     ADD         DI,SI
+    CMP    DI, 0
     JS          .LAB_LOC_8
 .LAB_LOC_9:
     LOOP        .LAB_LOC_7
@@ -6688,10 +6730,12 @@ FUN_1000_4120:
     MOV         word [BX + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
+    CMP    DI, 0
     JNS         .LAB_LOC_13
 .LAB_LOC_12:
     DEC         AX
     ADD         DI,SI
+    CMP    DI, 0
     JS          .LAB_LOC_12
 .LAB_LOC_13:
     LOOP        .LAB_LOC_11
@@ -6873,6 +6917,7 @@ FUN_1000_4302:
     JCXZ        .LAB_LOC_14
     PUSH        DX
     SUB         DX,AX
+    CMP    DX, 0
     JS          .LAB_LOC_10
     XOR         DI,DI
     MOV         SI,CX
@@ -6880,10 +6925,12 @@ FUN_1000_4302:
     MOV         word [BX + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
+    CMP    DI, 0
     JNS         .LAB_LOC_9
 .LAB_LOC_8:
     INC         AX
     ADD         DI,SI
+    CMP    DI, 0
     JS          .LAB_LOC_8
 .LAB_LOC_9:
     LOOP        .LAB_LOC_7
@@ -6898,10 +6945,12 @@ FUN_1000_4302:
     MOV         word [BX + 0xe590],AX
     ADD         BX,0x4
     SUB         DI,DX
+    CMP    DI, 0
     JNS         .LAB_LOC_13
 .LAB_LOC_12:
     DEC         AX
     ADD         DI,SI
+    CMP    DI, 0
     JS          .LAB_LOC_12
 .LAB_LOC_13:
     LOOP        .LAB_LOC_11
@@ -7647,6 +7696,7 @@ FUN_1000_48db:
     ADD         DI,0x1c
     INC         word [0xe9d6]
     DEC         word [0xe9d4]
+    CMP    word [0xe9d4], 0
     JNZ         .LAB_LOC_1
     CALL        FUN_1000_1003
     RET
@@ -7736,6 +7786,7 @@ FUN_1000_4a71:
     IMUL        dword [0xe9a8]
     SHL         EDX,0x1
     SUB         EBX,EDX
+    CMP    EBX, 0
     JNS         .LAB_LOC_3
     MOV         dword [0xe9c8],EBX
     CMP         EBX,0xfffa0000
@@ -8099,6 +8150,7 @@ FUN_1000_4e0a:
     JG          .LAB_LOC_6
     MOV         ECX,dword [mitemp_BeX]
     SUB         ECX,EAX
+    CMP    ECX, 0
     JZ          .LAB_LOC_3
     CMP         CX,word [0xe9e2]
     JG          .LAB_LOC_8
@@ -8141,6 +8193,7 @@ FUN_1000_4e0a:
 .LAB_LOC_4:
     ADD         SI,0xe
     DEC         word [0xe9e6]
+    CMP    word [0xe9e6], 0
     JNZ         .LAB_LOC_1
     RET
 .LAB_LOC_5:
@@ -8368,6 +8421,7 @@ FUN_1000_5091:
     ADD         word [0xea99],0xc
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     POP         SI
     RET
@@ -8402,6 +8456,7 @@ FUN_1000_51bd:
     SAR         EAX,0x10
     IMUL        EAX,dword [SI + 0xeaa3]
     ADD         EDX,EAX
+    CMP    EDX, 0
     JNS         .LAB_LOC_9
     CMP         EDX,ECX
     JG          .LAB_LOC_10
@@ -8468,6 +8523,7 @@ FUN_1000_51bd:
     ADD         DI,0x1c
     POP         CX
     DEC         CX
+    CMP    CX, 0
     JNZ         .LAB_LOC_1
     POP         SI
     POP         DI
