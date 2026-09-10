@@ -301,7 +301,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
 
     // TODO(gmb): get height of the menubar (20?)
     RECT rc = {0, 0, 640, 400+20}; /* Tamanho interno desejado */
+#ifndef DEBUGMENU
     DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+#else
+    DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
+#endif
 
     AdjustWindowRect(&rc, dwStyle, FALSE);
 
