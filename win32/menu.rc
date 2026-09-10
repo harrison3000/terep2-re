@@ -1,0 +1,26 @@
+#include "resource.h"
+
+Terep2Win32 MENU DISCARDABLE
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Open folder", T2_APP_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",  T2_APP_EXIT
+    END
+#ifdef DEBUGMENU
+    POPUP "&Visualisation"
+    BEGIN
+        MENUITEM "&Blinkenlights", T2_APP_BLINKEN
+    END
+    POPUP "&Simulation"
+    BEGIN
+        MENUITEM "&Running", T2_APP_PHYS_RUN
+        MENUITEM "Single ste&p", T2_APP_PHYS_STEP
+    END
+#endif // DEBUGMENU
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About", T2_APP_ABOUT
+    END
+END

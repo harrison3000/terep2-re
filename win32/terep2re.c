@@ -6,16 +6,15 @@
 #include <process.h>
 #include <stdint.h>
 
-#define DEFAULT_LEN (1 << 16)
+#include "resource.h"
 
-#define ID_BTN_FOLDER 101
-#define ID_CHK_BLINKEN 102
-#define ID_CHK_RUN_P   103
-#define ID_BTN_SNGLSTP 104
+#define DEFAULT_LEN (1 << 16)
 
 typedef struct {
     uint16_t msg, ax, bx, cx, dx, cf;
 } call_portal_t;
+
+TCHAR szAppName[] = TEXT("Terep2Win32") ;
 
 extern void asm_f_init();
 extern void asm_render();
@@ -59,159 +58,227 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     static HWND hCheckblk = NULL;
     static HWND hCheckrun = NULL;
     static int64_t last_p_update = -1;
+    HMENU hMenu;
 
-    if (msg == WM_CREATE) {
-        CreateWindow("BUTTON", "Select track", 
-                     WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-                     10, 10, 120, 30, hwnd, (HMENU)ID_BTN_FOLDER, NULL, NULL);
-        
-        hCheckblk = CreateWindow("BUTTON", "Show blinkenlights",
-                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-                     140, 10, 180, 30, hwnd, (HMENU)ID_CHK_BLINKEN, NULL, NULL);
+    switch (msg) {
+        case WM_CREATE: {
+             hMenu = GetMenu(hwnd);
 
-        hCheckrun = CreateWindow("BUTTON", "Run physics",
-                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-                     330, 10, 110, 30, hwnd, (HMENU)ID_CHK_RUN_P, NULL, NULL);
-
-        SendMessage(hCheckrun, BM_SETCHECK, BST_CHECKED, 0);
-
-        CreateWindow("BUTTON", "Single step", 
-                     WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-                     450, 10, 100, 30, hwnd, (HMENU)ID_BTN_SNGLSTP, NULL, NULL);
-
-        call_init(hwnd, ".", 0);
-    } 
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
-        if(started){
-            //TODO a way to cleanup the specific parts of the memory to restart the game with another track
-            MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
-            goto end; //behold the root of all evil!
-        }
-
-        char path[MAX_PATH];
-        BROWSEINFO bi = {0};
-        LPITEMIDLIST pidl;
-
-        bi.hwndOwner = hwnd;
-        bi.lpszTitle = "Select a track directory:";
-        bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_USENEWUI | BIF_NONEWFOLDERBUTTON;
-
-        pidl = SHBrowseForFolder(&bi);
-        if (pidl) {
-            if (SHGetPathFromIDList(pidl, path)) {
-                call_init(hwnd, path, 1);
+            // TODO (gmb): find a better way to init these
+            if (showblinken) {
+                CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_CHECKED) ;
+            } else {
+                CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_UNCHECKED) ;
             }
-            CoTaskMemFree(pidl); /* Frees da memory */
+
+            if (run_physics) {
+                CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_CHECKED) ;
+            } else {
+                CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED) ;
+            }
+
+            call_init(hwnd, ".", 0);
         }
-    } 
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_BLINKEN) {
-        showblinken = (SendMessage(hCheckblk, BM_GETCHECK, 0, 0) == BST_CHECKED);
-        if(!showblinken){
-            InvalidateRect(hwnd, 0, TRUE);
-        }
-        SetFocus(hwnd);
-    }
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_RUN_P) {
-        last_p_update = -1; //pretends we just started
-        run_physics = (SendMessage(hCheckrun, BM_GETCHECK, 0, 0) == BST_CHECKED);
-        SetFocus(hwnd);
-    }
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_SNGLSTP) {
-        if(started){
-            asm_physics();
-        }
-        SetFocus(hwnd);
-    }
-    else if (msg == WM_PAINT && started){
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
+        break;
 
-        int videoSegSel = base_mem[0xdb10];
-        char *video = all_segments[videoSegSel];
+        case WM_COMMAND: {
+            hMenu = GetMenu(hwnd);
 
-        StretchDIBits(hdc,
-            0, 50, 320*2, 200*2,
-            0,  0, 320, 200,
-            video, (void *)&gameImg,
-            DIB_RGB_COLORS, SRCCOPY
-        );
+            switch (LOWORD(wParam)) {
+                case T2_APP_OPEN: {
+                    if(started){
+                        //TODO a way to cleanup the specific parts of the memory to restart the game with another track
+                        MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
+                        goto end; //behold the root of all evil!
+                    }
 
-        if(showblinken){
-            SetBkMode(hdc, TRANSPARENT);
-            SetTextColor(hdc, RGB(0, 0, 0));
-            char text[256];
+                    char path[MAX_PATH];
+                    BROWSEINFO bi = {0};
+                    LPITEMIDLIST pidl;
 
-            for(int i = 0; i < 256; i++){
-                char* isds = (i == 0) ? " (DS)" : "";
-                uintptr_t ptr = all_segments[i];
-                if(ptr == 0){
-                    break;
+                    bi.hwndOwner = hwnd;
+                    bi.lpszTitle = "Select a track directory:";
+                    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_USENEWUI | BIF_NONEWFOLDERBUTTON;
+
+                    pidl = SHBrowseForFolder(&bi);
+                    if (pidl) {
+                        if (SHGetPathFromIDList(pidl, path)) {
+                            call_init(hwnd, path, 1);
+                        }
+                        CoTaskMemFree(pidl); /* Frees da memory */
+                    }
                 }
+                break;
 
+                case T2_APP_BLINKEN: {
+                    showblinken = !showblinken;
+
+                    if (showblinken) {
+                        CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_CHECKED) ;
+                    } else {
+                        CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_UNCHECKED) ;
+                    }
+
+                    if (!showblinken){
+                        InvalidateRect(hwnd, 0, TRUE);
+                    }
+                }
+                break;
+
+                case T2_APP_PHYS_RUN: {
+                    run_physics = !run_physics;
+
+                    if (run_physics) {
+                        CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_CHECKED) ;
+                    } else {
+                        CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED) ;
+                    }
+
+                    last_p_update = -1; //pretends we just started
+                }
+                break;
+
+                case T2_APP_PHYS_STEP: {
+                    if (started){
+                        if (run_physics) {
+                            MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
+                        } else {
+                           asm_physics();
+                        }
+                    }
+                }
+                break;
+
+                case T2_APP_EXIT: {
+                    SendMessage (hwnd, WM_CLOSE, 0, 0) ;
+                    return 0 ;
+                } break;
+
+                case T2_APP_ABOUT: {
+                    MessageBox (hwnd, TEXT ("Terep2-RE\n(c) Harrison, 2026"),
+                                TEXT ("About"), MB_ICONINFORMATION | MB_OK) ;
+                    return 0;
+                } break;
+            }
+        }
+        break;
+
+        case WM_PAINT: {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+
+            if (!started) {
+                const char *text = "No game is started, please open a track.";
                 RECT rc;
-                rc.left = (i % 4) * 280 + 680;
-                rc.top  = (i / 4) * 300 + 40;
-                rc.right = rc.left + 250;
-                rc.bottom = rc.top + 30;
+                GetClientRect(hwnd, &rc);
 
-                snprintf(text, sizeof(text), "Segment: %02d%s, Addr: %08x", i, isds, ptr);
-                DrawText(hdc, text, -1, &rc, DT_LEFT);
+                SetBkMode(hdc, TRANSPARENT);
+                SetTextColor(hdc, RGB(0, 0, 0));
 
-                SetDIBitsToDevice(hdc,
-                    rc.left, rc.top + 25, 256, 256,
-                    0, 0, 0, 256,
-                    ptr, (void *)&blinkenImg,
-                    DIB_RGB_COLORS
+                DrawText(hdc, text, -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            } else {
+                int videoSegSel = base_mem[0xdb10];
+                char *video = all_segments[videoSegSel];
+
+                StretchDIBits(hdc,
+                    0,  0, 320*2, 200*2,
+                    0,  0, 320, 200,
+                    video, (void *)&gameImg,
+                    DIB_RGB_COLORS, SRCCOPY
                 );
-            }
-        }
 
-        EndPaint(hwnd, &ps);
-    }
-    else if (msg == WM_TIMER && wParam == 122 && started){
-        if(run_physics){
-            int64_t agora = GetTimeee();
-            if(last_p_update < 0){
-                last_p_update = agora;
-            }
-            int64_t diff = agora - last_p_update;
-            
-            int64_t ticks = diff / USECS_PER_TICK;
-            int64_t sobra = diff % USECS_PER_TICK;
+                if(showblinken){
+                    SetBkMode(hdc, TRANSPARENT);
+                    SetTextColor(hdc, RGB(0, 0, 0));
+                    char text[256];
 
-            for(int i = 0; i < ticks; i++){
-                if(i > 5){
-                    //nah, something isnt right here
-                    //maybe the timer was delayed, lets bail
-                    break;
+                    for(int i = 0; i < 256; i++){
+                        char* isds = (i == 0) ? " (DS)" : "";
+                        uintptr_t ptr = all_segments[i];
+                        if(ptr == 0){
+                            break;
+                        }
+
+                        RECT rc;
+                        rc.left = (i % 4) * 280 + 680;
+                        rc.top  = (i / 4) * 300 + 40;
+                        rc.right = rc.left + 250;
+                        rc.bottom = rc.top + 30;
+
+                        snprintf(text, sizeof(text), "Segment: %02d%s, Addr: %08x", i, isds, ptr);
+                        DrawText(hdc, text, -1, &rc, DT_LEFT);
+
+                        SetDIBitsToDevice(hdc,
+                            rc.left, rc.top + 25, 256, 256,
+                            0, 0, 0, 256,
+                            ptr, (void *)&blinkenImg,
+                            DIB_RGB_COLORS
+                        );
+                    }
                 }
-                asm_physics();
             }
-            last_p_update = agora - sobra;
+
+            EndPaint(hwnd, &ps);
         }
-        
-        InvalidateRect(hwnd, 0, FALSE);
-        asm_render();
-    }
-    else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
-        WORD keyFlags = HIWORD(lParam);
-        WORD scanCode = keyFlags & 0x7f ;            
-        if(keyFlags & KF_UP){
-            //key released
-            scanCode += 0x80;
-        }else if(scanCode == 1){
-            //esc pressed
+        break;
+
+        case WM_TIMER: {
+            if (wParam == 122 && started) {
+                if(run_physics){
+                    int64_t agora = GetTimeee();
+                    if(last_p_update < 0){
+                        last_p_update = agora;
+                    }
+                    int64_t diff = agora - last_p_update;
+
+                    int64_t ticks = diff / USECS_PER_TICK;
+                    int64_t sobra = diff % USECS_PER_TICK;
+
+                    for(int i = 0; i < ticks; i++){
+                        if(i > 5){
+                            //nah, something isnt right here
+                            //maybe the timer was delayed, lets bail
+                            break;
+                        }
+                        asm_physics();
+                    }
+                    last_p_update = agora - sobra;
+                }
+
+                InvalidateRect(hwnd, 0, FALSE);
+                asm_render();
+            }
+        }
+        break;
+
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
+        {
+            WORD keyFlags = HIWORD(lParam);
+            WORD scanCode = keyFlags & 0x7f;
+            if(keyFlags & KF_UP){
+                //key released
+                scanCode += 0x80;
+            }else if(scanCode == 1){
+                //esc pressed
+                PostQuitMessage(0);
+            }
+
+            if(started){
+                asm_keys(scanCode);
+            }
+        }
+        break;
+
+        case WM_DESTROY:
+        {
             PostQuitMessage(0);
         }
+    }
 
-        if(started){
-            asm_keys(scanCode);
-        }
-    }
-    else if (msg == WM_DESTROY) {
-        PostQuitMessage(0);
-    }
-    end:
+end:
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -224,20 +291,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
 
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInst;
-    wc.lpszClassName = "Terep2Win32";
+    wc.lpszClassName = szAppName;
+    wc.lpszMenuName = szAppName;
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
     RegisterClass(&wc);
     
     QueryPerformanceFrequency(&tickfreq);
 
-    RECT rc = {0, 0, 640, 400 + 50}; /* Tamanho interno desejado */
-    DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
+    // TODO(gmb): get height of the menubar (20?)
+    RECT rc = {0, 0, 640, 400+20}; /* Tamanho interno desejado */
+    DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
     AdjustWindowRect(&rc, dwStyle, FALSE);
 
     /* Janela aproximada de 800x600 */
-    hwnd = CreateWindow("Terep2Win32", "TeREp2", 
+    hwnd = CreateWindow(szAppName, "TeREp2",
                         dwStyle,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         rc.right - rc.left,
@@ -245,6 +314,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
                         NULL, NULL, hInst, NULL);
 
     blinkenInit();
+
+    ShowWindow (hwnd, nShow);
+    UpdateWindow (hwnd);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);

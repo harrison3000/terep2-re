@@ -4,7 +4,9 @@
 *.exe.txt
 *.err
 *.o
+*.res
 sim.cfg
 erros.txt
 terep2re
 .vscode/
+build/
