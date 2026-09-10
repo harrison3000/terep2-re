@@ -155,7 +155,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 } break;
 
                 case T2_APP_ABOUT: {
-                    MessageBox (hwnd, TEXT ("Terep2-RE\n(c) Harrison, 2026"),
+                    MessageBox (hwnd, TEXT ("Terep2-RE\n(c) Harrison, 2026\n(c) Nagymathe Denes, 1996-1997"),
                                 TEXT ("About"), MB_ICONINFORMATION | MB_OK) ;
                     return 0;
                 } break;
