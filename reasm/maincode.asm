@@ -533,7 +533,7 @@ FUN_main_render:
     CMP   byte [0x7f], 5
     JL    .LAB_LOC_19
     MOV   byte [0x7f], 0
-    JL    .LAB_LOC_19
+    JMP   .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
