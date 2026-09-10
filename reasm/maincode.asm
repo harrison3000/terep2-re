@@ -586,7 +586,9 @@ F_0693:
     CALL        FUN_1000_2b08
     POP         BX
     SUB         BX,AX
+    MOV  word [another_quick_temp], BX
     MOV         BX,CX
+    CMP  word [another_quick_temp], 0
     JNS         .LAB_LOC_1
     NEG         BX
 .LAB_LOC_1:
@@ -1020,6 +1022,7 @@ FUN_1000_0b25:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: somehow related to the lifetime of particles, disabling this make the particles never despawn
 FUN_1000_0bb5:
                               ;XREF[1]:     1000:56cb(c)
     XOR         DI,DI
@@ -1049,9 +1052,11 @@ FUN_1000_0bb5:
     CALL        FUN_1000_25c5
     POP         CX
     CMP         AX,CX
+    SETNS  byte [another_quick_temp]
     POP         BX
     POP         AX
-    JNS         .LAB_LOC_6
+    CMP byte [another_quick_temp], 1
+    JE         .LAB_LOC_6
     MOV         EAX, dword [0x6a]
     SAR         EAX,0x1
     SUB         dword [DI + 0x3e67],EAX
@@ -1091,7 +1096,9 @@ FUN_1000_0bb5:
 
     MOV         SI,word [0x3e51]
     SUB         SI,0x1c
+    MOV word [another_quick_temp], SI
     MOV         word [0x3e51],SI
+    CMP word [another_quick_temp], 0
     JZ          .LAB_LOC_5
     mov_m2m     dword [DI + 0x3e53], dword [SI + 0x3e53]
     mov_m2m     dword [DI + 0x3e57], dword [SI + 0x3e57]
@@ -1809,9 +1816,11 @@ FUN_1000_1408:
     ADD         DI,0x126
     MOV         AX, word [0x120]
     CMP         word [DI + 0x2],AX
+    SETL  byte [another_quick_temp]
     LODSW 
     MOV         CL,AL
-    JL     .L_1408_START
+    CMP  word [another_quick_temp], 1
+    JE     .L_1408_START
     MOV         AX,word [DI + 0x6]
     MOV         BX,word [DI + 0x8]
     CALL        FUN_1000_3f98
@@ -8141,6 +8150,7 @@ FUN_1000_4e0a:
     MOVZX       ECX,word [BX + 0x8]
     MOV         word [0xea04],CX
     AND         CX,0xff
+    TEST  CX, 0xff
     JZ          .LAB_LOC_5
     JS          .LAB_LOC_3
     CMP         CX,0x1
@@ -8224,6 +8234,7 @@ FUN_1000_4e0a:
     MOV         ECX,EDX
     SUB         ECX,EAX
     SAR         ECX,0x1
+    CMP    ECX, 0
     JZ          .LAB_LOC_3
     MOV         dword [mitemp_BeX],EAX
     mov_m2m     word [BX + 0x6], word [mitemp_BeX]
@@ -8695,6 +8706,7 @@ FUN_keyboard_56df:
     MOV         BL, AL
     AND         BX,0x7f
     AND         AL,0x80
+    TEST   AL, 0x80
     JNS         .LAB_LOC_1
     MOV         byte [BX + CSD_DAT_keys_571e],0xff
     MOV         byte [CSD_DAT_keys_571e],0x0
@@ -8922,6 +8934,7 @@ FUN_1000_5940_render_text:
 .LAB_LOC_8:
     SHR         DL,0x1
     JC          .LAB_LOC_9
+    CMP   DL, 0 
     JZ          .LAB_LOC_10
     INC         BX
     JMP         .LAB_LOC_8

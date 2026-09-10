@@ -46,7 +46,7 @@ flying_car_tmp:
     db 0
 
 another_quick_temp:
-    db 0
+    dd 0
 
 ;All the data that used to be mixed with  code
 
