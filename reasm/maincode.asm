@@ -4348,11 +4348,8 @@ FUN_1000_2d61:
     ADD         DI,AX
     CLD
     MOV         AX, word [0xdb12]
-    SHR         CX,0x1
-    REP STOSW 
-    JNC         .LAB_LOC_3
-    STOSB 
-.LAB_LOC_3:
+    REP STOSB
+
     ADD         SI,0x4
     DEC         DX
     CMP    DX, 0
