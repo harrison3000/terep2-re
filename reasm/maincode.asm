@@ -2365,8 +2365,8 @@ FUN_1000_1965:
     MOV         word [0x19ff],0x0
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
-    TEST        AH,0x60
     ;jumping to another function, some kind of tail call optimization
+    TEST        AH,0x60
     JNP         FUN_1965_NP
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
@@ -3709,7 +3709,8 @@ FUN_1000_2662:
     SUB         AX,CX
     SBB         DX,BX
     ;change this to SETNS to see some trippy inverted triangle stuff lol
-    SETS    byte [some_flag_thing_idk]
+    TEST  DX,0x8000
+    SETS    byte [some_flag_thing_idk] 
     RET
 
  ; 1000:26dc [UNDEFINED BYTES REMOVED]
@@ -8974,8 +8975,9 @@ FUN_1000_5acf:
     CALL        FUN_1000_5b26
     MOV         AH,AL
     AND         AH,0xc0
-    CMP         AH,0xc0
+    MOV   byte [another_quick_temp], AH
     MOV         AH,0x0
+    CMP         byte [another_quick_temp], 0xc0
     JNZ         .LAB_LOC_4
     MOV         AH,AL
     AND         AH,0x3f
