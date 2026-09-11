@@ -105,3 +105,33 @@ export function tamanhador(val){
 
     throw "unreq size";
 }
+
+
+/**
+ *
+ * @param {string[]} linhas
+ */
+export function mergetron(linhas, insta, instb){
+    var regx = /INST_(?<ins>[A-Z]+)\((?<opr>.+)\);/;
+    while(1){
+        let u = linhas.findIndex(function(v,i,a){
+            if(!v.includes(insta)){
+                return false;
+            }
+            if(a[i+1].includes(instb)){
+                return true;
+            }
+            return false;
+        });
+
+        if(u < 0 ){
+            break;
+        }
+
+        let a = linhas[u].match(regx).groups;
+        let b = linhas[u+1].match(regx).groups;
+
+        linhas[u] = `   MERGED_${a.ins}_${b.ins}(${a.opr}, ${b.opr});`;        
+        linhas[u+1] = "//REMOVEME";
+    }
+}

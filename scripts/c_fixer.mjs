@@ -1,7 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
-import { trataCondicao } from "./utils.mjs";
+import { mergetron, trataCondicao } from "./utils.mjs";
 
 /**
  * @type {string[]}
@@ -49,6 +49,10 @@ for(let jump of u.matchAll(/GR+/g)){
 
     f[jump.index] = "//REMOVEME";
 }
+
+mergetron(f, "ADD", "ADC");
+mergetron(f, "SUB", "SBB");
+mergetron(f, "SHL", "RCL");
 
 const filtratada = f.filter(x => x !== "//REMOVEME");
 
