@@ -1,6 +1,11 @@
 const map_comparisions = {
     "CMP_E":  (a, b) => `${a} == ${b}`,
     "CMP_NE": (a, b) => `${a} != ${b}`,
+    "CMP_C":  (a, b) => `${a} <  ${b}`,
+    "CMP_NC": (a, b) => `${a} >= ${b}`,
+    "CMP_BE": (a, b) => `${a} <= ${b}`,
+    "CMP_A":  (a, b) => `${a} >  ${b}`,
+
     "CMP_G":  condicionadorSig(">"),
     "CMP_GE": condicionadorSig(">="),
     "CMP_L":  condicionadorSig("<"),
