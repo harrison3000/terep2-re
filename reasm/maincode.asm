@@ -1819,7 +1819,7 @@ FUN_1000_1408:
     SETL  byte [another_quick_temp]
     LODSW 
     MOV         CL,AL
-    CMP  word [another_quick_temp], 1
+    CMP  byte [another_quick_temp], 1
     JE     .L_1408_START
     MOV         AX,word [DI + 0x6]
     MOV         BX,word [DI + 0x8]
