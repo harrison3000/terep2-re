@@ -14,16 +14,22 @@ typedef struct {
     uint16_t msg, ax, bx, cx, dx, cf;
 } call_portal_t;
 
-TCHAR szAppName[] = TEXT("Terep2Win32") ;
+TCHAR szAppName[] = "Terep2Win32";
 
-extern void asm_f_init();
-extern void asm_render();
-extern void asm_physics();
+extern void asm_f_init(void);
+extern void asm_render(void);
+extern void asm_physics(void);
 extern void asm_keys(uint16_t);
 
 extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
+
+// blinken.c
+extern void blinkenInit(void);
+extern LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+HWND hBlinken;
 
 void call_init(HWND hwnd, char path[], int complain);
 
@@ -37,9 +43,12 @@ typedef struct {
 } st_image;
 
 st_image gameImg;
-st_image blinkenImg;
 
 LARGE_INTEGER tickfreq;
+
+int started = 0;
+int run_physics = 1;
+int64_t last_p_update = -1;
 
 //get system uptime in uSecs
 int64_t GetTimeee(){
@@ -50,26 +59,12 @@ int64_t GetTimeee(){
     return ret;
 }
 
-int started = 0;
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    static int showblinken = 0;
-    static int run_physics = 1;
-    static HWND hCheckblk = NULL;
-    static HWND hCheckrun = NULL;
-    static int64_t last_p_update = -1;
     HMENU hMenu;
 
     switch (msg) {
         case WM_CREATE: {
-             hMenu = GetMenu(hwnd);
-
-            // TODO (gmb): find a better way to init these
-            if (showblinken) {
-                CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_CHECKED) ;
-            } else {
-                CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_UNCHECKED) ;
-            }
+            hMenu = GetMenu(hwnd);
 
             if (run_physics) {
                 CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_CHECKED) ;
@@ -111,17 +106,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 break;
 
                 case T2_APP_BLINKEN: {
-                    showblinken = !showblinken;
-
-                    if (showblinken) {
-                        CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_CHECKED) ;
-                    } else {
-                        CheckMenuItem (hMenu, T2_APP_BLINKEN, MF_UNCHECKED) ;
-                    }
-
-                    if (!showblinken){
-                        InvalidateRect(hwnd, 0, TRUE);
-                    }
+                    ShowWindow(hBlinken, SW_SHOW);
+                    UpdateWindow(hBlinken);
                 }
                 break;
 
@@ -129,9 +115,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     run_physics = !run_physics;
 
                     if (run_physics) {
-                        CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_CHECKED) ;
+                        CheckMenuItem(hMenu, T2_APP_PHYS_RUN, MF_CHECKED);
                     } else {
-                        CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED) ;
+                        CheckMenuItem(hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED);
                     }
 
                     last_p_update = -1; //pretends we just started
@@ -155,8 +141,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 } break;
 
                 case T2_APP_ABOUT: {
-                    MessageBox (hwnd, TEXT ("TeREp2\n(c) Harrison, 2026\n(c) gmb, 2026\n(c) Nagymathe Denes, 1996-1997"),
-                                TEXT ("About"), MB_ICONINFORMATION | MB_OK) ;
+                    MessageBox (hwnd, "TeREp2\n"
+                                      "(c) Harrison, 2026\n"
+                                      "(c) gmb, 2026\n"
+                                      "(c) Nagymathe Denes, 1996-1997",
+                                "About", MB_ICONINFORMATION | MB_OK) ;
                     return 0;
                 } break;
             }
@@ -168,54 +157,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             HDC hdc = BeginPaint(hwnd, &ps);
 
             if (!started) {
-                const char *text = "No game is started, please open a track.";
                 RECT rc;
                 GetClientRect(hwnd, &rc);
 
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, text, -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 int videoSegSel = base_mem[0xdb10];
-                char *video = all_segments[videoSegSel];
+                char *video = (char*)all_segments[videoSegSel];
 
                 StretchDIBits(hdc,
                     0,  0, 320*2, 200*2,
                     0,  0, 320, 200,
-                    video, (void *)&gameImg,
+                    (void *)video, (void *)&gameImg,
                     DIB_RGB_COLORS, SRCCOPY
                 );
-
-                if(showblinken){
-                    SetBkMode(hdc, TRANSPARENT);
-                    SetTextColor(hdc, RGB(0, 0, 0));
-                    char text[256];
-
-                    for(int i = 0; i < 256; i++){
-                        char* isds = (i == 0) ? " (DS)" : "";
-                        uintptr_t ptr = all_segments[i];
-                        if(ptr == 0){
-                            break;
-                        }
-
-                        RECT rc;
-                        rc.left = (i % 4) * 280 + 680;
-                        rc.top  = (i / 4) * 300 + 40;
-                        rc.right = rc.left + 250;
-                        rc.bottom = rc.top + 30;
-
-                        snprintf(text, sizeof(text), "Segment: %02d%s, Addr: %08x", i, isds, ptr);
-                        DrawText(hdc, text, -1, &rc, DT_LEFT);
-
-                        SetDIBitsToDevice(hdc,
-                            rc.left, rc.top + 25, 256, 256,
-                            0, 0, 0, 256,
-                            ptr, (void *)&blinkenImg,
-                            DIB_RGB_COLORS
-                        );
-                    }
-                }
             }
 
             EndPaint(hwnd, &ps);
@@ -247,6 +205,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
                 InvalidateRect(hwnd, 0, FALSE);
                 asm_render();
+
+#ifdef DEBUGMENU
+                InvalidateRect(hBlinken, 0, FALSE);
+#endif
             }
         }
         break;
@@ -282,30 +244,43 @@ end:
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-void blinkenInit();
-
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
-    WNDCLASS wc = {0};
+    WNDCLASS wndclassMain = {0};
+    WNDCLASS wndclassBlinken = {0};
     MSG msg;
     HWND hwnd;
 
-    wc.lpfnWndProc = WndProc;
-    wc.hInstance = hInst;
-    wc.lpszClassName = szAppName;
-    wc.lpszMenuName = szAppName;
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wndclassMain.lpfnWndProc = WndProc;
+    wndclassMain.hInstance = hInst;
+    wndclassMain.lpszClassName = szAppName;
+    wndclassMain.lpszMenuName = szAppName;
+    wndclassMain.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
-    RegisterClass(&wc);
-    
-    QueryPerformanceFrequency(&tickfreq);
+    if (!RegisterClass (&wndclassMain)){
+        MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR) ;
+        return 0;
+    }
+
+#ifdef DEBUGMENU
+    wndclassBlinken.lpfnWndProc = BlinkenWndProc;
+    wndclassBlinken.hInstance = hInst;
+    wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
+    wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+    if (!RegisterClass (&wndclassBlinken)){
+        MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR);
+        return 0;
+    }
+#endif // DEBUGMENU
+
+    if (!QueryPerformanceFrequency(&tickfreq)) {
+        MessageBox(NULL, "Unable to retrieve the frequency of the performance counter.", szAppName, MB_ICONERROR);
+        return 0;
+    }
 
     // TODO(gmb): get height of the menubar (20?)
     RECT rc = {0, 0, 640, 400+20}; /* Tamanho interno desejado */
-#ifndef DEBUGMENU
     DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-#else
-    DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
-#endif
 
     AdjustWindowRect(&rc, dwStyle, FALSE);
 
@@ -316,11 +291,33 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
                         rc.right - rc.left,
                         rc.bottom - rc.top,
                         NULL, NULL, hInst, NULL);
+    if (hwnd == NULL) {
+        MessageBox(NULL, "Unable to create main window.", szAppName, MB_ICONERROR);
+        return 0;
+    }
 
+#ifdef DEBUGMENU
     blinkenInit();
+    rc.right = 1130;
+    rc.bottom = 600;
+    dwStyle = WS_OVERLAPPEDWINDOW;
+    AdjustWindowRect(&rc, dwStyle, FALSE);
 
-    ShowWindow (hwnd, nShow);
-    UpdateWindow (hwnd);
+    hBlinken = CreateWindow("Terep2Win32Blinken", "TeREp2 - Blinkenlights",
+                        dwStyle,
+                        CW_USEDEFAULT, CW_USEDEFAULT,
+                        rc.right - rc.left,
+                        rc.bottom - rc.top,
+                        NULL, NULL, hInst, NULL);
+                        
+    if (hBlinken == NULL) {
+        MessageBox(NULL, "Unable to create blinken window.", szAppName, MB_ICONERROR);
+        return 0;
+    }
+#endif // DEBUGMENU
+
+    ShowWindow(hwnd, nShow);
+    UpdateWindow(hwnd);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -413,7 +410,7 @@ void call_init(HWND hwnd, char path[], int complain){
         exit(1);
     }
 
-    prepare_bitmap_info(320, 200, &gameImg,&base_mem[0x1a4d]);
+    prepare_bitmap_info(320, 200, &gameImg, (uint8_t *)&base_mem[0x1a4d]);
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
@@ -474,8 +471,7 @@ int mydoscall(HWND hwnd, char path[]){
             return 0;
         }
         volatile char *addr = &base_mem[dx];
-
-        int32_t r = fread(addr, 1, cx, f);
+        int32_t r = fread((void*)addr, 1, cx, f);
         if(dx != 0xf008){
             //show this message only for carX.dat loading
             printf("* Read %ld bytes into address: %08x (%04x relative to DS)!\n", r, addr, dx);
@@ -516,29 +512,4 @@ int mydoscall(HWND hwnd, char path[]){
     return 0;
 }
 
-#define SETCOLORR(i, r,g,b) {     \
-    RGBQUAD tmp = {.rgbRed = r, .rgbGreen = g, .rgbBlue = b,};\
-    blinkenImg.palette[i] = tmp;  \
-}
 
-void blinkenInit(){
-    uint8_t pRandom[256*3];
-    for(int i =0; i < 256*3; i++){
-        pRandom[i] = rand();
-    }
-
-    prepare_bitmap_info(256, 256, &blinkenImg, pRandom);
-
-    SETCOLORR(0, 0,     0,   0);
-    SETCOLORR(1, 255,   0,   0);
-    SETCOLORR(2, 255, 128,   0);
-    SETCOLORR(3, 0,   255, 255);
-
-    SETCOLORR(126, 255, 255,   0);
-    SETCOLORR(127,   0,   0, 255);
-    SETCOLORR(128,   0, 255,   0);
-    SETCOLORR(129, 128,   0, 255);
-
-    SETCOLORR(254, 255,   0, 255);
-    SETCOLORR(255, 255, 255, 255);
-}
