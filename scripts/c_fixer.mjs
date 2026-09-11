@@ -47,9 +47,11 @@ for(let jump of u.matchAll(/GR+/g)){
         f[idx] = l;
     }
 
-    f[jump.index] = "//old:" + _tudo ;
+    f[jump.index] = "//REMOVEME";
 }
 
-await writeFile("lifted/maincode.cpp", f.join("\n"));
+const filtratada = f.filter(x => x !== "//REMOVEME");
+
+await writeFile("lifted/maincode.cpp", filtratada.join("\n"));
 
 debugger;
