@@ -19,13 +19,14 @@ extern void asm_render(void);
 extern void asm_physics(void);
 extern void asm_keys(uint16_t);
 
+int mydoscall(char path[]);
+void call_init(HWND hwnd, char path[], int complain);
+
 extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
 HWND hBlinken;
-
-void call_init(HWND hwnd, char path[], int complain);
 
 #define HZ_PHYSICS 120 //TODO check if this is right
 #define USECS_PER_TICK (1000000/HZ_PHYSICS)
@@ -40,7 +41,7 @@ int run_physics = 1;
 int64_t last_p_update = -1;
 
 //get system uptime in uSecs
-int64_t GetTimeee(){
+int64_t GetTimeee(void){
     LARGE_INTEGER t;
     QueryPerformanceCounter(&t);
 
@@ -234,6 +235,9 @@ end:
 }
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
+    (void)hPrev;
+    (void)lpCmd;
+
     WNDCLASS wndclassMain = {0};
     WNDCLASS wndclassBlinken = {0};
     MSG msg;
@@ -335,9 +339,8 @@ void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette){
     }
 }
 
-int mydoscall(HWND hwnd, char path[]);
-
 void __watcall GameInitThread(void *param) {
+    (void)param;
     asm_f_init();
     _endthread();
 }
@@ -368,7 +371,7 @@ void call_init(HWND hwnd, char path[], int complain){
 
     while(1){
         if(call_portal->msg == 0xd3ca){
-            int ok = mydoscall(hwnd, path);
+            int ok = mydoscall(path);
 
             call_portal->cf = ok ? 3 : 1;
             call_portal->msg = 0x1234;
@@ -402,7 +405,7 @@ void call_init(HWND hwnd, char path[], int complain){
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
-int mydoscall(HWND hwnd, char path[]){
+int mydoscall(char path[]){
     uint16_t ax = call_portal->ax;
     uint16_t bx = call_portal->bx;
     uint16_t cx = call_portal->cx;
