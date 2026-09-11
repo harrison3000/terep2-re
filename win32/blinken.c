@@ -1,21 +1,14 @@
-#include <stdlib.h>
+#include "common.h"
+
 #include <stdio.h>
-#include <windows.h>
-#include <stdint.h>
 
 #define SETCOLORR(i,r,g,b) {                                                \
         RGBQUAD tmp = {.rgbRed = (r), .rgbGreen = (g), .rgbBlue = (b),};    \
         blinkenImg.palette[(i)] = tmp;                                      \
     }
 
-// NOTE(gmb): Not the most elegant solution, but it will do for debug
-typedef struct {
-    BITMAPINFOHEADER info;
-    RGBQUAD palette[256];
-} st_image;
 st_image blinkenImg;
 extern volatile uintptr_t all_segments[];
-extern void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette);
 extern int started;
 
 void blinkenInit(void){

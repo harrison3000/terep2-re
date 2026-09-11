@@ -1,12 +1,10 @@
+#include "common.h"
+#include "resource.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <windows.h>
 #include <shlobj.h>
 #include <process.h>
-#include <stdint.h>
-
-#include "resource.h"
 
 #define DEFAULT_LEN (1 << 16)
 
@@ -25,10 +23,6 @@ extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
-// blinken.c
-extern void blinkenInit(void);
-extern LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 HWND hBlinken;
 
 void call_init(HWND hwnd, char path[], int complain);
@@ -36,11 +30,6 @@ void call_init(HWND hwnd, char path[], int complain);
 #define HZ_PHYSICS 120 //TODO check if this is right
 #define USECS_PER_TICK (1000000/HZ_PHYSICS)
 #define HZ_DISPLAY 60
-
-typedef struct {
-    BITMAPINFOHEADER info;
-    RGBQUAD palette[256];
-} st_image;
 
 st_image gameImg;
 
@@ -273,10 +262,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     }
 #endif // DEBUGMENU
 
-    if (!QueryPerformanceFrequency(&tickfreq)) {
-        MessageBox(NULL, "Unable to retrieve the frequency of the performance counter.", szAppName, MB_ICONERROR);
-        return 0;
-    }
+    QueryPerformanceFrequency(&tickfreq);
 
     // TODO(gmb): get height of the menubar (20?)
     RECT rc = {0, 0, 640, 400+20}; /* Tamanho interno desejado */
