@@ -35,7 +35,11 @@ for(let jump of u.matchAll(/GR+/g)){
         const idx = i + jump.index;
         const j = f[idx].match(/ + (JUMP|SET)«(.+),(.+)»/)?.map(x => x.trim());
         const [_tudo, jtipo, jop1, jop2] = j;
-        const tipoz = [tipo, jop1].join("_");
+        let tipoz = [tipo, jop1].join("_");
+        if(tipo === "TEST"){
+            let ig = op1 === op2 ? "IG" : "DIF";
+            tipoz += "_" + ig;
+        }
 
         let oopz = tipoz;
         const cpz = map_comparisions[tipoz];
