@@ -6,10 +6,13 @@ const map_comparisions = {
     "CMP_BE": (a, b) => `${a} <= ${b}`,
     "CMP_A":  (a, b) => `${a} >  ${b}`,
 
-    "CMP_G":  condicionadorSig(">"),
-    "CMP_GE": condicionadorSig(">="),
-    "CMP_L":  condicionadorSig("<"),
-    "CMP_LE": condicionadorSig("<="),
+    "CMP_G":  condicionadorSig.bind(null, ">"),
+    "CMP_GE": condicionadorSig.bind(null, ">="),
+    "CMP_L":  condicionadorSig.bind(null, "<"),
+    "CMP_LE": condicionadorSig.bind(null, "<="),
+
+    "CMP_NS": comps.bind(null, ">="),
+    "CMP_S":  comps.bind(null, "<"),
 
     "TEST_Z_IG" : (a) => `${a} == 0`,
     "TEST_NZ_IG": (a) => `${a} != 0`,
@@ -20,6 +23,12 @@ const map_comparisions = {
     "TEST_S":  (a, b) => siszzs(a,b) + " != 0",
     "TEST_NS": (a, b) => siszzs(a,b) + " == 0",
 
+    "TEST_GE_IG": a => `SIGNED(${a}) >= 0`,
+
+    "TEST_L_IG" : a => `SIGNED(${a}) < 0`,
+
+    "TEST_P" :  (a, b) => `PARITY(${a} & ${b})`,
+    "TEST_NP" : (a, b) => `PARITY(${a} & ${b}) == 0`,
 }
 
 map_comparisions["CMP_Z"]  = map_comparisions["CMP_E"];
@@ -32,7 +41,7 @@ export function trataCondicao(tipocmp,tipojmp,op1,op2){
     let ig = eq ? "_IG" : "_DIF";
 
     let oopz = tipoz;
-    const cpz = map_comparisions[tipoz] || map_comparisions[tipoz+ig];
+    const cpz = map_comparisions[tipoz+ig] || map_comparisions[tipoz];
     if(typeof cpz === "function"){
         return cpz(op1,op2);
     }
@@ -44,19 +53,25 @@ export function trataCondicao(tipocmp,tipojmp,op1,op2){
 }
 
 
-function condicionadorSig(op){
-    return function(a, b){
-        if(b.startsWith("0x") || b.match(/^-?[0-9]+$/)){
-            let t = tamanhador(a);
-            let unsig = parseInt(b);
-            if(unsig >= t[1]/2){
-                b = unsig - t[1];
-            }
-            return `SIGNED(${a}) ${op} ${b}`;
+function condicionadorSig (op, a, b){
+    if(b.startsWith("0x") || b.match(/^-?[0-9]+$/)){
+        let t = tamanhador(a);
+        let unsig = parseInt(b);
+        if(unsig >= t[1]/2){
+            b = unsig - t[1];
         }
+        return `SIGNED(${a}) ${op} ${b}`;
+    }
 
-        return `SIGNED(${a}) ${op} SIGNED(${b})`;
-    };
+    return `SIGNED(${a}) ${op} SIGNED(${b})`;
+}
+
+function comps(op, a, b){
+    if(b === "0"){
+        //TODO enter here for other ints?
+        return `SIGNED(${a}) ${op} 0`;
+    }
+    return `SIGNED(${a}) ${op} SIGNED(${b})`;
 }
 
 function siszzs(a, b){

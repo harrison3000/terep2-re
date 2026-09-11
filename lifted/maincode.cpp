@@ -241,14 +241,14 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->EBX = cpu->EAX;
    LAB_LOC_2:
 //old:COMP«TEST, cpu->BX, cpu->BX»
-   if(TEST_GE_IG) goto LAB_LOC_3;
+   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_3;
    INST_NEG(cpu->BX);
    LAB_LOC_3:
    INST_ADD(cpu->BX, 0x1030);
    cpu->CX = MEM_WORD(cpu->SI + 0xc);
    INST_SAR(cpu->CX, 0x9);
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_GE_IG) goto LAB_LOC_4;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_4;
    INST_NEG(cpu->CX);
    LAB_LOC_4:
    INST_ADD(cpu->CX, 0x2c);
@@ -306,14 +306,14 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->EBX = cpu->EAX;
    LAB_LOC_7:
 //old:COMP«TEST, cpu->BX, cpu->BX»
-   if(TEST_GE_IG) goto LAB_LOC_8;
+   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_8;
    INST_NEG(cpu->BX);
    LAB_LOC_8:
    INST_ADD(cpu->BX, 0x1030);
    cpu->CX = MEM_WORD(cpu->SI + 0xc);
    INST_SAR(cpu->CX, 0x9);
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_GE_IG) goto LAB_LOC_9;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_9;
    INST_NEG(cpu->CX);
    LAB_LOC_9:
    INST_ADD(cpu->CX, 0x2c);
@@ -366,14 +366,14 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->EBX = cpu->EAX;
    LAB_LOC_11:
 //old:COMP«TEST, cpu->BX, cpu->BX»
-   if(TEST_GE_IG) goto LAB_LOC_12;
+   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_12;
    INST_NEG(cpu->BX);
    LAB_LOC_12:
    INST_ADD(cpu->BX, 0x1030);
    cpu->CX = MEM_WORD(cpu->SI + 0xc);
    INST_SAR(cpu->CX, 0x9);
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_GE_IG) goto LAB_LOC_13;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_13;
    INST_NEG(cpu->CX);
    LAB_LOC_13:
    INST_ADD(cpu->CX, 0x2c);
@@ -601,7 +601,7 @@ void F_0693(cpu_ctx *cpu){
    another_quick_temp = cpu->BX;
    cpu->BX = cpu->CX;
 //old:COMP«CMP, another_quick_temp, 0»
-   if(CMP_NS) goto LAB_LOC_1;
+   if(SIGNED(another_quick_temp) >= 0) goto LAB_LOC_1;
    INST_NEG(cpu->BX);
    LAB_LOC_1:
    cpu->AX = MEM_WORD(0xe9);
@@ -919,12 +919,12 @@ void FUN_1000_0a3b(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
 //old:COMP«TEST, CSD_DAT_keys_571e[2], 0xc0»
-   flying_car_tmp = (TEST_P_DIF);
+   flying_car_tmp = (PARITY(CSD_DAT_keys_571e[2] & 0xc0));
 //old:COMP«TEST, CSD_DAT_keys_571e[2], 0x80»
    if((CSD_DAT_keys_571e[2] & 0x80) == 0) goto LAB_LOC_3;
    LAB_LOC_1:
 //old:COMP«TEST, CSD_DAT_keys_571e[3], 0xc0»
-   flying_car_tmp = (TEST_P_DIF);
+   flying_car_tmp = (PARITY(CSD_DAT_keys_571e[3] & 0xc0));
 //old:COMP«TEST, CSD_DAT_keys_571e[3], 0x80»
    if((CSD_DAT_keys_571e[3] & 0x80) == 0) goto LAB_LOC_4;
    LAB_LOC_2:
@@ -1061,7 +1061,7 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
    LAB_LOC_1:
    INST_SUB(MEM_WORD(cpu->DI + 0x3e6b), 0x2);
 //old:COMP«CMP, MEM_WORD(cpu->DI + 0x3e6b), 0»
-   if(CMP_S) goto LAB_LOC_8;
+   if(SIGNED(MEM_WORD(cpu->DI + 0x3e6b)) < 0) goto LAB_LOC_8;
    cpu->EAX = MEM_DWORD(cpu->DI + 0x3e5f);
    cpu->EBX = MEM_DWORD(cpu->DI + 0x3e63);
    cpu->ECX = MEM_DWORD(cpu->DI + 0x3e67);
@@ -1082,7 +1082,7 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
    FUN_1000_25c5(cpu);
    INST_POP(cpu->CX);
 //old:COMP«CMP, cpu->AX, cpu->CX»
-   another_quick_temp = (CMP_NS);
+   another_quick_temp = (SIGNED(cpu->AX) >= SIGNED(cpu->CX));
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
 //old:COMP«CMP, another_quick_temp, 1»
@@ -1248,7 +1248,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    cpu->ECX = MEM_DWORD(cpu->SI + 0x42);
    INST_ADD(cpu->ECX, MEM_DWORD(cpu->SI + 0x46));
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_GE_IG) goto LAB_LOC_7;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
    INST_NEG(cpu->CX);
    LAB_LOC_7:
    INST_SHR(cpu->ECX, 0x10);
@@ -1901,7 +1901,7 @@ void FUN_1000_1408(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(cpu->DI + 0x128);
    INST_LODSW();
 //old:COMP«CMP, cpu->BX, cpu->AX»
-   some_flag_thing_idk = (CMP_S);
+   some_flag_thing_idk = (SIGNED(cpu->BX) < SIGNED(cpu->AX));
    goto L_1408_START;
    LAB_LOC_8:
    cpu->BX = 0; //was a XOR
@@ -2446,12 +2446,12 @@ void FUN_1000_1965(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(0xc6);
     //jumping to another function, some kind of tail call optimization
 //old:COMP«TEST, cpu->AH, 0x60»
-   if(TEST_NP_DIF) goto FUN_1965_NP;
+   if(PARITY(cpu->AH & 0x60) == 0) goto FUN_1965_NP;
    MEM_BYTE(0x5fb) = 0x0;
    FUN_1000_3fd0(cpu);
    cpu->AX = MEM_WORD(0xc6);
 //old:COMP«TEST, cpu->AH, 0xa0»
-   if(TEST_NP_DIF) goto LAB_LOC_12;
+   if(PARITY(cpu->AH & 0xa0) == 0) goto LAB_LOC_12;
    cpu->DI = 0x5bbc;
    cpu->CX = MEM_WORD(0x5bba);
    LAB_LOC_1:
@@ -3351,7 +3351,7 @@ void FUN_1000_22f0(cpu_ctx *cpu){
    INST_SUB(cpu->AL, MEM_BYTE(0xad));
    INST_NEG(cpu->AH);
 //old:COMP«TEST, cpu->AL, cpu->AL»
-   if(TEST_GE_IG) goto LAB_LOC_2;
+   if(SIGNED(cpu->AL) >= 0) goto LAB_LOC_2;
    INST_NEG(cpu->AL);
    LAB_LOC_2:
 //old:COMP«CMP, cpu->AL, cpu->CL»
@@ -3395,7 +3395,7 @@ void FUN_1000_233b(cpu_ctx *cpu){
    INST_SUB(cpu->AH, MEM_BYTE(0xb1));
    INST_SUB(cpu->AL, MEM_BYTE(0xad));
 //old:COMP«TEST, cpu->AL, cpu->AL»
-   if(TEST_GE_IG) goto LAB_LOC_2;
+   if(SIGNED(cpu->AL) >= 0) goto LAB_LOC_2;
    INST_NEG(cpu->AL);
    LAB_LOC_2:
 //old:COMP«CMP, cpu->AL, cpu->CL»
@@ -3439,7 +3439,7 @@ void FUN_1000_2384(cpu_ctx *cpu){
    INST_SUB(cpu->AH, MEM_BYTE(0xb1));
    INST_SUB(cpu->AL, MEM_BYTE(0xad));
 //old:COMP«TEST, cpu->AH, cpu->AH»
-   if(TEST_GE_IG) goto LAB_LOC_2;
+   if(SIGNED(cpu->AH) >= 0) goto LAB_LOC_2;
    INST_NEG(cpu->AH);
    LAB_LOC_2:
    INST_NEG(cpu->AL);
@@ -3484,7 +3484,7 @@ void FUN_1000_23cf(cpu_ctx *cpu){
    INST_SUB(cpu->AH, MEM_BYTE(0xb1));
    INST_SUB(cpu->AL, MEM_BYTE(0xad));
 //old:COMP«TEST, cpu->AH, cpu->AH»
-   if(TEST_GE_IG) goto LAB_LOC_2;
+   if(SIGNED(cpu->AH) >= 0) goto LAB_LOC_2;
    INST_NEG(cpu->AH);
    LAB_LOC_2:
 //old:COMP«CMP, cpu->AL, cpu->CL»
@@ -3840,7 +3840,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    INST_PUSH(cpu->BX);
    FUN_1000_2b08(cpu);
 //old:COMP«TEST, cpu->AH, 0x60»
-   if(TEST_P_DIF) goto LAB_LOC_1;
+   if(PARITY(cpu->AH & 0x60)) goto LAB_LOC_1;
    cpu->BX = cpu->AX;
    FUN_1000_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
@@ -4206,7 +4206,7 @@ void FUN_1000_2ad8(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(cpu->BX + 0xd10c);
    INST_POP(cpu->BX);
 //old:COMP«TEST, cpu->BH, 0xc0»
-   if(TEST_P_DIF) goto LAB_LOC_3;
+   if(PARITY(cpu->BH & 0xc0)) goto LAB_LOC_3;
    INST_NEG(cpu->AX);
    LAB_LOC_3:
    return;
@@ -4482,7 +4482,7 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
    INST_SUB(cpu->CX, cpu->AX);
 //old:COMP«CMP, cpu->CX, 0»
-   if(CMP_NS) goto LAB_LOC_2;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    LAB_LOC_2:
@@ -4511,7 +4511,7 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
    INST_SUB(cpu->CX, cpu->AX);
 //old:COMP«CMP, cpu->CX, 0»
-   if(CMP_NS) goto LAB_LOC_7;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    LAB_LOC_7:
@@ -5097,7 +5097,7 @@ void FUN_1000_31d1(cpu_ctx *cpu){
    INST_SUB(cpu->DX, cpu->BP);
    INST_SUB(cpu->CX, cpu->AX);
 //old:COMP«CMP, cpu->CX, 0»
-   if(CMP_NS) goto LAB_LOC_2;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    INST_ADD(cpu->BP, cpu->DX);
@@ -5847,7 +5847,7 @@ void FUN_1000_3827(cpu_ctx *cpu){
    INST_SUB(cpu->DX, cpu->BX);
    INST_SUB(cpu->CX, cpu->AX);
 //old:COMP«CMP, cpu->CX, 0»
-   if(CMP_NS) goto LAB_LOC_2;
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
    INST_ADD(cpu->AX, cpu->CX);
    INST_NEG(cpu->CX);
    INST_ADD(cpu->BX, cpu->DX);
@@ -6888,7 +6888,7 @@ void FUN_1000_4120(cpu_ctx *cpu){
    INST_PUSH(cpu->DX);
    INST_SUB(cpu->DX, cpu->AX);
 //old:COMP«CMP, cpu->DX, 0»
-   if(CMP_S) goto LAB_LOC_10;
+   if(SIGNED(cpu->DX) < 0) goto LAB_LOC_10;
    cpu->DI = 0; //was a XOR
    cpu->SI = cpu->CX;
    LAB_LOC_7:
@@ -6896,12 +6896,12 @@ void FUN_1000_4120(cpu_ctx *cpu){
    INST_ADD(cpu->BX, 0x4);
    INST_SUB(cpu->DI, cpu->DX);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_NS) goto LAB_LOC_9;
+   if(SIGNED(cpu->DI) >= 0) goto LAB_LOC_9;
    LAB_LOC_8:
    INST_INC(cpu->AX);
    INST_ADD(cpu->DI, cpu->SI);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_S) goto LAB_LOC_8;
+   if(SIGNED(cpu->DI) < 0) goto LAB_LOC_8;
    LAB_LOC_9:
    if (--cpu->CX != 0) goto LAB_LOC_7;
    INST_POP(cpu->AX);
@@ -6916,12 +6916,12 @@ void FUN_1000_4120(cpu_ctx *cpu){
    INST_ADD(cpu->BX, 0x4);
    INST_SUB(cpu->DI, cpu->DX);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_NS) goto LAB_LOC_13;
+   if(SIGNED(cpu->DI) >= 0) goto LAB_LOC_13;
    LAB_LOC_12:
    INST_DEC(cpu->AX);
    INST_ADD(cpu->DI, cpu->SI);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_S) goto LAB_LOC_12;
+   if(SIGNED(cpu->DI) < 0) goto LAB_LOC_12;
    LAB_LOC_13:
    if (--cpu->CX != 0) goto LAB_LOC_11;
    INST_POP(cpu->AX);
@@ -7109,7 +7109,7 @@ void FUN_1000_4302(cpu_ctx *cpu){
    INST_PUSH(cpu->DX);
    INST_SUB(cpu->DX, cpu->AX);
 //old:COMP«CMP, cpu->DX, 0»
-   if(CMP_S) goto LAB_LOC_10;
+   if(SIGNED(cpu->DX) < 0) goto LAB_LOC_10;
    cpu->DI = 0; //was a XOR
    cpu->SI = cpu->CX;
    LAB_LOC_7:
@@ -7117,12 +7117,12 @@ void FUN_1000_4302(cpu_ctx *cpu){
    INST_ADD(cpu->BX, 0x4);
    INST_SUB(cpu->DI, cpu->DX);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_NS) goto LAB_LOC_9;
+   if(SIGNED(cpu->DI) >= 0) goto LAB_LOC_9;
    LAB_LOC_8:
    INST_INC(cpu->AX);
    INST_ADD(cpu->DI, cpu->SI);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_S) goto LAB_LOC_8;
+   if(SIGNED(cpu->DI) < 0) goto LAB_LOC_8;
    LAB_LOC_9:
    if (--cpu->CX != 0) goto LAB_LOC_7;
    INST_POP(cpu->AX);
@@ -7137,12 +7137,12 @@ void FUN_1000_4302(cpu_ctx *cpu){
    INST_ADD(cpu->BX, 0x4);
    INST_SUB(cpu->DI, cpu->DX);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_NS) goto LAB_LOC_13;
+   if(SIGNED(cpu->DI) >= 0) goto LAB_LOC_13;
    LAB_LOC_12:
    INST_DEC(cpu->AX);
    INST_ADD(cpu->DI, cpu->SI);
 //old:COMP«CMP, cpu->DI, 0»
-   if(CMP_S) goto LAB_LOC_12;
+   if(SIGNED(cpu->DI) < 0) goto LAB_LOC_12;
    LAB_LOC_13:
    if (--cpu->CX != 0) goto LAB_LOC_11;
    INST_POP(cpu->AX);
@@ -7631,7 +7631,7 @@ void FUN_1000_46d3(cpu_ctx *cpu){
    cpu->EBP = cpu->EBX;
    cpu->CX = MEM_WORD(0xe992);
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_L_IG) goto LAB_LOC_3;
+   if(SIGNED(cpu->CX) < 0) goto LAB_LOC_3;
    INST_PUSH(cpu->DI);
    cpu->DI = MEM_WORD(0xe996);
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
@@ -7747,7 +7747,7 @@ void FUN_1000_47ec(cpu_ctx *cpu){
    cpu->EBP = cpu->EBX;
    cpu->CX = MEM_WORD(0xe992);
 //old:COMP«TEST, cpu->CX, cpu->CX»
-   if(TEST_L_IG) goto LAB_LOC_3;
+   if(SIGNED(cpu->CX) < 0) goto LAB_LOC_3;
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
    INST_SUB(cpu->AX, MEM_WORD(0x120));
    JUMP«L, goto LAB_LOC_1;»
@@ -7876,7 +7876,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    INST_ADD(cpu->AX, MEM_WORD(cpu->DI + 0x18));
    MEM_WORD(0xe9c6) = cpu->AX;
 //old:COMP«CMP, cpu->AX, cpu->CX»
-   if(CMP_NS) goto LAB_LOC_11;
+   if(SIGNED(cpu->AX) >= SIGNED(cpu->CX)) goto LAB_LOC_11;
    LAB_LOC_2:
    cpu->AX = MEM_WORD(cpu->DI + 0x2);
    INST_SUB(cpu->AX, MEM_WORD(cpu->DI + 0x18));
@@ -8000,7 +8000,7 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    INST_SHL(cpu->EDX, 0x1);
    INST_SUB(cpu->EBX, cpu->EDX);
 //old:COMP«CMP, cpu->EBX, 0»
-   if(CMP_NS) goto LAB_LOC_3;
+   if(SIGNED(cpu->EBX) >= 0) goto LAB_LOC_3;
    MEM_DWORD(0xe9c8) = cpu->EBX;
 //old:COMP«CMP, cpu->EBX, 0xfffa0000»
    if(SIGNED(cpu->EBX) > -393216) goto LAB_LOC_1;
@@ -8154,11 +8154,11 @@ void FUN_1000_4c68(cpu_ctx *cpu){
    cpu->EAX = MEM_DWORD(0xe9cc);
    cpu->EBX = MEM_DWORD(0xe9d0);
 //old:COMP«TEST, cpu->EAX, cpu->EAX»
-   if(TEST_GE_IG) goto LAB_LOC_1;
+   if(SIGNED(cpu->EAX) >= 0) goto LAB_LOC_1;
    INST_NEG(cpu->EAX);
    LAB_LOC_1:
 //old:COMP«TEST, cpu->EBX, cpu->EBX»
-   if(TEST_GE_IG) goto LAB_LOC_2;
+   if(SIGNED(cpu->EBX) >= 0) goto LAB_LOC_2;
    INST_NEG(cpu->EBX);
    LAB_LOC_2:
    INST_ADD(cpu->EAX, cpu->EBX);
@@ -8690,7 +8690,7 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    INST_IMUL(cpu->EAX, MEM_DWORD(cpu->SI + 0xeaa3));
    INST_ADD(cpu->EDX, cpu->EAX);
 //old:COMP«CMP, cpu->EDX, 0»
-   if(CMP_NS) goto LAB_LOC_9;
+   if(SIGNED(cpu->EDX) >= 0) goto LAB_LOC_9;
 //old:COMP«CMP, cpu->EDX, cpu->ECX»
    if(SIGNED(cpu->EDX) > SIGNED(cpu->ECX)) goto LAB_LOC_10;
    LAB_LOC_3:
@@ -8716,19 +8716,19 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    LAB_LOC_4:
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
 //old:COMP«TEST, cpu->AX, cpu->AX»
-   if(TEST_GE_IG) goto LAB_LOC_5;
+   if(SIGNED(cpu->AX) >= 0) goto LAB_LOC_5;
    INST_NEG(cpu->AX);
    LAB_LOC_5:
    cpu->BX = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI + 0x6);
 //old:COMP«TEST, cpu->AX, cpu->AX»
-   if(TEST_GE_IG) goto LAB_LOC_6;
+   if(SIGNED(cpu->AX) >= 0) goto LAB_LOC_6;
    INST_NEG(cpu->AX);
    LAB_LOC_6:
    INST_ADD(cpu->BX, cpu->AX);
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
 //old:COMP«TEST, cpu->AX, cpu->AX»
-   if(TEST_GE_IG) goto LAB_LOC_7;
+   if(SIGNED(cpu->AX) >= 0) goto LAB_LOC_7;
    INST_NEG(cpu->AX);
    LAB_LOC_7:
    INST_ADD(cpu->BX, cpu->AX);
