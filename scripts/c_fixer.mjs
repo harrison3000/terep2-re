@@ -1,6 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
+import { map_comparisions } from "./utils.mjs";
 
 /**
  * @type {string[]}
@@ -36,7 +37,11 @@ for(let jump of u.matchAll(/GR+/g)){
         const [_tudo, jtipo, jop1, jop2] = j;
         const tipoz = [tipo, jop1].join("_");
 
-        const oopz = tipoz;
+        let oopz = tipoz;
+        const cpz = map_comparisions[tipoz];
+        if(typeof cpz === "function"){
+            oopz = cpz(op1,op2);
+        }
 
         let l = "!!!!!!!!!!!!!!"
         if(jtipo === "JUMP"){
