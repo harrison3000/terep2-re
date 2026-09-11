@@ -399,25 +399,25 @@ FUN_main_render:
 
     CALL        FUN_1000_2baa
     TEST        byte [CSD_DAT_keys_571e + 78],0x80
-    JS          .LAB_LOC_15
+    JNZ         .LAB_LOC_15
     CMP         word [0x11c],0x3e8   ;= 0100h
     JG          .LAB_LOC_15
     ADD         word [0x11c],0x14    ;= 0100h
 .LAB_LOC_15:
     TEST        byte [CSD_DAT_keys_571e + 74],0x80
-    JS          .LAB_LOC_16
+    JNZ         .LAB_LOC_16
     CMP         word [0x11c],0x32    ;= 0100h
     JL          .LAB_LOC_16
     SUB         word [0x11c],0x14    ;= 0100h
 .LAB_LOC_16:
     TEST        byte [CSD_DAT_keys_571e + 53],0x80
-    JS          .LAB_LOC_17
+    JNZ         .LAB_LOC_17
     CMP         word [0x11e],0x1000  ;= 0400h
     JG          .LAB_LOC_17
     ADD         word [0x11e],0x28    ;= 0400h
 .LAB_LOC_17:
     TEST        byte [CSD_DAT_keys_571e + 55],0x80
-    JS          .LAB_LOC_18
+    JNZ          .LAB_LOC_18
     CMP         word [0x11e],0x100   ;= 0400h
     JL          .LAB_LOC_18
     SUB         word [0x11e],0x28    ;= 0400h
@@ -898,11 +898,13 @@ FUN_1000_0a3b:
     PUSH        DI
     TEST        byte [CSD_DAT_keys_571e + 2],0xc0
     SETP    byte [flying_car_tmp]
-    JNS         .LAB_LOC_3
+    TEST        byte [CSD_DAT_keys_571e + 2],0x80
+    JZ         .LAB_LOC_3
 .LAB_LOC_1:
     TEST        byte [CSD_DAT_keys_571e + 3],0xc0
     SETP    byte [flying_car_tmp]
-    JNS         .LAB_LOC_4
+    TEST        byte [CSD_DAT_keys_571e + 3],0x80
+    JZ         .LAB_LOC_4
 .LAB_LOC_2:
     POP         DI
     POP         SI
@@ -8146,7 +8148,7 @@ FUN_1000_4e0a:
     SAR         EAX,0xa
     movsx_m2m   dword [mitemp_BeX], word [BX + 0x4]
     TEST        dword [mitemp_BeX], 0x80000000
-    JS          .LAB_LOC_10
+    JNZ          .LAB_LOC_10
     MOVZX       ECX,word [BX + 0x8]
     MOV         word [0xea04],CX
     AND         CX,0xff

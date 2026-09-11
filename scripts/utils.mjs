@@ -14,8 +14,12 @@ const map_comparisions = {
     "TEST_Z_IG" : (a) => `${a} == 0`,
     "TEST_NZ_IG": (a) => `${a} != 0`,
 
-    "TEST_Z_DIF": (a, b) => `(${a} & ${b}) == 0`,
-    "TEST_Z_ID" : (a, b) => `(${a} & ${b}) != 0`,
+    "TEST_Z_DIF":   (a, b) => `(${a} & ${b}) == 0`,
+    "TEST_NZ_DIF" : (a, b) => `(${a} & ${b}) != 0`,
+
+    "TEST_S":  (a, b) => siszzs(a,b) + " != 0",
+    "TEST_NS": (a, b) => siszzs(a,b) + " == 0",
+
 }
 
 map_comparisions["CMP_Z"]  = map_comparisions["CMP_E"];
@@ -25,17 +29,17 @@ export function trataCondicao(tipocmp,tipojmp,op1,op2){
     const eq = op1 === op2;
     
     let tipoz = [tipocmp, tipojmp].join("_");
-    if(tipocmp === "TEST"){
-        let ig = eq ? "IG" : "DIF";
-        tipoz += "_" + ig;
-    }
+    let ig = eq ? "_IG" : "_DIF";
 
     let oopz = tipoz;
-    const cpz = map_comparisions[tipoz];
+    const cpz = map_comparisions[tipoz] || map_comparisions[tipoz+ig];
     if(typeof cpz === "function"){
         return cpz(op1,op2);
     }
 
+    if(tipocmp === "TEST"){
+        return oopz+ig;    
+    }
     return oopz;
 }
 
@@ -55,6 +59,19 @@ function condicionadorSig(op){
     };
 }
 
+function siszzs(a, b){
+    var t = tamanhador(a);
+    var uuu = "0x" + (t[1]/2).toString(16);
+    if(uuu === b){
+        return `(${a} & ${b})`;
+    }
+    if(a === b){
+        return `(${a} & 0x${uuu})`;
+    }
+
+    return `(${a} & ${b} & ${uuu})`;
+}
+
 /**
  *
  * @param {string} val
@@ -64,9 +81,12 @@ export function tamanhador(val){
     if(st === "cpu->E" || st === "MEM_DW"){
         return ["int32_t",0x100000000];
     }
-    if(st === "MEM_BY" || /[LH]$/.test(val)){
+    if(st === "MEM_BY" || /cpu->[A-D][LH]$/.test(val)){
         return ["int8_t",0x100];
     }
-    return ["int16_t", 0x10000];
-    //TODO e quando for variavel?
+    if(st === "MEM_WO" || /cpu->[A-D]X$/.test(val) ){
+        return ["int16_t", 0x10000];
+    }
+
+    throw "unreq size";
 }
