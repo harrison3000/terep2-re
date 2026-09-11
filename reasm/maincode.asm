@@ -531,7 +531,7 @@ FUN_main_render:
 .CYCLE_2ND_CAM:
     INC   byte [0x7f]
     CMP   byte [0x7f], 5
-    JL    .LAB_LOC_19
+    JC    .LAB_LOC_19
     MOV   byte [0x7f], 0
     JMP   .LAB_LOC_19
 
@@ -3459,7 +3459,7 @@ FUN_1000_2431:
     ADD         DI,CX
     MOV         CX,word [DI]
 .LAB_LOC_1:
-    CMP         word [DI + 0x1a],-0x1
+    CMP         word [DI + 0x1a], -1
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1

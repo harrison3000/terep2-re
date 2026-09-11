@@ -1,7 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
-import { map_comparisions } from "./utils.mjs";
+import { trataCondicao } from "./utils.mjs";
 
 /**
  * @type {string[]}
@@ -35,17 +35,8 @@ for(let jump of u.matchAll(/GR+/g)){
         const idx = i + jump.index;
         const j = f[idx].match(/ + (JUMP|SET)«(.+),(.+)»/)?.map(x => x.trim());
         const [_tudo, jtipo, jop1, jop2] = j;
-        let tipoz = [tipo, jop1].join("_");
-        if(tipo === "TEST"){
-            let ig = op1 === op2 ? "IG" : "DIF";
-            tipoz += "_" + ig;
-        }
-
-        let oopz = tipoz;
-        const cpz = map_comparisions[tipoz];
-        if(typeof cpz === "function"){
-            oopz = cpz(op1,op2);
-        }
+        
+        const oopz = trataCondicao(tipo, jop1, op1, op2);
 
         let l = "!!!!!!!!!!!!!!"
         if(jtipo === "JUMP"){
