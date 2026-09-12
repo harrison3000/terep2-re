@@ -96,6 +96,8 @@ void DOS3Call(cpu_ctx*);
     ds >>= src; \
     dest = ds;  \
 })
+#define INST_ROL(dest, src) ({dest = std::rotl(dest, src);})
+#define INST_ROR(dest, src) ({dest = std::rotr(dest, src);})
 
 #define INST_INC(dest) ({dest += 1;})
 #define INST_DEC(dest) ({dest -= 1;})
@@ -166,6 +168,34 @@ void DOS3Call(cpu_ctx*);
     }                     \
 })
 
+#define INST_XLAT() ({cpu->AL = MEM_BYTE(cpu->BX + cpu->AL);})
+
+#define INST_MUL(op) ({    \
+    static_assert(sizeof(op) == 2, "We only support 16bit for this instruction"); \
+    uint32_t res = (uint32_t)cpu->AX * (uint32_t)op; \
+    cpu->AX = res & 0xffff; \
+    cpu->DX = res >> 16;    \
+})
+
+
+static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
+    auto as = SIGNED(a);
+    auto sax = SIGNED(cpu->AX);
+
+    auto res = (int32_t)sax * (int32_t)as;
+    cpu->AX = res & 0xffff;
+    cpu->DX = res >> 16;
+}
+static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
+    auto as = SIGNED(a);
+    auto bs = SIGNED(b);
+
+    auto res = (int64_t)as * (int64_t)bs;
+    cpu->EAX = res & 0xffffffff;
+    cpu->EDX = res >> 32;
+}
+
+#define INST_IMUL(...) inner_imul(cpu,__VA_ARGS__)
 
 #define INST_CLC() ({cpu->CF = 0;})
 

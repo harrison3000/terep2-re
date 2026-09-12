@@ -35,6 +35,8 @@ uint8_t giracor = 0;
 uint16_t pseudolocal_a = 0;
 uint16_t pseudolocal_b = 0;
 
+uint16_t pseudolocal_2_a = 0;
+
 uint8_t  mu_b_tmp = 0;
 uint16_t mu_w_tmp = 0;
 uint32_t mu_d_tmp = 0;

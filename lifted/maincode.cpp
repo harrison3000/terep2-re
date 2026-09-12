@@ -1585,7 +1585,7 @@ void FUN_1000_11f0(cpu_ctx *cpu){
 //************************************************************************************************
 void FUN_1000_1323(cpu_ctx *cpu){
                               //XREF[1]:     1000:195c(c)
-   INST_PUSHA();
+   INST_PUSHAD();
    cpu->AX = MEM_WORD(cpu->SI + 0x1e);
    if(cpu->AX != 0) goto LAB_LOC_1;
    cpu->AX = MEM_WORD(0x1a49);
@@ -1600,7 +1600,7 @@ void FUN_1000_1323(cpu_ctx *cpu){
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x4));
    FUN_1000_1408(cpu);
    INST_POP(cpu->FS);
-   INST_POPA();
+   INST_POPAD();
    return;
 }
 
@@ -2312,7 +2312,7 @@ void FUN_1000_1965(cpu_ctx *cpu){
    MEM_WORD(0x1a01) = 0xa00;
    cpu->AX = MEM_WORD(0xc6);
     //jumping to another function, some kind of tail call optimization
-   if(PARITY(cpu->AH & 0x60) == 0) goto FUN_1965_NP;
+   if(PARITY(cpu->AH & 0x60) == 0) {FUN_1965_NP(cpu); return;}
    MEM_BYTE(0x5fb) = 0x0;
    FUN_1000_3fd0(cpu);
    cpu->AX = MEM_WORD(0xc6);
@@ -3963,7 +3963,7 @@ void FUN_1000_2b08(cpu_ctx *cpu){
                               //             1000:0a20(c),1000:1841(c),1000:26df(c),1000:4a43(c),
                               //             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
    if((cpu->AX & 0x8000) != 0) goto LAB_LOC_2;
-   if(cpu->AX != 0) goto FUN_1000_2b1f;
+   if(cpu->AX != 0) {FUN_1000_2b1f(cpu); return;}
    cpu->AX = 0x0;
    if((cpu->BX & 0x8000) == 0) goto LAB_LOC_1;
    INST_ADD(cpu->AX, 0x8000);
@@ -3983,7 +3983,7 @@ void FUN_1000_2b08(cpu_ctx *cpu){
 void FUN_1000_2b1f(cpu_ctx *cpu){
                               //XREF[2]:     1000:2b0e(j),1000:2b63(c)
    if((cpu->BX & 0x8000) != 0) goto LAB_LOC_1;
-   if(cpu->BX != 0) goto FUN_1000_2b2d;
+   if(cpu->BX != 0) {FUN_1000_2b2d(cpu); return;}
    cpu->AX = 0x4000;
    return;
 
@@ -4001,7 +4001,7 @@ void FUN_1000_2b1f(cpu_ctx *cpu){
 void FUN_1000_2b2d(cpu_ctx *cpu){
                               //XREF[2]:     1000:2b25(j),1000:2b58(c)
    if(SIGNED(cpu->AX) > SIGNED(cpu->BX)) goto LAB_LOC_1;
-   if(SIGNED(cpu->AX) < SIGNED(cpu->BX)) goto FUN_1000_2b3b;
+   if(SIGNED(cpu->AX) < SIGNED(cpu->BX)) {FUN_1000_2b3b(cpu); return;}
    cpu->AX = 0x2000;
    return;
 
