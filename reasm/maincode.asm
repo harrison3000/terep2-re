@@ -7975,7 +7975,6 @@ FUN_1000_4c68:
     IDIV        ECX
     SAR         EBX,0x6
     SAR         ECX,0x1
-    CMP         EAX,EBX
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -7983,6 +7982,7 @@ FUN_1000_4c68:
 FUN_1000_4cc3:
                               ;XREF[1]:     1000:4c22(c)
     CALL        FUN_1000_4c68
+    CMP         EAX,EBX
     JG          .LAB_LOC_1
     PUSH        ECX
     CALL        FUN_1000_4d96
@@ -8013,6 +8013,7 @@ FUN_1000_4cc3:
 FUN_1000_4d0e:
                               ;XREF[1]:     1000:4bc7(c)
     CALL        FUN_1000_4c68
+    CMP         EAX,EBX
     JG          .LAB_LOC_1
     PUSH        ECX
     CALL        FUN_1000_4d96
@@ -8939,8 +8940,10 @@ FUN_1000_5940_render_text:
     TEST        DL,DL
     JZ          .LAB_LOC_11
 .LAB_LOC_8:
+    MOV  byte [another_quick_temp], DL
     SHR         DL,0x1
-    JC          .LAB_LOC_9
+    TEST  byte [another_quick_temp], 1
+    JNZ         .LAB_LOC_9
     CMP   DL, 0 
     JZ          .LAB_LOC_10
     INC         BX

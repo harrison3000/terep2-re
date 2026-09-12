@@ -7782,7 +7782,6 @@ void FUN_1000_4c68(cpu_ctx *cpu){
    INST_IDIV(cpu->ECX);
    INST_SAR(cpu->EBX, 0x6);
    INST_SAR(cpu->ECX, 0x1);
-   COMP«CMP, cpu->EAX, cpu->EBX»
    return;
 }
 
@@ -7792,7 +7791,7 @@ void FUN_1000_4c68(cpu_ctx *cpu){
 void FUN_1000_4cc3(cpu_ctx *cpu){
                               //XREF[1]:     1000:4c22(c)
    FUN_1000_4c68(cpu);
-   JUMP«G, goto LAB_LOC_1;»
+   if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
    INST_PUSH(cpu->ECX);
    FUN_1000_4d96(cpu);
    INST_POP(cpu->ECX);
@@ -7824,7 +7823,7 @@ void FUN_1000_4cc3(cpu_ctx *cpu){
 void FUN_1000_4d0e(cpu_ctx *cpu){
                               //XREF[1]:     1000:4bc7(c)
    FUN_1000_4c68(cpu);
-   JUMP«G, goto LAB_LOC_1;»
+   if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
    INST_PUSH(cpu->ECX);
    FUN_1000_4d96(cpu);
    INST_POP(cpu->ECX);
@@ -8739,8 +8738,9 @@ void FUN_1000_5940_render_text(cpu_ctx *cpu){
    cpu->DL = MEM_BYTE(cpu->SI);
    if(cpu->DL == 0) goto LAB_LOC_11;
    LAB_LOC_8:
+   another_quick_temp = cpu->DL;
    INST_SHR(cpu->DL, 0x1);
-   JUMP«C, goto LAB_LOC_9;»
+   if((another_quick_temp & 1) != 0) goto LAB_LOC_9;
    if(cpu->DL == 0) goto LAB_LOC_10;
    INST_INC(cpu->BX);
    goto LAB_LOC_8;
