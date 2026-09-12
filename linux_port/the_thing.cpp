@@ -111,6 +111,7 @@ int main(int argc, char **argv){
     printf("lets go\n");
 
     f_init(cpu);
+    printf("AX after init: %04x\n", cpu->AX);
 
     auto videoSegSel = ((uint16_t *)memory)[0xdb10 / 2];
     auto videoSeg = (uint8_t*)(cpu->mem_base + videoSegSel * 1024);

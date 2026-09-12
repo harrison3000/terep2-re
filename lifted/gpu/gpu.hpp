@@ -32,6 +32,7 @@ struct encangado64_t {
 #define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
 
 #define INST_POP(reg) ({        \
+    if(cpu->stack.empty()) {__builtin_trap();}   \
     auto it = cpu->stack.back();\
     if(sizeof(reg) != it.size){__builtin_trap();}\
     cpu->stack.pop_back();      \
@@ -87,7 +88,7 @@ inline int16_t SIGNED(uint16_t v) { return v; }
 inline int32_t SIGNED(uint32_t v) { return v; } 
 
 //the builtin is the oposite of the x86 flag
-#define PARITY(val) (!__builtin_parity(val))
+#define PARITY(val) (!__builtin_parity(val & 0xff))
 
 //TODO improve
 #define CHECK_CFLAG() cpu->CF
@@ -132,7 +133,10 @@ void DOS3Call(cpu_ctx*);
     dest = tmp;     \
 })
 
-#define INST_MOVSX(dest, src) ({dest = SIGNED(src);})
+#define INST_MOVSX(dest, src) ({ \
+    int32_t tmp = SIGNED(src);   \
+    dest = tmp;                  \
+})
 
 // we just ignore the direction flag, the code never sets it to reverse, thank God
 #define INST_LODSB() ({ \

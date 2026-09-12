@@ -2381,7 +2381,6 @@ FUN_1000_1965:
     MOV         word [0x19ff],0x0
     MOV         word [0x1a01],0xa00
     MOV         AX, word [0xc6]
-    ;jumping to another function, some kind of tail call optimization
     TEST        AH,0x60
     JP         .continue_here
     CALL FUN_1965_NP
