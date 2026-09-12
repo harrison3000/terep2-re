@@ -135,3 +135,12 @@ export function mergetron(linhas, insta, instb){
         linhas[u+1] = "//REMOVEME";
     }
 }
+
+export function replacetron(array, regex, f){
+    for(let i = 0; i < array.length;i++){
+        let m = array[i].match(regex);
+        if(m){
+            array[i] = f(m);
+        }
+    }
+}

@@ -1,7 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
-import { mergetron, trataCondicao } from "./utils.mjs";
+import { mergetron, replacetron, trataCondicao } from "./utils.mjs";
 
 /**
  * @type {string[]}
@@ -57,6 +57,45 @@ for(let jump of u.matchAll(/GR+/g)){
 
     f[jump.index] = "//REMOVEME";
 }
+
+replacetron(f, /^ +REP«(.+)»/, (m) => `   while(cpu->CX){
+      INST_${m[1]}();
+      cpu->CX--;
+   }`);
+replacetron(f, /INST_ADD.+->SP/, () => "   DUMMY_POP_WORD();");
+
+replacetron(f, /CVTSI2SS\(cpu->XMM([012]),/, (m) => `   float tmp_f${m[1]} = SIGNED(cpu->EAX);`);
+replacetron(f, /CVTSS2SI/, (m) => 
+`   tmp_f0 *= tmp_f0;
+   tmp_f1 *= tmp_f1;
+   tmp_f2 *= tmp_f2;
+
+   float ressq = __builtin_sqrtf(tmp_f0 + tmp_f1 + tmp_f2);
+   cpu->EAX = (int32_t)ressq;`);
+
+replacetron(f, /XMM[0-3]/, () => "//REMOVEME");
+
+for(let i =0; i < 2; i++){
+    const ini = f.findIndex(s => s.includes("cpu->BX + ZZZZ"));
+    const fim = f.findIndex(s => s.includes("LAB_RUIM:"));
+
+    let x = 0;
+    const miniarray = f.slice(ini, fim);
+
+    replacetron(miniarray, /^ +VAL_DW«(.+)»/, function(m){
+        var u = `     case ${x}: goto ${m[1]};`;
+        x += 2;
+        return u;
+    });
+
+    miniarray[0] = "";
+    miniarray[1] = "   switch(cpu->BX){";
+    miniarray[miniarray.length-2] = "      default: __builtin_trap();";
+    miniarray[miniarray.length-1] = "   }";
+
+    f.splice(ini-1, miniarray.length+3, ...miniarray);
+}
+
 
 mergetron(f, "ADD", "ADC");
 mergetron(f, "SUB", "SBB");

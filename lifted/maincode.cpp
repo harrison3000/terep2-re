@@ -146,13 +146,15 @@ void f_init(cpu_ctx *cpu){
 
 void f_cam_select(cpu_ctx *cpu){
    INST_SHL(cpu->BX, 1);
-//;
+
    switch(cpu->BX){
-      case 0: goto CAMERA_1;
-      case 2: goto CAMERA_2;
-      case 4: goto CAMERA_3;
-      case 6: goto CAMERA_4;
-      case 8: goto CAMERA_5;
+     case 0: goto CAMERA_1;
+     case 2: goto CAMERA_2;
+     case 4: goto CAMERA_3;
+     case 6: goto CAMERA_4;
+     case 8: goto CAMERA_5;
+
+//pseudops times3dw.LAB_RUIM
       default: __builtin_trap();
    }
 
@@ -1702,29 +1704,32 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_LODSB();
    INST_MOVZX(cpu->BX, cpu->AL);
    INST_SHL(cpu->BX, 1);
-//;
+
    switch(cpu->BX){
-      case 0: goto LAB_LOC_1;
-      case 2: goto LAB_LOC_6;
-      case 4: goto LAB_LOC_7;
-      case 6: goto LAB_LOC_8;
-      case 8: goto LAB_LOC_9;
-      case 10: goto LAB_LOC_11;
-      case 12: goto LAB_LOC_12;
-      case 14: goto LAB_LOC_14;
-      case 16: goto LAB_LOC_16;
-      case 18: goto LAB_LOC_18;
-      case 20: goto LAB_LOC_20;
-      case 22: goto LAB_LOC_1;
-      case 24: goto LAB_LOC_1;
-      case 26: goto LAB_LOC_1;
-      case 28: goto LAB_LOC_1;
-      case 30: goto LAB_LOC_1;
-      case 32: goto LAB_LOC_24;
-      case 34: goto LAB_LOC_2;
-      case 36: goto LAB_LOC_3;
-      case 38: goto LAB_LOC_4;
-      case 40: goto LAB_LOC_5;
+    //addr[21]
+     case 0: goto LAB_LOC_1;
+     case 2: goto LAB_LOC_6;
+     case 4: goto LAB_LOC_7;
+     case 6: goto LAB_LOC_8;
+     case 8: goto LAB_LOC_9;
+     case 10: goto LAB_LOC_11;
+     case 12: goto LAB_LOC_12;
+     case 14: goto LAB_LOC_14;
+     case 16: goto LAB_LOC_16;
+     case 18: goto LAB_LOC_18;
+     case 20: goto LAB_LOC_20;
+     case 22: goto LAB_LOC_1;
+     case 24: goto LAB_LOC_1;
+     case 26: goto LAB_LOC_1;
+     case 28: goto LAB_LOC_1;
+     case 30: goto LAB_LOC_1;
+     case 32: goto LAB_LOC_24;
+     case 34: goto LAB_LOC_2;
+     case 36: goto LAB_LOC_3;
+     case 38: goto LAB_LOC_4;
+     case 40: goto LAB_LOC_5;
+
+//pseudops times11dw.LAB_RUIM
       default: __builtin_trap();
    }
 
@@ -3337,7 +3342,10 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->CX = 0x41;
    cpu->AX = 0; //was a XOR
    INST_CLD();
-   REP_STOSW(cpu);
+   while(cpu->CX){
+      INST_STOSW();
+      cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    cpu->DX = cpu->DX;
@@ -4053,7 +4061,10 @@ void FUN_1000_2b98(cpu_ctx *cpu){
    cpu->DI = 0; //was a XOR
    cpu->CX = 0x7D00;
    INST_CLD();
-   REP_STOSW(cpu);
+   while(cpu->CX){
+      INST_STOSW();
+      cpu->CX--;
+   }
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
@@ -4210,7 +4221,10 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
-   REP_STOSB(cpu);
+   while(cpu->CX){
+      INST_STOSB();
+      cpu->CX--;
+   }
 
    INST_ADD(cpu->SI, 0x4);
    INST_DEC(cpu->DX);
@@ -7920,9 +7934,7 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0xc));
    MEM_DWORD(0xe9f8) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   INST_XORPS(cpu->XMM0, cpu->XMM0);
-   INST_CVTSI2SS(cpu->XMM0, cpu->EAX);
-   INST_MULSS(cpu->XMM0, cpu->XMM0);
+   float tmp_f0 = SIGNED(cpu->EAX);
 
    cpu->EAX = MEM_DWORD(cpu->SI + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
@@ -7930,9 +7942,7 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x10));
    MEM_DWORD(0xe9fc) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   INST_XORPS(cpu->XMM1, cpu->XMM1);
-   INST_CVTSI2SS(cpu->XMM1, cpu->EAX);
-   INST_MULSS(cpu->XMM1, cpu->XMM1);
+   float tmp_f1 = SIGNED(cpu->EAX);
 
    cpu->EAX = MEM_DWORD(cpu->SI + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
@@ -7940,17 +7950,16 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x14));
    MEM_DWORD(0xea00) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   INST_XORPS(cpu->XMM2, cpu->XMM2);
-   INST_CVTSI2SS(cpu->XMM2, cpu->EAX);
-   INST_MULSS(cpu->XMM2, cpu->XMM2);
+   float tmp_f2 = SIGNED(cpu->EAX);
 
-   INST_ADDSS(cpu->XMM1, cpu->XMM0);
-   INST_ADDSS(cpu->XMM2, cpu->XMM1);
 
-   INST_XORPS(cpu->XMM3, cpu->XMM3);
-   INST_SQRTSS(cpu->XMM3, cpu->XMM2);
 
-   INST_CVTSS2SI(cpu->EAX, cpu->XMM3);
+   tmp_f0 *= tmp_f0;
+   tmp_f1 *= tmp_f1;
+   tmp_f2 *= tmp_f2;
+
+   float ressq = __builtin_sqrtf(tmp_f0 + tmp_f1 + tmp_f2);
+   cpu->EAX = (int32_t)ressq;
 
    INST_SAR(cpu->EAX, 0xa);
    INST_MOVSX(mitemp_BeX, MEM_WORD(cpu->BX + 0x4));
