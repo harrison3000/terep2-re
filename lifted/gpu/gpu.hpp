@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
 #include <vector>
 #include <bit>
 #include <cstdio>
@@ -242,6 +243,15 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
 
 #define INST_CLD INST_NOP
 
+//TODO needs checking, is this the right order?
+#define MERGED_SHL_RCL(a,b,c,d) ({ \
+    static_assert(b == 1 && d == 1, "We only support shifts by 1 here"); \
+    encangado_t dest = {.lo_word = (a), .hi_word = (c)}; \
+    dest.big <<= 1;    \
+    a = dest.lo_word;  \
+    c = dest.hi_word;  \
+})
+
 #define MERGED_ADD_ADC(a,b,c,d) ({ \
     encangado_t dest = {.lo_word = (a), .hi_word = (c)}; \
     encangado_t src  = {.lo_word = (b), .hi_word = (d)}; \
@@ -249,6 +259,10 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
     a = dest.lo_word;    \
     c = dest.hi_word;    \
 })
+
+
+#define MERGED_SUB_SBB(a,b,c,d) ({__builtin_trap();})
+
 
 
 static inline void inner_div(cpu_ctx *cpu, uint16_t a) {
@@ -269,6 +283,11 @@ static inline void inner_div(cpu_ctx *cpu, uint32_t a) {
 
 
 
+
+#define INST_CLC() ({cpu->CF = 0;})
+
+#define INST_PUSHAD() uint32_t regsave[7]; memcpy(regsave, cpu, 7*4)
+#define INST_POPAD()  memcpy(cpu, regsave, 7*4)
 
 
 
