@@ -40,3 +40,15 @@ uint16_t mu_w_tmp = 0;
 uint32_t mu_d_tmp = 0;
 
 int retval_2418;
+
+
+//this used to be at 0x5ee, but it was bugged I think, it stored and loaded to AL, but used SAHF/LAHF (they modify AH), so yeah
+//and only worked because nothing overwrote AH in the meantime? IDK really
+//I will just make something that resembles what was probably intended and hope for the best
+//after the changes I didnt notice any rendering bug, so yeah
+uint8_t some_flag_thing_idk = 0;
+
+
+uint8_t flying_car_tmp = 0;
+
+uint32_t another_quick_temp = 0;
