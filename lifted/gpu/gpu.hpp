@@ -46,6 +46,27 @@
     (uint32_t *)finalAddr;   \
 })[0]
 
+#define SMEM_BYTE(seg, addr) ({    \
+    uint16_t displ = (addr); \
+    uintptr_t _seg = (seg);  \
+    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
+    (uint8_t *)finalAddr; \
+})[0]
+
+#define SMEM_WORD(seg, addr) ({    \
+    uint16_t displ = (addr); \
+    uintptr_t _seg = (seg);  \
+    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
+    (uint16_t *)finalAddr;   \
+})[0]
+
+#define SMEM_DWORD(seg, addr) ({   \
+    uint16_t displ = (addr); \
+    uintptr_t _seg = (seg);  \
+    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
+    (uint32_t *)finalAddr;   \
+})[0]
+
 inline int8_t SIGNED(uint8_t v) { return v; }
 inline int16_t SIGNED(uint16_t v) { return v; }
 inline int32_t SIGNED(uint32_t v) { return v; } 
@@ -80,5 +101,76 @@ void DOS3Call(cpu_ctx*);
 #define INST_DEC(dest) ({dest -= 1;})
 
 #define INST_MOVZX(dest, src) ({dest = src;})
+
+#define INST_CBW() ({cpu->AX = SIGNED(cpu->AL);})
+
+#define INST_XOR(dest, src) ({dest ^= src;})
+#define INST_AND(dest, src) ({dest &= src;})
+#define INST_OR(dest, src)  ({dest |= src;})
+#define INST_NOT(dest)  ({dest = ~dest;})
+
+#define INST_XCHG(dest, src) ({ \
+    auto tmp = src; \
+    src = dest;     \
+    dest = tmp;     \
+})
+
+#define INST_MOVSX(dest, src) ({dest = SIGNED(src);})
+
+// we just ignore the direction flag, the code never sets it to reverse, thank God
+#define INST_LODSB() ({ \
+    cpu->AL = MEM_BYTE(cpu->SI); \
+    cpu->SI += 1;                \
+})
+#define INST_LODSW() ({ \
+    cpu->AX = MEM_WORD(cpu->SI); \
+    cpu->SI += 2;                \
+})
+#define INST_LODSD() ({   \
+    cpu->EAX = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4;                  \
+})
+
+#define INST_STOSB() ({ \
+    SMEM_BYTE(cpu->ES, cpu->DI) = cpu->AL; \
+    cpu->DI += 1;       \
+})
+#define INST_STOSW() ({ \
+    SMEM_WORD(cpu->ES, cpu->DI) = cpu->AX; \
+    cpu->DI += 2;       \
+})
+#define INST_STOSD() ({   \
+    SMEM_DWORD(cpu->ES, cpu->DI) = cpu->EAX; \
+    cpu->DI += 4;         \
+})
+
+#define INST_MOVSD() ({ \
+    SMEM_DWORD(cpu->ES, cpu->DI) = MEM_DWORD(cpu->SI); \
+    cpu->SI += 4; \
+    cpu->DI += 4; \
+})
+
+#define INST_CWD() ({ \
+    if(cpu->AX & 0x8000){ \
+        cpu->DX = 0xFFFF; \
+    }else{                \
+        cpu->DX = 0;      \
+    }                     \
+})
+
+#define INST_CDQ() ({ \
+    if(cpu->EAX & 0x80000000){ \
+        cpu->EDX = 0xFFFFFFFF; \
+    }else{                \
+        cpu->EDX = 0;     \
+    }                     \
+})
+
+
+#define INST_CLC() ({cpu->CF = 0;})
+
+
+
+
 
 
