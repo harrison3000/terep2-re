@@ -191,8 +191,8 @@ void DOS3Call(cpu_ctx*);
 
 #define INST_MUL(op) ({    \
     static_assert(sizeof(op) == 2, "We only support 16bit for this instruction"); \
-    uint32_t res = (uint32_t)cpu->AX * (uint32_t)op; \
-    encangado_t enc = {.big = res}; \
+    encangado_t enc = {0}; \
+    enc.big = (uint32_t)cpu->AX * (uint32_t)op; \
     cpu->AX = enc.lo_word; \
     cpu->DX = enc.hi_word; \
 })
@@ -223,7 +223,7 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
 static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
     encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
     int32_t num = numm.sign_big;
-    int16_t den = SIGNED(a);
+    int32_t den = SIGNED(a);
     
     cpu->AX = (uint16_t)(num / den);
     cpu->DX = (uint16_t)(num % den);
@@ -232,7 +232,7 @@ static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
 static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
     encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
     int64_t num = numm.sign_big;
-    int32_t den = SIGNED(a);
+    int64_t den = SIGNED(a);
     
     cpu->EAX = (uint32_t)(num / den);
     cpu->EDX = (uint32_t)(num % den);
