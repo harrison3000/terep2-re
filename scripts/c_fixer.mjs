@@ -22,8 +22,16 @@ const u = f.map(function(z){
     return "_";
 }).join("");
 
-const sem = Array.from(u.matchAll(/_R/g)).map(x => `${f[x.index]} | ${f[x.index+1]}, ${x.index}`).toSorted();
-//console.log("Unhandled jumps: ", sem);
+for(let unjump of u.matchAll(/_R/g)){
+    const idx = unjump.index + 1
+    const j = f[idx].match(/ + JUMP«(.+),(.+)»/)?.map(x => x.trim());
+    if(j[1] !== "C"){
+        console.log("not JC, not touching that!");
+        continue;
+    }
+
+    f[idx] = "   if(CHECK_CFLAG()) " + j[2];
+}
 
 
 
