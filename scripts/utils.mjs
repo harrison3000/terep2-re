@@ -81,7 +81,7 @@ function siszzs(a, b){
         return `(${a} & ${b})`;
     }
     if(a === b){
-        return `(${a} & 0x${uuu})`;
+        return `(${a} & ${uuu})`;
     }
 
     return `(${a} & ${b} & ${uuu})`;

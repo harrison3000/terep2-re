@@ -1141,14 +1141,14 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    cpu->CX = 0x32;
    if((cpu->AL & 0x80) != 0) goto LAB_LOC_2;
    if(SIGNED(cpu->BX) > 0x2000) goto LAB_LOC_2;
-   if((cpu->BX & 0x0x8000) == 0) goto LAB_LOC_1;
+   if((cpu->BX & 0x8000) == 0) goto LAB_LOC_1;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_1:
    INST_ADD(cpu->BX, cpu->CX);
    LAB_LOC_2:
    if((cpu->AH & 0x80) != 0) goto LAB_LOC_4;
    if(SIGNED(cpu->BX) < -8192) goto LAB_LOC_4;
-   if((cpu->BX & 0x0x8000) != 0) goto LAB_LOC_3;
+   if((cpu->BX & 0x8000) != 0) goto LAB_LOC_3;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_3:
    INST_SUB(cpu->BX, cpu->CX);
@@ -1157,7 +1157,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    if((cpu->AX & 0x8080) != 0) goto LAB_LOC_6;
    cpu->CX = 0x12c;
    if(cpu->BX == 0) goto LAB_LOC_6;
-   if((cpu->BX & 0x0x8000) == 0) goto LAB_LOC_5;
+   if((cpu->BX & 0x8000) == 0) goto LAB_LOC_5;
    INST_NEG(cpu->CX);
    LAB_LOC_5:
    INST_SUB(cpu->BX, cpu->CX);
@@ -1178,14 +1178,14 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    INST_ADD(cpu->CX, 0x40);
    if((cpu->AL & 0x80) != 0) goto LAB_LOC_9;
    if(SIGNED(cpu->BX) < -8192) goto LAB_LOC_9;
-   if((cpu->BX & 0x0x8000) != 0) goto LAB_LOC_8;
+   if((cpu->BX & 0x8000) != 0) goto LAB_LOC_8;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_8:
    INST_SUB(cpu->BX, cpu->CX);
    LAB_LOC_9:
    if((cpu->AH & 0x80) != 0) goto LAB_LOC_11;
    if(SIGNED(cpu->BX) > 0x2000) goto LAB_LOC_11;
-   if((cpu->BX & 0x0x8000) == 0) goto LAB_LOC_10;
+   if((cpu->BX & 0x8000) == 0) goto LAB_LOC_10;
    INST_SHL(cpu->CX, 0x2);
    LAB_LOC_10:
    INST_ADD(cpu->BX, cpu->CX);
@@ -1194,7 +1194,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
    if((cpu->AX & 0x8080) != 0) goto LAB_LOC_13;
    cpu->CX = 0x50;
    if(cpu->BX == 0) goto LAB_LOC_13;
-   if((cpu->BX & 0x0x8000) == 0) goto LAB_LOC_12;
+   if((cpu->BX & 0x8000) == 0) goto LAB_LOC_12;
    INST_NEG(cpu->CX);
    LAB_LOC_12:
    INST_SUB(cpu->BX, cpu->CX);
@@ -3954,10 +3954,10 @@ void FUN_1000_2b08(cpu_ctx *cpu){
                               //             1000:087c(c),1000:08a5(c),1000:0907(c),1000:09b3(c),
                               //             1000:0a20(c),1000:1841(c),1000:26df(c),1000:4a43(c),
                               //             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
-   if((cpu->AX & 0x0x8000) != 0) goto LAB_LOC_2;
+   if((cpu->AX & 0x8000) != 0) goto LAB_LOC_2;
    if(cpu->AX != 0) goto FUN_1000_2b1f;
    cpu->AX = 0x0;
-   if((cpu->BX & 0x0x8000) == 0) goto LAB_LOC_1;
+   if((cpu->BX & 0x8000) == 0) goto LAB_LOC_1;
    INST_ADD(cpu->AX, 0x8000);
    LAB_LOC_1:
    return;
@@ -3974,7 +3974,7 @@ void FUN_1000_2b08(cpu_ctx *cpu){
 //************************************************************************************************
 void FUN_1000_2b1f(cpu_ctx *cpu){
                               //XREF[2]:     1000:2b0e(j),1000:2b63(c)
-   if((cpu->BX & 0x0x8000) != 0) goto LAB_LOC_1;
+   if((cpu->BX & 0x8000) != 0) goto LAB_LOC_1;
    if(cpu->BX != 0) goto FUN_1000_2b2d;
    cpu->AX = 0x4000;
    return;
