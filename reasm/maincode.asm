@@ -389,7 +389,7 @@ FUN_main_render:
     MOV         CL,0xf
     CALL        FUN_1000_5940_render_text
 
-    MOV         SI, nova_linha ;string
+    MOV         SI, 0xf700 ;string
     MOV         AX, 5         ;X
     MOV         BX, 190       ;Y
     MOV         CL, byte [giracor]       ;color
@@ -2383,7 +2383,10 @@ FUN_1000_1965:
     MOV         AX, word [0xc6]
     ;jumping to another function, some kind of tail call optimization
     TEST        AH,0x60
-    JNP         FUN_1965_NP
+    JP         .continue_here
+    CALL FUN_1965_NP
+    RET
+.continue_here:
     MOV         byte [0x5fb],0x0
     CALL        FUN_1000_3fd0
     MOV         AX, word [0xc6]
@@ -4110,7 +4113,7 @@ FUN_1000_2b08:
                               ;             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
     TEST        AX, AX
     JS          .LAB_LOC_2
-    JNZ         FUN_1000_2b1f
+    JNZ         .call_the_other
     MOV         AX,0x0
     TEST        BX,BX
     JNS         .LAB_LOC_1
@@ -4123,6 +4126,11 @@ FUN_1000_2b08:
     CALL        FUN_1000_2b1f
     NEG         AX
     RET
+
+.call_the_other:
+    CALL FUN_1000_2b1f
+    RET
+
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -4130,7 +4138,7 @@ FUN_1000_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
     TEST        BX, BX
     JS          .LAB_LOC_1
-    JNZ         FUN_1000_2b2d
+    JNZ         .call_the_other
     MOV         AX,0x4000
     RET
 
@@ -4140,6 +4148,10 @@ FUN_1000_2b1f:
     NEG         AX
     ADD         AX,0x8000
     RET
+
+.call_the_other:
+    CALL FUN_1000_2b2d
+    RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
@@ -4147,7 +4159,7 @@ FUN_1000_2b2d:
                               ;XREF[2]:     1000:2b25(j),1000:2b58(c)
     CMP         AX,BX
     JG          .LAB_LOC_1
-    JL          FUN_1000_2b3b
+    JL          .call_the_other
     MOV         AX,0x2000
     RET
 
@@ -4156,6 +4168,10 @@ FUN_1000_2b2d:
     CALL        FUN_1000_2b3b
     NEG         AX
     ADD         AX,0x4000
+    RET
+
+.call_the_other:
+    CALL FUN_1000_2b3b
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
