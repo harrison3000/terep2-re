@@ -1,146 +1,119 @@
 #include <SDL3/SDL_events.h>
-#include <asm/ldt.h>
-#include <asm/unistd.h>
 #include <errno.h>
 #include <stdint.h>
-#include <sys/syscall.h>
-#include <thread>
 #include <unistd.h>
 #include <cstdlib>
 #include <cstdio>
 #include <cstdint>
-#include <map>
-#include <sys/mman.h>
-#include <linux/prctl.h> 
-#include <sys/prctl.h>
 #include <fcntl.h>
+#include <cstring>
 #include <string>
 
 #include <SDL3/SDL.h>
 
 #include "keys.hpp"
 
+#include "../lifted/declrs.hpp"
+#include "../lifted/gpu/types.hpp"
+
 #define W 320
 #define H 200
 
-#define DEFAULT_LEN (1 << 16)
 
-extern "C" void asm_f_init();
-extern "C" void asm_render();
-extern "C" void asm_physics();
-extern "C" void asm_keys(int16_t);
+std::string basedir("./");
 
-extern volatile uint32_t all_segments[];
-extern volatile uint16_t data_callregs[]; //TODO portal struct
-extern volatile uint16_t base_mem[];
+const uint8_t initialdata[] = {
+    #embed "../memdumps/data.bin"
+};
 
-
-std::string basedir;
-
-
-bool doscall(void* mem, volatile uint16_t &ax, volatile uint16_t &bx, volatile uint16_t &cx, volatile uint16_t &dx){
-    int op = ax & 0xff00;
-    auto memchar = (char*)mem;
+void DOS3Call(cpu_ctx *cpu){
+    int op = cpu->AX & 0xff00;
     switch(op){
         case 0x3d00:{
             //open
-            std::string filename(&memchar[dx]);
+            auto addr = cpu->mem_base + cpu->DX;
+            std::string filename((char*)addr);
             if(filename == ""){
                 printf("Tried to load a empty filename, probably better to bail out\n");
-                return false;
+                cpu->CF = 1;
+                return;
             }
 
             auto fullpath = basedir + filename;
 
             auto fd = open(fullpath.c_str(), O_RDONLY);
             printf("* trying to open: %s, returned: %d\n", filename.c_str(), fd);
-            ax = fd;
-            return fd >= 0;
+            cpu->CF = fd < 0;
+            cpu->AX = fd;
+            return;
         }
         case 0x4800:{
-            static int seletor = 0;
-            seletor++;
-            auto mem = malloc(DEFAULT_LEN);
-            all_segments[seletor] = (uint32_t)mem;
-            printf("* Aloc: %d, %08x\n", seletor, mem);
-            printf("* game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", bx, bx * 16);
-            ax = seletor;
-            return true;
+            //memory alocation
+            static int current_seg = 0;
+            current_seg += 68; // a bit more for safety
+            printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
+            cpu->AX = current_seg;
+            cpu->CF=0;
+            return;
         }
         case 0x3f00:{
-            auto fd = bx;
-            auto addr = memchar + dx;
-            auto r = read(fd, (void *)addr, cx);
-            ax = r;
-            printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, dx);
-            return r >= 0;
+            auto fd = cpu->BX;
+            if(cpu->DS != 0){
+                printf("Something wrong isnt right\n");
+                exit(2);
+            }
+            auto addr = cpu->mem_base + cpu->DX;
+            auto r = read(fd, (void *)addr, cpu->CX);
+            cpu->CF = r < 0;
+            cpu->AX = r;
+            printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, cpu->DX);
+            return;
         }
         case 0x4200:{
-            int off = cx;
+            int off = cpu->CX;
             off <<= 16;
-            off += dx;
+            off += cpu->DX;
 
-            auto offset = lseek(bx, off, ax & 0xf);
-            dx = offset >> 16;
-            ax = offset;
-            return offset >= 0; 
+            auto offset = lseek(cpu->BX, off, cpu->AL);
+            cpu->CF = offset < 0;
+            cpu->DX = offset >> 16;
+            cpu->AX = offset;
+            return;
         }
         case 0x3e00:{
-            auto ok = close(bx);
-            return ok == 0;
+            auto ok = close(cpu->BX);
+            cpu->CF = ok != 0;
+            return;
         }
     }
 
-    printf("\nunhandled Dos call: %04x\n", ax);
+    printf("\nunhandled Dos call: %04x\n", cpu->AX);
 
     exit(6);
 
-    return false;
+    return;
 }
 
-void call_init(void *datamem, volatile uint16_t* datawindow){
-    std::thread ch([](){
-        asm_f_init();
-    });
-
-    while(1){
-        if(datawindow[0] == 0xd3ca){
-            auto ok = doscall(datamem, datawindow[1], datawindow[2], datawindow[3], datawindow[4]);
-
-            datawindow[5] = ok ? 3 : 1;
-            datawindow[0] = 0x1234;
-            continue;
-        }
-        if(datawindow[0] == 0xbeef){
-            break;
-        }
-        //TODO some kind of timeout
-    }
-
-    printf("init ");
-    
-    ch.join();
-
-    printf("ended!\n");
-}
 
 int main(int argc, char **argv){
-    auto datamem = (void *)base_mem;
-    
+    auto cpu = new cpu_ctx;
+    auto memory = malloc(2 * 1024 * 1024);
+    cpu->mem_base = (uintptr_t)memory;
+
+    memcpy(memory, initialdata, sizeof(initialdata));
+
     if(argc > 1){
         basedir = argv[1];
     }
 
-    //strcpy(&((char*)datamem)[0xf700], "GAMBIARRA FOREVER 32!");
-
-    
+    strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER 32!");
 
     printf("lets go\n");
 
-    call_init(datamem, data_callregs);
+    f_init(cpu);
 
-    auto videoSegSel = ((uint16_t *)datamem)[0xdb10 / 2];
-    auto videoSeg = (uint8_t*)all_segments[videoSegSel];
+    auto videoSegSel = ((uint16_t *)memory)[0xdb10 / 2];
+    auto videoSeg = (uint8_t*)(cpu->mem_base + videoSegSel * 1024);
     printf("video data: %04x, %08x\n", videoSegSel, videoSeg);
     
     SDL_Init(SDL_INIT_VIDEO);
@@ -152,7 +125,7 @@ int main(int argc, char **argv){
 
     // Paleta de 256 cores (exemplo: 0 = Preto, 1 = Vermelho, 2 = Verde...)
     SDL_Color colors[256];
-    uint8_t *ptr = &((uint8_t*)datamem)[0x1a4d];
+    uint8_t *ptr = &((uint8_t*)memory)[0x1a4d];
     for(int i = 0;i<256;i++){
         colors[i].r = ptr[0];
         colors[i].g = ptr[1];
@@ -182,12 +155,13 @@ int main(int argc, char **argv){
             if(e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP){
                 auto ec = get_pc_scancode(e);
                 if(ec != 0){
-                    asm_keys(ec);
+                    cpu->AX = ec;
+                    FUN_keyboard_56df(cpu);
                 }
             }
         }
 
-        asm_render();
+        FUN_main_render(cpu);
         for(int i = 0; i < W*H; i++){
             pixels[i] = videoSeg[i];
         }
@@ -198,8 +172,8 @@ int main(int argc, char **argv){
         SDL_RenderPresent(ren);
 
         //physics run at 120 ticks per sec
-        asm_physics();
-        asm_physics();
+        FUN_timer_5680(cpu);
+        FUN_timer_5680(cpu);
 
         // Limita a 60 FPS
         Uint64 elapsed = SDL_GetTicksNS() - start;

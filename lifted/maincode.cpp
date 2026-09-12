@@ -382,7 +382,7 @@ void FUN_main_render(cpu_ctx *cpu){
    FUN_1000_5940_render_text(cpu);
 
    // unknown ->
-   // unknown ->MOVSI, //string
+   cpu->SI = 0xf700; //string location
    cpu->AX = 5; //X
    cpu->BX = 190; //Y
    cpu->CL = giracor; //color

@@ -261,7 +261,13 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
 })
 
 
-#define MERGED_SUB_SBB(a,b,c,d) ({__builtin_trap();})
+#define MERGED_SUB_SBB(a,b,c,d) ({ \
+    encangado_t dest = {.lo_word = (a), .hi_word = (c)}; \
+    encangado_t src  = {.lo_word = (b), .hi_word = (d)}; \
+    dest.big -= src.big; \
+    a = dest.lo_word;    \
+    c = dest.hi_word;    \
+})
 
 
 
