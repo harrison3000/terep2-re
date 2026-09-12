@@ -7408,6 +7408,7 @@ FUN_1000_46a0:
     MOV         AX,word [SI + 0x2]
     SUB         AX,word [0x120]
     MOV         word [0xe992],AX
+;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
     JL          .LAB_LOC_1
     MOV         EAX,dword [SI + 0x6]
     MOV         dword [DI + 0xdb16],EAX
@@ -7439,6 +7440,7 @@ FUN_1000_46d3:
     MOV         DI,word [0xe996]
     MOV         AX,word [SI + 0x2]
     SUB         AX,word [0x120]
+;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
     JL          .LAB_LOC_1
     MOV         word [0xe992],AX
     MOV         EAX,dword [SI + 0x6]
@@ -7490,6 +7492,7 @@ FUN_1000_46d3:
 .LAB_LOC_3:
     MOV         AX,word [SI + 0x2]
     SUB         AX,word [0x120]
+;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
     JGE         .LAB_LOC_4
     MOV         word [0xe992],AX
     MOV         AX,word [SI]
@@ -7551,6 +7554,7 @@ FUN_1000_47ec:
     JL          .LAB_LOC_3
     MOV         AX,word [SI + 0x2]
     SUB         AX,word [0x120]
+;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
     JL          .LAB_LOC_1
     MOV         AX, word [0xe996]
     SHR         AX,0x3
@@ -7593,6 +7597,7 @@ FUN_1000_47ec:
 .LAB_LOC_3:
     MOV         AX,word [SI + 0x2]
     SUB         AX,word [0x120]
+;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
     JGE         .LAB_LOC_4
     MOV         AX, word [0xe996]
     SHR         AX,0x3
