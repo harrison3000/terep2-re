@@ -8,6 +8,20 @@
 
 #include "types.hpp"
 
+struct encangado_t {
+    union {
+        uint32_t big; int32_t sign_big;
+        struct { uint16_t lo_word, hi_word; }; 
+    };
+};
+
+struct encangado64_t {
+    union {
+        uint64_t big; int64_t sign_big;
+        struct { uint32_t lo, hi; }; 
+    };
+};
+
 //TODO add a 4k buffer zone so we can fault on writes beyond 64k?
 //or maybe just use the blinkenlights to see rogue writes
 #define SEGM 1024
@@ -173,8 +187,9 @@ void DOS3Call(cpu_ctx*);
 #define INST_MUL(op) ({    \
     static_assert(sizeof(op) == 2, "We only support 16bit for this instruction"); \
     uint32_t res = (uint32_t)cpu->AX * (uint32_t)op; \
-    cpu->AX = res & 0xffff; \
-    cpu->DX = res >> 16;    \
+    encangado_t enc = {.big = res}; \
+    cpu->AX = enc.lo_word; \
+    cpu->DX = enc.hi_word; \
 })
 
 
@@ -182,22 +197,76 @@ static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
     auto as = SIGNED(a);
     auto sax = SIGNED(cpu->AX);
 
-    auto res = (int32_t)sax * (int32_t)as;
-    cpu->AX = res & 0xffff;
-    cpu->DX = res >> 16;
+    encangado_t res;
+    res.sign_big = (int32_t)sax * (int32_t)as;
+    cpu->AX = res.lo_word;
+    cpu->DX = res.hi_word;
 }
 static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
     auto as = SIGNED(a);
     auto bs = SIGNED(b);
 
-    auto res = (int64_t)as * (int64_t)bs;
-    cpu->EAX = res & 0xffffffff;
-    cpu->EDX = res >> 32;
+    encangado64_t res;
+    res.sign_big = (int64_t)as * (int64_t)bs;
+    cpu->EAX = res.lo;
+    cpu->EDX = res.hi;
 }
 
 #define INST_IMUL(...) inner_imul(cpu,__VA_ARGS__)
 
+
+static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
+    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
+    int32_t num = numm.sign_big;
+    int16_t den = SIGNED(a);
+    
+    cpu->AX = (uint16_t)(num / den);
+    cpu->DX = (uint16_t)(num % den);
+}
+
+static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
+    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
+    int64_t num = numm.sign_big;
+    int32_t den = SIGNED(a);
+    
+    cpu->EAX = (uint32_t)(num / den);
+    cpu->EDX = (uint32_t)(num % den);
+}
+
+#define INST_IDIV(a) inner_idiv(cpu, a);
+
+
 #define INST_CLC() ({cpu->CF = 0;})
+
+
+
+#define INST_CLD INST_NOP
+
+#define MERGED_ADD_ADC(a,b,c,d) ({ \
+    encangado_t dest = {.lo_word = (a), .hi_word = (c)}; \
+    encangado_t src  = {.lo_word = (b), .hi_word = (d)}; \
+    dest.big += src.big; \
+    a = dest.lo_word;    \
+    c = dest.hi_word;    \
+})
+
+
+static inline void inner_div(cpu_ctx *cpu, uint16_t a) {
+    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
+    uint32_t num = numm.big;
+    cpu->AX = (uint16_t)(num / a);
+    cpu->DX = (uint16_t)(num % a);
+}
+
+static inline void inner_div(cpu_ctx *cpu, uint32_t a) {
+    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
+    uint64_t num = numm.big;
+    cpu->EAX = (uint32_t)(num / a);
+    cpu->EDX = (uint32_t)(num % a);
+}
+
+#define INST_DIV(op) inner_div(cpu, op)
+
 
 
 
