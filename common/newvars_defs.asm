@@ -48,6 +48,9 @@ flying_car_tmp:
 another_quick_temp:
     dd 0
 
+another_quick_temp_w:
+    dd 0 
+
 ;All the data that used to be mixed with  code
 
 CSD_WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),

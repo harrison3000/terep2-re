@@ -586,9 +586,9 @@ F_0693:
     CALL        FUN_1000_2b08
     POP         BX
     SUB         BX,AX
-    MOV  word [another_quick_temp], BX
+    MOV  word [another_quick_temp_w], BX
     MOV         BX,CX
-    CMP  word [another_quick_temp], 0
+    CMP  word [another_quick_temp_w], 0
     JNS         .LAB_LOC_1
     NEG         BX
 .LAB_LOC_1:
@@ -1098,9 +1098,9 @@ FUN_1000_0bb5:
 
     MOV         SI,word [0x3e51]
     SUB         SI,0x1c
-    MOV word [another_quick_temp], SI
+    MOV word [another_quick_temp_w], SI
     MOV         word [0x3e51],SI
-    CMP word [another_quick_temp], 0
+    CMP word [another_quick_temp_w], 0
     JZ          .LAB_LOC_5
     mov_m2m     dword [DI + 0x3e53], dword [SI + 0x3e53]
     mov_m2m     dword [DI + 0x3e57], dword [SI + 0x3e57]
@@ -8251,7 +8251,10 @@ FUN_1000_4e0a:
     SUB         EAX,dword [mitemp_BeX]
     SAR         EAX,0x1
     ADD         ECX,EAX
-    mov_m2m     word [BX + 0x6], word [mitemp_BeX]
+    push eax
+    mov eax, dword [mitemp_BeX]
+    mov      word [BX + 0x6], ax
+    pop eax
     JMP         .LAB_LOC_2
 .LAB_LOC_7:
     MOV         ECX,EDX
@@ -8260,7 +8263,7 @@ FUN_1000_4e0a:
     CMP    ECX, 0
     JZ          .LAB_LOC_3
     MOV         dword [mitemp_BeX],EAX
-    mov_m2m     word [BX + 0x6], word [mitemp_BeX]
+    MOV         word [BX + 0x6], AX
     JMP         .LAB_LOC_2
 .LAB_LOC_8:
     SAR         ECX,0x4

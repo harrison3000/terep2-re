@@ -50,7 +50,7 @@ uint8_t  mu_b_tmp = 0;
 uint16_t mu_w_tmp = 0;
 uint32_t mu_d_tmp = 0;
 
-int retval_2418;
+uint16_t retval_2418;
 
 
 //this used to be at 0x5ee, but it was bugged I think, it stored and loaded to AL, but used SAHF/LAHF (they modify AH), so yeah
@@ -62,12 +62,13 @@ uint8_t some_flag_thing_idk = 0;
 
 uint8_t flying_car_tmp = 0;
 
-uint32_t another_quick_temp = 0;
+uint8_t another_quick_temp = 0;
+uint16_t another_quick_temp_w = 0;
 
 
 uint32_t mitemp_01 = 0;
 uint32_t mitemp_02 = 0;
-uint32_t mitemp_03 = 0;
+uint16_t mitemp_03 = 0;
 
 
 uint32_t pslc_eb5f = 0;

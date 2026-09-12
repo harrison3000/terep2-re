@@ -556,9 +556,9 @@ void F_0693(cpu_ctx *cpu){
    FUN_1000_2b08(cpu);
    INST_POP(cpu->BX);
    INST_SUB(cpu->BX, cpu->AX);
-   another_quick_temp = cpu->BX;
+   another_quick_temp_w = cpu->BX;
    cpu->BX = cpu->CX;
-   if(SIGNED(another_quick_temp) >= 0) goto LAB_LOC_1;
+   if(SIGNED(another_quick_temp_w) >= 0) goto LAB_LOC_1;
    INST_NEG(cpu->BX);
    LAB_LOC_1:
    cpu->AX = MEM_WORD(0xe9);
@@ -1060,9 +1060,9 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
 
    cpu->SI = MEM_WORD(0x3e51);
    INST_SUB(cpu->SI, 0x1c);
-   another_quick_temp = cpu->SI;
+   another_quick_temp_w = cpu->SI;
    MEM_WORD(0x3e51) = cpu->SI;
-   if(another_quick_temp == 0) goto LAB_LOC_5;
+   if(another_quick_temp_w == 0) goto LAB_LOC_5;
    MEM_DWORD(cpu->DI + 0x3e53) = MEM_DWORD(cpu->SI + 0x3e53);
    MEM_DWORD(cpu->DI + 0x3e57) = MEM_DWORD(cpu->SI + 0x3e57);
    MEM_DWORD(cpu->DI + 0x3e5b) = MEM_DWORD(cpu->SI + 0x3e5b);
@@ -8049,7 +8049,10 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->EAX, mitemp_BeX);
    INST_SAR(cpu->EAX, 0x1);
    INST_ADD(cpu->ECX, cpu->EAX);
-   MEM_WORD(cpu->BX + 0x6) = mitemp_BeX;
+   INST_PUSH(cpu->EAX);
+   cpu->EAX = mitemp_BeX;
+   MEM_WORD(cpu->BX + 0x6) = cpu->AX;
+   INST_POP(cpu->EAX);
    goto LAB_LOC_2;
    LAB_LOC_7:
    cpu->ECX = cpu->EDX;
@@ -8057,7 +8060,7 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
    INST_SAR(cpu->ECX, 0x1);
    if(cpu->ECX == 0) goto LAB_LOC_3;
    mitemp_BeX = cpu->EAX;
-   MEM_WORD(cpu->BX + 0x6) = mitemp_BeX;
+   MEM_WORD(cpu->BX + 0x6) = cpu->AX;
    goto LAB_LOC_2;
    LAB_LOC_8:
    INST_SAR(cpu->ECX, 0x4);
