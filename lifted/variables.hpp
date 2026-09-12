@@ -52,3 +52,19 @@ uint8_t some_flag_thing_idk = 0;
 uint8_t flying_car_tmp = 0;
 
 uint32_t another_quick_temp = 0;
+
+
+uint32_t mitemp_01 = 0;
+uint32_t mitemp_02 = 0;
+uint32_t mitemp_03 = 0;
+
+
+uint32_t pslc_eb5f = 0;
+uint32_t pslc_ea9b = 0;
+uint32_t pslc_eb63 = 0;
+
+uint32_t pslc_ea9f = 0;
+uint32_t pslc_eb5b = 0;
+uint32_t pslc_eaa3 = 0;
+
+uint32_t mitemp_BeX = 0;

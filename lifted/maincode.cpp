@@ -3337,7 +3337,7 @@ void FUN_1000_2454(cpu_ctx *cpu){
    cpu->CX = 0x41;
    cpu->AX = 0; //was a XOR
    INST_CLD();
-   REP«STOSW»
+   REP_STOSW(cpu);
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    cpu->DX = cpu->DX;
@@ -4053,7 +4053,7 @@ void FUN_1000_2b98(cpu_ctx *cpu){
    cpu->DI = 0; //was a XOR
    cpu->CX = 0x7D00;
    INST_CLD();
-   REP«STOSW»
+   REP_STOSW(cpu);
    INST_POP(cpu->DI);
    INST_POP(cpu->ES);
    return;
@@ -4210,7 +4210,7 @@ void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
-   REP«STOSB»
+   REP_STOSB(cpu);
 
    INST_ADD(cpu->SI, 0x4);
    INST_DEC(cpu->DX);
