@@ -909,7 +909,7 @@ void FUN_1000_0a82(cpu_ctx *cpu){
    cpu->CX = cpu->AX;
    INST_SHR(cpu->EAX, 0x1);
    INST_INC(cpu->EAX);
-   INST_IMUL(cpu->EAX, MEM_DWORD(0x6a));
+   INST_IMUL2(cpu->EAX, MEM_DWORD(0x6a));
    if(flying_car_tmp == 1) goto LAB_LOC_3;
    INST_INC(cpu->DI);
    INST_INC(cpu->DI);
@@ -8185,7 +8185,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x8));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    cpu->EDX = cpu->EAX;
    cpu->EAX = MEM_DWORD(cpu->BX + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
@@ -8193,7 +8193,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI + 0x8));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
    pslc_ea9b = cpu->EDX;
    cpu->EAX = MEM_DWORD(cpu->BX + 0x8);
@@ -8203,7 +8203,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    cpu->EDX = cpu->EAX;
    cpu->EAX = MEM_DWORD(cpu->BX + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0x8));
@@ -8211,7 +8211,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
    INST_NEG(cpu->EDX);
    pslc_ea9f = cpu->EDX;
@@ -8222,7 +8222,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI + 0x4));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    cpu->EDX = cpu->EAX;
    cpu->EAX = MEM_DWORD(cpu->BX);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI));
@@ -8230,7 +8230,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x4));
    INST_SAR(cpu->EAX, 0xe);
    INST_SAR(cpu->ECX, 0xe);
-   INST_IMUL(cpu->EAX, cpu->ECX);
+   INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
    pslc_eaa3 = cpu->EDX;
    INST_POP(cpu->DX);
@@ -8273,17 +8273,17 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    cpu->EAX = MEM_DWORD(cpu->DI);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0xeb5b));
    INST_SAR(cpu->EAX, 0x10);
-   INST_IMUL(cpu->EAX, MEM_DWORD(cpu->SI + 0xea9b));
+   INST_IMUL2(cpu->EAX, MEM_DWORD(cpu->SI + 0xea9b));
    cpu->EDX = cpu->EAX;
    cpu->EAX = MEM_DWORD(cpu->DI + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0xeb5f));
    INST_SAR(cpu->EAX, 0x10);
-   INST_IMUL(cpu->EAX, MEM_DWORD(cpu->SI + 0xea9f));
+   INST_IMUL2(cpu->EAX, MEM_DWORD(cpu->SI + 0xea9f));
    INST_ADD(cpu->EDX, cpu->EAX);
    cpu->EAX = MEM_DWORD(cpu->DI + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0xeb63));
    INST_SAR(cpu->EAX, 0x10);
-   INST_IMUL(cpu->EAX, MEM_DWORD(cpu->SI + 0xeaa3));
+   INST_IMUL2(cpu->EAX, MEM_DWORD(cpu->SI + 0xeaa3));
    INST_ADD(cpu->EDX, cpu->EAX);
    if(SIGNED(cpu->EDX) >= 0) goto LAB_LOC_9;
    if(SIGNED(cpu->EDX) > SIGNED(cpu->ECX)) goto LAB_LOC_10;

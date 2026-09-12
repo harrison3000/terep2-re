@@ -207,9 +207,9 @@ static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
     cpu->AX = res.lo_word;
     cpu->DX = res.hi_word;
 }
-static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
+static inline void inner_imul(cpu_ctx *cpu, uint32_t a){
     auto as = SIGNED(a);
-    auto bs = SIGNED(b);
+    auto bs = SIGNED(cpu->EAX);
 
     encangado64_t res;
     res.sign_big = (int64_t)as * (int64_t)bs;
@@ -217,8 +217,15 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a, uint32_t b){
     cpu->EDX = res.hi;
 }
 
-#define INST_IMUL(...) inner_imul(cpu,__VA_ARGS__)
+#define INST_IMUL(op) inner_imul(cpu, op)
 
+#define INST_IMUL2(dest, src) ({ \
+    static_assert(sizeof(dest) == 4, "We only support 32bit for this instruction"); \
+    int32_t d = SIGNED(dest);    \
+    int32_t s = SIGNED(src);     \
+    int32_t res = d*s;           \
+    dest = res;                  \
+})
 
 static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
     encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
