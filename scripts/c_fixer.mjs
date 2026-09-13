@@ -75,6 +75,8 @@ replacetron(f, /CVTSS2SI/, (m) =>
 
 replacetron(f, /XMM[0-3]/, () => "//REMOVEME");
 
+replacetron(f, /^.+INST_IMUL\(cpu->[A-Z]+,.+/, (m) => m[0].replace("IMUL(", "IMUL2("));
+
 for(let i =0; i < 2; i++){
     const ini = f.findIndex(s => s.includes("cpu->BX + ZZZZ"));
     const fim = f.findIndex(s => s.includes("LAB_RUIM:"));
