@@ -94,6 +94,23 @@ void DOS3Call(cpu_ctx *cpu){
     return;
 }
 
+void mem_dumper(void *mem, const char *desc){
+    static int counter = 0;
+    counter++;
+    char tmp[512];
+
+    sprintf(tmp, "dump_%d.pgm", counter);
+
+    auto o = open(tmp,O_WRONLY|O_CREAT, 0644);
+
+    sprintf(tmp, "P5\n#%s\n256 %d\n255\n", desc,1*1024*3);
+    write(o, tmp, strlen(tmp));
+
+    write(o, mem, 1*1024*768);
+
+    close(o);
+}
+
 
 int main(int argc, char **argv){
     auto cpu = new cpu_ctx;
@@ -110,8 +127,16 @@ int main(int argc, char **argv){
 
     printf("lets go\n");
 
+    mem_dumper(memory, "before init");
+
     f_init(cpu);
     printf("AX after init: %04x\n", cpu->AX);
+
+    mem_dumper(memory, "after init");
+
+    FUN_main_render(cpu);
+
+    mem_dumper(memory, "after first render");
 
     auto videoSegSel = ((uint16_t *)memory)[0xdb10 / 2];
     auto videoSeg = (uint8_t*)(cpu->mem_base + videoSegSel * 1024);

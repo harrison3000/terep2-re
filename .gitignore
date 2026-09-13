@@ -9,3 +9,4 @@ erros.txt
 terep2re
 .vscode/
 raw_c.cpp
+*.pgm
