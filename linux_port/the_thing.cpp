@@ -1,6 +1,7 @@
 #include <SDL3/SDL_events.h>
 #include <asm/ldt.h>
 #include <asm/unistd.h>
+#include <cmath>
 #include <errno.h>
 #include <stdint.h>
 #include <sys/syscall.h>
@@ -18,7 +19,9 @@
 
 #include <SDL3/SDL.h>
 
+#include "cardat.h"
 #include "keys.hpp"
+#include "common.h"
 
 #define W 320
 #define H 200
@@ -42,6 +45,8 @@ extern volatile uint8_t base_mem[];
 
 extern "C" void _mydoscall();
 
+
+void dump_first_car(int);
 
 std::string basedir;
 
@@ -160,6 +165,13 @@ int main(int argc, char **argv){
             if (e.type == SDL_EVENT_QUIT) running = false;
             if (e.type == SDL_EVENT_KEY_DOWN) {
                 if (e.key.key == SDLK_ESCAPE) running = false;
+
+                if(e.key.key == SDLK_P){
+                    dump_first_car(0);
+                }
+                if(e.key.key == SDLK_O){
+                    dump_first_car(1);
+                }
                 //TODO do the keys thing
             }
             if(e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP){
@@ -200,3 +212,111 @@ int main(int argc, char **argv){
 
     return 0;
 }
+
+void dump_first_car(int bag){
+    static int n = 0;
+    char nome[128];
+    snprintf(nome, 128, "cardump_%d.obj", n);
+    n++;
+
+    auto carloc = 0x5bd0;
+
+    printf("here we go, dump: %s\n", nome);
+
+    auto pointsloc = MEM_WORD(carloc);
+
+    auto pointsn = MEM_WORD(carloc + pointsloc);
+
+    printf("number of points: %d\n", pointsn);
+
+    auto f = fopen(nome, "w");
+
+    auto points = (pointdef*)&MEM_WORD(carloc + pointsloc + 2);
+
+    printf("addr %08x\n", points);
+
+
+    for(int i = 0; i < pointsn; i++){
+        auto p0 = points[0];
+        auto p  = points[i];
+
+        int32_t xi = p.coord[0] - p0.coord[0];
+        int32_t yi = p.coord[1] - p0.coord[1];
+        int32_t zi = p.coord[2] - p0.coord[2];
+
+        float x = std::ldexp(xi,-24);
+        float y = std::ldexp(yi,-24);
+        float z = std::ldexp(zi,-24);
+
+        fprintf(f, "v  %f %f %f\n", x, y, z);
+    }
+
+    fprintf(f, "\n\n");
+
+    auto vldfs = MEM_WORD(carloc + 4);
+
+    while(1){
+        printf("trying offset: %04x\n",vldfs);
+
+        auto typ = MEM_BYTE(carloc + vldfs);
+        vldfs++;
+        if(typ == tipos::NULLENTRY){
+            break;
+        }
+        
+        if(typ == tipos::CAMERA){
+            vldfs += tipos_skip::CAMERA;
+            continue;
+        }
+        if(typ == tipos::UNKNOWN){
+            vldfs += tipos_skip::UNKNOWN;
+            continue;
+        }
+        if(typ == tipos::WHEEL){
+            vldfs += tipos_skip::WHEEL;
+            continue;
+        }
+        if(typ == tipos::COLORED){
+            auto n = MEM_BYTE(carloc + vldfs);
+            vldfs++;
+            fprintf(f, "f ");
+            for(int i =0; i < n;i++){
+                int v = MEM_WORD(carloc + vldfs);
+                vldfs += 2;
+                v >>= 1; //TODO the flag!
+                fprintf(f, " %d", v+1);
+                
+            }
+            vldfs += 4; //skip the palette for now
+
+            fprintf(f, "\n\n");
+            continue;
+        }
+        if(typ == tipos::TEXTURED){
+            auto n = MEM_BYTE(carloc + vldfs);
+            vldfs++;
+            fprintf(f, "f ");
+            auto def = (textured*)&MEM_BYTE(carloc + vldfs);
+            for(int i =0; i < n+1;i++){
+                int v = def[i].p_index;
+                v >>= 1; //TODO the flag!
+                fprintf(f, " %d", v+1);
+                vldfs+= 6;
+            }
+
+            fprintf(f, "\n\n");
+            continue;
+        }
+
+
+
+        printf("deu ruim :( \n");
+        break;
+    }
+
+    printf("nada\n");
+
+    fclose(f);
+
+}
+
