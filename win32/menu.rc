@@ -19,6 +19,10 @@ BEGIN
         MENUITEM "Single ste&p (space)", T2_APP_PHYS_STEP
     END
 #endif // DEBUGMENU
+    POPUP "&Sound"
+    BEGIN
+        MENUITEM "&Enable sound", T2_APP_SOUND
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&About", T2_APP_ABOUT

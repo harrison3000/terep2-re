@@ -6,3 +6,4 @@
 #define T2_APP_PHYS_RUN         40004
 #define T2_APP_PHYS_STEP        40005
 #define T2_APP_ABOUT            40006
+#define T2_APP_SOUND            40007
