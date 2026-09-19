@@ -1,10 +1,41 @@
 #include "raylib.h"
+#include <fcntl.h>
+#include <stddef.h>
+#include <sys/mman.h>
+#include <cstdint>
+#include <unistd.h>
+#include "cardat.h"
+#include "common.h"
+
+
+void* shared_mem = 0;
+
+struct carroMesh {
+    Vector3 loc;
+    Vector3 vertices[128];
+
+    int npoints;
+    pointdef *points;
+
+    Model modelo;
+
+    bool error;
+
+    void update_vertices();
+    void load_car(void *cardata, size_t size);
+};
+
+
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
+    int fdshm = shm_open("/terep2re-shm", O_RDONLY, 0);
+    shared_mem = mmap(0, 1 * 1024*1024, PROT_READ, MAP_SHARED, fdshm, 0);
+
+
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
@@ -70,4 +101,85 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     return 0;
+}
+
+//see: https://github.com/Zi9/Deformerz/blob/master/docs/TEREP2_DAT_car_model_format.md
+void carroMesh::load_car(void *cardata, size_t size){
+    auto base_mem = cardata; //so the macro works
+    auto pointsloc = MEM_WORD(0);
+    npoints = MEM_WORD(pointsloc);
+    points = (pointdef*)&MEM_WORD(pointsloc + 2);
+    
+
+    auto vldfs = MEM_WORD(4);
+    while(vldfs < size){
+        auto typ = MEM_BYTE(vldfs);
+        vldfs++;
+        
+        if(typ == tipos::CAMERA){
+            vldfs += tipos::CAMERA_SKIP;
+            continue;
+        }
+        if(typ == tipos::UNKNOWN){
+            vldfs += tipos::UNKNOWN_SKIP;
+            continue;
+        }
+        if(typ == tipos::WHEEL){
+            vldfs += tipos::WHEEL_SKIP;
+            continue;
+        }
+        if(typ == tipos::COLORED){
+            auto n = MEM_BYTE(vldfs);
+            vldfs++;
+
+            for(int i =0; i < n+1;i++){
+                int v = MEM_WORD(vldfs);
+                vldfs += 2;
+                v >>= 1; //TODO interpret the flag!
+            }
+            vldfs += 2; //skip the palette for now
+
+            continue;
+        }
+        if(typ == tipos::TEXTURED){
+            auto n = MEM_BYTE(vldfs);
+            vldfs++;
+
+            auto def = (textured*)&MEM_BYTE(vldfs);
+            for(int i =0; i < n+1;i++){
+                int v = def[i].p_index;
+                v >>= 1; //TODO interpret the flag!
+                vldfs+= 6;
+            }
+
+            continue;
+        }
+        if(typ == tipos::NULLENTRY){
+            error = 0;
+            return;
+        }
+
+        //unrecognized type
+        break;
+    }
+
+    error=1;
+}
+
+//see: https://github.com/Zi9/Deformerz/blob/master/docs/TEREP2_DAT_car_model_format.md
+void carroMesh::update_vertices(){
+    const float scale = 1.0f / 16777216.0f;
+
+    auto p0 = points[0];
+    for(int i = 0; i < npoints; i++){            
+        auto p  = points[i];
+
+        vertices[i].x = (float)((int32_t)(p.x - p0.x)) * scale;
+        vertices[i].y = (float)((int32_t)(p.y - p0.y)) * scale;
+        vertices[i].z = (float)((int32_t)(p.z - p0.z)) * scale;
+    }
+
+    loc.x = (float)p0.x * scale;
+    loc.y = (float)p0.y * scale;
+    loc.z = (float)p0.z * scale;
 }

@@ -8,13 +8,10 @@ class tipos {
     static const int COLORED = 4;
     static const int TEXTURED = 8;
     static const int WHEEL = 10;
-};
 
-class tipos_skip {
-    public:
-    static const int CAMERA = 4;
-    static const int UNKNOWN = 12;
-    static const int WHEEL = 186;
+    static const int CAMERA_SKIP = 4;
+    static const int UNKNOWN_SKIP = 12;
+    static const int WHEEL_SKIP = 186;
 };
 
 struct textured {
@@ -23,7 +20,7 @@ struct textured {
 };
 
 struct pointdef {
-    uint32_t coord[3];
+    uint32_t x,y,z;
     uint32_t unk[3];
     uint16_t size;
     uint16_t designator;
