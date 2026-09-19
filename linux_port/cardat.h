@@ -20,7 +20,7 @@ struct textured {
 };
 
 struct pointdef {
-    uint32_t x,y,z;
+    uint32_t x,z,y;
     uint32_t unk[3];
     uint16_t size;
     uint16_t designator;

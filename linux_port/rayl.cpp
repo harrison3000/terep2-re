@@ -10,6 +10,11 @@
 
 void* shared_mem = 0;
 
+struct trints {
+    int a,b,c;
+    Color color;
+};
+
 struct carroMesh {
     Vector3 loc;
     Vector3 vertices[128];
@@ -18,6 +23,10 @@ struct carroMesh {
     pointdef *points;
 
     Model modelo;
+
+    int ntris;
+    trints *trs;
+    
 
     bool error;
 
@@ -51,7 +60,10 @@ int main(void)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+    carroMesh carro;
+    carro.load_car(shared_mem, 4630); //all cars seem to be this size
+    carro.update_vertices();
+
 
     DisableCursor();                    // Limit cursor to relative movement inside the window
 
@@ -61,6 +73,8 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())        // Detect window close button or ESC key
     {
+        carro.update_vertices();
+
         // Update
         //----------------------------------------------------------------------------------
         UpdateCamera(&camera, CAMERA_FREE);
@@ -76,8 +90,12 @@ int main(void)
 
             BeginMode3D(camera);
 
-                DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
-                DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
+                for(int i =0; i<carro.ntris;i++){
+                    auto t = carro.trs[i];
+
+                    DrawTriangle3D(carro.vertices[t.a], carro.vertices[t.b], carro.vertices[t.c], t.color);
+                    DrawTriangle3D(carro.vertices[t.a], carro.vertices[t.c], carro.vertices[t.b], t.color);
+                }
 
                 DrawGrid(10, 1.0f);
 
@@ -110,6 +128,9 @@ void carroMesh::load_car(void *cardata, size_t size){
     npoints = MEM_WORD(pointsloc);
     points = (pointdef*)&MEM_WORD(pointsloc + 2);
     
+    ntris = 0;
+    trs = new trints[1024];
+    
 
     auto vldfs = MEM_WORD(4);
     while(vldfs < size){
@@ -130,26 +151,46 @@ void carroMesh::load_car(void *cardata, size_t size){
         }
         if(typ == tipos::COLORED){
             auto n = MEM_BYTE(vldfs);
+            n++; //the extra vertex
             vldfs++;
 
-            for(int i =0; i < n+1;i++){
+            int idxs[99];
+
+            for(int i =0; i < n;i++){
                 int v = MEM_WORD(vldfs);
                 vldfs += 2;
                 v >>= 1; //TODO interpret the flag!
+                idxs[i] = v;
             }
             vldfs += 2; //skip the palette for now
+
+            for(int i = 0 ; i < n-2;i++){
+                trs[ntris] = {idxs[i], idxs[i+1], idxs[i+2]};
+                trs[ntris].color = GREEN;
+                ntris++;
+            }
 
             continue;
         }
         if(typ == tipos::TEXTURED){
             auto n = MEM_BYTE(vldfs);
+            n++; //the extra vertex
             vldfs++;
 
+            int idxs[99];
+
             auto def = (textured*)&MEM_BYTE(vldfs);
-            for(int i =0; i < n+1;i++){
+            for(int i =0; i < n;i++){
                 int v = def[i].p_index;
                 v >>= 1; //TODO interpret the flag!
                 vldfs+= 6;
+                idxs[i] = v;
+            }
+
+            for(int i = 0 ; i < n-2;i++){
+                trs[ntris] = {idxs[i], idxs[i+1], idxs[i+2]};
+                trs[ntris].color = BLUE;
+                ntris++;
             }
 
             continue;
