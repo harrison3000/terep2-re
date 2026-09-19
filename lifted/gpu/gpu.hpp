@@ -108,7 +108,7 @@ void DOS3Call(cpu_ctx*);
 #define INST_SHL(dest, src) ({dest <<= src;})
 #define INST_SHR(dest, src) ({dest >>= src;})
 #define INST_SAR(dest, src) ({ \
-    typeof(dest) ds = SIGNED(dest);\
+    auto ds = SIGNED(dest);\
     ds >>= src; \
     dest = ds;  \
 })
