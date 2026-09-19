@@ -27,4 +27,4 @@ i686-w64-mingw32-gcc \
     win32/terep2re.c      \
     ${BLINKEN_SRC}        \
     win32/menu.o          \
-    -lole32 -o build/terep2re32.exe
+    -lole32 -lws2_32 -o build/terep2re32.exe

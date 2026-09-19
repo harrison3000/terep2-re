@@ -5,6 +5,7 @@ BEGIN
     POPUP "&File"
     BEGIN
         MENUITEM "&Open folder", T2_APP_OPEN
+        MENUITEM "Connect to deformerz", T2_CONNECT
         MENUITEM SEPARATOR
         MENUITEM "E&xit",  T2_APP_EXIT
     END

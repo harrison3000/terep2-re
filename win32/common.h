@@ -13,3 +13,7 @@ void blinkenInit(void);
 
 LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+#define MEM_WORD(addr) ({    \
+    uintptr_t finalAddr = (uintptr_t)base_mem + (addr); \
+    (uint16_t *)finalAddr; \
+})[0]

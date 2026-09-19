@@ -1,9 +1,15 @@
+#include <winsock2.h>
+
 #include "common.h"
 #include "resource.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <shlobj.h>
+
+
+#include <ws2tcpip.h>
+#include <unistd.h>
 
 #define DEFAULT_LEN (1 << 16)
 
@@ -53,6 +59,7 @@ int64_t GetTimeee(void){
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     HMENU hMenu;
+    static int fdnetwor = -1;
 
     switch (msg) {
         case WM_CREATE: {
@@ -140,6 +147,34 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                                 "About", MB_ICONINFORMATION | MB_OK) ;
                     return 0;
                 } break;
+
+                case T2_CONNECT: {
+                    static int started = 0;
+                    if(started == 0){
+                        WSADATA wsa;
+                        WSAStartup(MAKEWORD(2,2), &wsa); 
+                        started = 1;
+                    }
+
+                    MessageBox(NULL, "Trying to connect to 127.0.0.1:4567", "Lets go", MB_ICONINFORMATION);
+
+                    int fd = socket(AF_INET, SOCK_STREAM, 0);
+                    struct sockaddr_in addr = {
+                        .sin_family = AF_INET,
+                        .sin_port = htons(4567),
+                        .sin_addr.s_addr = inet_addr("127.0.0.1")
+                    };
+
+                    int ok = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+                    if(ok == SOCKET_ERROR){
+                        MessageBox(NULL, "Could not connect", "Error", MB_ICONSTOP);
+                        fdnetwor = -1;
+                    }else {
+                        fdnetwor = fd;
+                    }                    
+
+                    break;
+                }
             }
         }
         break;
@@ -166,6 +201,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     (void *)video, (void *)&gameImg,
                     DIB_RGB_COLORS, SRCCOPY
                 );
+
+                if(fdnetwor != -1){
+                    //first car always get loaded in the same location
+                    uint16_t offset = MEM_WORD(0x5bd0);
+                    void *payload = (void*)(&base_mem[0x5bd0 + offset]);
+
+                    int sent = send(fdnetwor, payload, 814, 0);
+                    if(sent != 814){
+                        MessageBox(NULL, "Didnt send all 814 bytes, something bad may happen", "Error", MB_ICONSTOP);
+                        closesocket(fdnetwor);
+                        fdnetwor = -1;
+                    }
+                }
             }
 
             EndPaint(hwnd, &ps);
