@@ -65,11 +65,14 @@ export function classifyRegs(r){
 }
 
 export function classifyMem(m){
+    const mt = m.match(/^(d?word|byte) (([DEFG]S)\:)?\[(.+)\]$/)
+    if(!mt){
+        return false;
+    }
     
-    return false;
+    return {tipo: "MEM", tipo2:mt[1], miolo: mt[4], reg: mt[3]};
 }
 
 export function classifyLit(l){
-    
-    return false;
+    return {tipo: "LIT", val: l};
 }

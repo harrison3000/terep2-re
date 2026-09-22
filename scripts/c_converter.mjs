@@ -43,4 +43,13 @@ const ops = normalized.map(function(l){
 
 debugIntermediaries(ops);
 
+
+const u = ops.map(function(a){
+
+
+    return "ERRO" + JSON.stringify(a);
+})
+
+await writeFile("raw_c.cpp", u.join("\n"));
+
 debugger;
