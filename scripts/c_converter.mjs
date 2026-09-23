@@ -1,7 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
-import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassifier, splitabom } from "./utils_converter.mjs";
+import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassifier, splitabom, doTheThingInst } from "./utils_converter.mjs";
 
 /**
  * @type {string[]}
@@ -11,10 +11,27 @@ const f = (await readFile("reasm/maincode.asm", "utf-8")).split("\n");
 const normalized = f.map(function(l){
     const sp = splitabom(l, ";");
     const command = sp[0].replaceAll(/\s+/g," ").trim();    
-    var classe = preclassifier(command);    
+    var classe = preclassifier(command);
 
     return {classe, command, comment: sp[1], original: l};
 });
+
+for(let i = normalized.length - 1; i > 0; i--){
+    if(normalized[i].classe !== "FUNC_LABEL"){
+        continue;
+    }
+    if(normalized[i].original === "f_init:"){
+        break;
+    }
+    while(i > 0){
+        i--;
+        let ni = normalized[i];
+        if(!ni.comment){
+            normalized.splice(i+1,0,{classe: "F_END"});
+            break;
+        }
+    }
+}
 
 debugIntermediaries(normalized);
 
@@ -37,9 +54,12 @@ const ops = normalized.map(function(l){
             })
             ;
     }
+    opcode = opcode?.toUpperCase();
 
     return {...l, classe: "INST", operands, opcode};
 });
+
+ops.push({classe: "F_END"});
 
 debugIntermediaries(ops);
 
@@ -57,29 +77,30 @@ const u = ops.map(function(a){
         return `void ${f}(cpu_ctx *cpu){    `;
     }
     if(c === "INST"){
-        let ops = a.operands.map(x => x + "");
-
-        if(a.opcode === "MOV"){
-            return "    " + ops.join(" = ") + ";";
+        let v = doTheThingInst(a);
+        if(a.comment){
+            v += " //" + a.comment;
         }
-        if(a.opcode === "XOR" && ops[0] === ops[1]){
-            return "    " + ops[0] + " = 0; //was a XOR";
-        }
-
-
-        let op = a.operands.join(", ");
-        let u = `    INST_${a.opcode}(${op});`;
-        return u;
+        return "   " + v;
     }
     if(c === "CALL"){
         let f = a.command.split(" ").at(-1);
-        return `    ${f}(cpu);`;
+        let c = `   ${f}(cpu);`;
+        if(a.comment){
+            c += " //" + a.comment;
+        }
+        return c;
     }
     if(c === "LOCAL_LABEL"){
         let l = a.command.slice(1);
-        return "    " + l;
+        return "   " + l;
     }
-    
+    if(c === "RETURN"){
+        return "   return;";
+    }
+    if(c === "F_END"){
+        return "}\n";
+    }
 
     //debugger;
     return "ERRO" + JSON.stringify(a);

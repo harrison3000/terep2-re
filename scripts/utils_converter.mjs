@@ -14,8 +14,6 @@ export function preclassifier(command){
     switch(clc){
         case "":     return "EMPTY";
         case "ret":  return "RETURN";
-        case "jmp":  return "UNCOND_JUMP";
-        case "jcxz": return "JCXZ";
         case "dw":   return "DW";
         case "call": return "CALL";
     }
@@ -87,6 +85,11 @@ export function classifyLit(l){
 
 
 function mem2string(){
+    if(this.miolo.match(/^[a-z]\w{2,}$/i)){
+        //variable
+        return this.miolo;
+    }
+
     var miolomole = this.miolo.replaceAll(/(SI|DI|BX)/g, "cpu->$1");
     var s = this.tipo2.toUpperCase();
 
@@ -94,4 +97,57 @@ function mem2string(){
         return  `SMEM_${s}(cpu->${this.seg},${miolomole})`;
     }
     return  `MEM_${s}(${miolomole})`;
+}
+
+export function doTheThingInst(a){
+    let ops = a.operands.map(x => x + "");
+    let {opcode} = a;
+    if(opcode.endsWith("_M2M")){
+        opcode = opcode.slice(0,-4);
+    }
+
+    if(opcode === "MOV"){
+        return ops.join(" = ") + ";";
+    }
+    if(opcode === "XOR" && ops[0] === ops[1]){
+        return ops[0] + " = 0; //was a XOR";
+    }
+    if(opcode === "JMP"){
+        return `goto ${tiraponto(ops[0])};`;
+    }
+    if(opcode === "JCXZ"){
+        return `if (cpu->CX == 0) goto ${tiraponto(ops[0])};`;
+    }
+    if(opcode === "LOOP"){
+        return `if (--cpu->CX != 0) goto ${tiraponto(ops[0])};`;
+    }
+
+    if(opcode.startsWith("J")){
+        let t = opcode.slice(1);
+        return `JUMP«${t},goto ${tiraponto(ops[0])};»;`;
+    }
+    if(opcode.startsWith("SET")){
+        let t = opcode.slice(3);
+        return `SET«${t},${ops[0]}»;`;
+    }
+
+    if(opcode === "CMP" || opcode === "TEST"){
+        return `COMP«${opcode}, ${ops[0]}, ${ops[1]}»`
+    }
+
+
+    if(opcode === "IMUL" && ops.length === 2){
+        opcode  = "IMUL2";
+    }
+
+
+    let op = a.operands.join(", ");
+    return `INST_${opcode}(${op});`;
+}
+
+function tiraponto(s){
+    if(s.startsWith(".")){
+        return s.slice(1);
+    }
+    return s;
 }
