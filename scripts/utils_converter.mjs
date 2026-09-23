@@ -48,17 +48,21 @@ export function splitabom(str, sep){
 
 export function classifyRegs(r){
     var val = r.toUpperCase();
+    function toString(){
+        return "cpu->" + val;
+    }
+
     if(val.match(/^[CDEFG]S$/)){
-        return {tipo: "REG", tipo2: "SEGMENT", val};
+        return {tipo: "REG", tipo2: "SEGMENT", val, toString};
     }
     if(val.match(/^E[ABCD]X$/) || val.match(/^E[SD]I$/) || val === "EBP"){
-        return {tipo: "REG", tipo2: "GPR32", val};
+        return {tipo: "REG", tipo2: "GPR32", val, toString};
     }
     if(val.match(/^[ABCD]X$/) || val.match(/^[SD]I$/) || val === "BP"){
-        return {tipo: "REG", tipo2: "GPR16", val};
+        return {tipo: "REG", tipo2: "GPR16", val, toString};
     }
     if(val.match(/^[ABCD][HL]$/)){
-        return {tipo: "REG", tipo2: "GPR8", val};
+        return {tipo: "REG", tipo2: "GPR8", val, toString};
     }
 
     return false;
@@ -70,9 +74,24 @@ export function classifyMem(m){
         return false;
     }
     
-    return {tipo: "MEM", tipo2:mt[1], miolo: mt[4], reg: mt[3]};
+    return {tipo: "MEM", tipo2:mt[1], miolo: mt[4], seg: mt[3], toString:mem2string};
 }
 
 export function classifyLit(l){
-    return {tipo: "LIT", val: l};
+    function toString(){
+        return l;
+    }
+
+    return {tipo: "LIT", val: l, toString};
+}
+
+
+function mem2string(){
+    var miolomole = this.miolo.replaceAll(/(SI|DI|BX)/g, "cpu->$1");
+    var s = this.tipo2.toUpperCase();
+
+    if(this.seg){
+        return  `SMEM_${s}(cpu->${this.seg},${miolomole})`;
+    }
+    return  `MEM_${s}(${miolomole})`;
 }

@@ -57,6 +57,16 @@ const u = ops.map(function(a){
         return `void ${f}(cpu_ctx *cpu){    `;
     }
     if(c === "INST"){
+        let ops = a.operands.map(x => x + "");
+
+        if(a.opcode === "MOV"){
+            return "    " + ops.join(" = ") + ";";
+        }
+        if(a.opcode === "XOR" && ops[0] === ops[1]){
+            return "    " + ops[0] + " = 0; //was a XOR";
+        }
+
+
         let op = a.operands.join(", ");
         let u = `    INST_${a.opcode}(${op});`;
         return u;
