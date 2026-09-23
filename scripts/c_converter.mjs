@@ -45,8 +45,33 @@ debugIntermediaries(ops);
 
 
 const u = ops.map(function(a){
+    const c = a.classe;
+    if(c === "EMPTY"){
+        if(a.comment === undefined){
+            return "";
+        }
+        return a.original.replace(";", "//");
+    }
+    if(c === "FUNC_LABEL"){
+        const f = a.command.slice(0,-1);
+        return `void ${f}(cpu_ctx *cpu){    `;
+    }
+    if(c === "INST"){
+        let op = a.operands.join(", ");
+        let u = `    INST_${a.opcode}(${op});`;
+        return u;
+    }
+    if(c === "CALL"){
+        let f = a.command.split(" ").at(-1);
+        return `    ${f}(cpu);`;
+    }
+    if(c === "LOCAL_LABEL"){
+        let l = a.command.slice(1);
+        return "    " + l;
+    }
+    
 
-
+    //debugger;
     return "ERRO" + JSON.stringify(a);
 })
 
