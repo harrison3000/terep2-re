@@ -7421,10 +7421,12 @@ FUN_1000_46a0:
     PUSH        DI
     XOR         DI,DI
     MOV         AX,word [SI + 0x2]
+    CMP ax, word [0x120]
+    setl  byte [another_flag_thing]
     SUB         AX,word [0x120]
     MOV         word [0xe992],AX
-;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
-    JL          .LAB_LOC_1
+    CMP byte [another_flag_thing], 1
+    JE          .LAB_LOC_1
     MOV         EAX,dword [SI + 0x6]
     MOV         dword [DI + 0xdb16],EAX
     MOV         dword [DI + 0xdb1a],EBX
@@ -7454,9 +7456,11 @@ FUN_1000_46d3:
     PUSH        DI
     MOV         DI,word [0xe996]
     MOV         AX,word [SI + 0x2]
+    CMP ax, word [0x120]
+    setl  byte [another_flag_thing]
     SUB         AX,word [0x120]
-;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
-    JL          .LAB_LOC_1
+    CMP byte [another_flag_thing], 1
+    JE          .LAB_LOC_1
     MOV         word [0xe992],AX
     MOV         EAX,dword [SI + 0x6]
     MOV         dword [DI + 0xdb16],EAX
@@ -7506,9 +7510,11 @@ FUN_1000_46d3:
     RET
 .LAB_LOC_3:
     MOV         AX,word [SI + 0x2]
+    CMP ax, word [0x120]
+    setge  byte [another_flag_thing]
     SUB         AX,word [0x120]
-;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
-    JGE         .LAB_LOC_4
+    CMP byte [another_flag_thing], 1
+    JE          .LAB_LOC_4
     MOV         word [0xe992],AX
     MOV         AX,word [SI]
     MOV         word [0xe990],AX
@@ -7568,9 +7574,11 @@ FUN_1000_47ec:
     TEST        CX,CX
     JL          .LAB_LOC_3
     MOV         AX,word [SI + 0x2]
+    CMP ax, word [0x120]
+    setl  byte [another_flag_thing]
     SUB         AX,word [0x120]
-;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
-    JL          .LAB_LOC_1
+    CMP byte [another_flag_thing], 1
+    JE          .LAB_LOC_1
     MOV         AX, word [0xe996]
     SHR         AX,0x3
     MOV         word [0xdb14],AX
@@ -7611,9 +7619,11 @@ FUN_1000_47ec:
     RET
 .LAB_LOC_3:
     MOV         AX,word [SI + 0x2]
+    CMP ax, word [0x120]
+    setge  byte [another_flag_thing]
     SUB         AX,word [0x120]
-;#REMOVE_BEFORE_CONV  CMP  word [SI + 0x2], word [0x120]
-    JGE         .LAB_LOC_4
+    CMP byte [another_flag_thing], 1
+    JE          .LAB_LOC_4
     MOV         AX, word [0xe996]
     SHR         AX,0x3
     MOV         word [0xdb14],AX

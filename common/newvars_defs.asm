@@ -42,6 +42,9 @@ some_flag_thing_idk:
     ;after the changes I didnt notice any rendering bug, so yeah
     db 0
 
+another_flag_thing:
+    db 0
+
 flying_car_tmp:
     db 0
 

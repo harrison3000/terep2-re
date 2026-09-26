@@ -7329,9 +7329,10 @@ void FUN_1000_46a0(cpu_ctx *cpu){
    INST_PUSH(cpu->DI);
    cpu->DI = 0; //was a XOR
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
+   another_flag_thing = (SIGNED(cpu->AX) < SIGNED(MEM_WORD(0x120)));
    INST_SUB(cpu->AX, MEM_WORD(0x120));
    MEM_WORD(0xe992) = cpu->AX;
-   if(SIGNED(MEM_WORD(cpu->SI + 0x2)) < SIGNED(MEM_WORD(0x120))) goto LAB_LOC_1;
+   if(another_flag_thing == 1) goto LAB_LOC_1;
    cpu->EAX = MEM_DWORD(cpu->SI + 0x6);
    MEM_DWORD(cpu->DI + 0xdb16) = cpu->EAX;
    MEM_DWORD(cpu->DI + 0xdb1a) = cpu->EBX;
@@ -7363,8 +7364,9 @@ void FUN_1000_46d3(cpu_ctx *cpu){
    INST_PUSH(cpu->DI);
    cpu->DI = MEM_WORD(0xe996);
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
+   another_flag_thing = (SIGNED(cpu->AX) < SIGNED(MEM_WORD(0x120)));
    INST_SUB(cpu->AX, MEM_WORD(0x120));
-   if(SIGNED(MEM_WORD(cpu->SI + 0x2)) < SIGNED(MEM_WORD(0x120))) goto LAB_LOC_1;
+   if(another_flag_thing == 1) goto LAB_LOC_1;
    MEM_WORD(0xe992) = cpu->AX;
    cpu->EAX = MEM_DWORD(cpu->SI + 0x6);
    MEM_DWORD(cpu->DI + 0xdb16) = cpu->EAX;
@@ -7414,8 +7416,9 @@ void FUN_1000_46d3(cpu_ctx *cpu){
    return;
    LAB_LOC_3:
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
+   another_flag_thing = (SIGNED(cpu->AX) >= SIGNED(MEM_WORD(0x120)));
    INST_SUB(cpu->AX, MEM_WORD(0x120));
-   if(SIGNED(MEM_WORD(cpu->SI + 0x2)) >= SIGNED(MEM_WORD(0x120))) goto LAB_LOC_4;
+   if(another_flag_thing == 1) goto LAB_LOC_4;
    MEM_WORD(0xe992) = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI);
    MEM_WORD(0xe990) = cpu->AX;
@@ -7477,8 +7480,9 @@ void FUN_1000_47ec(cpu_ctx *cpu){
    cpu->CX = MEM_WORD(0xe992);
    if(SIGNED(cpu->CX) < 0) goto LAB_LOC_3;
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
+   another_flag_thing = (SIGNED(cpu->AX) < SIGNED(MEM_WORD(0x120)));
    INST_SUB(cpu->AX, MEM_WORD(0x120));
-   if(SIGNED(MEM_WORD(cpu->SI + 0x2)) < SIGNED(MEM_WORD(0x120))) goto LAB_LOC_1;
+   if(another_flag_thing == 1) goto LAB_LOC_1;
    cpu->AX = MEM_WORD(0xe996);
    INST_SHR(cpu->AX, 0x3);
    MEM_WORD(0xdb14) = cpu->AX;
@@ -7519,8 +7523,9 @@ void FUN_1000_47ec(cpu_ctx *cpu){
    return;
    LAB_LOC_3:
    cpu->AX = MEM_WORD(cpu->SI + 0x2);
+   another_flag_thing = (SIGNED(cpu->AX) >= SIGNED(MEM_WORD(0x120)));
    INST_SUB(cpu->AX, MEM_WORD(0x120));
-   if(SIGNED(MEM_WORD(cpu->SI + 0x2)) >= SIGNED(MEM_WORD(0x120))) goto LAB_LOC_4;
+   if(another_flag_thing == 1) goto LAB_LOC_4;
    cpu->AX = MEM_WORD(0xe996);
    INST_SHR(cpu->AX, 0x3);
    MEM_WORD(0xdb14) = cpu->AX;

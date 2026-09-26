@@ -9,8 +9,7 @@ import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassif
 const f = (await readFile("reasm/maincode.asm", "utf-8")).split("\n");
 
 const normalized = f.map(function(l){
-    const l2 = l.replace(";#REMOVE_BEFORE_CONV","");
-    const sp = splitabom(l2, ";");
+    const sp = splitabom(l, ";");
     const command = sp[0].replaceAll(/\s+/g," ").trim();    
     var classe = preclassifier(command);
     if (command.includes("[CS:BX + .JMP_TABLE")){

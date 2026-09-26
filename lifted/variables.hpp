@@ -59,6 +59,7 @@ uint16_t retval_2418;
 //after the changes I didnt notice any rendering bug, so yeah
 uint8_t some_flag_thing_idk = 0;
 
+uint8_t another_flag_thing = 0;
 
 uint8_t flying_car_tmp = 0;
 
