@@ -55,8 +55,8 @@ void f_init(cpu_ctx *cpu){
    DOS3Call(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_6;
    MEM_WORD(0x1a4b) = cpu->AX;
-   FUN_1000_24c0(cpu);
-   FUN_1000_255c(cpu);
+   FUN_INIT_24c0(cpu);
+   FUN_INIT_255c(cpu);
    MEM_WORD(0x5bba) = 0x0; //= 0001h
    cpu->DI = 0x5bd0;
    MEM_WORD(0x5bbc) = cpu->DI;
@@ -70,14 +70,14 @@ void f_init(cpu_ctx *cpu){
    cpu->BX = 0x7a00;
    cpu->DX = MEM_WORD(cpu->SI + 0x5af7); //= 5B01h
    INST_PUSH(cpu->SI);
-   FUN_1000_2454(cpu);
+   FUN_INIT_2454(cpu);
    INST_POP(cpu->SI);
    if(CHECK_CFLAG()) goto LAB_LOC_5;
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->DI);
    INST_PUSH(cpu->SI);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   FUN_1000_2431(cpu);
+   FUN_INIT_2431(cpu);
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
    INST_POP(cpu->AX);
@@ -91,7 +91,7 @@ void f_init(cpu_ctx *cpu){
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
    if(CHECK_CFLAG()) goto LAB_LOC_4;
-   FUN_1000_5a95(cpu);
+   FUN_INIT_5a95(cpu);
    INST_PUSH(cpu->BX);
    if(SIGNED(cpu->AX) <= 0x100) goto LAB_LOC_2;
    cpu->AX = 0x100;
@@ -110,7 +110,7 @@ void f_init(cpu_ctx *cpu){
    MEM_WORD(cpu->DI + 0x1e) = cpu->AX;
    cpu->ES = cpu->AX;
    cpu->DI = 0; //was a XOR
-   FUN_1000_5acf(cpu);
+   FUN_INIT_5acf(cpu);
    LAB_LOC_3:
    cpu->AH = 0x3e;
    DOS3Call(cpu);
@@ -127,9 +127,9 @@ void f_init(cpu_ctx *cpu){
    goto load_cars_loop;
 
    LAB_LOC_5:
-   FUN_1000_2b70(cpu);
+   FUN_INIT_2b70(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_6;
-    //CALL        FUN_1000_57e0 ;FIXME restore sound!
+    //CALL        FUN_INIT_57e0 ;FIXME restore sound!
    MEM_WORD(0x6f) = cpu->DX;
    MEM_WORD(0x71) = cpu->AX;
 
@@ -200,10 +200,10 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->DI = 0x80;
    f_cam_select(cpu);
    cpu->BX = MEM_WORD(0xc6);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f7) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f9) = cpu->AX;
    cpu->SI = 0xc2;
@@ -261,10 +261,10 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->DI = 0x80;
    f_cam_select(cpu);
    cpu->BX = MEM_WORD(0xc6);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f7) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f9) = cpu->AX;
    cpu->SI = 0xc2;
@@ -319,10 +319,10 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->DI = 0x92;
    f_cam_select(cpu);
    cpu->BX = MEM_WORD(0xc6);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f7) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SAR(cpu->AX, 0x7);
    MEM_WORD(0x5f9) = cpu->AX;
    cpu->SI = 0xc2;
@@ -529,11 +529,11 @@ void F_0693(cpu_ctx *cpu){
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_INC(cpu->SI);
    INST_INC(cpu->SI);
-   FUN_1000_1091(cpu);
+   FUN_PHYSICS_1091(cpu);
    MEM_DWORD(0xe0) = cpu->EAX;
    MEM_DWORD(0xe4) = cpu->EBX;
    MEM_DWORD(0xe8) = cpu->ECX;
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    MEM_DWORD(0xec) = cpu->EAX;
    MEM_DWORD(0xf0) = cpu->EBX;
    MEM_DWORD(0xf4) = cpu->ECX;
@@ -541,18 +541,18 @@ void F_0693(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(0xed);
    cpu->BX = MEM_WORD(0xf1);
    INST_NEG(cpu->AX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_PUSH(cpu->AX);
    INST_SUB(cpu->AX, MEM_WORD(0xc6));
    INST_ADD(MEM_WORD(0xc6), cpu->AX);
    cpu->AX = MEM_WORD(0xe1);
    cpu->BX = MEM_WORD(0xe5);
-   FUN_1000_26dd(cpu);
+   FUN_PHYSICS_26dd(cpu);
    cpu->CX = cpu->AX;
    cpu->AX = MEM_WORD(0xe1);
    cpu->BX = MEM_WORD(0xe5);
    INST_NEG(cpu->AX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_POP(cpu->BX);
    INST_SUB(cpu->BX, cpu->AX);
    another_quick_temp_w = cpu->BX;
@@ -561,17 +561,17 @@ void F_0693(cpu_ctx *cpu){
    INST_NEG(cpu->BX);
    LAB_LOC_1:
    cpu->AX = MEM_WORD(0xe9);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_NEG(cpu->AX);
    INST_SUB(cpu->AX, MEM_WORD(0xc2));
    INST_ADD(MEM_WORD(0xc2), cpu->AX);
    cpu->AX = MEM_WORD(0xed);
    cpu->BX = MEM_WORD(0xf1);
    cpu->CX = MEM_WORD(0xf5);
-   FUN_1000_26dd(cpu);
+   FUN_PHYSICS_26dd(cpu);
    cpu->BX = cpu->AX;
    cpu->AX = cpu->CX;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_NEG(cpu->AX);
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
@@ -595,11 +595,11 @@ void F_073f(cpu_ctx *cpu){
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_INC(cpu->SI);
    INST_INC(cpu->SI);
-   FUN_1000_1091(cpu);
+   FUN_PHYSICS_1091(cpu);
    MEM_DWORD(0xe0) = cpu->EAX;
    MEM_DWORD(0xe4) = cpu->EBX;
    MEM_DWORD(0xe8) = cpu->ECX;
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    MEM_DWORD(0xec) = cpu->EAX;
    MEM_DWORD(0xf0) = cpu->EBX;
    MEM_DWORD(0xf4) = cpu->ECX;
@@ -607,55 +607,55 @@ void F_073f(cpu_ctx *cpu){
    cpu->AX = MEM_WORD(0xed);
    cpu->BX = MEM_WORD(0xf1);
    INST_NEG(cpu->EAX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc6));
    INST_ADD(MEM_WORD(0xc6), cpu->AX);
    cpu->BX = MEM_WORD(0xc6);
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_NEG(cpu->AX);
    INST_SAR(cpu->AX, 0x5);
    INST_ADD(cpu->AX, MEM_WORD(0xb0));
    INST_PUSH(cpu->AX);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x5);
    INST_ADD(cpu->AX, MEM_WORD(0xac));
    INST_POP(cpu->BX);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xb4));
    cpu->BX = 0x3ff;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_SAR(cpu->AX, 0x2);
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
    cpu->BX = MEM_WORD(0xc6);
    INST_ADD(cpu->BX, 0x2000);
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_NEG(cpu->AX);
    INST_SAR(cpu->AX, 0x6);
    INST_ADD(cpu->AX, MEM_WORD(0xb0));
    INST_PUSH(cpu->AX);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x6);
    INST_POP(cpu->BX);
    INST_ADD(cpu->AX, MEM_WORD(0xac));
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    INST_PUSH(cpu->AX);
    cpu->BX = MEM_WORD(0xc6);
    INST_SUB(cpu->BX, 0x2000);
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_NEG(cpu->AX);
    INST_SAR(cpu->AX, 0x6);
    INST_ADD(cpu->AX, MEM_WORD(0xb0));
    INST_PUSH(cpu->AX);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SAR(cpu->AX, 0x6);
    INST_POP(cpu->BX);
    INST_ADD(cpu->AX, MEM_WORD(0xac));
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    INST_POP(cpu->BX);
    INST_SUB(cpu->AX, cpu->BX);
    cpu->BX = 0x1ff;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc2));
    INST_SAR(cpu->AX, 0x2);
    INST_ADD(MEM_WORD(0xc2), cpu->AX);
@@ -672,7 +672,7 @@ void F_0828(cpu_ctx *cpu){
    MEM_DWORD(0xae) = cpu->EAX;
    cpu->AX = MEM_WORD(0xac);
    cpu->BX = MEM_WORD(0xb0);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    INST_ADD(cpu->AX, MEM_WORD(0x11c));
    INST_SHL(cpu->EAX, 0x10);
    MEM_DWORD(0xb2) = cpu->EAX;
@@ -685,16 +685,16 @@ void F_0828(cpu_ctx *cpu){
    INST_NEG(cpu->BX);
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc6));
    INST_ADD(MEM_WORD(0xc6), cpu->AX);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
-   FUN_1000_26dd(cpu);
+   FUN_PHYSICS_26dd(cpu);
    cpu->BX = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
    INST_SUB(cpu->AX, MEM_WORD(0xb4));
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
    cpu->AX = 0; //was a XOR
@@ -716,12 +716,12 @@ void F_0893(cpu_ctx *cpu){
    cpu->BX = MEM_WORD(cpu->SI + 0x6);
    INST_SUB(cpu->BX, MEM_WORD(cpu->DI + 0x6));
    INST_NEG(cpu->BX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    MEM_WORD(cpu->DI + 0xc) = cpu->AX;
    cpu->BX = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    cpu->CX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    cpu->BX = cpu->CX;
    cpu->CX = MEM_WORD(0x11e);
    INST_SHL(cpu->CX, 0x1);
@@ -740,7 +740,7 @@ void F_0893(cpu_ctx *cpu){
    INST_ADD(MEM_WORD(cpu->DI + 0x6), cpu->BX);
    cpu->AX = MEM_WORD(cpu->DI + 0x2);
    cpu->BX = MEM_WORD(cpu->DI + 0x6);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    cpu->BX = cpu->AX;
    INST_ADD(cpu->BX, 0x28);
    INST_ADD(cpu->AX, MEM_WORD(0x11c));
@@ -752,7 +752,7 @@ void F_0893(cpu_ctx *cpu){
    cpu->BX = MEM_WORD(0x11e);
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
    INST_SUB(cpu->AX, MEM_WORD(cpu->DI + 0xa));
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(cpu->DI + 0xe));
    INST_SAR(cpu->AX, 0x2);
    INST_ADD(MEM_WORD(cpu->DI + 0xe), cpu->AX);
@@ -818,12 +818,12 @@ void F_0948(cpu_ctx *cpu){
    INST_SUB(cpu->AX, MEM_WORD(0xac));
    INST_SUB(cpu->BX, MEM_WORD(0xb0));
    INST_NEG(cpu->BX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    MEM_WORD(0xc6) = cpu->AX;
    cpu->BX = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    cpu->CX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    cpu->BX = cpu->CX;
    cpu->CX = MEM_WORD(0x11e);
    INST_SHL(cpu->CX, 0x1);
@@ -842,7 +842,7 @@ void F_0948(cpu_ctx *cpu){
    INST_ADD(MEM_WORD(0xb0), cpu->BX);
    cpu->AX = MEM_WORD(0xac);
    cpu->BX = MEM_WORD(0xb0);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    cpu->BX = cpu->AX;
    INST_ADD(cpu->BX, 0x28);
    INST_ADD(cpu->AX, MEM_WORD(0x11c));
@@ -854,7 +854,7 @@ void F_0948(cpu_ctx *cpu){
    cpu->BX = MEM_WORD(0x11e);
    cpu->AX = MEM_WORD(0xcc);
    INST_SUB(cpu->AX, MEM_WORD(0xb4));
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    INST_SUB(cpu->AX, MEM_WORD(0xc4));
    INST_SAR(cpu->AX, 0x2);
    INST_ADD(MEM_WORD(0xc4), cpu->AX);
@@ -868,7 +868,7 @@ void F_0948(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0a3b(cpu_ctx *cpu){    
+void FUN_PHYSICS_0a3b(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56ce(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -886,21 +886,21 @@ void FUN_1000_0a3b(cpu_ctx *cpu){
    cpu->SI = MEM_WORD(0xa4);
    INST_SHL(cpu->SI, 0x1);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   FUN_1000_0a82(cpu);
+   FUN_PHYSICS_0a82(cpu);
    goto LAB_LOC_1;
    LAB_LOC_4:
    INST_AND(CSD_DAT_keys_571e[3], 0x3f);
    cpu->SI = MEM_WORD(0xa6);
    INST_SHL(cpu->SI, 0x1);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   FUN_1000_0a82(cpu);
+   FUN_PHYSICS_0a82(cpu);
    goto LAB_LOC_2;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0a82(cpu_ctx *cpu){    
+void FUN_PHYSICS_0a82(cpu_ctx *cpu){    
                               //XREF[2]:     1000:0a66(c),1000:0a7d(c)
    cpu->DI = cpu->SI;
    INST_ADD(cpu->DI, MEM_WORD(cpu->SI));
@@ -993,7 +993,7 @@ void FUN_1000_0b25(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: somehow related to the lifetime of particles, disabling this make the particles never despawn
-void FUN_1000_0bb5(cpu_ctx *cpu){    
+void FUN_PHYSICS_0bb5(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56cb(c)
    cpu->DI = 0; //was a XOR
    if(cpu->DI >= MEM_WORD(0x3e51)) goto LAB_LOC_4;
@@ -1016,7 +1016,7 @@ void FUN_1000_0bb5(cpu_ctx *cpu){
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
    INST_PUSH(cpu->CX);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    INST_POP(cpu->CX);
    another_quick_temp = (SIGNED(cpu->AX) >= SIGNED(cpu->CX));
    INST_POP(cpu->BX);
@@ -1131,7 +1131,7 @@ void FUN_1000_0cd3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0d2a(cpu_ctx *cpu){    
+void FUN_PHYSICS_0d2a(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56b4(c)
    INST_MOVZX(cpu->BX, MEM_BYTE(cpu->DI));
    cpu->AL = CSD_DAT_keys_571e[cpu->BX];
@@ -1212,7 +1212,7 @@ void FUN_1000_0d2a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0e28(cpu_ctx *cpu){    
+void FUN_PHYSICS_0e28(cpu_ctx *cpu){    
                               //XREF[1]:     1000:48db(c)
    cpu->DI = cpu->SI;
    INST_ADD(cpu->DI, MEM_WORD(cpu->SI));
@@ -1244,7 +1244,7 @@ void FUN_1000_0e28(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0e69(cpu_ctx *cpu){    
+void FUN_PHYSICS_0e69(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4b6f(c)
    if(cpu->AX == 0x0) goto LAB_LOC_1;
    if(cpu->AX == 0x1) goto LAB_LOC_3;
@@ -1256,7 +1256,7 @@ void FUN_1000_0e69(cpu_ctx *cpu){
    return;
    LAB_LOC_1:
    if((CSD_WORD_1000_0e67 & 0x1) != 0) goto LAB_LOC_2;
-   FUN_1000_1136(cpu);
+   FUN_PHYSICS_1136(cpu);
    INST_OR(CSD_WORD_1000_0e67, 0x1);
    LAB_LOC_2:
    cpu->EAX = CSD_DWORD_1000_12a7;
@@ -1266,7 +1266,7 @@ void FUN_1000_0e69(cpu_ctx *cpu){
    return;
    LAB_LOC_3:
    if((CSD_WORD_1000_0e67 & 0x1) != 0) goto LAB_LOC_4;
-   FUN_1000_1136(cpu);
+   FUN_PHYSICS_1136(cpu);
    INST_OR(CSD_WORD_1000_0e67, 0x1);
    LAB_LOC_4:
    cpu->EAX = CSD_DWORD_1000_12a7;
@@ -1279,7 +1279,7 @@ void FUN_1000_0e69(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_ADD(cpu->SI, 0x2);
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    CSD_DWORD_1000_12bf = cpu->EAX;
    CSD_DWORD_1000_12c3 = cpu->EBX;
    CSD_DWORD_1000_12c7 = cpu->ECX;
@@ -1296,7 +1296,7 @@ void FUN_1000_0e69(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_ADD(cpu->SI, 0x2);
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    CSD_DWORD_1000_12bf = cpu->EAX;
    CSD_DWORD_1000_12c3 = cpu->EBX;
    CSD_DWORD_1000_12c7 = cpu->ECX;
@@ -1313,7 +1313,7 @@ void FUN_1000_0e69(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0f67(cpu_ctx *cpu){    
+void FUN_PHYSICS_0f67(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4bd5(c)
    cpu->CX = MEM_WORD(cpu->SI + 0x8);
    if(cpu->AX == 0x0) goto LAB_LOC_1;
@@ -1370,7 +1370,7 @@ void FUN_1000_0f67(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1003(cpu_ctx *cpu){    
+void FUN_PHYSICS_1003(cpu_ctx *cpu){    
                               //XREF[1]:     1000:497a(c)
    return;
 }
@@ -1378,7 +1378,7 @@ void FUN_1000_1003(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1004(cpu_ctx *cpu){    
+void FUN_PHYSICS_1004(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56b7(c)
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
    MEM_WORD(cpu->SI + 0x16) = cpu->AX;
@@ -1432,7 +1432,7 @@ void FUN_1000_1004(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1091(cpu_ctx *cpu){    
+void FUN_PHYSICS_1091(cpu_ctx *cpu){    
                               //XREF[4]:     1000:06b4(c),1000:0760(c),1000:113c(c),1000:11f6(c)
    cpu->EDX = MEM_DWORD(cpu->SI + 0xc4);
    INST_SUB(cpu->EDX, MEM_DWORD(cpu->SI + 0xa8));
@@ -1441,14 +1441,14 @@ void FUN_1000_1091(cpu_ctx *cpu){
    cpu->ECX = MEM_DWORD(cpu->SI + 0xcc);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI + 0xb0));
    cpu->EAX = cpu->EDX;
-   FUN_1000_2726(cpu);
+   FUN_PHYSICS_2726(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_10b6(cpu_ctx *cpu){    
+void FUN_PHYSICS_10b6(cpu_ctx *cpu){    
                               //XREF[6]:     1000:06c5(c),1000:0771(c),1000:0ef4(c),1000:0f36(c),
                               //             1000:1150(c),1000:120a(c)
    cpu->EDX = MEM_DWORD(cpu->SI + 0x70);
@@ -1464,7 +1464,7 @@ void FUN_1000_10b6(cpu_ctx *cpu){
    INST_ADD(cpu->ECX, MEM_DWORD(cpu->SI + 0x94));
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI + 0xcc));
    cpu->EAX = cpu->EDX;
-   FUN_1000_2726(cpu);
+   FUN_PHYSICS_2726(cpu);
    return;
 
  // 1000:1135 [UNDEFINED BYTES REMOVED]
@@ -1475,25 +1475,25 @@ void FUN_1000_10b6(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to steering, disabling this function disables steering
-void FUN_1000_1136(cpu_ctx *cpu){    
+void FUN_PHYSICS_1136(cpu_ctx *cpu){    
                               //XREF[2]:     1000:0e9a(c),1000:0ec4(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_ADD(cpu->SI, 0x2);
-   FUN_1000_1091(cpu);
+   FUN_PHYSICS_1091(cpu);
    CSD_DWORD_1000_12b3 = cpu->EAX;
    CSD_DWORD_1000_12b7 = cpu->EBX;
    CSD_DWORD_1000_12bb = cpu->ECX;
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    CSD_DWORD_1000_12bf = cpu->EAX;
    CSD_DWORD_1000_12c3 = cpu->EBX;
    CSD_DWORD_1000_12c7 = cpu->ECX;
    INST_POP(cpu->SI);
    cpu->BX = MEM_WORD(cpu->SI + 0x16);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SHL(cpu->EAX, 0x10);
    CSD_DWORD_1000_129f = cpu->EAX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SHL(cpu->EAX, 0x10);
    CSD_DWORD_1000_12a3 = cpu->EAX; //= 7FFF0000h
    cpu->EAX = CSD_DWORD_1000_12bf;
@@ -1532,20 +1532,20 @@ void FUN_1000_11f0(cpu_ctx *cpu){
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
    INST_ADD(cpu->SI, 0x2);
-   FUN_1000_1091(cpu);
+   FUN_PHYSICS_1091(cpu);
    CSD_DWORD_1000_12b3 = cpu->EAX;
    CSD_DWORD_1000_12b7 = cpu->EBX;
    CSD_DWORD_1000_12bb = cpu->ECX;
-   FUN_1000_10b6(cpu);
+   FUN_PHYSICS_10b6(cpu);
    CSD_DWORD_1000_12bf = cpu->EAX;
    CSD_DWORD_1000_12c3 = cpu->EBX;
    CSD_DWORD_1000_12c7 = cpu->ECX;
    INST_POP(cpu->SI);
    cpu->BX = MEM_WORD(cpu->SI + 0x16);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SHL(cpu->EAX, 0x10);
    CSD_DWORD_1000_129f = cpu->EAX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SHL(cpu->EAX, 0x10);
    CSD_DWORD_1000_12a3 = cpu->EAX; //= 7FFF0000h
    cpu->EAX = CSD_DWORD_1000_12bf;
@@ -1624,7 +1624,7 @@ void FUN_1000_1347(cpu_ctx *cpu){
    INST_ROR(cpu->EBX, 0x10);
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    cpu->CX = cpu->AX;
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
@@ -2114,12 +2114,12 @@ void FUN_1000_1408(cpu_ctx *cpu){
    INST_SUB(cpu->AX, MEM_WORD(cpu->DI + 0x126));
    INST_SUB(cpu->BX, MEM_WORD(cpu->DI + 0x128));
    INST_SUB(cpu->CX, MEM_WORD(cpu->DI + 0x12a));
-   FUN_1000_271d(cpu);
+   FUN_PHYSICS_271d(cpu);
    INST_MOVSX(cpu->EBP, cpu->AX);
    cpu->AX = MEM_WORD(cpu->SI + 0x126);
    cpu->BX = MEM_WORD(cpu->SI + 0x128);
    cpu->CX = MEM_WORD(cpu->SI + 0x12a);
-   FUN_1000_271d(cpu);
+   FUN_PHYSICS_271d(cpu);
    INST_IMUL(cpu->EBP);
    cpu->EBP = cpu->EAX;
    cpu->AX = MEM_WORD(cpu->DI + 0x126);
@@ -2168,11 +2168,11 @@ void FUN_1000_1408(cpu_ctx *cpu){
    cpu->BX = MEM_WORD(cpu->DI + 0x12e);
    INST_SUB(cpu->AX, cpu->DX);
    INST_SUB(cpu->BX, cpu->BP);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    cpu->BX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    cpu->BP = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    cpu->BX = cpu->AX;
    cpu->AX = MEM_WORD(cpu->SI);
    INST_IMUL(cpu->BX);
@@ -3305,7 +3305,7 @@ void FUN_1000_2418(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2431(cpu_ctx *cpu){    
+void FUN_INIT_2431(cpu_ctx *cpu){    
                               //XREF[1]:     1000:01b8(c)
    cpu->DI = cpu->SI;
    cpu->CX = MEM_WORD(cpu->SI);
@@ -3329,7 +3329,7 @@ void FUN_1000_2431(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2454(cpu_ctx *cpu){    
+void FUN_INIT_2454(cpu_ctx *cpu){    
                               //XREF[1]:     1000:01a9(c)
 
    INST_PUSH(cpu->AX);
@@ -3364,7 +3364,7 @@ void FUN_1000_2454(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
-   FUN_1000_25c5(cpu);
+   FUN_SHARED_25c5(cpu);
    cpu->CX = cpu->AX;
    INST_ADD(cpu->CX, 0x64);
    INST_POP(cpu->BX);
@@ -3396,25 +3396,25 @@ void FUN_1000_2454(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_24c0(cpu_ctx *cpu){    
+void FUN_INIT_24c0(cpu_ctx *cpu){    
                               //XREF[1]:     1000:017e(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a03;
    cpu->ES = MEM_WORD(0x1a45);
    cpu->DI = 0; //was a XOR
-   FUN_1000_5a60(cpu);
+   FUN_INIT_5a60(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->DX = 0x1a20;
    cpu->ES = MEM_WORD(0x1a4b);
    cpu->DI = 0; //was a XOR
-   FUN_1000_5a60(cpu);
+   FUN_INIT_5a60(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->DX = 0x1a0b;
    cpu->AL = 0x0;
    cpu->AH = 0x3d;
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
-   FUN_1000_5a95(cpu);
+   FUN_INIT_5a95(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->CX = 0xffff;
    cpu->DX = 0xfd00;
@@ -3431,7 +3431,7 @@ void FUN_1000_24c0(cpu_ctx *cpu){
    DOS3Call(cpu);
    cpu->ES = MEM_WORD(0x1a47);
    cpu->DI = 0; //was a XOR
-   FUN_1000_5acf(cpu);
+   FUN_INIT_5acf(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->AH = 0x3e;
    DOS3Call(cpu);
@@ -3466,13 +3466,13 @@ void FUN_1000_24c0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_255c(cpu_ctx *cpu){    
+void FUN_INIT_255c(cpu_ctx *cpu){    
                               //XREF[1]:     1000:0181(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a13;
    cpu->ES = MEM_WORD(0x1a49);
    cpu->DI = 0; //was a XOR
-   FUN_1000_5a60(cpu);
+   FUN_INIT_5a60(cpu);
    INST_POP(cpu->ES);
    return;
 }
@@ -3480,7 +3480,7 @@ void FUN_1000_255c(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_256b(cpu_ctx *cpu){    
+void FUN_SHARED_256b(cpu_ctx *cpu){    
                               //XREF[2]:     1000:261a(c),1000:265b(c)
    cpu->AX = MEM_WORD(0x5ac1);
    INST_IMUL(MEM_WORD(0x5ac9));
@@ -3514,7 +3514,7 @@ void FUN_1000_256b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_25c5(cpu_ctx *cpu){    
+void FUN_SHARED_25c5(cpu_ctx *cpu){    
                               //XREF[9]:     1000:07b4(c),1000:07ec(c),1000:0810(c),1000:083e(c),
                               //             1000:08e1(c),1000:09f6(c),1000:0c0d(c),1000:1372(c),
                               //             1000:2486(c)
@@ -3542,7 +3542,7 @@ void FUN_1000_25c5(cpu_ctx *cpu){
    INST_SUB(cpu->AX, cpu->CX);
    MEM_WORD(0x5acb) = cpu->AX;
    INST_PUSH(cpu->CX);
-   FUN_1000_256b(cpu);
+   FUN_SHARED_256b(cpu);
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, cpu->CX);
    goto LAB_LOC_2;
@@ -3566,7 +3566,7 @@ void FUN_1000_25c5(cpu_ctx *cpu){
    INST_SUB(cpu->AX, cpu->CX);
    MEM_WORD(0x5ac5) = cpu->AX;
    INST_PUSH(cpu->CX);
-   FUN_1000_256b(cpu);
+   FUN_SHARED_256b(cpu);
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, cpu->CX);
    LAB_LOC_2:
@@ -3605,15 +3605,15 @@ void FUN_1000_2662(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_26dd(cpu_ctx *cpu){    
+void FUN_PHYSICS_26dd(cpu_ctx *cpu){    
                               //XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               //             1000:2722(c)
    INST_PUSH(cpu->AX);
    INST_PUSH(cpu->BX);
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    if(PARITY(cpu->AH & 0x60)) goto LAB_LOC_1;
    cpu->BX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
    DUMMY_POP_WORD();
    INST_POP(cpu->AX);
@@ -3624,7 +3624,7 @@ void FUN_1000_26dd(cpu_ctx *cpu){
    return;
    LAB_LOC_1:
    cpu->BX = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
    INST_POP(cpu->AX);
    DUMMY_POP_WORD();
@@ -3638,18 +3638,18 @@ void FUN_1000_26dd(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_271d(cpu_ctx *cpu){    
+void FUN_PHYSICS_271d(cpu_ctx *cpu){    
                               //XREF[4]:     1000:17a4(c),1000:17b7(c),1000:2738(c),1000:57cd(c)
-   FUN_1000_26dd(cpu);
+   FUN_PHYSICS_26dd(cpu);
    cpu->BX = cpu->CX;
-   FUN_1000_26dd(cpu);
+   FUN_PHYSICS_26dd(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2726(cpu_ctx *cpu){    
+void FUN_PHYSICS_2726(cpu_ctx *cpu){    
                               //XREF[3]:     1000:10b2(c),1000:10f2(c),1000:57d4(c)
    INST_PUSH(cpu->EAX);
    INST_PUSH(cpu->EBX);
@@ -3657,7 +3657,7 @@ void FUN_1000_2726(cpu_ctx *cpu){
    INST_SAR(cpu->EAX, 0x10);
    INST_SAR(cpu->EBX, 0x10);
    INST_SAR(cpu->ECX, 0x10);
-   FUN_1000_271d(cpu);
+   FUN_PHYSICS_271d(cpu);
    cpu->EBX = cpu->EAX;
    INST_INC(cpu->EBX);
    INST_POP(cpu->EAX);
@@ -3793,20 +3793,20 @@ void FUN_1000_27f1(cpu_ctx *cpu){
 void FUN_1000_2989(cpu_ctx *cpu){    
                               //XREF[3]:     1000:02ba(c),1000:0386(c),1000:044f(c)
    cpu->BX = MEM_WORD(cpu->SI);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    MEM_WORD(0xd100) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    MEM_WORD(0xd102) = cpu->AX;
    cpu->BX = MEM_WORD(cpu->SI + 0x2);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    MEM_WORD(0xd104) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    MEM_WORD(0xd106) = cpu->AX;
    cpu->BX = MEM_WORD(cpu->SI + 0x4);
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_NEG(cpu->AX);
    MEM_WORD(0xd108) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    MEM_WORD(0xd10a) = cpu->AX;
    cpu->AX = MEM_WORD(0xd100);
    INST_IMUL(MEM_WORD(0xd104));
@@ -3894,7 +3894,7 @@ void FUN_1000_2989(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2aad(cpu_ctx *cpu){    
+void FUN_PHYSICS_2aad(cpu_ctx *cpu){    
                               //XREF[19]:    1000:02a2(c),1000:036e(c),1000:0437(c),1000:07a9(c),
                               //             1000:07e1(c),1000:0805(c),1000:08b2(c),1000:09c0(c),
                               //             1000:1168(c),1000:1222(c),1000:1846(c),1000:26eb(c),
@@ -3923,7 +3923,7 @@ void FUN_1000_2aad(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2ad8(cpu_ctx *cpu){    
+void FUN_PHYSICS_2ad8(cpu_ctx *cpu){    
                               //XREF[19]:    1000:02ab(c),1000:0377(c),1000:0440(c),1000:079c(c),
                               //             1000:07d4(c),1000:07f8(c),1000:08ad(c),1000:09bb(c),
                               //             1000:1174(c),1000:122e(c),1000:184b(c),1000:2705(c),
@@ -3955,7 +3955,7 @@ void FUN_1000_2ad8(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2b08(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b08(cpu_ctx *cpu){    
                               //XREF[19]:    1000:06e0(c),1000:0701(c),1000:0712(c),1000:0731(c),
                               //             1000:078d(c),1000:07be(c),1000:0819(c),1000:0863(c),
                               //             1000:087c(c),1000:08a5(c),1000:0907(c),1000:09b3(c),
@@ -3971,12 +3971,12 @@ void FUN_1000_2b08(cpu_ctx *cpu){
 
    LAB_LOC_2:
    INST_NOT(cpu->AX);
-   FUN_1000_2b1f(cpu);
+   FUN_PHYSICS_2b1f(cpu);
    INST_NEG(cpu->AX);
    return;
 
    call_the_other:
-   FUN_1000_2b1f(cpu);
+   FUN_PHYSICS_2b1f(cpu);
    return;
 
 }
@@ -3984,7 +3984,7 @@ void FUN_1000_2b08(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2b1f(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b1f(cpu_ctx *cpu){    
                               //XREF[2]:     1000:2b0e(j),1000:2b63(c)
    if((cpu->BX & 0x8000) != 0) goto LAB_LOC_1;
    if(cpu->BX != 0) goto call_the_other;
@@ -3993,20 +3993,20 @@ void FUN_1000_2b1f(cpu_ctx *cpu){
 
    LAB_LOC_1:
    INST_NOT(cpu->BX);
-   FUN_1000_2b2d(cpu);
+   FUN_PHYSICS_2b2d(cpu);
    INST_NEG(cpu->AX);
    INST_ADD(cpu->AX, 0x8000);
    return;
 
    call_the_other:
-   FUN_1000_2b2d(cpu);
+   FUN_PHYSICS_2b2d(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2b2d(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b2d(cpu_ctx *cpu){    
                               //XREF[2]:     1000:2b25(j),1000:2b58(c)
    if(SIGNED(cpu->AX) > SIGNED(cpu->BX)) goto LAB_LOC_1;
    if(SIGNED(cpu->AX) < SIGNED(cpu->BX)) goto call_the_other;
@@ -4015,20 +4015,20 @@ void FUN_1000_2b2d(cpu_ctx *cpu){
 
    LAB_LOC_1:
    INST_XCHG(cpu->AX, cpu->BX);
-   FUN_1000_2b3b(cpu);
+   FUN_PHYSICS_2b3b(cpu);
    INST_NEG(cpu->AX);
    INST_ADD(cpu->AX, 0x4000);
    return;
 
    call_the_other:
-   FUN_1000_2b3b(cpu);
+   FUN_PHYSICS_2b3b(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2b3b(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b3b(cpu_ctx *cpu){    
                               //XREF[2]:     1000:2b33(j),1000:2b4d(c)
    cpu->DX = cpu->AX;
    cpu->AX = 0; //was a XOR
@@ -4047,7 +4047,7 @@ void FUN_1000_2b3b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //MODIFIED: now it only alocates and doesnt set vga to mode 13h
-void FUN_1000_2b70(cpu_ctx *cpu){    
+void FUN_INIT_2b70(cpu_ctx *cpu){    
                               //XREF[1]:     1000:021c(c)
    cpu->AH = 0x48;
    cpu->BX = 0xfa0;
@@ -7469,13 +7469,13 @@ void FUN_1000_47ec(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_48d0(cpu_ctx *cpu){    
+void FUN_PHYSICS_48d0(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56ba(c)
    INST_PUSH(cpu->SI);
-   FUN_1000_4e0a(cpu);
+   FUN_PHYSICS_4e0a(cpu);
    INST_POP(cpu->SI);
    INST_PUSH(cpu->SI);
-   FUN_1000_48db(cpu);
+   FUN_PHYSICS_48db(cpu);
    INST_POP(cpu->SI);
    return;
 }
@@ -7483,9 +7483,9 @@ void FUN_1000_48d0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_48db(cpu_ctx *cpu){    
+void FUN_PHYSICS_48db(cpu_ctx *cpu){    
                               //XREF[1]:     1000:48d6(c)
-   FUN_1000_0e28(cpu);
+   FUN_PHYSICS_0e28(cpu);
    cpu->DI = cpu->SI;
    INST_ADD(cpu->DI, MEM_WORD(cpu->SI));
    cpu->AX = MEM_WORD(cpu->DI);
@@ -7502,7 +7502,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    INST_SHR(cpu->EBX, 0x10);
    INST_SHR(cpu->ECX, 0x10);
    INST_PUSH(cpu->CX);
-   FUN_1000_532e(cpu);
+   FUN_PHYSICS_532e(cpu);
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, MEM_WORD(cpu->DI + 0x18));
    MEM_WORD(0xe9c6) = cpu->AX;
@@ -7534,7 +7534,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    INST_INC(MEM_WORD(0xe9d6));
    INST_DEC(MEM_WORD(0xe9d4));
    if(MEM_WORD(0xe9d4) != 0) goto LAB_LOC_1;
-   FUN_1000_1003(cpu);
+   FUN_PHYSICS_1003(cpu);
    return;
    LAB_LOC_7:
    MEM_WORD(0xe9a2) = 0x8000;
@@ -7542,7 +7542,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    MEM_WORD(0xe9aa) = 0x0;
    MEM_WORD(0xe9ae) = 0x7f00;
    MEM_BYTE(0xea28) = 0x0;
-   FUN_1000_4a71(cpu);
+   FUN_PHYSICS_4a71(cpu);
    goto LAB_LOC_3;
    LAB_LOC_8:
    MEM_WORD(0xe9a2) = 0x0;
@@ -7550,7 +7550,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    MEM_WORD(0xe9aa) = 0x8000;
    MEM_WORD(0xe9ae) = 0x0;
    MEM_BYTE(0xea28) = 0x0;
-   FUN_1000_4a71(cpu);
+   FUN_PHYSICS_4a71(cpu);
    goto LAB_LOC_4;
    LAB_LOC_9:
    MEM_WORD(0xe9a2) = 0x7fff;
@@ -7558,7 +7558,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    MEM_WORD(0xe9aa) = 0x0;
    MEM_WORD(0xe9ae) = 0x7fff;
    MEM_BYTE(0xea28) = 0x0;
-   FUN_1000_4a71(cpu);
+   FUN_PHYSICS_4a71(cpu);
    goto LAB_LOC_5;
    LAB_LOC_10:
    MEM_WORD(0xe9a2) = 0x0;
@@ -7566,7 +7566,7 @@ void FUN_1000_48db(cpu_ctx *cpu){
    MEM_WORD(0xe9aa) = 0x7fff;
    MEM_WORD(0xe9ae) = 0x0;
    MEM_BYTE(0xea28) = 0x0;
-   FUN_1000_4a71(cpu);
+   FUN_PHYSICS_4a71(cpu);
    goto LAB_LOC_6;
    LAB_LOC_11:
    INST_MOVZX(cpu->BX, MEM_BYTE(0xea28));
@@ -7585,28 +7585,28 @@ void FUN_1000_48db(cpu_ctx *cpu){
    LAB_LOC_12:
    cpu->AX = MEM_WORD(0xea24);
    cpu->BX = 0x100;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    cpu->BX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    MEM_WORD(0xe9a2) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    MEM_WORD(0xe9a6) = cpu->AX;
    cpu->AX = MEM_WORD(0xea26);
    cpu->BX = 0x100;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    cpu->BX = cpu->AX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    MEM_WORD(0xe9aa) = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    MEM_WORD(0xe9ae) = cpu->AX;
-   FUN_1000_4a71(cpu);
+   FUN_PHYSICS_4a71(cpu);
    goto LAB_LOC_2;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4a71(cpu_ctx *cpu){    
+void FUN_PHYSICS_4a71(cpu_ctx *cpu){    
                               //XREF[5]:     1000:499c(c),1000:49bf(c),1000:49e3(c),1000:4a07(c),
                               //             1000:4a6b(c)
    cpu->EAX = MEM_DWORD(cpu->DI + 0x14);
@@ -7628,7 +7628,7 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    MEM_DWORD(0xe9c8) = cpu->EBX;
    if(SIGNED(cpu->EBX) > -393216) goto LAB_LOC_1;
    cpu->AX = 0; //was a XOR
-   FUN_1000_5864(cpu);
+   FUN_PHYSICS_5864(cpu);
    LAB_LOC_1:
    cpu->ECX = MEM_DWORD(0xe9c8);
    cpu->EAX = cpu->ECX;
@@ -7679,19 +7679,19 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    INST_ADD(cpu->EBX, cpu->EDX);
    MEM_DWORD(0xe9d0) = cpu->EBX;
    cpu->AX = MEM_WORD(0xe9d6);
-   FUN_1000_0e69(cpu);
+   FUN_PHYSICS_0e69(cpu);
    MEM_DWORD(0xe9b0) = cpu->EAX;
    MEM_DWORD(0xe9b4) = cpu->EBX;
    MEM_DWORD(0xe9b8) = cpu->ECX;
    INST_NEG(cpu->EDX);
    MEM_DWORD(0xe9da) = cpu->EDX;
-   FUN_1000_4c26(cpu);
+   FUN_PHYSICS_4c26(cpu);
    MEM_WORD(0xe9bc) = cpu->AX;
    cpu->BX = cpu->AX;
-   FUN_1000_2ad8(cpu);
+   FUN_PHYSICS_2ad8(cpu);
    INST_SHL(cpu->EAX, 0x10);
    MEM_DWORD(0xe9c2) = cpu->EAX;
-   FUN_1000_2aad(cpu);
+   FUN_PHYSICS_2aad(cpu);
    INST_SHL(cpu->EAX, 0x10);
    MEM_DWORD(0xe9be) = cpu->EAX;
    cpu->EAX = MEM_DWORD(0xe9da);
@@ -7702,11 +7702,11 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    cpu->EAX = cpu->EBX;
    INST_IMUL(MEM_DWORD(0xe9c2));
    INST_SUB(MEM_DWORD(0xe9d0), cpu->EDX);
-   FUN_1000_4d0e(cpu);
+   FUN_PHYSICS_4d0e(cpu);
    cpu->EBX = MEM_DWORD(0xe9da);
    INST_NEG(cpu->EBX);
    cpu->AX = MEM_WORD(0xe9d6);
-   FUN_1000_0f67(cpu);
+   FUN_PHYSICS_0f67(cpu);
    LAB_LOC_3:
    return;
    LAB_LOC_4:
@@ -7733,14 +7733,14 @@ void FUN_1000_4a71(cpu_ctx *cpu){
    INST_SHL(cpu->EDX, 0x1);
    INST_ADD(cpu->EBX, cpu->EDX);
    MEM_DWORD(0xe9d0) = cpu->EBX;
-   FUN_1000_4cc3(cpu);
+   FUN_PHYSICS_4cc3(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4c26(cpu_ctx *cpu){    
+void FUN_PHYSICS_4c26(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4b88(c)
    INST_PUSH(cpu->ECX);
    INST_PUSH(cpu->EBX);
@@ -7763,14 +7763,14 @@ void FUN_1000_4c26(cpu_ctx *cpu){
    INST_IMUL(MEM_DWORD(0xe9a8));
    INST_ADD(cpu->BX, cpu->DX);
    cpu->AX = cpu->CX;
-   FUN_1000_2b08(cpu);
+   FUN_PHYSICS_2b08(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4c68(cpu_ctx *cpu){    
+void FUN_PHYSICS_4c68(cpu_ctx *cpu){    
                               //XREF[2]:     1000:4cc3(c),1000:4d0e(c)
    cpu->EAX = MEM_DWORD(0xe9cc);
    cpu->EBX = MEM_DWORD(0xe9d0);
@@ -7803,12 +7803,12 @@ void FUN_1000_4c68(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4cc3(cpu_ctx *cpu){    
+void FUN_PHYSICS_4cc3(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4c22(c)
-   FUN_1000_4c68(cpu);
+   FUN_PHYSICS_4c68(cpu);
    if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
    INST_PUSH(cpu->ECX);
-   FUN_1000_4d96(cpu);
+   FUN_PHYSICS_4d96(cpu);
    INST_POP(cpu->ECX);
    cpu->EAX = MEM_DWORD(0xe9d0);
    INST_CDQ();
@@ -7835,12 +7835,12 @@ void FUN_1000_4cc3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4d0e(cpu_ctx *cpu){    
+void FUN_PHYSICS_4d0e(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4bc7(c)
-   FUN_1000_4c68(cpu);
+   FUN_PHYSICS_4c68(cpu);
    if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
    INST_PUSH(cpu->ECX);
-   FUN_1000_4d96(cpu);
+   FUN_PHYSICS_4d96(cpu);
    INST_POP(cpu->ECX);
    cpu->EAX = MEM_DWORD(0xe9d0);
    INST_CDQ();
@@ -7880,7 +7880,7 @@ void FUN_1000_4d0e(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4d96(cpu_ctx *cpu){    
+void FUN_PHYSICS_4d96(cpu_ctx *cpu){    
                               //XREF[3]:     1000:4ccc(c),1000:4d17(c),1000:52b7(c)
    INST_PUSH(cpu->SI);
    cpu->SI = MEM_WORD(0x3e51);
@@ -7916,7 +7916,7 @@ void FUN_1000_4d96(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4e0a(cpu_ctx *cpu){    
+void FUN_PHYSICS_4e0a(cpu_ctx *cpu){    
                               //XREF[1]:     1000:48d1(c)
    cpu->AX = cpu->SI;
    INST_ADD(cpu->AX, MEM_WORD(cpu->SI));
@@ -8080,7 +8080,7 @@ void FUN_1000_4e0a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_500b(cpu_ctx *cpu){    
+void FUN_PHYSICS_500b(cpu_ctx *cpu){    
                               //XREF[1]:     1000:56c8(c)
    MEM_BYTE(0xea28) = 0x0;
    cpu->DI = 0x5bbc;
@@ -8089,7 +8089,7 @@ void FUN_1000_500b(cpu_ctx *cpu){
    INST_PUSH(cpu->CX);
    INST_PUSH(cpu->DI);
    cpu->SI = MEM_WORD(cpu->DI);
-   FUN_1000_5091(cpu);
+   FUN_PHYSICS_5091(cpu);
    cpu->DI = 0x5bbc;
    cpu->CX = MEM_WORD(0x5bba);
    LAB_LOC_2:
@@ -8117,7 +8117,7 @@ void FUN_1000_500b(cpu_ctx *cpu){
    if(SIGNED(cpu->AX) < -512) goto LAB_LOC_3;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   FUN_1000_51bd(cpu);
+   FUN_PHYSICS_51bd(cpu);
    goto LAB_LOC_4;
 
  // 1000:507f [UNDEFINED BYTES REMOVED]
@@ -8142,7 +8142,7 @@ void FUN_1000_500b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
-void FUN_1000_5091(cpu_ctx *cpu){    
+void FUN_PHYSICS_5091(cpu_ctx *cpu){    
                               //XREF[1]:     1000:501c(c)
    INST_PUSH(cpu->SI);
    cpu->DX = cpu->SI;
@@ -8255,7 +8255,7 @@ void FUN_1000_5091(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_51bd(cpu_ctx *cpu){    
+void FUN_PHYSICS_51bd(cpu_ctx *cpu){    
                               //XREF[1]:     1000:507a(c)
    INST_PUSH(cpu->DI);
    INST_PUSH(cpu->SI);
@@ -8338,7 +8338,7 @@ void FUN_1000_51bd(cpu_ctx *cpu){
    INST_SAR(cpu->EAX, 0x1);
    INST_SUB(MEM_DWORD(cpu->SI + 0x14), cpu->EAX);
    INST_ADD(MEM_DWORD(cpu->DI + 0x14), cpu->EAX);
-   FUN_1000_4d96(cpu);
+   FUN_PHYSICS_4d96(cpu);
    LAB_LOC_9:
    INST_ADD(cpu->DI, 0x1c);
    INST_POP(cpu->CX);
@@ -8360,7 +8360,7 @@ void FUN_1000_51bd(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_52d4(cpu_ctx *cpu){    
+void FUN_PHYSICS_52d4(cpu_ctx *cpu){    
                               //XREF[2]:     1000:5393(c),1000:53e4(c)
    cpu->AX = MEM_WORD(0xea0c);
    INST_IMUL(MEM_WORD(0xea14));
@@ -8394,7 +8394,7 @@ void FUN_1000_52d4(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_532e(cpu_ctx *cpu){    
+void FUN_PHYSICS_532e(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4910(c)
    MEM_WORD(0xea1c) = cpu->CX;
    MEM_WORD(0xea0c) = 0x80;
@@ -8425,7 +8425,7 @@ void FUN_1000_532e(cpu_ctx *cpu){
    MEM_WORD(0xea16) = cpu->AX;
    MEM_WORD(0xea26) = cpu->AX;
    INST_PUSH(cpu->CX);
-   FUN_1000_52d4(cpu);
+   FUN_PHYSICS_52d4(cpu);
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, cpu->CX);
    goto LAB_LOC_2;
@@ -8455,7 +8455,7 @@ void FUN_1000_532e(cpu_ctx *cpu){
    INST_NEG(cpu->AX);
    MEM_WORD(0xea24) = cpu->AX;
    INST_PUSH(cpu->CX);
-   FUN_1000_52d4(cpu);
+   FUN_PHYSICS_52d4(cpu);
    INST_POP(cpu->CX);
    INST_ADD(cpu->AX, cpu->CX);
    LAB_LOC_2:
@@ -8490,18 +8490,18 @@ void FUN_timer_5680(cpu_ctx *cpu){
    INST_PUSH(cpu->DI);
    INST_PUSH(cpu->BP);
    cpu->DI = cpu->BP;
-   FUN_1000_0d2a(cpu);
-   FUN_1000_1004(cpu);
-   FUN_1000_48d0(cpu);
+   FUN_PHYSICS_0d2a(cpu);
+   FUN_PHYSICS_1004(cpu);
+   FUN_PHYSICS_48d0(cpu);
    INST_POP(cpu->BP);
    INST_POP(cpu->DI);
    INST_POP(cpu->CX);
    INST_ADD(cpu->DI, 0x2);
    INST_ADD(cpu->BP, 0x6);
    if (--cpu->CX != 0) goto LAB_LOC_1;
-   FUN_1000_500b(cpu);
-   FUN_1000_0bb5(cpu);
-   FUN_1000_0a3b(cpu);
+   FUN_PHYSICS_500b(cpu);
+   FUN_PHYSICS_0bb5(cpu);
+   FUN_PHYSICS_0a3b(cpu);
    LAB_LOC_2:
    INST_POP(cpu->GS);
    INST_POP(cpu->FS);
@@ -8538,37 +8538,37 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_57e0(cpu_ctx *cpu){    
+void FUN_INIT_57e0(cpu_ctx *cpu){    
                               //XREF[1]:     1000:022c(c)
    cpu->AX = 0x120;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AX = 0x800;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AX = 0xbdc0;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AX = 0xb000;
    LAB_LOC_1:
    INST_PUSH(cpu->AX);
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    INST_POP(cpu->AX);
    INST_INC(cpu->AH);
    if(cpu->AH <= 0xb8) goto LAB_LOC_1;
    cpu->AL = 0x0;
    cpu->SI = 0xecb8;
-   FUN_1000_589b(cpu);
+   FUN_SHARED_589b(cpu);
    cpu->AL = 0x1;
    cpu->SI = 0xecb8;
-   FUN_1000_589b(cpu);
+   FUN_SHARED_589b(cpu);
    cpu->AX = 0x443f;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->CX = 0xf00;
    cpu->AL = cpu->CL;
    cpu->AH = 0xa1;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AL = cpu->CH;
    INST_OR(cpu->AL, 0x20);
    cpu->AH = 0xb1;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
     //MOV         AX, FUN_dummy_1000_588b
    return;
 
@@ -8583,12 +8583,12 @@ void FUN_1000_5831(cpu_ctx *cpu){
    cpu->AL = cpu->BL;
    cpu->AH = 0xa0;
    INST_ADD(cpu->AH, cpu->CH);
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AL = cpu->BH;
    INST_OR(cpu->AL, 0x20);
    cpu->AH = 0xb0;
    INST_ADD(cpu->AH, cpu->CH);
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AL = 0x3f;
    INST_SUB(cpu->AL, cpu->CL);
    if(cpu->AL <= 0x3f) goto LAB_LOC_1;
@@ -8597,7 +8597,7 @@ void FUN_1000_5831(cpu_ctx *cpu){
    cpu->AH = 0x43;
    INST_MOVZX(cpu->BX, cpu->CH);
    INST_ADD(cpu->AH, CSD_DAT_unk_592c[cpu->BX]);
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    return;
 
 }
@@ -8605,7 +8605,7 @@ void FUN_1000_5831(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5864(cpu_ctx *cpu){    
+void FUN_PHYSICS_5864(cpu_ctx *cpu){    
                               //XREF[1]:     1000:4abf(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DX);
@@ -8614,15 +8614,15 @@ void FUN_1000_5864(cpu_ctx *cpu){
    cpu->SI = 0xecd9;
    INST_ADD(cpu->SI, cpu->AX);
    cpu->AX = 0xb800;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AL = 0x8;
-   FUN_1000_589b(cpu);
+   FUN_SHARED_589b(cpu);
    INST_LODSB();
    cpu->AH = 0xa8;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    INST_LODSB();
    cpu->AH = 0xb8;
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    INST_POP(cpu->DX);
    INST_POP(cpu->SI);
    return;
@@ -8633,61 +8633,61 @@ void FUN_1000_5864(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_589b(cpu_ctx *cpu){    
+void FUN_SHARED_589b(cpu_ctx *cpu){    
                               //XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
    INST_MOVZX(cpu->BX, cpu->AL);
    cpu->BL = CSD_DAT_unk_592c[cpu->BX];
    cpu->AH = 0x20;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x40;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x60;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x80;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0xe0;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x23;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x43;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x63;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0x83;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0xe3;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    cpu->AH = 0xc0;
    INST_ADD(cpu->AH, cpu->BL);
    INST_LODSB();
-   FUN_1000_58fc(cpu);
+   FUN_SHARED_58fc(cpu);
    return;
 }
 
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_58fc(cpu_ctx *cpu){    
+void FUN_SHARED_58fc(cpu_ctx *cpu){    
                               //XREF[21]:    1000:57e3(c),1000:57e9(c),1000:57ef(c),1000:57f6(c),
                               //             1000:5814(c),1000:581e(c),1000:5827(c),1000:5874(c),
                               //             1000:587f(c),1000:5885(c),1000:58a8(c),1000:58b0(c),
@@ -8785,7 +8785,7 @@ void FUN_1000_5940_render_text(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5a60(cpu_ctx *cpu){    
+void FUN_INIT_5a60(cpu_ctx *cpu){    
                               //XREF[3]:     1000:24ca(c),1000:24da(c),1000:2566(c)
    cpu->DX = cpu->DX;
    cpu->AL = 0x0;
@@ -8793,14 +8793,14 @@ void FUN_1000_5a60(cpu_ctx *cpu){
    DOS3Call(cpu);
    cpu->BX = cpu->AX;
    if(CHECK_CFLAG()) goto LAB_LOC_1;
-   FUN_1000_5a95(cpu);
+   FUN_INIT_5a95(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->CX = 0x0;
    cpu->DX = 0x80;
    cpu->AX = 0x4200;
    DOS3Call(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
-   FUN_1000_5acf(cpu);
+   FUN_INIT_5acf(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_1;
    cpu->AH = 0x3e;
    DOS3Call(cpu);
@@ -8814,7 +8814,7 @@ void FUN_1000_5a60(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5a95(cpu_ctx *cpu){    
+void FUN_INIT_5a95(cpu_ctx *cpu){    
                               //XREF[3]:     1000:01d3(c),1000:24ec(c),1000:5a6e(c)
    cpu->DX = 0xef88;
    cpu->CX = 0x80;
@@ -8839,7 +8839,7 @@ void FUN_1000_5a95(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5acf(cpu_ctx *cpu){    
+void FUN_INIT_5acf(cpu_ctx *cpu){    
                               //XREF[3]:     1000:01ff(c),1000:251d(c),1000:5a84(c)
    INST_CLD();
    cpu->DX = 0xf008;
@@ -8859,7 +8859,7 @@ void FUN_1000_5acf(cpu_ctx *cpu){
  // 1000:5af5 [UNDEFINED BYTES REMOVED]
 
    LAB_LOC_3:
-   FUN_1000_5b26(cpu);
+   FUN_INIT_5b26(cpu);
    cpu->AH = cpu->AL;
    INST_AND(cpu->AH, 0xc0);
    another_quick_temp = cpu->AH;
@@ -8867,7 +8867,7 @@ void FUN_1000_5acf(cpu_ctx *cpu){
    if(another_quick_temp != 0xc0) goto LAB_LOC_4;
    cpu->AH = cpu->AL;
    INST_AND(cpu->AH, 0x3f);
-   FUN_1000_5b26(cpu);
+   FUN_INIT_5b26(cpu);
    INST_DEC(cpu->AH);
    LAB_LOC_4:
    if(cpu->CX >= 0x100) goto LAB_LOC_5;
@@ -8884,7 +8884,7 @@ void FUN_1000_5acf(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5b26(cpu_ctx *cpu){    
+void FUN_INIT_5b26(cpu_ctx *cpu){    
                               //XREF[2]:     1000:5af6(c),1000:5b0c(c)
    if(cpu->SI != 0xf308) goto LAB_LOC_1;
    INST_PUSH(cpu->AX);
