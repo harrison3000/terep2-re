@@ -3,7 +3,8 @@
 #include "variables.hpp"
 
 
-void f_init(cpu_ctx *cpu){    
+void f_init(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    MEM_WORD(0x5bba) = -2; //just to be sure
 
    MEM_WORD(0xec50) = 0x78; //= 00C8h
@@ -144,7 +145,8 @@ void f_init(cpu_ctx *cpu){
 
 }
 
-void f_cam_select(cpu_ctx *cpu){    
+void f_cam_select(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    INST_SHL(cpu->BX, 1);
 
    switch(cpu->BX){
@@ -179,7 +181,8 @@ void f_cam_select(cpu_ctx *cpu){
 
 }
 
-void FUN_main_render(cpu_ctx *cpu){    
+void FUN_main_render(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
     //needed now that it runs on paint message
    cpu->FS = MEM_WORD(0x1a47);
    cpu->GS = MEM_WORD(0x1a45);
@@ -515,7 +518,8 @@ void FUN_main_render(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void F_0693(cpu_ctx *cpu){    
+void F_0693(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
    cpu->EAX = MEM_DWORD(cpu->SI);
@@ -581,7 +585,8 @@ void F_0693(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void F_073f(cpu_ctx *cpu){    
+void F_073f(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
    cpu->EAX = MEM_DWORD(cpu->SI);
@@ -665,7 +670,8 @@ void F_073f(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void F_0828(cpu_ctx *cpu){    
+void F_0828(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    cpu->EAX = MEM_DWORD(cpu->DI);
    MEM_DWORD(0xaa) = cpu->EAX;
    cpu->EAX = MEM_DWORD(cpu->DI + 0x4);
@@ -707,7 +713,8 @@ void F_0828(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void F_0893(cpu_ctx *cpu){    
+void F_0893(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:029a(c),1000:0366(c),1000:042f(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x20));
@@ -779,7 +786,8 @@ void F_0893(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void F_0948(cpu_ctx *cpu){    
+void F_0948(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    cpu->EAX = 0; //was a XOR
    cpu->EBX = 0; //was a XOR
    cpu->EDX = 0; //was a XOR
@@ -868,7 +876,8 @@ void F_0948(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0a3b(cpu_ctx *cpu){    
+void FUN_PHYSICS_0a3b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56ce(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -900,7 +909,8 @@ void FUN_PHYSICS_0a3b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0a82(cpu_ctx *cpu){    
+void FUN_PHYSICS_0a82(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:0a66(c),1000:0a7d(c)
    cpu->DI = cpu->SI;
    INST_ADD(cpu->DI, MEM_WORD(cpu->SI));
@@ -940,7 +950,8 @@ void FUN_PHYSICS_0a82(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to smoke, debris, particle effects in general
-void FUN_1000_0b25(cpu_ctx *cpu){    
+void FUN_1000_0b25(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:02cc(c),1000:0398(c),1000:0458(c)
    INST_PUSH(cpu->FS);
    cpu->FS = MEM_WORD(0x1a49);
@@ -993,7 +1004,8 @@ void FUN_1000_0b25(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: somehow related to the lifetime of particles, disabling this make the particles never despawn
-void FUN_PHYSICS_0bb5(cpu_ctx *cpu){    
+void FUN_PHYSICS_0bb5(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56cb(c)
    cpu->DI = 0; //was a XOR
    if(cpu->DI >= MEM_WORD(0x3e51)) goto LAB_LOC_4;
@@ -1078,7 +1090,8 @@ void FUN_PHYSICS_0bb5(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_0cd3(cpu_ctx *cpu){    
+void FUN_1000_0cd3(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:0ba2(c)
    if(SIGNED(cpu->CX) < SIGNED(MEM_WORD(0x120))) goto LAB_LOC_1;
    cpu->BP = cpu->BX;
@@ -1131,7 +1144,8 @@ void FUN_1000_0cd3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0d2a(cpu_ctx *cpu){    
+void FUN_PHYSICS_0d2a(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56b4(c)
    INST_MOVZX(cpu->BX, MEM_BYTE(cpu->DI));
    cpu->AL = CSD_DAT_keys_571e[cpu->BX];
@@ -1212,7 +1226,8 @@ void FUN_PHYSICS_0d2a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0e28(cpu_ctx *cpu){    
+void FUN_PHYSICS_0e28(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:48db(c)
    cpu->DI = cpu->SI;
    INST_ADD(cpu->DI, MEM_WORD(cpu->SI));
@@ -1244,7 +1259,8 @@ void FUN_PHYSICS_0e28(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0e69(cpu_ctx *cpu){    
+void FUN_PHYSICS_0e69(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4b6f(c)
    if(cpu->AX == 0x0) goto LAB_LOC_1;
    if(cpu->AX == 0x1) goto LAB_LOC_3;
@@ -1313,7 +1329,8 @@ void FUN_PHYSICS_0e69(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_0f67(cpu_ctx *cpu){    
+void FUN_PHYSICS_0f67(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4bd5(c)
    cpu->CX = MEM_WORD(cpu->SI + 0x8);
    if(cpu->AX == 0x0) goto LAB_LOC_1;
@@ -1370,7 +1387,8 @@ void FUN_PHYSICS_0f67(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_1003(cpu_ctx *cpu){    
+void FUN_PHYSICS_1003(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:497a(c)
    return;
 }
@@ -1378,7 +1396,8 @@ void FUN_PHYSICS_1003(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_1004(cpu_ctx *cpu){    
+void FUN_PHYSICS_1004(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56b7(c)
    cpu->AX = MEM_WORD(cpu->SI + 0xa);
    MEM_WORD(cpu->SI + 0x16) = cpu->AX;
@@ -1432,7 +1451,8 @@ void FUN_PHYSICS_1004(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_1091(cpu_ctx *cpu){    
+void FUN_PHYSICS_1091(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[4]:     1000:06b4(c),1000:0760(c),1000:113c(c),1000:11f6(c)
    cpu->EDX = MEM_DWORD(cpu->SI + 0xc4);
    INST_SUB(cpu->EDX, MEM_DWORD(cpu->SI + 0xa8));
@@ -1448,7 +1468,8 @@ void FUN_PHYSICS_1091(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_10b6(cpu_ctx *cpu){    
+void FUN_PHYSICS_10b6(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[6]:     1000:06c5(c),1000:0771(c),1000:0ef4(c),1000:0f36(c),
                               //             1000:1150(c),1000:120a(c)
    cpu->EDX = MEM_DWORD(cpu->SI + 0x70);
@@ -1475,7 +1496,8 @@ void FUN_PHYSICS_10b6(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to steering, disabling this function disables steering
-void FUN_PHYSICS_1136(cpu_ctx *cpu){    
+void FUN_PHYSICS_1136(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:0e9a(c),1000:0ec4(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -1527,7 +1549,8 @@ void FUN_PHYSICS_1136(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //also relate do steering maybe, disabling it just makes the game crash
-void FUN_1000_11f0(cpu_ctx *cpu){    
+void FUN_1000_11f0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:138f(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -1581,7 +1604,8 @@ void FUN_1000_11f0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1323(cpu_ctx *cpu){    
+void FUN_1000_1323(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:195c(c)
    INST_PUSHAD();
    cpu->AX = MEM_WORD(cpu->SI + 0x1e);
@@ -1605,7 +1629,8 @@ void FUN_1000_1323(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1347(cpu_ctx *cpu){    
+void FUN_1000_1347(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1335(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -1663,7 +1688,8 @@ void FUN_1000_1347(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_13cc(cpu_ctx *cpu){    
+void FUN_1000_13cc(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[4]:     1000:135e(c),1000:1385(c),1000:13a8(c),1000:13c8(c)
    INST_SUB(cpu->EAX, MEM_DWORD(0xaa));
    INST_SUB(cpu->EBX, MEM_DWORD(0xae));
@@ -1690,7 +1716,8 @@ void FUN_1000_13cc(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: all about car rendering, disabling this function make the cars invisible
-void FUN_1000_1408(cpu_ctx *cpu){    
+void FUN_1000_1408(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[21]:    1000:1340(c),1000:1441(c),1000:1447(c),1000:144b(c),
                               //             1000:1452(j),1000:1456(c),1000:145d(j),1000:1461(c),
                               //             1000:147a(j),1000:1567(j),1000:1577(j),1000:15da(j),
@@ -2285,7 +2312,8 @@ void FUN_1000_1408(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_194c(cpu_ctx *cpu){    
+void FUN_1000_194c(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[8]:     1000:1a50(c),1000:1b06(c),1000:1bfa(c),1000:1caa(c),
                               //             1000:2063(c),1000:2117(c),1000:220c(c),1000:22bc(c)
    cpu->DI = 0x5bbc;
@@ -2303,7 +2331,8 @@ void FUN_1000_194c(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1965(cpu_ctx *cpu){    
+void FUN_1000_1965(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:02c9(c),1000:0395(c),1000:0455(c)
    MEM_WORD(0x19ff) = 0x0;
    MEM_WORD(0x1a01) = 0xa00;
@@ -2605,7 +2634,8 @@ void FUN_1000_1965(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1cde(cpu_ctx *cpu){    
+void FUN_1000_1cde(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[4]:     1000:1a45(c),1000:1afb(c),1000:1bf0(c),1000:1ca3(c)
    cpu->AL = MEM_BYTE(0x5fc);
    cpu->BX = 0x1d51;
@@ -2719,7 +2749,8 @@ void FUN_1000_1cde(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_1e3a(cpu_ctx *cpu){    
+void FUN_1000_1e3a(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[4]:     1000:2058(c),1000:210d(c),1000:2202(c),1000:22b5(c)
    cpu->AL = MEM_BYTE(0x5fc);
    cpu->BX = 0x1d51;
@@ -2830,7 +2861,8 @@ void FUN_1000_1e3a(cpu_ctx *cpu){
 }
 
 //seems like a alternative version of FUN_1000_1965, what it does? who knows?
-void FUN_1965_NP(cpu_ctx *cpu){    
+void FUN_1965_NP(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    LAB_LOC_1:
    MEM_BYTE(0x5fb) = 0x1;
    FUN_1000_41b2(cpu);
@@ -3126,7 +3158,8 @@ void FUN_1965_NP(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_22f0(cpu_ctx *cpu){    
+void FUN_1000_22f0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1998(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -3167,7 +3200,8 @@ void FUN_1000_22f0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_233b(cpu_ctx *cpu){    
+void FUN_1000_233b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1b44(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -3207,7 +3241,8 @@ void FUN_1000_233b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2384(cpu_ctx *cpu){    
+void FUN_1000_2384(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1fab(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -3248,7 +3283,8 @@ void FUN_1000_2384(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_23cf(cpu_ctx *cpu){    
+void FUN_1000_23cf(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2155(c)
    INST_PUSH(cpu->SI);
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI));
@@ -3288,7 +3324,8 @@ void FUN_1000_23cf(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2418(cpu_ctx *cpu){    
+void FUN_1000_2418(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:0b8d(c),1000:13f7(c)
    if(SIGNED(cpu->BX) < SIGNED(MEM_WORD(0x120))) goto LAB_LOC_1;
    FUN_1000_2760(cpu);
@@ -3305,7 +3342,8 @@ void FUN_1000_2418(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_2431(cpu_ctx *cpu){    
+void FUN_INIT_2431(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:01b8(c)
    cpu->DI = cpu->SI;
    cpu->CX = MEM_WORD(cpu->SI);
@@ -3329,7 +3367,8 @@ void FUN_INIT_2431(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_2454(cpu_ctx *cpu){    
+void FUN_INIT_2454(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:01a9(c)
 
    INST_PUSH(cpu->AX);
@@ -3396,7 +3435,8 @@ void FUN_INIT_2454(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_24c0(cpu_ctx *cpu){    
+void FUN_INIT_24c0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:017e(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a03;
@@ -3466,7 +3506,8 @@ void FUN_INIT_24c0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_255c(cpu_ctx *cpu){    
+void FUN_INIT_255c(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:0181(c)
    INST_PUSH(cpu->ES);
    cpu->DX = 0x1a13;
@@ -3480,7 +3521,8 @@ void FUN_INIT_255c(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_SHARED_256b(cpu_ctx *cpu){    
+void FUN_SHARED_256b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:261a(c),1000:265b(c)
    cpu->AX = MEM_WORD(0x5ac1);
    INST_IMUL(MEM_WORD(0x5ac9));
@@ -3514,7 +3556,8 @@ void FUN_SHARED_256b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_SHARED_25c5(cpu_ctx *cpu){    
+void FUN_SHARED_25c5(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[9]:     1000:07b4(c),1000:07ec(c),1000:0810(c),1000:083e(c),
                               //             1000:08e1(c),1000:09f6(c),1000:0c0d(c),1000:1372(c),
                               //             1000:2486(c)
@@ -3576,7 +3619,8 @@ void FUN_SHARED_25c5(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2662(cpu_ctx *cpu){    
+void FUN_1000_2662(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[13]:    1000:1509(c),1000:156f(c),1000:15e2(c),1000:166e(c),
                               //             1000:16e4(c),1000:1d20(c),1000:1d4c(c),1000:1dd4(c),
                               //             1000:1e2d(c),1000:1e7c(c),1000:1ea5(c),1000:1f28(c),
@@ -3605,7 +3649,8 @@ void FUN_1000_2662(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_26dd(cpu_ctx *cpu){    
+void FUN_PHYSICS_26dd(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               //             1000:2722(c)
    INST_PUSH(cpu->AX);
@@ -3638,7 +3683,8 @@ void FUN_PHYSICS_26dd(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_271d(cpu_ctx *cpu){    
+void FUN_PHYSICS_271d(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[4]:     1000:17a4(c),1000:17b7(c),1000:2738(c),1000:57cd(c)
    FUN_PHYSICS_26dd(cpu);
    cpu->BX = cpu->CX;
@@ -3649,7 +3695,8 @@ void FUN_PHYSICS_271d(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2726(cpu_ctx *cpu){    
+void FUN_PHYSICS_2726(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:10b2(c),1000:10f2(c),1000:57d4(c)
    INST_PUSH(cpu->EAX);
    INST_PUSH(cpu->EBX);
@@ -3679,7 +3726,8 @@ void FUN_PHYSICS_2726(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2760(cpu_ctx *cpu){    
+void FUN_1000_2760(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[13]:    1000:1a03(c),1000:1abb(c),1000:1bae(c),1000:1c63(c),
                               //             1000:2016(c),1000:20cd(c),1000:21c0(c),1000:2275(c),
                               //             1000:2420(c),1000:4739(c),1000:47a6(c),1000:4836(c),
@@ -3712,7 +3760,8 @@ void FUN_1000_2760(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: seems to be related to camera rotation and maybe position, if I nop it the camera stops rotating and following the car
 //MODIFICATIONS: before ES and BP was used as temporary storage, this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
-void FUN_1000_277e(cpu_ctx *cpu){    
+void FUN_1000_277e(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               //             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               //             1000:21ab(c),1000:2260(c)
@@ -3770,7 +3819,8 @@ void FUN_1000_277e(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_27f1(cpu_ctx *cpu){    
+void FUN_1000_27f1(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:02bd(c),1000:0389(c),1000:0452(c)
    cpu->AX = MEM_WORD(cpu->DI + 0x2);
    INST_XCHG(MEM_WORD(cpu->DI + 0x6), cpu->AX);
@@ -3790,7 +3840,8 @@ void FUN_1000_27f1(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2989(cpu_ctx *cpu){    
+void FUN_1000_2989(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:02ba(c),1000:0386(c),1000:044f(c)
    cpu->BX = MEM_WORD(cpu->SI);
    FUN_PHYSICS_2aad(cpu);
@@ -3894,7 +3945,8 @@ void FUN_1000_2989(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2aad(cpu_ctx *cpu){    
+void FUN_PHYSICS_2aad(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[19]:    1000:02a2(c),1000:036e(c),1000:0437(c),1000:07a9(c),
                               //             1000:07e1(c),1000:0805(c),1000:08b2(c),1000:09c0(c),
                               //             1000:1168(c),1000:1222(c),1000:1846(c),1000:26eb(c),
@@ -3923,7 +3975,8 @@ void FUN_PHYSICS_2aad(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2ad8(cpu_ctx *cpu){    
+void FUN_PHYSICS_2ad8(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[19]:    1000:02ab(c),1000:0377(c),1000:0440(c),1000:079c(c),
                               //             1000:07d4(c),1000:07f8(c),1000:08ad(c),1000:09bb(c),
                               //             1000:1174(c),1000:122e(c),1000:184b(c),1000:2705(c),
@@ -3955,7 +4008,8 @@ void FUN_PHYSICS_2ad8(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2b08(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b08(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[19]:    1000:06e0(c),1000:0701(c),1000:0712(c),1000:0731(c),
                               //             1000:078d(c),1000:07be(c),1000:0819(c),1000:0863(c),
                               //             1000:087c(c),1000:08a5(c),1000:0907(c),1000:09b3(c),
@@ -3984,7 +4038,8 @@ void FUN_PHYSICS_2b08(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2b1f(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b1f(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:2b0e(j),1000:2b63(c)
    if((cpu->BX & 0x8000) != 0) goto LAB_LOC_1;
    if(cpu->BX != 0) goto call_the_other;
@@ -4006,7 +4061,8 @@ void FUN_PHYSICS_2b1f(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2b2d(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b2d(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:2b25(j),1000:2b58(c)
    if(SIGNED(cpu->AX) > SIGNED(cpu->BX)) goto LAB_LOC_1;
    if(SIGNED(cpu->AX) < SIGNED(cpu->BX)) goto call_the_other;
@@ -4028,7 +4084,8 @@ void FUN_PHYSICS_2b2d(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_2b3b(cpu_ctx *cpu){    
+void FUN_PHYSICS_2b3b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:2b33(j),1000:2b4d(c)
    cpu->DX = cpu->AX;
    cpu->AX = 0; //was a XOR
@@ -4047,7 +4104,8 @@ void FUN_PHYSICS_2b3b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //MODIFIED: now it only alocates and doesnt set vga to mode 13h
-void FUN_INIT_2b70(cpu_ctx *cpu){    
+void FUN_INIT_2b70(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:021c(c)
    cpu->AH = 0x48;
    cpu->BX = 0xfa0;
@@ -4065,7 +4123,8 @@ void FUN_INIT_2b70(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: this clears the framebuffer
-void FUN_1000_2b98(cpu_ctx *cpu){    
+void FUN_1000_2b98(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:02c6(c),1000:0392(c)
    INST_PUSH(cpu->ES);
    INST_PUSH(cpu->DI);
@@ -4085,7 +4144,8 @@ void FUN_1000_2b98(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2baa(cpu_ctx *cpu){    
+void FUN_1000_2baa(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:04f7(c)
 //REMOVED, was copy to VGA mem
    return;
@@ -4096,7 +4156,8 @@ void FUN_1000_2baa(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: this has something to do with flat shaded polygons, disabling this function makes only the textured ones render
-void FUN_1000_2bec(cpu_ctx *cpu){    
+void FUN_1000_2bec(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[5]:     1000:157b(c),1000:1d27(c),1000:1d62(c),1000:1e83(c),
                               //             1000:1ebb(c)
    INST_PUSH(cpu->SI);
@@ -4147,7 +4208,8 @@ void FUN_1000_2bec(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2c4b(cpu_ctx *cpu){    
+void FUN_1000_2c4b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[6]:     1000:2c2d(c),1000:2c42(c),1000:312f(c),1000:3144(c),
                               //             1000:373f(c),1000:3754(c)
    INST_XCHG(cpu->DX, cpu->CX);
@@ -4205,7 +4267,8 @@ void FUN_1000_2c4b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2d61(cpu_ctx *cpu){    
+void FUN_1000_2d61(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2c45(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4277,7 +4340,8 @@ void FUN_1000_2d61(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2df2(cpu_ctx *cpu){    
+void FUN_1000_2df2(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2bf4(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4377,7 +4441,8 @@ void FUN_1000_2df2(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2eaf(cpu_ctx *cpu){    
+void FUN_1000_2eaf(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2bf9(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4477,7 +4542,8 @@ void FUN_1000_2eaf(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_2f6c(cpu_ctx *cpu){    
+void FUN_1000_2f6c(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2bfe(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4579,7 +4645,8 @@ void FUN_1000_2f6c(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_302d(cpu_ctx *cpu){    
+void FUN_1000_302d(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:2c03(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4682,7 +4749,8 @@ void FUN_1000_302d(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //TODO find out when this is called
-void FUN_1000_30ee(cpu_ctx *cpu){    
+void FUN_1000_30ee(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:15ee(c),1000:167a(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4755,7 +4823,8 @@ void FUN_1000_30ee(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_317d(cpu_ctx *cpu){    
+void FUN_1000_317d(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:315d(c),1000:3174(c)
    INST_XCHG(cpu->DX, cpu->CX);
    if(SIGNED(cpu->BX) <= SIGNED(cpu->CX)) goto LAB_LOC_1;
@@ -4797,7 +4866,8 @@ void FUN_1000_317d(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_31d1(cpu_ctx *cpu){    
+void FUN_1000_31d1(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3177(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4858,7 +4928,8 @@ void FUN_1000_31d1(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_324f(cpu_ctx *cpu){    
+void FUN_1000_324f(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:30f6(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -4985,7 +5056,8 @@ void FUN_1000_324f(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3376(cpu_ctx *cpu){    
+void FUN_1000_3376(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:30fb(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5114,7 +5186,8 @@ void FUN_1000_3376(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_34a2(cpu_ctx *cpu){    
+void FUN_1000_34a2(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3100(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5245,7 +5318,8 @@ void FUN_1000_34a2(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_35cf(cpu_ctx *cpu){    
+void FUN_1000_35cf(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3105(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5378,7 +5452,8 @@ void FUN_1000_35cf(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to textured polygons
-void FUN_1000_36fe(cpu_ctx *cpu){    
+void FUN_1000_36fe(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[8]:     1000:0d24(c),1000:16f0(c),1000:175a(c),1000:1907(c),
                               //             1000:1ddb(c),1000:1e34(c),1000:1f2f(c),1000:1f88(c)
    INST_PUSH(cpu->SI);
@@ -5456,7 +5531,8 @@ void FUN_1000_36fe(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_379b(cpu_ctx *cpu){    
+void FUN_1000_379b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:3773(c),1000:3792(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5520,7 +5596,8 @@ void FUN_1000_379b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
-void FUN_1000_3827(cpu_ctx *cpu){    
+void FUN_1000_3827(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
    cpu->DI = MEM_WORD(0xdbc6);
@@ -5615,7 +5692,8 @@ void FUN_1000_3827(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: seems to also be related to rendering textured polygons
-void FUN_1000_390a(cpu_ctx *cpu){    
+void FUN_1000_390a(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3706(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5791,7 +5869,8 @@ void FUN_1000_390a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3aa3(cpu_ctx *cpu){    
+void FUN_1000_3aa3(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:370b(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5967,7 +6046,8 @@ void FUN_1000_3aa3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3c3c(cpu_ctx *cpu){    
+void FUN_1000_3c3c(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3710(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -6147,7 +6227,8 @@ void FUN_1000_3c3c(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3ddb(cpu_ctx *cpu){    
+void FUN_1000_3ddb(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:3715(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -6327,7 +6408,8 @@ void FUN_1000_3ddb(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3f7a(cpu_ctx *cpu){    
+void FUN_1000_3f7a(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[21]:    1000:2e4e(c),1000:2e77(c),1000:2f0e(c),1000:2f34(c),
                               //             1000:2fcb(c),1000:2ff6(c),1000:308f(c),1000:30b7(c),
                               //             1000:39b0(c),1000:39cc(c),1000:39e2(c),1000:3a23(c),
@@ -6356,7 +6438,8 @@ void FUN_1000_3f7a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3f98(cpu_ctx *cpu){    
+void FUN_1000_3f98(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:1482(c),1000:59ad(c)
    if(SIGNED(cpu->AX) < SIGNED(MEM_WORD(0xdbc0))) goto LAB_LOC_1;
    if(SIGNED(cpu->AX) > SIGNED(MEM_WORD(0xdbc2))) goto LAB_LOC_1;
@@ -6382,7 +6465,8 @@ void FUN_1000_3f98(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_3fd0(cpu_ctx *cpu){    
+void FUN_1000_3fd0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1981(c)
    MEM_WORD(0xe530) = 0x6;
    cpu->BX = MEM_WORD(0x5f9);
@@ -6476,7 +6560,8 @@ void FUN_1000_3fd0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_40c8(cpu_ctx *cpu){    
+void FUN_1000_40c8(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:40c4(c)
    cpu->SI = 0xe532;
    cpu->DI = 0xe55c;
@@ -6521,7 +6606,8 @@ void FUN_1000_40c8(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4120(cpu_ctx *cpu){    
+void FUN_1000_4120(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:4107(c),1000:411c(c)
    INST_XCHG(cpu->DX, cpu->CX);
    if(SIGNED(cpu->BX) <= SIGNED(cpu->CX)) goto LAB_LOC_3;
@@ -6592,7 +6678,8 @@ void FUN_1000_4120(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_41b2(cpu_ctx *cpu){    
+void FUN_1000_41b2(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:1f94(c)
    MEM_WORD(0xe530) = 0x6;
    cpu->BX = MEM_WORD(0x5f9);
@@ -6686,7 +6773,8 @@ void FUN_1000_41b2(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_42aa(cpu_ctx *cpu){    
+void FUN_1000_42aa(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:42a6(c)
    cpu->SI = 0xe532;
    cpu->DI = 0xe55c;
@@ -6731,7 +6819,8 @@ void FUN_1000_42aa(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4302(cpu_ctx *cpu){    
+void FUN_1000_4302(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:42e9(c),1000:42fe(c)
    INST_XCHG(cpu->DX, cpu->CX);
    if(SIGNED(cpu->BX) <= SIGNED(cpu->CX)) goto LAB_LOC_3;
@@ -6802,7 +6891,8 @@ void FUN_1000_4302(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4394(cpu_ctx *cpu){    
+void FUN_1000_4394(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:40ce(c),1000:42b0(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -6900,7 +6990,8 @@ void FUN_1000_4394(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_444d(cpu_ctx *cpu){    
+void FUN_1000_444d(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:40d3(c),1000:42b5(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -6998,7 +7089,8 @@ void FUN_1000_444d(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4506(cpu_ctx *cpu){    
+void FUN_1000_4506(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:40d8(c),1000:42ba(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -7098,7 +7190,8 @@ void FUN_1000_4506(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_45c3(cpu_ctx *cpu){    
+void FUN_1000_45c3(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:40dd(c),1000:42bf(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -7198,7 +7291,8 @@ void FUN_1000_45c3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_4680(cpu_ctx *cpu){    
+void FUN_1000_4680(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[8]:     1000:43ec(c),1000:4415(c),1000:44a8(c),1000:44ce(c),
                               //             1000:4561(c),1000:458c(c),1000:4621(c),1000:4649(c)
    if(cpu->BX == cpu->DX) goto LAB_LOC_1;
@@ -7226,7 +7320,8 @@ void FUN_1000_4680(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_46a0(cpu_ctx *cpu){    
+void FUN_1000_46a0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[13]:    1000:14bf(c),1000:152a(c),1000:159b(c),1000:1617(c),
                               //             1000:1699(c),1000:1d04(c),1000:1d30(c),1000:1d97(c),
                               //             1000:1ded(c),1000:1e60(c),1000:1e89(c),1000:1eeb(c),
@@ -7254,7 +7349,8 @@ void FUN_1000_46a0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_46d3(cpu_ctx *cpu){    
+void FUN_1000_46d3(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[21]:    1000:14d4(c),1000:14e9(c),1000:1541(c),1000:15b5(c),
                               //             1000:1639(c),1000:1d09(c),1000:1d0d(c),1000:1d34(c),
                               //             1000:1d3a(c),1000:1da5(c),1000:1db5(c),1000:1dfd(c),
@@ -7371,7 +7467,8 @@ void FUN_1000_46d3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_47ec(cpu_ctx *cpu){    
+void FUN_1000_47ec(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[13]:    1000:1500(c),1000:1559(c),1000:15d0(c),1000:165c(c),
                               //             1000:16d2(c),1000:1d14(c),1000:1d40(c),1000:1dc8(c),
                               //             1000:1e21(c),1000:1e70(c),1000:1e99(c),1000:1f1c(c),
@@ -7469,7 +7566,8 @@ void FUN_1000_47ec(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_48d0(cpu_ctx *cpu){    
+void FUN_PHYSICS_48d0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56ba(c)
    INST_PUSH(cpu->SI);
    FUN_PHYSICS_4e0a(cpu);
@@ -7483,7 +7581,8 @@ void FUN_PHYSICS_48d0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_48db(cpu_ctx *cpu){    
+void FUN_PHYSICS_48db(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:48d6(c)
    FUN_PHYSICS_0e28(cpu);
    cpu->DI = cpu->SI;
@@ -7606,7 +7705,8 @@ void FUN_PHYSICS_48db(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4a71(cpu_ctx *cpu){    
+void FUN_PHYSICS_4a71(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[5]:     1000:499c(c),1000:49bf(c),1000:49e3(c),1000:4a07(c),
                               //             1000:4a6b(c)
    cpu->EAX = MEM_DWORD(cpu->DI + 0x14);
@@ -7740,7 +7840,8 @@ void FUN_PHYSICS_4a71(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4c26(cpu_ctx *cpu){    
+void FUN_PHYSICS_4c26(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4b88(c)
    INST_PUSH(cpu->ECX);
    INST_PUSH(cpu->EBX);
@@ -7770,7 +7871,8 @@ void FUN_PHYSICS_4c26(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4c68(cpu_ctx *cpu){    
+void FUN_PHYSICS_4c68(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:4cc3(c),1000:4d0e(c)
    cpu->EAX = MEM_DWORD(0xe9cc);
    cpu->EBX = MEM_DWORD(0xe9d0);
@@ -7803,7 +7905,8 @@ void FUN_PHYSICS_4c68(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4cc3(cpu_ctx *cpu){    
+void FUN_PHYSICS_4cc3(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4c22(c)
    FUN_PHYSICS_4c68(cpu);
    if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
@@ -7835,7 +7938,8 @@ void FUN_PHYSICS_4cc3(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4d0e(cpu_ctx *cpu){    
+void FUN_PHYSICS_4d0e(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4bc7(c)
    FUN_PHYSICS_4c68(cpu);
    if(SIGNED(cpu->EAX) > SIGNED(cpu->EBX)) goto LAB_LOC_1;
@@ -7880,7 +7984,8 @@ void FUN_PHYSICS_4d0e(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4d96(cpu_ctx *cpu){    
+void FUN_PHYSICS_4d96(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:4ccc(c),1000:4d17(c),1000:52b7(c)
    INST_PUSH(cpu->SI);
    cpu->SI = MEM_WORD(0x3e51);
@@ -7916,7 +8021,8 @@ void FUN_PHYSICS_4d96(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_4e0a(cpu_ctx *cpu){    
+void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:48d1(c)
    cpu->AX = cpu->SI;
    INST_ADD(cpu->AX, MEM_WORD(cpu->SI));
@@ -8080,7 +8186,8 @@ void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_500b(cpu_ctx *cpu){    
+void FUN_PHYSICS_500b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:56c8(c)
    MEM_BYTE(0xea28) = 0x0;
    cpu->DI = 0x5bbc;
@@ -8142,7 +8249,8 @@ void FUN_PHYSICS_500b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
-void FUN_PHYSICS_5091(cpu_ctx *cpu){    
+void FUN_PHYSICS_5091(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:501c(c)
    INST_PUSH(cpu->SI);
    cpu->DX = cpu->SI;
@@ -8255,7 +8363,8 @@ void FUN_PHYSICS_5091(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_51bd(cpu_ctx *cpu){    
+void FUN_PHYSICS_51bd(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:507a(c)
    INST_PUSH(cpu->DI);
    INST_PUSH(cpu->SI);
@@ -8360,7 +8469,8 @@ void FUN_PHYSICS_51bd(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_52d4(cpu_ctx *cpu){    
+void FUN_PHYSICS_52d4(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:5393(c),1000:53e4(c)
    cpu->AX = MEM_WORD(0xea0c);
    INST_IMUL(MEM_WORD(0xea14));
@@ -8394,7 +8504,8 @@ void FUN_PHYSICS_52d4(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_532e(cpu_ctx *cpu){    
+void FUN_PHYSICS_532e(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4910(c)
    MEM_WORD(0xea1c) = cpu->CX;
    MEM_WORD(0xea0c) = 0x80;
@@ -8468,7 +8579,8 @@ void FUN_PHYSICS_532e(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_timer_5680(cpu_ctx *cpu){    
+void FUN_timer_5680(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    INST_PUSHAD();
    INST_PUSH(cpu->DS);
    INST_PUSH(cpu->ES);
@@ -8514,7 +8626,8 @@ void FUN_timer_5680(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_keyboard_56df(cpu_ctx *cpu){    
+void FUN_keyboard_56df(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
 
    cpu->BX = def_datareg;
    cpu->DS = cpu->BX;
@@ -8538,7 +8651,8 @@ void FUN_keyboard_56df(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_57e0(cpu_ctx *cpu){    
+void FUN_INIT_57e0(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:022c(c)
    cpu->AX = 0x120;
    FUN_SHARED_58fc(cpu);
@@ -8577,7 +8691,8 @@ void FUN_INIT_57e0(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5831(cpu_ctx *cpu){    
+void FUN_1000_5831(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
    cpu->CH = cpu->AL;
    cpu->DX = 0x388;
    cpu->AL = cpu->BL;
@@ -8605,7 +8720,8 @@ void FUN_1000_5831(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_PHYSICS_5864(cpu_ctx *cpu){    
+void FUN_PHYSICS_5864(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[1]:     1000:4abf(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DX);
@@ -8633,7 +8749,8 @@ void FUN_PHYSICS_5864(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_SHARED_589b(cpu_ctx *cpu){    
+void FUN_SHARED_589b(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:5806(c),1000:580e(c),1000:5879(c)
    INST_MOVZX(cpu->BX, cpu->AL);
    cpu->BL = CSD_DAT_unk_592c[cpu->BX];
@@ -8687,7 +8804,8 @@ void FUN_SHARED_589b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_SHARED_58fc(cpu_ctx *cpu){    
+void FUN_SHARED_58fc(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[21]:    1000:57e3(c),1000:57e9(c),1000:57ef(c),1000:57f6(c),
                               //             1000:5814(c),1000:581e(c),1000:5827(c),1000:5874(c),
                               //             1000:587f(c),1000:5885(c),1000:58a8(c),1000:58b0(c),
@@ -8710,7 +8828,8 @@ void FUN_SHARED_58fc(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_1000_5940_render_text(cpu_ctx *cpu){    
+void FUN_1000_5940_render_text(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:04e6(c),1000:04f4(c)
    CSD_BYTE_1000_59c1 = cpu->CL; //= Fh
    cpu->CX = cpu->AX;
@@ -8785,7 +8904,8 @@ void FUN_1000_5940_render_text(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_5a60(cpu_ctx *cpu){    
+void FUN_INIT_5a60(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:24ca(c),1000:24da(c),1000:2566(c)
    cpu->DX = cpu->DX;
    cpu->AL = 0x0;
@@ -8814,7 +8934,8 @@ void FUN_INIT_5a60(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_5a95(cpu_ctx *cpu){    
+void FUN_INIT_5a95(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:01d3(c),1000:24ec(c),1000:5a6e(c)
    cpu->DX = 0xef88;
    cpu->CX = 0x80;
@@ -8839,7 +8960,8 @@ void FUN_INIT_5a95(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_5acf(cpu_ctx *cpu){    
+void FUN_INIT_5acf(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[3]:     1000:01ff(c),1000:251d(c),1000:5a84(c)
    INST_CLD();
    cpu->DX = 0xf008;
@@ -8884,7 +9006,8 @@ void FUN_INIT_5acf(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-void FUN_INIT_5b26(cpu_ctx *cpu){    
+void FUN_INIT_5b26(cpu_ctx *cpu){
+   PROLOGUE_FUNC();
                               //XREF[2]:     1000:5af6(c),1000:5b0c(c)
    if(cpu->SI != 0xf308) goto LAB_LOC_1;
    INST_PUSH(cpu->AX);

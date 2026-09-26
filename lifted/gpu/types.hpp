@@ -3,10 +3,6 @@
 #include <cstdint>
 #include <vector>
 
-struct stackItem {
-    uint32_t value;  uint16_t line; uint16_t size;
-};
-
 struct cpu_ctx {
     // GPRs
     union {uint32_t EAX;  uint16_t AX;  struct { uint8_t AL, AH; }; };
@@ -23,12 +19,9 @@ struct cpu_ctx {
     //segment registers, will be used with a multiplier to emulate segments
     //(defined below, not exactly 16 like in the original real mode) 
     uint16_t DS; //should ALWAYS be zero
-    uint16_t CS; //should never be used
     uint16_t ES, FS, GS;
 
     uint8_t CF;
 
     uintptr_t mem_base;
-
-    std::vector<stackItem> stack;
 };

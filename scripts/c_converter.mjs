@@ -77,7 +77,7 @@ const u = ops.map(function(a){
     }
     if(c === "FUNC_LABEL"){
         const f = a.command.slice(0,-1);
-        return `void ${f}(cpu_ctx *cpu){    `;
+        return `void ${f}(cpu_ctx *cpu){\n   PROLOGUE_FUNC();`;
     }
     if(c === "INST"){
         let v = doTheThingInst(a);

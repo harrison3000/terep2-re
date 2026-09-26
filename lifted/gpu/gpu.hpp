@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <cstring>
-#include <vector>
 #include <bit>
 #include <cstdio>
 
@@ -23,26 +22,35 @@ struct encangado64_t {
     };
 };
 
+struct stackItem {
+    uint32_t value;  uint16_t line; uint16_t size;
+};
+
 //TODO add a 4k buffer zone so we can fault on writes beyond 64k?
 //or maybe just use the blinkenlights to see rogue writes
 #define SEGM 1024
 
 #define def_datareg 0
 
-#define INST_PUSH(reg) cpu->stack.push_back({.value = reg, .line = __LINE__, .size = sizeof(reg)});
+//this 16 here is a very conservative value
+//TODO do some kind of high water mark to see the real limits
+#define PROLOGUE_FUNC() stackItem _local_stack[16]; int _local_stack_pointer = 0;
 
-#define INST_POP(reg) ({        \
-    if(cpu->stack.empty()) {__builtin_trap();}   \
-    auto it = cpu->stack.back();\
-    if(sizeof(reg) != it.size){__builtin_trap();}\
-    cpu->stack.pop_back();      \
+#define INST_PUSH(reg) ({   \
+    _local_stack[_local_stack_pointer] = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    _local_stack_pointer++; \
+})
+
+
+#define INST_POP(reg) ({     \
+    _local_stack_pointer--;  \
+    if(_local_stack_pointer < 0 || _local_stack_pointer >= sizeof(_local_stack)) {__builtin_trap();}   \
+    auto it = _local_stack[_local_stack_pointer]; \
+    if(sizeof(reg) != it.size){__builtin_trap();} \
     reg = it.value;             \
 })
 
-#define DUMMY_POP_WORD() ({ \
-    int16_t dummy;   \
-    INST_POP(dummy); \
-})
+#define DUMMY_POP_WORD() ({ _local_stack_pointer--; })
 
 #define MEM_BYTE(addr) ({    \
     uint16_t displ = (addr); \
