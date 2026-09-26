@@ -23,6 +23,9 @@ int8_t get_pc_scancode(const SDL_Event& event) {
         case SDLK_A:   make_code = 0x1E; break;
         case SDLK_D:   make_code = 0x20; break;
 
+        case SDLK_1:   make_code = 0x2; break;
+        case SDLK_2:   make_code = 0x3; break;
+
         case SDLK_UP:    make_code = 0x48; break;
         case SDLK_DOWN:  make_code = 0x50; break;
         case SDLK_LEFT:  make_code = 0x4B; break;
