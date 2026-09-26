@@ -1,8 +1,5 @@
 //@ts-check
 
-//This thing helps transform the ghidra generated label "LAB_1000_XXXX" into local labels
-//its not foolproof, needs some manual fixing
-
 
 import { readFile, writeFile } from 'node:fs/promises';
 
