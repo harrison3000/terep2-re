@@ -62,9 +62,9 @@ replacetron(f, /^ +REP«(.+)»/, (m) => `   while(cpu->CX){
       INST_${m[1]}();
       cpu->CX--;
    }`);
-replacetron(f, /INST_ADD.+->SP/, () => "   DUMMY_POP_WORD();");
+replacetron(f, /INST_ADD\(SP/, () => "   DUMMY_POP_WORD();");
 
-replacetron(f, /CVTSI2SS\(cpu->XMM([012]),/, (m) => `   float tmp_f${m[1]} = SIGNED(cpu->EAX);`);
+replacetron(f, /CVTSI2SS\(xmm([012]),/, (m) => `   float tmp_f${m[1]} = SIGNED(cpu->EAX);`);
 replacetron(f, /CVTSS2SI/, (m) => 
 `   tmp_f0 *= tmp_f0;
    tmp_f1 *= tmp_f1;
@@ -73,12 +73,12 @@ replacetron(f, /CVTSS2SI/, (m) =>
    float ressq = __builtin_sqrtf(tmp_f0 + tmp_f1 + tmp_f2);
    cpu->EAX = (int32_t)ressq;`);
 
-replacetron(f, /XMM[0-3]/, () => "//REMOVEME");
+replacetron(f, /XMM[0-3]/i, () => "//REMOVEME");
 
-replacetron(f, /^.+INST_IMUL\(cpu->[A-Z]+,.+/, (m) => m[0].replace("IMUL(", "IMUL2("));
+replacetron(f, /^.+_DATA2.+/, (m) => m[0].replace("_DATA2", "def_datareg"));
 
 for(let i =0; i < 2; i++){
-    const ini = f.findIndex(s => s.includes("cpu->BX + ZZZZ"));
+    const ini = f.findIndex(s => s.includes("THE_JUMP_TABLE_MARKER"));
     const fim = f.findIndex(s => s.includes("LAB_RUIM:"));
 
     let x = 0;
@@ -104,6 +104,13 @@ mergetron(f, "SUB", "SBB");
 mergetron(f, "SHL", "RCL");
 
 const filtratada = f.filter(x => x !== "//REMOVEME");
+
+filtratada.splice(0,0,
+    `#include "gpu/gpu.hpp"`,
+    `#include "declrs.hpp"`,
+    `#include "variables.hpp"`,
+    "");
+
 
 await writeFile("lifted/maincode.cpp", filtratada.join("\n"));
 

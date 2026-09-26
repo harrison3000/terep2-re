@@ -67,12 +67,14 @@ export function classifyRegs(r){
 }
 
 export function classifyMem(m){
-    const mt = m.match(/^(d?word|byte) (([DEFG]S)\:)?\[(.+)\]$/)
+    const mt = m.match(/^(d?word|byte)? ?(([DEFG]S)\:)?\[(.+)\]$/)
     if(!mt){
         return false;
     }
+    var miolomole = mt[4].replaceAll(/(SI|DI|BX)/g, "cpu->$1");
     
-    return {tipo: "MEM", tipo2:mt[1], miolo: mt[4], seg: mt[3], toString:mem2string};
+    
+    return {tipo: "MEM", tipo2:mt[1], miolo: mt[4], miolomole, seg: mt[3], toString:mem2string};
 }
 
 export function classifyLit(l){
@@ -85,18 +87,26 @@ export function classifyLit(l){
 
 
 function mem2string(){
-    if(this.miolo.match(/^[a-z]\w{2,}$/i)){
+    var dmm = this.miolomole.match(/^([a-z]\w{2,})( \+ (.*))?$/i);
+    if(dmm){
         //variable
+        if(dmm[2]){
+            return `${dmm[1]}[${dmm[3]}]`;
+        }
+
         return this.miolo;
     }
 
-    var miolomole = this.miolo.replaceAll(/(SI|DI|BX)/g, "cpu->$1");
+    if(!this.tipo2){
+        return "Error: we only accept mem without size for variables";
+    }
+
     var s = this.tipo2.toUpperCase();
 
     if(this.seg){
-        return  `SMEM_${s}(cpu->${this.seg},${miolomole})`;
+        return  `SMEM_${s}(cpu->${this.seg},${this.miolomole})`;
     }
-    return  `MEM_${s}(${miolomole})`;
+    return  `MEM_${s}(${this.miolomole})`;
 }
 
 export function doTheThingInst(a){
@@ -118,8 +128,12 @@ export function doTheThingInst(a){
     if(opcode === "JCXZ"){
         return `if (cpu->CX == 0) goto ${tiraponto(ops[0])};`;
     }
-    if(opcode === "LOOP"){
+    if(opcode === "LOOP" || opcode === "L_LOOP"){
         return `if (--cpu->CX != 0) goto ${tiraponto(ops[0])};`;
+    }
+    if(opcode === "LEA"){
+        let calc = a.operands[1].miolomole;
+        return `${ops[0]} = ${calc}; //was a LEA`;
     }
 
     if(opcode.startsWith("J")){
@@ -138,6 +152,10 @@ export function doTheThingInst(a){
 
     if(opcode === "IMUL" && ops.length === 2){
         opcode  = "IMUL2";
+    }
+
+    if(opcode === "REP"){
+        return `REP«${ops[0]}»`;
     }
 
 
