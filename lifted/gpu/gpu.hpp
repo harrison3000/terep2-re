@@ -311,8 +311,8 @@ static inline void inner_div(cpu_ctx *cpu, uint32_t a) {
 
 #define INST_CLC() ({cpu->CF = 0;})
 
-#define INST_PUSHAD() uint32_t regsave[7]; memcpy(regsave, cpu, 7*4)
-#define INST_POPAD()  memcpy(cpu, regsave, 7*4)
+#define INST_PUSHAD() uint32_t regsave[8]; memcpy(regsave, cpu, 8*4)
+#define INST_POPAD()  memcpy(cpu, regsave, 8*4)
 
 
 

@@ -16,12 +16,14 @@ struct cpu_ctx {
     
     union {uint32_t EBP;  uint16_t BP; };
 
+    uint32_t padding;//premature optimization for pushad/popad to be exacly 8*4
+
+    uintptr_t mem_base;
+
     //segment registers, will be used with a multiplier to emulate segments
     //(defined below, not exactly 16 like in the original real mode) 
     uint16_t DS; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
     uint8_t CF;
-
-    uintptr_t mem_base;
 };
