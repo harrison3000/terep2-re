@@ -34,7 +34,7 @@ struct stackItem {
 
 //this 16 here is a very conservative value
 //TODO do some kind of high water mark to see the real limits
-#define SETUP_STACK() stackItem _local_stack[16]; int _local_stack_pointer = 0;
+#define SETUP_STACK() stackItem _local_stack[16]; unsigned int _local_stack_pointer = 0;
 
 #define INST_PUSH(reg) ({   \
     _local_stack[_local_stack_pointer] = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
@@ -44,7 +44,7 @@ struct stackItem {
 
 #define INST_POP(reg) ({     \
     _local_stack_pointer--;  \
-    if(_local_stack_pointer < 0 || _local_stack_pointer >= sizeof(_local_stack)) {__builtin_trap();}   \
+    if(_local_stack_pointer >= sizeof(_local_stack)) {__builtin_trap();}   \
     auto it = _local_stack[_local_stack_pointer]; \
     if(sizeof(reg) != it.size){__builtin_trap();} \
     reg = it.value;             \
