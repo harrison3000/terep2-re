@@ -29,6 +29,30 @@ pseudolocal_a:
 pseudolocal_b:
     dw 0
 
+pseudolocal_2_a:
+    dw 0
+
+retval_2418:
+    dw 0
+
+some_flag_thing_idk:
+    ;this used to be at 0x5ee, but it was bugged I think, it stored and loaded to AL, but used SAHF/LAHF (they modify AH), so yeah
+    ;and only worked because nothing overwrote AH in the meantime? IDK really
+    ;I will just make something that resembles what was probably intended and hope for the best
+    ;after the changes I didnt notice any rendering bug, so yeah
+    db 0
+
+another_flag_thing:
+    db 0
+
+flying_car_tmp:
+    db 0
+
+another_quick_temp:
+    dd 0
+
+another_quick_temp_w:
+    dd 0 
 
 ;All the data that used to be mixed with  code
 

@@ -9,4 +9,7 @@ sim.cfg
 erros.txt
 terep2re
 .vscode/
+raw_c.cpp
+*.pgm
 build/
+dump*.txt

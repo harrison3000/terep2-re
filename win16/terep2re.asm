@@ -68,10 +68,10 @@ segment _DATA2 class=DATA align=16
 
     db "SEPARATOR", 0
     
-    nova_linha:
-    db "GAMBIARRA FOREVER!", 0
-
+    
 %include "common/newvars_defs.asm"
 
-;pad to the limit
-times (65534 - ($ - $$)) db 'P'
+;pad to almost the limit
+times (0xf700 - ($ - $$)) db 'P'
+db "GAMBIARRA FOREVER!", 0
+
