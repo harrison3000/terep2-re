@@ -5,17 +5,14 @@
 #include "common.h"
 #include "resource.h"
 
-extern volatile uintptr_t all_segments[];
-extern volatile call_portal_t call_portal[];
-extern volatile uint8_t  base_mem[];
+extern void *getVideoSeg();
 
 extern st_image gameImg;
 
 static inline RGBQUAD blend_rgb(RGBQUAD a, RGBQUAD b);
 
 void drawTheFramebuffer(HDC hdc,int scale){
-    int videoSegSel = base_mem[0xdb10];
-    void *video = (void*)all_segments[videoSegSel];
+    void *video = (void*)getVideoSeg();
     uint8_t* ivideo = (uint8_t *)video;
 
     if(scale == T2_SCALE_P2){

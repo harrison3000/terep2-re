@@ -12,17 +12,15 @@
 
 TCHAR szAppName[] = "Terep2Win32";
 
-extern void asm_f_init(void);
-extern void asm_render(void);
-extern void asm_physics(void);
-extern void asm_keys(void);
+extern int lifted_f_init(void);
+extern void lifted_render(void);
+extern void lifted_physics(void);
+extern void lifted_keys(int);
+extern uint8_t *getBaseMem();
 
 void call_init(HWND hwnd, char path[], int complain);
 void adjustWindowSize(HWND hwnd, int w, int h);
 
-extern volatile uintptr_t all_segments[];
-extern volatile call_portal_t call_portal[];
-extern volatile uint8_t  base_mem[];
 
 HWND hBlinken;
 
@@ -166,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                         if (run_physics) {
                             MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
                         } else {
-                           asm_physics();
+                           lifted_physics();
                         }
                     }
                 }
@@ -247,13 +245,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                             //maybe the timer was delayed, lets bail
                             break;
                         }
-                        asm_physics();
+                        lifted_physics();
                     }
                     last_p_update = agora - sobra;
                 }
 
                 InvalidateRect(hwnd, 0, FALSE);
-                asm_render();
+                lifted_render();
 
 #ifdef DEBUGMENU
                 InvalidateRect(hBlinken, 0, FALSE);
@@ -265,7 +263,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_KEYDOWN:
         {
             if(wParam == VK_SPACE && !run_physics){
-                asm_physics();
+                lifted_physics();
             }
             if(wParam == '3'){
                 run_physics = !run_physics;
@@ -288,8 +286,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
 
             if(started){
-                call_portal->ax = scanCode;
-                asm_keys();
+                lifted_keys(scanCode);
             }
         }
         break;
@@ -461,17 +458,18 @@ void call_init(HWND hwnd, char path[], int complain){
     }
 
     tmp_g_path = path;
-    asm_f_init();
+    int ax = lifted_f_init();
     tmp_g_path = 0;
 
     started = 1;
 
 
-    if(call_portal->ax){
+    if(ax){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
         exit(55);
     }
 
+    uint8_t *base_mem = getBaseMem();
     int ncars = base_mem[0x5bba];
     if(ncars <= 0){
         MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
@@ -479,13 +477,12 @@ void call_init(HWND hwnd, char path[], int complain){
     }
 
     prepare_bitmap_info(320, 200, &gameImg, (uint8_t *)&base_mem[0x1a4d]);
-    asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
+    lifted_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
-void adlib_callback(){
-    uint16_t ax = call_portal->ax;
+void adlib_callback(int ax){
     uint8_t reg = ax >> 8;
     uint8_t val = ax & 0xFF;
 
