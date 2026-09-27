@@ -3354,7 +3354,7 @@ void FUN_INIT_2431(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->CX);
    cpu->CX = MEM_WORD(cpu->DI);
    LAB_LOC_1:
-   if(MEM_WORD(cpu->DI + 0x1a) == -1) goto LAB_LOC_2;
+   if(MEM_WORD(cpu->DI + 0x1a) == 0xffff) goto LAB_LOC_2;
    INST_ADD(cpu->DI, 0x1c);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    return;
