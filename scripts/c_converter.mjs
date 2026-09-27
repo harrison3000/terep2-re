@@ -1,7 +1,7 @@
 //@ts-check
 
 import {readFile, writeFile} from "node:fs/promises";
-import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassifier, splitabom, doTheThingInst } from "./utils_converter.mjs";
+import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassifier, splitabom, doTheThingInst, processProlog } from "./utils_converter.mjs";
 
 /**
  * @type {string[]}
@@ -63,6 +63,8 @@ const ops = normalized.map(function(l){
 
 ops.push({classe: "F_END"});
 
+processProlog(ops);
+
 debugIntermediaries(ops);
 
 
@@ -76,7 +78,11 @@ const u = ops.map(function(a){
     }
     if(c === "FUNC_LABEL"){
         const f = a.command.slice(0,-1);
-        return `void ${f}(cpu_ctx *cpu){\n   PROLOGUE_FUNC();`;
+        let r = `void ${f}(cpu_ctx *cpu){`;
+        if(a.usesStack){
+            r += "\n   SETUP_STACK();";
+        }
+        return r;
     }
     if(c === "INST"){
         let v = doTheThingInst(a);

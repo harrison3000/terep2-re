@@ -169,3 +169,17 @@ function tiraponto(s){
     }
     return s;
 }
+
+export function processProlog(/** @type {any[]} */ls){
+    var iLast = {};
+    for(let i = 0; i < ls.length; i++){
+        let obj = ls[i];
+        if(obj.classe === "FUNC_LABEL"){
+            iLast = obj;
+        }
+
+        if(obj.classe === "INST" && obj.opcode === "PUSH"){
+            iLast.usesStack = true;
+        }
+    }
+}
