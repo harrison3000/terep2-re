@@ -99,14 +99,21 @@ void mem_dumper(void *mem, const char *desc){
     counter++;
     char tmp[512];
 
-    sprintf(tmp, "dump_%d.pgm", counter);
+    sprintf(tmp, "dump_%d.txt", counter);
 
     auto o = open(tmp,O_WRONLY|O_CREAT, 0644);
 
-    sprintf(tmp, "P5\n#%s\n256 %d\n255\n", desc,1*1024*3);
-    write(o, tmp, strlen(tmp));
+    auto uintp = (uint8_t*) mem;
+    for(int i = 0; i < 4096;i++){
+        int slp = sprintf(tmp, "%04X:   %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+            i*16,
+            uintp[0x0], uintp[0x1], uintp[0x2], uintp[0x3], uintp[0x4], uintp[0x5], uintp[0x6], uintp[0x7],
+            uintp[0x8], uintp[0x9], uintp[0xa], uintp[0xb], uintp[0xc], uintp[0xd], uintp[0xe], uintp[0xf]
+        );
+        write(o, tmp, slp);
 
-    write(o, mem, 1*1024*768);
+        uintp += 16;
+    }
 
     close(o);
 }

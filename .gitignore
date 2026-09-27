@@ -11,3 +11,4 @@ terep2re
 raw_c.cpp
 *.pgm
 build/
+dump*.txt
