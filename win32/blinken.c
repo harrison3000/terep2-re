@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include <stdint.h>
 #include <stdio.h>
 
 #define SETCOLORR(i,r,g,b) {                                            \
@@ -10,6 +11,8 @@
 st_image blinkenImg;
 extern volatile uintptr_t all_segments[];
 extern int started;
+
+void getCarTxt(char *text, size_t len);
 
 void blinkenInit(void){
     prepare_bitmap_info(256, 256, &blinkenImg, NULL);
@@ -41,9 +44,14 @@ LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
                 DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
-                SetBkMode(hdc, TRANSPARENT);
+                SetBkMode(hdc, OPAQUE);
                 SetTextColor(hdc, RGB(0, 0, 0));
+
+                RECT rc = {5,5, 100,100};
                 char text[256];
+
+                getCarTxt(text, sizeof(text));
+                DrawText(hdc, text, -1, &rc, DT_LEFT);
 
                 for(int i = 0; i < 256; i++){
                     char* isds = (i == 0) ? " (DS)" : "";
@@ -52,9 +60,8 @@ LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         break;
                     }
 
-                    RECT rc;
                     rc.left = (i % 4) * 280 + 20;
-                    rc.top  = (i / 4) * 300 + 20;
+                    rc.top  = (i / 4) * 300 + 70;
                     rc.right = rc.left + 250;
                     rc.bottom = rc.top + 30;
 
@@ -81,4 +88,20 @@ LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
+void getCarTxt(char *text, size_t len){
+    uintptr_t carloc = 0x5bd0 + all_segments[0];
+    uint16_t offset = ((uint16_t*)carloc)[0];
+    carloc += offset + 2;
+
+    uint32_t *coords = (uint32_t*)carloc;
+    float scale = 1.0f / 16777216.0f; //8.24 fixed point
+
+    float x = (float)coords[0] * scale;
+    float y = (float)coords[1] * scale;
+    float z = (float)coords[2] * scale;
+
+
+    snprintf(text, len, "X: %.03f\nY: %.03f\nZ: %.03f", x,y,z);
 }
