@@ -1,6 +1,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include <windows.h>
 #include "common.h"
 
@@ -30,6 +31,8 @@ int innermydoscall(char path[]){
     static FILE* f = 0;
     static int fidx = 5;
     static int32_t totalrd = 0;
+
+    static char lastRP[256] = "a";
 
     int op = ax & 0xff00;
     
@@ -79,11 +82,19 @@ int innermydoscall(char path[]){
         }
         volatile char *addr = &base_mem[dx];
         int32_t r = fread((void*)addr, 1, cx, f);
-        if(dx != 0xf008){
-            //show this message only for carX.dat loading
-            printf("* READ syscall called at EIP: %08x  \n", call_portal->caller);
-            printf("* Read %ld bytes into address: %08x (%04x relative to DS)!\n", r, addr, dx);
+
+        char currRP[256];
+
+        snprintf(currRP, 256, "* READ at EIP: %08x, Read %ld bytes into to %08x (DS:%04x)", call_portal->caller, r, addr, cx);
+
+        if(strncmp(currRP, lastRP, 256) != 0){
+            strncpy(lastRP, currRP, 256);
+            printf("%s\n", currRP);
+        }else{
+            //read msg same as the last, just print a single period
+            printf(".");
         }
+
         if(r != cx){
             printf("* Short read, %d, %d\n", r, cx);
         }
@@ -95,9 +106,13 @@ int innermydoscall(char path[]){
         uint32_t off = cx;
         off <<= 16;
         off += dx;
+        int32_t soff = off;
+        int w = ax & 0xf;
 
-        uint32_t fsok = fseek(f, off, ax & 0xf);
+        uint32_t fsok = fseek(f, soff, w);
         uint32_t offset = ftell(f);
+        printf("* SEEK at EIP %08x, whence: %d, offset: %d, ftell result: %d\n", call_portal->caller, w, soff, offset);
+
         call_portal->dx = offset >> 16;
         call_portal->ax = offset;
         return fsok == 0; 
@@ -105,7 +120,8 @@ int innermydoscall(char path[]){
     if (op == 0x3e00){
         int ok = fclose(f);
         f = NULL;
-        printf("* Total read: %ld\n=====================\n", totalrd);
+        lastRP[0] = 0;
+        printf("* File closed\n* Total read: %ld\n=====================\n", totalrd);
         totalrd = 0;
         return ok == 0;
     }
