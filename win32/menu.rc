@@ -19,20 +19,16 @@ BEGIN
             MENUITEM "1600x1200", T2_SCALE_S3
         END
     END
-#ifdef DEBUGMENU
-    POPUP "&Visualisation"
-    BEGIN
-        MENUITEM "&Blinkenlights", T2_APP_BLINKEN
-    END
-    POPUP "&Simulation"
-    BEGIN
-        MENUITEM "&Running (3)", T2_APP_PHYS_RUN
-        MENUITEM "Single ste&p (space)", T2_APP_PHYS_STEP
-    END
-#endif // DEBUGMENU
     POPUP "&Sound"
     BEGIN
         MENUITEM "&Enable sound", T2_APP_SOUND
+    END
+    POPUP "&Debug"
+    BEGIN
+        MENUITEM "&Blinkenlights", T2_APP_BLINKEN
+        MENUITEM SEPARATOR
+        MENUITEM "&Running\tF7", T2_APP_PHYS_RUN
+        MENUITEM "Single-ste&p\tF8", T2_APP_PHYS_STEP
     END
     POPUP "&Help"
     BEGIN
