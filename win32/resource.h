@@ -14,3 +14,4 @@
 #define T2_SCALE_S1   40111
 #define T2_SCALE_S2   40112
 #define T2_SCALE_S3   40113
+#define T2_GRAPH_GL   40121

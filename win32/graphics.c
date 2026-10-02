@@ -98,6 +98,11 @@ void getScaleDimension(int scale, int *w, int *h){
         *h = 200*6;
         return;
     }
+    if(scale == T2_GRAPH_GL){
+        *w = 1280;
+        *h = 720;
+        return;
+    }
 
     *w = 320;
     *h = 200;

@@ -17,6 +17,8 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "800x600", T2_SCALE_S2
             MENUITEM "1600x1200", T2_SCALE_S3
+            MENUITEM SEPARATOR
+            MENUITEM "OpenGL", T2_GRAPH_GL
         END
     END
 #ifdef DEBUGMENU

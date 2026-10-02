@@ -20,6 +20,8 @@ extern void asm_keys(void);
 void call_init(HWND hwnd, char path[], int complain);
 void adjustWindowSize(HWND hwnd, int w, int h);
 
+void doTheGLThing(HWND hwnd);
+
 extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
@@ -211,21 +213,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
         case WM_PAINT: {
             PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hwnd, &ps);
 
             if (!started) {
                 RECT rc;
                 GetClientRect(hwnd, &rc);
 
+                HDC hdc = BeginPaint(hwnd, &ps);
+
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
                 DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                EndPaint(hwnd, &ps);
+            } else if(selected_scale == T2_GRAPH_GL){
+                doTheGLThing(hwnd);
             } else {
+                HDC hdc = BeginPaint(hwnd, &ps);
                 drawTheFramebuffer(hdc, selected_scale);
+                EndPaint(hwnd, &ps);
             }
-
-            EndPaint(hwnd, &ps);
         }
         break;
 
