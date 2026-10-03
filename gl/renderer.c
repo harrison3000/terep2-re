@@ -11,6 +11,7 @@ struct carrodef_s{
     int32_t id;
     int16_t n_points;
     uint16_t points_loc2;
+    uint16_t camera_pt;
 };
 
 struct carrodef_s carros[5];
@@ -52,7 +53,7 @@ void doTheGLThing(HWND hwnd){
 
         loadCars();
 
-        p.rzSetCameraTarget(ctx, carros[0].id, 1);//TODO actual id
+        p.rzSetCameraTarget(ctx, carros[0].id, carros[0].camera_pt);
         
         for(int i=0;i<5;i++){
             int id = carros[i].id;
@@ -110,6 +111,9 @@ static void loadCars(){
             vldc_off++;
             
             if(kind == 1){ //camera
+                __auto_type c = U_CAST(uint16_t, vldc_off)[0];
+                carros[i].camera_pt = c >> 1;
+                
                 vldc_off += 4;
                 continue;
             }
