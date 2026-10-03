@@ -7,11 +7,20 @@
 static RzPlugin p;
 static RzContext* ctx;
 
+
+typedef struct {
+    uint32_t x,y,z;
+    uint32_t _data[3];
+    int16_t size;
+    int16_t type;
+} point_def;
+
+
 struct carrodef_s{
     int32_t id;
     int16_t n_points;
-    uint16_t points_loc2;
     uint16_t camera_pt;
+    const point_def *points;
 };
 
 struct carrodef_s carros[5];
@@ -97,7 +106,7 @@ static void loadCars(){
         //see: https://github.com/Zi9/Deformerz/blob/master/docs/TEREP2_DAT_car_model_format.md
         __auto_type pointsloc = chunks_offsets[0] + car_offset;
         carros[i].n_points = U_CAST(uint16_t, pointsloc)[0];
-        carros[i].points_loc2 = pointsloc + 2;
+        carros[i].points = U_CAST(point_def, pointsloc + 2);
 
         p.rzCreateObject(ctx, carros[i].n_points, &carros[i].id);
 
@@ -191,25 +200,22 @@ static void loadCars(){
 
 static void updateCarVerts(int i){
     int n = carros[i].n_points;
-    int pl2 = carros[i].points_loc2;
+    __auto_type pps = carros[i].points;
 
     uint32_t ptrs[512];
 
     for(int i =0; i<n;i++){
-        __auto_type pdef = U_CAST(uint32_t, pl2);
+        __auto_type p = pps[i];
 
-        __auto_type z = pdef[2];
-        if(z > 0xfe000000){
+        if(p.z > 0xfe000000){
             //prevents underflow related graphical glitches,
             //most notable when the car gets upside down in a low part of the map
-            z = 1;
+            p.z = 1;
         }
 
-        ptrs[i*3 + 0] = pdef[0];
-        ptrs[i*3 + 1] = pdef[1];
-        ptrs[i*3 + 2] = z;
-
-        pl2+= 28;
+        ptrs[i*3 + 0] = p.x;
+        ptrs[i*3 + 1] = p.y;
+        ptrs[i*3 + 2] = p.z;
     }
 
     p.rzUpdateObjectVertices(ctx, carros[i].id, ptrs);
