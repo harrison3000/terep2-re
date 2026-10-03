@@ -45,14 +45,7 @@ typedef struct RzContext RzContext;
 #define RZ_FILTER_MIP_LINEAR  3
 #define RZ_FILTER_TRILINEAR   4
 
-/* rzSetObjectAxes */
-#define RZ_AXES_Y_UP  0
-#define RZ_AXES_Z_UP  1
 
-/* rzSetObjectCulling */
-#define RZ_CULL_NONE  0
-#define RZ_CULL_CW    1
-#define RZ_CULL_CCW   2
 
 /* X(retorno, nome, parâmetros) */
 #define RZ_PLUGIN_FUNCTIONS(X)                                                                     \
@@ -67,7 +60,6 @@ typedef struct RzContext RzContext;
     X(int32_t, rzSetTileMap,    (RzContext* ctx, const uint8_t* data, int32_t width, int32_t height)) \
     X(int32_t, rzSetTextureFilter, (RzContext* ctx, int32_t filter))                                 \
     X(int32_t, rzSetBackgroundColor, (RzContext* ctx, uint8_t r, uint8_t g, uint8_t b))              \
-    X(int32_t, rzSetObjectAxes, (RzContext* ctx, int32_t axes))                                      \
     X(int32_t, rzCreateObject,  (RzContext* ctx, int32_t vertexCount, int32_t* outId))               \
     X(int32_t, rzAddObjectPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,             \
                                int32_t count, int32_t paletteIndex))                               \
@@ -77,8 +69,6 @@ typedef struct RzContext RzContext;
     X(int32_t, rzLoadFallbackTexture, (RzContext* ctx, const char* pcxPath))                         \
     X(int32_t, rzUpdateObjectVertices, (RzContext* ctx, int32_t id, const uint32_t* vertices))       \
     X(int32_t, rzDestroyObject, (RzContext* ctx, int32_t id))                                        \
-    X(int32_t, rzSetObjectVisible, (RzContext* ctx, int32_t id, int32_t visible))                    \
-    X(int32_t, rzSetObjectCulling, (RzContext* ctx, int32_t id, int32_t cull))                       \
     X(int32_t, rzSetCameraTarget, (RzContext* ctx, int32_t id, int32_t vertex))                      \
     X(int32_t, rzSetCameraFollow, (RzContext* ctx, float distance, float height, float stiffness))   \
     X(int32_t, rzRender,        (RzContext* ctx))

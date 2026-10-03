@@ -59,7 +59,6 @@ void doTheGLThing(HWND hwnd){
             if(id == -1) continue;
             snprintf(full_path, MAX_PATH, "%s\\car%d.pcx", track_path, i+1);
             p.rzLoadObjectTexture(ctx, id, full_path);
-            p.rzSetObjectCulling(ctx, id, RZ_CULL_CCW);
         }
 
         __auto_type bgc = U_CAST(uint8_t, 0x1a4d + 3*255);
