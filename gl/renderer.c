@@ -193,9 +193,17 @@ static void updateCarVerts(int i){
 
     for(int i =0; i<n;i++){
         __auto_type pdef = U_CAST(uint32_t, pl2);
+
+        __auto_type z = pdef[2];
+        if(z > 0xfe000000){
+            //prevents underflow related graphical glitches,
+            //most notable when the car gets upside down in a low part of the map
+            z = 1;
+        }
+
         ptrs[i*3 + 0] = pdef[0];
         ptrs[i*3 + 1] = pdef[1];
-        ptrs[i*3 + 2] = pdef[2];
+        ptrs[i*3 + 2] = z;
 
         pl2+= 28;
     }
