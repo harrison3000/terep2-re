@@ -139,7 +139,15 @@ static void loadCars(){
                 int p2 = U_CAST(uint8_t, vldc_off)[1];
                 vldc_off += 2;
 
-                if(!flag){
+                if(flag){
+                    //shadow polygon, we dont need that
+                    continue;
+                }
+
+                if(p1 == 240){
+                    //TODO see if there is a single tone or various
+                    p.rzAddObjectTranslucentPolygon(ctx, carros[i].id, idxs, n, 8);
+                }else{
                     p.rzAddObjectPolygon(ctx, carros[i].id, idxs, n, p1);
                 }
 

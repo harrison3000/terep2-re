@@ -65,6 +65,8 @@ typedef struct RzContext RzContext;
                                int32_t count, int32_t paletteIndex))                               \
     X(int32_t, rzAddObjectTexturedPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,     \
                                const float* uvs, int32_t count))                                   \
+    X(int32_t, rzAddObjectTranslucentPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,  \
+                               int32_t count, int32_t tone))                                       \
     X(int32_t, rzLoadObjectTexture, (RzContext* ctx, int32_t id, const char* pcxPath))               \
     X(int32_t, rzLoadFallbackTexture, (RzContext* ctx, const char* pcxPath))                         \
     X(int32_t, rzUpdateObjectVertices, (RzContext* ctx, int32_t id, const uint32_t* vertices))       \
