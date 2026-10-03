@@ -21,6 +21,11 @@ extern char track_path[];
 static void loadCars();
 static void updateCarVerts(int);
 
+#define U_CAST(type, addr)({ \
+    uintptr_t finalAddr = all_segments[0] + (addr); \
+    (type const*)finalAddr;       \
+})
+
 //TODO error checking
 
 void doTheGLThing(HWND hwnd){
@@ -48,7 +53,6 @@ void doTheGLThing(HWND hwnd){
         loadCars();
 
         p.rzSetCameraTarget(ctx, carros[0].id, 1);//TODO actual id
-
         
         for(int i=0;i<5;i++){
             int id = carros[i].id;
@@ -57,6 +61,9 @@ void doTheGLThing(HWND hwnd){
             p.rzLoadObjectTexture(ctx, id, full_path);
             p.rzSetObjectCulling(ctx, id, RZ_CULL_CCW);
         }
+
+        __auto_type bgc = U_CAST(uint8_t, 0x1a4d + 3*255);
+        p.rzSetBackgroundColor(ctx, bgc[0], bgc[1],bgc[2]);
     }
 
     for(int i=0;i<5;i++){
@@ -70,10 +77,6 @@ void doTheGLThing(HWND hwnd){
     p.rzRender(ctx);
 }
 
-#define U_CAST(type, addr)({ \
-    uintptr_t finalAddr = all_segments[0] + (addr); \
-    (type const*)finalAddr;       \
-})
 
 static void loadCars(){
     __auto_type ncars = U_CAST(uint16_t, 0x5bba)[0];

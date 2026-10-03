@@ -66,6 +66,7 @@ typedef struct RzContext RzContext;
     X(int32_t, rzLoadTileAtlas, (RzContext* ctx, const char* pcxPath))                               \
     X(int32_t, rzSetTileMap,    (RzContext* ctx, const uint8_t* data, int32_t width, int32_t height)) \
     X(int32_t, rzSetTextureFilter, (RzContext* ctx, int32_t filter))                                 \
+    X(int32_t, rzSetBackgroundColor, (RzContext* ctx, uint8_t r, uint8_t g, uint8_t b))              \
     X(int32_t, rzSetObjectAxes, (RzContext* ctx, int32_t axes))                                      \
     X(int32_t, rzCreateObject,  (RzContext* ctx, int32_t vertexCount, int32_t* outId))               \
     X(int32_t, rzAddObjectPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,             \
