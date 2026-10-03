@@ -29,7 +29,7 @@ extern volatile uintptr_t all_segments[];
 extern char track_path[];
 
 static void loadCars();
-static void updateCarVerts(int);
+static void updateCarThings(int);
 
 #define U_CAST(type, addr)({ \
     uintptr_t finalAddr = all_segments[0] + (addr); \
@@ -78,7 +78,7 @@ void doTheGLThing(HWND hwnd){
     for(int i=0;i<5;i++){
         int id = carros[i].id;
         if(id != -1){
-            updateCarVerts(i);
+            updateCarThings(i);
         }
     }
     
@@ -113,6 +113,9 @@ static void loadCars(){
         //variable length definitions chunk
         __auto_type vldc_loc = chunks_offsets[2];
 
+        int wi = 0;
+        int wp[4];
+
         int error = 99;
         uint16_t vldc_off = vldc_loc + car_offset;
         while(vldc_off < next_car_offset){
@@ -131,6 +134,9 @@ static void loadCars(){
                 continue;
             }
             if(kind == 10){ //wheel
+                wp[wi] = vldc_off;
+                wi++;
+
                 vldc_off += 186;
                 continue;
             }
@@ -195,10 +201,31 @@ static void loadCars(){
             printf("Unknown kind: %x, at %x, car %d\n", kind, vldc_off, i);
             break;
         }
+
+        if(wi == 4){
+            uint16_t hubv[4];
+            uint8_t front[4];
+            float diams[4];
+            __auto_type pps = carros[i].points;
+
+            for(int i = 0; i < wi; i++){
+                __auto_type wheeldef = U_CAST(uint16_t, wp[i]);
+                __auto_type pid = wheeldef[0]/2;
+                __auto_type p = pps[pid];
+
+                hubv[i] = pid;
+                front[i] = p.type == 1;
+                diams[i] = (float)p.size / 150.0f;
+            }
+            p.rzSetObjectWheels(ctx, carros[i].id, hubv, front, diams);
+        }else{
+            printf("WAT? %d wheels? HOW?\n", wi);
+        }
+
     }
 }
 
-static void updateCarVerts(int i){
+static void updateCarThings(int i){
     int n = carros[i].n_points;
     __auto_type pps = carros[i].points;
 
