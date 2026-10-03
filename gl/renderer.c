@@ -25,6 +25,8 @@ static void updateCarVerts(int);
 
 void doTheGLThing(HWND hwnd){
     static int inited = 0;
+    char full_path[MAX_PATH];
+
     if(!inited){
         int ok = rzPluginLoad(&p, "renderizeitor.dll");
         if(ok != RZ_PLUGIN_OK){
@@ -35,15 +37,26 @@ void doTheGLThing(HWND hwnd){
 
         p.rzSetHeightmap(ctx, (uint8_t*)all_segments[1], 256,256 );
 
-        char full_path[MAX_PATH];
-        snprintf(full_path, MAX_PATH, "%s\\%s",track_path, "maptex.pcx");
+        snprintf(full_path, MAX_PATH, "%s\\maptex.pcx",track_path);
 
         p.rzLoadTileAtlas(ctx, full_path);
         p.rzSetTileMap(ctx, (uint8_t*)all_segments[2], 256,256);
 
+        snprintf(full_path, MAX_PATH, "%s\\textures.pcx",track_path);
+        p.rzLoadFallbackTexture(ctx,full_path);
+
         loadCars();
 
         p.rzSetCameraTarget(ctx, carros[0].id, 1);//TODO actual id
+
+        
+        for(int i=0;i<5;i++){
+            int id = carros[i].id;
+            if(id == -1) continue;
+            snprintf(full_path, MAX_PATH, "%s\\car%d.pcx", track_path, i+1);
+            p.rzLoadObjectTexture(ctx, id, full_path);
+            p.rzSetObjectCulling(ctx, id, RZ_CULL_CCW);
+        }
     }
 
     for(int i=0;i<5;i++){
@@ -59,7 +72,7 @@ void doTheGLThing(HWND hwnd){
 
 #define U_CAST(type, addr)({ \
     uintptr_t finalAddr = all_segments[0] + (addr); \
-    (type *)finalAddr;       \
+    (type const*)finalAddr;       \
 })
 
 static void loadCars(){
@@ -73,23 +86,24 @@ static void loadCars(){
             continue;
         }
 
-        __auto_type c_offset = car_offs[i];
+        __auto_type car_offset = car_offs[i];
+        __auto_type next_car_offset = car_offs[i+1];
 
-        //p.rzCreateObject(ctx)
+        __auto_type chunks_offsets = U_CAST(uint16_t, car_offset);
 
         //see: https://github.com/Zi9/Deformerz/blob/master/docs/TEREP2_DAT_car_model_format.md
-        __auto_type pointsloc = U_CAST(uint16_t, c_offset)[0] + c_offset;
+        __auto_type pointsloc = chunks_offsets[0] + car_offset;
         carros[i].n_points = U_CAST(uint16_t, pointsloc)[0];
         carros[i].points_loc2 = pointsloc + 2;
 
         p.rzCreateObject(ctx, carros[i].n_points, &carros[i].id);
 
         //variable length definitions chunk
-        __auto_type vldc_loc = U_CAST(uint16_t, c_offset)[2];
+        __auto_type vldc_loc = chunks_offsets[2];
 
         int error = 99;
-        uint16_t vldc_off = vldc_loc + c_offset;
-        while(vldc_off < 60000){
+        uint16_t vldc_off = vldc_loc + car_offset;
+        while(vldc_off < next_car_offset){
             __auto_type kind = U_CAST(uint8_t, vldc_off)[0];
             vldc_off++;
             
@@ -110,15 +124,17 @@ static void loadCars(){
                 n++; //the extra vertex
                 vldc_off++;
 
-                uint16_t idxs[99];
+                uint16_t idxs[20];
 
                 for(int i =0; i < n;i++){
                     int v = U_CAST(uint16_t, vldc_off)[0];
+                    int flag = v & 1;
+                    idxs[i] = v >> 1;
                     vldc_off += 2;
-                    v >>= 1; //TODO interpret the flag!
-                    idxs[i] = v;
                 }
-                vldc_off += 2; //we just skip the palette for now
+                int p1 = U_CAST(uint8_t, vldc_off)[0];
+                int p2 = U_CAST(uint8_t, vldc_off)[1];
+                vldc_off += 2;
 
                 p.rzAddObjectPolygon(ctx, carros[i].id, idxs, n);
 
@@ -129,22 +145,25 @@ static void loadCars(){
                 n++; //the extra vertex
                 vldc_off++;
 
-                uint16_t idxs[99];
+                uint16_t idxs[20];
+                float uvs[30];
 
                 for(int i =0; i < n;i++){
-                    int v = U_CAST(uint16_t, vldc_off)[0];
-                    v >>= 1; //TODO interpret the flag!
-                    //TODO get the uv coords
-                    vldc_off+= 6;
-                    idxs[i] = v;
-                }
+                    __auto_type parr = U_CAST(uint16_t, vldc_off);
+                    int v = parr[0];
+                    uvs[i*2 + 0] = (float)parr[1] / 65535.0f;
+                    uvs[i*2 + 1] = (float)parr[2] / 65535.0f;
 
-                p.rzAddObjectPolygon(ctx, carros[i].id, idxs, n);
+                    idxs[i] = v >> 1;
+                    vldc_off+= 6;
+                }
+                
+                p.rzAddObjectTexturedPolygon(ctx, carros[i].id, idxs, uvs, n);
 
                 continue;
             }
             if(kind == 0){
-                break;
+                continue;
             }
 
             printf("Unknown kind: %x, at %x, car %d\n", kind, vldc_off, i);

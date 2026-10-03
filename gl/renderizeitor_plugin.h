@@ -70,6 +70,10 @@ typedef struct RzContext RzContext;
     X(int32_t, rzCreateObject,  (RzContext* ctx, int32_t vertexCount, int32_t* outId))               \
     X(int32_t, rzAddObjectPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,             \
                                int32_t count))                                                     \
+    X(int32_t, rzAddObjectTexturedPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,     \
+                               const float* uvs, int32_t count))                                   \
+    X(int32_t, rzLoadObjectTexture, (RzContext* ctx, int32_t id, const char* pcxPath))               \
+    X(int32_t, rzLoadFallbackTexture, (RzContext* ctx, const char* pcxPath))                         \
     X(int32_t, rzUpdateObjectVertices, (RzContext* ctx, int32_t id, const uint32_t* vertices))       \
     X(int32_t, rzDestroyObject, (RzContext* ctx, int32_t id))                                        \
     X(int32_t, rzSetObjectColor, (RzContext* ctx, int32_t id, uint32_t rgb))                         \
