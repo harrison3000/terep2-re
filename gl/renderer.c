@@ -125,10 +125,11 @@ static void loadCars(){
                 vldc_off++;
 
                 uint16_t idxs[20];
+                int flag = 0;
 
                 for(int i =0; i < n;i++){
                     int v = U_CAST(uint16_t, vldc_off)[0];
-                    int flag = v & 1;
+                    flag |= v & 1;
                     idxs[i] = v >> 1;
                     vldc_off += 2;
                 }
@@ -136,7 +137,9 @@ static void loadCars(){
                 int p2 = U_CAST(uint8_t, vldc_off)[1];
                 vldc_off += 2;
 
-                p.rzAddObjectPolygon(ctx, carros[i].id, idxs, n);
+                if(!flag){
+                    p.rzAddObjectPolygon(ctx, carros[i].id, idxs, n, p1);
+                }
 
                 continue;
             }
