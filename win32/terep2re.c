@@ -450,7 +450,7 @@ void adjustWindowSize(HWND hwnd, int w, int h){
     InvalidateRect(hwnd, 0, TRUE);
 }
 
-char *tmp_g_path;
+char track_path[MAX_PATH];
 
 void call_init(HWND hwnd, char path[], int complain){
     {
@@ -466,9 +466,9 @@ void call_init(HWND hwnd, char path[], int complain){
         fclose(f);
     }
 
-    tmp_g_path = path;
+    //TODO strip trailing slash
+    strncpy(track_path, path, MAX_PATH);
     asm_f_init();
-    tmp_g_path = 0;
 
     started = 1;
 

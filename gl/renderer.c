@@ -16,6 +16,7 @@ struct carrodef_s{
 struct carrodef_s carros[5];
 
 extern volatile uintptr_t all_segments[];
+extern char track_path[];
 
 static void loadCars();
 static void updateCarVerts(int);
@@ -33,7 +34,11 @@ void doTheGLThing(HWND hwnd){
         p.rzCreateWindow(hwnd, 0, 0, 1280, 720, &ctx);
 
         p.rzSetHeightmap(ctx, (uint8_t*)all_segments[1], 256,256 );
-        p.rzLoadTileAtlas(ctx, "D:\\Storm3000\\maptex.pcx");
+
+        char full_path[MAX_PATH];
+        snprintf(full_path, MAX_PATH, "%s\\%s",track_path, "maptex.pcx");
+
+        p.rzLoadTileAtlas(ctx, full_path);
         p.rzSetTileMap(ctx, (uint8_t*)all_segments[2], 256,256);
 
         loadCars();
@@ -153,7 +158,6 @@ static void updateCarVerts(int i){
     int pl2 = carros[i].points_loc2;
 
     uint32_t ptrs[512];
-    int pp = 0;
 
     for(int i =0; i<n;i++){
         __auto_type pdef = U_CAST(uint32_t, pl2);

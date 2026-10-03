@@ -13,10 +13,10 @@ extern volatile uint8_t  base_mem[];
 void mydoscall(void);
 int innermydoscall(char path[]);
 
-extern char *tmp_g_path;
+extern char track_path[];
 
 void mydoscall(){
-    char *path = tmp_g_path;
+    char *path = track_path;
     int ok = innermydoscall(path);
     call_portal->ok = ok;
 }
