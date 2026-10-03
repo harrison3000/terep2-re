@@ -67,8 +67,9 @@ typedef struct RzContext RzContext;
     X(int32_t, rzSetTileMap,    (RzContext* ctx, const uint8_t* data, int32_t width, int32_t height)) \
     X(int32_t, rzSetTextureFilter, (RzContext* ctx, int32_t filter))                                 \
     X(int32_t, rzSetObjectAxes, (RzContext* ctx, int32_t axes))                                      \
-    X(int32_t, rzCreateObject,  (RzContext* ctx, const uint32_t* vertices, int32_t vertexCount,      \
-                               const uint16_t* indices, int32_t indexCount, int32_t* outId))       \
+    X(int32_t, rzCreateObject,  (RzContext* ctx, int32_t vertexCount, int32_t* outId))               \
+    X(int32_t, rzAddObjectPolygon, (RzContext* ctx, int32_t id, const uint16_t* indices,             \
+                               int32_t count))                                                     \
     X(int32_t, rzUpdateObjectVertices, (RzContext* ctx, int32_t id, const uint32_t* vertices))       \
     X(int32_t, rzDestroyObject, (RzContext* ctx, int32_t id))                                        \
     X(int32_t, rzSetObjectColor, (RzContext* ctx, int32_t id, uint32_t rgb))                         \
