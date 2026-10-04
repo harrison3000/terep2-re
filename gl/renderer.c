@@ -20,7 +20,9 @@ struct carrodef_s{
     int32_t id;
     int16_t n_points;
     uint16_t camera_pt;
+
     const point_def *points;
+    const int16_t *steering;
 };
 
 struct carrodef_s carros[5];
@@ -214,9 +216,11 @@ static void loadCars(){
                 __auto_type p = pps[pid];
 
                 hubv[i] = pid;
-                front[i] = p.type == 1;
+                front[i] = p.type != 1;
                 diams[i] = (float)p.size / 150.0f;
             }
+            carros[i].steering = U_CAST(int16_t, car_offset + 10);
+
             p.rzSetObjectWheels(ctx, carros[i].id, hubv, front, diams);
         }else{
             printf("WAT? %d wheels? HOW?\n", wi);
@@ -245,5 +249,9 @@ static void updateCarThings(int i){
         ptrs[i*3 + 2] = p.z;
     }
 
+    float steering = carros[i].steering[0];
+    steering *= -0.0001f;
+
+    p.rzUpdateObjectWheels(ctx, carros[i].id, steering);
     p.rzUpdateObjectVertices(ctx, carros[i].id, ptrs);
 }

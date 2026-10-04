@@ -69,7 +69,7 @@ typedef struct RzContext RzContext;
                                int32_t count, int32_t tone))                                       \
     X(int32_t, rzSetObjectWheels, (RzContext* ctx, int32_t id, const uint16_t* hubVertices,          \
                                const uint8_t* front, const float* diameters))                     \
-    X(int32_t, rzUpdateObjectWheels, (RzContext* ctx, int32_t id, const float* steer))               \
+    X(int32_t, rzUpdateObjectWheels, (RzContext* ctx, int32_t id, float steer))                      \
     X(int32_t, rzLoadObjectTexture, (RzContext* ctx, int32_t id, const char* pcxPath))               \
     X(int32_t, rzLoadFallbackTexture, (RzContext* ctx, const char* pcxPath))                         \
     X(int32_t, rzUpdateObjectVertices, (RzContext* ctx, int32_t id, const uint32_t* vertices))       \
