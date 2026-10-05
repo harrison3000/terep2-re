@@ -134,7 +134,7 @@ f_init:
 .LAB_LOC_5:
     CALL        FUN_1000_2b70
     JC          .LAB_LOC_6
-    CALL        FUN_1000_57e0 ;FIXME restore sound!
+    CALL        FUN_1000_57e0
     MOV         word [base_mem + 0x6f],DX
     MOV         word [base_mem + 0x71],AX
     
@@ -551,9 +551,9 @@ FUN_main_render:
 .CYCLE_2ND_CAM:
     INC   byte [base_mem + 0x7f]
     CMP   byte [base_mem + 0x7f], 5
-    JL    .LAB_LOC_19
+    JC    .LAB_LOC_19
     MOV   byte [base_mem + 0x7f], 0
-    JL    .LAB_LOC_19
+    JMP   .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 

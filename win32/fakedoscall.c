@@ -85,7 +85,7 @@ int innermydoscall(char path[]){
 
         char currRP[256];
 
-        snprintf(currRP, 256, "* READ at EIP: %08x, Read %ld bytes into to %08x (DS:%04x)", call_portal->caller, r, addr, cx);
+        snprintf(currRP, 256, "* READ at EIP: %08x, Read %ld bytes into %08x (DS:%04x)", call_portal->caller, r, addr, cx);
 
         if(strncmp(currRP, lastRP, 256) != 0){
             strncpy(lastRP, currRP, 256);

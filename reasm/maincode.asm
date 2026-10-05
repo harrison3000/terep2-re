@@ -528,9 +528,9 @@ FUN_main_render:
 .CYCLE_2ND_CAM:
     INC   byte [0x7f]
     CMP   byte [0x7f], 5
-    JL    .LAB_LOC_19
+    JC    .LAB_LOC_19
     MOV   byte [0x7f], 0
-    JL    .LAB_LOC_19
+    JMP   .LAB_LOC_19
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
@@ -1019,6 +1019,7 @@ FUN_1000_0b25:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: somehow related to the lifetime of particles, disabling this make the particles never despawn
 FUN_PHYSICS_0bb5:
                               ;XREF[1]:     1000:56cb(c)
     XOR         DI,DI
@@ -1078,6 +1079,7 @@ FUN_PHYSICS_0bb5:
     ADD         BX,0x80
     ADD         AX,0x80
     MOV         BL,AH
+    ;siberia ice breaking is done here
     DEC         byte GS:[BX]
     MOV         word [DI + 0x3e6d],0x1
     MOV         EAX,0x0
@@ -1734,6 +1736,7 @@ FUN_1000_13cc:
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
+;ANALYSIS: all about car rendering, disabling this function make the cars invisible
 FUN_1000_1408:
                               ;XREF[21]:    1000:1340(c),1000:1441(c),1000:1447(c),1000:144b(c),
                               ;             1000:1452(j),1000:1456(c),1000:145d(j),1000:1461(c),
