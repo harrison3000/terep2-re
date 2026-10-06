@@ -211,40 +211,13 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_2
-    DEC         CX
-    JZ          .LAB_LOC_1
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_1:
-    MOV         EBX,EAX
-.LAB_LOC_2:
-    AND         BX,BX
-    JGE         .LAB_LOC_3
-    NEG         BX
-.LAB_LOC_3:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_4
-    NEG         CX
-.LAB_LOC_4:
-    ADD         CX,0x2c
-    MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+
+    push  word [0xa4]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 0
+    call f_do_the_sound_thing
+
+
     JMP         .LAB_LOC_14
 .LAB_LOC_5:
     ;split-screen
@@ -275,40 +248,11 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_7
-    DEC         CX
-    JZ          .LAB_LOC_6
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_6:
-    MOV         EBX,EAX
-.LAB_LOC_7:
-    AND         BX,BX
-    JGE         .LAB_LOC_8
-    NEG         BX
-.LAB_LOC_8:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_9
-    NEG         CX
-.LAB_LOC_9:
-    ADD         CX,0x2c
-    MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+
+    push  word [0xa4]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 0
+    call f_do_the_sound_thing
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -334,40 +278,11 @@ FUN_main_render:
     CALL        FUN_1000_27f1
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa6]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_11
-    DEC         CX
-    JZ          .LAB_LOC_10
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_10:
-    MOV         EBX,EAX
-.LAB_LOC_11:
-    AND         BX,BX
-    JGE         .LAB_LOC_12
-    NEG         BX
-.LAB_LOC_12:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_13
-    NEG         CX
-.LAB_LOC_13:
-    ADD         CX,0x2c
-    MOV         AL,0x1
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+    
+    push  word [0xa6]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 1
+    call f_do_the_sound_thing
 .LAB_LOC_14:
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
@@ -537,6 +452,43 @@ FUN_main_render:
 .LAB_LOC_33:
     mov ax, 1
     ret
+
+f_do_the_sound_thing:
+    MOV         SI, word [v_snd_parm_a]
+    SHL         SI,0x1
+    MOV         SI,word [SI + 0x5bbc]
+    MOV         CX,word [SI + 0x8]
+    MOV         EAX,dword [SI + 0x42]
+    ADD         EAX,dword [SI + 0x46]
+    SAR         EAX,0xe
+    MOV         EBX,dword [SI + 0x4a]
+    ADD         EBX,dword [SI + 0x4e]
+    SAR         EBX,0xe
+    TEST        CX,CX
+    JZ          .LAB_LOC_2
+    DEC         CX
+    JZ          .LAB_LOC_1
+    ADD         EAX,EBX
+    SAR         EAX,0x1
+.LAB_LOC_1:
+    MOV         EBX,EAX
+.LAB_LOC_2:
+    AND         BX,BX
+    JGE         .LAB_LOC_3
+    NEG         BX
+.LAB_LOC_3:
+    ADD         BX,0x1030
+    MOV         CX,word [SI + 0xc]
+    SAR         CX,0x9
+    AND         CX,CX
+    JGE         .LAB_LOC_4
+    NEG         CX
+.LAB_LOC_4:
+    ADD         CX,0x2c
+    MOV         AL, byte [v_snd_parm_b]
+                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
+    CALL        FUN_1000_5831 ;was indirect
+    RET
 
  ; 1000:0692 [UNDEFINED BYTES REMOVED]
 

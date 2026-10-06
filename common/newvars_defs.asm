@@ -29,6 +29,11 @@ pseudolocal_a:
 pseudolocal_b:
     dw 0
 
+v_snd_parm_a:
+    dw 0
+v_snd_parm_b:
+    dw 0
+
 
 ;All the data that used to be mixed with  code
 
