@@ -1922,17 +1922,15 @@ FUN_1000_1408:
     POP         SI
     JMP    .L_1408_START
 .LAB_LOC_4:
-    MOV         AL, byte [base_mem + 0x5ee]
-    SAHF
     CALL  F_WRAP_LODSW 
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_5:
-    MOV         AL, byte [base_mem + 0x5ee]
-    SAHF
     CALL  F_WRAP_LODSW 
-    JNS    .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JNE    .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_6:
@@ -1970,8 +1968,7 @@ FUN_1000_1408:
     MOV         AX,word [EBP + 0x128]
     CALL  F_WRAP_LODSW 
     CMP         BX,AX
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
+    SETS   byte [some_flag_thing_idk]
     JMP    .L_1408_START
 .LAB_LOC_8:
     XOR         BX,BX
@@ -2015,8 +2012,6 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
     POP         SI
     JMP    .L_1408_START
 .LAB_LOC_9:
@@ -2063,10 +2058,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_2bec
     JMP    .L_1408_START
 .LAB_LOC_11:
@@ -2118,10 +2112,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_14:
@@ -2182,10 +2175,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_16:
@@ -2235,10 +2227,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [base_mem + 0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_36fe
     JMP    .L_1408_START
 .LAB_LOC_18:
@@ -2492,9 +2483,8 @@ FUN_1000_1408:
     ADD         SI,0xba
     JMP    .L_1408_START
 .LAB_LOC_24:
-    MOV         AL, byte [base_mem + 0x5ee]
-    SAHF
-    JS          .LAB_LOC_25
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_25
     PUSH        SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
@@ -2936,7 +2926,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_1
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
     LEA         SI,[DI + 0xa]
@@ -2952,7 +2943,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_3
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_3
     MOV         AX, word [base_mem + 0xdb12]
     TEST        AL,0xf
     JZ          .LAB_LOC_2
@@ -2995,7 +2987,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_5
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
     LEA         SI,[DI + 0xa]
@@ -3018,7 +3011,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_6
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
     POP         dword [ptr_seg_FeS]
@@ -3056,7 +3050,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_1
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
     LEA         SI,[DI + 0xa]
@@ -3071,7 +3066,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_3
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_3
     MOV         AX, word [base_mem + 0xdb12]
     TEST        AL,0xf
     JZ          .LAB_LOC_2
@@ -3113,7 +3109,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_5
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
     LEA         SI,[DI + 0xa]
@@ -3136,7 +3133,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_6
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
     POP         dword [ptr_seg_FeS]
@@ -3990,6 +3988,9 @@ FUN_1000_2662:
     IMUL        DX
     SUB         AX,CX
     SBB         DX,BX
+    ;change this to SETNS to see some trippy inverted triangle stuff lol
+    TEST  DX,0x8000
+    SETS    byte [some_flag_thing_idk] 
     RET
 
  ; 1000:26dc [UNDEFINED BYTES REMOVED]

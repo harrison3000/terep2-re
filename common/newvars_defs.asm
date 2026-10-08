@@ -53,7 +53,11 @@ flying_car_tmp:
     db 0
 
 retval_2418:
-    dw 0 
+    dw 0
+
+some_flag_thing_idk:
+    ;seems to be related to the backface testing function (2662)
+    db 0
 
 ;All the data that used to be mixed with  code
 
