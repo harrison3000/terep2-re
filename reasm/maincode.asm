@@ -5544,7 +5544,7 @@ FUN_1000_379b:
 .LAB_LOC_2:
     TEST        DI,DI
     JZ          .LAB_LOC_4
-    MOVSX       EDI,DI
+    movsx_m2m   dword [v_tmp_379b], DI
     SUB         CX,AX
     SUB         DX,BX
     PUSH        AX
@@ -5553,18 +5553,18 @@ FUN_1000_379b:
     MOV         AX,CX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         ECX,EAX
     POP         AX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         EDX,EAX
     POP         BX
     POP         AX
     SHL         EAX,0x10
     SHL         EBX,0x10
-    XCHG        ECX,EDI
+    XCHG        ECX, dword [v_tmp_379b]
 .LAB_LOC_3:
     ROR         EAX,0x10
     ROR         EBX,0x10
@@ -5573,7 +5573,7 @@ FUN_1000_379b:
     ADD         SI,0x4
     ROL         EAX,0x10
     ROL         EBX,0x10
-    ADD         EAX,EDI
+    ADD         EAX, dword [v_tmp_379b]
     ADD         EBX,EDX
     LOOP        .LAB_LOC_3
     ROR         EAX,0x10

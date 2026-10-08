@@ -34,6 +34,8 @@ v_snd_parm_a:
 v_snd_parm_b:
     dw 0
 
+v_tmp_379b:
+    dd 0
 
 ;All the data that used to be mixed with  code
 
