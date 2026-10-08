@@ -71,6 +71,12 @@ uint32_t mitemp_01 = 0;
 uint32_t mitemp_02 = 0;
 uint16_t mitemp_03 = 0;
 
+uint16_t v_snd_parm_a = 0;
+uint16_t v_snd_parm_b = 0;
+
+uint16_t v_tmp_26dd_a = 0;
+uint16_t v_tmp_26dd_b = 0;
+
 
 uint32_t pslc_eb5f = 0;
 uint32_t pslc_ea9b = 0;

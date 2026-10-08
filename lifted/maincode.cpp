@@ -130,7 +130,7 @@ void f_init(cpu_ctx *cpu){
    LAB_LOC_5:
    FUN_INIT_2b70(cpu);
    if(CHECK_CFLAG()) goto LAB_LOC_6;
-    //CALL        FUN_INIT_57e0 ;FIXME restore sound!
+   FUN_INIT_57e0(cpu);
    MEM_WORD(0x6f) = cpu->DX;
    MEM_WORD(0x71) = cpu->AX;
 
@@ -181,6 +181,7 @@ void f_cam_select(cpu_ctx *cpu){
 }
 
 void FUN_main_render(cpu_ctx *cpu){
+   SETUP_STACK();
     //needed now that it runs on paint message
    cpu->FS = MEM_WORD(0x1a47);
    cpu->GS = MEM_WORD(0x1a45);
@@ -215,37 +216,13 @@ void FUN_main_render(cpu_ctx *cpu){
    FUN_1000_2b98(cpu);
    FUN_1000_1965(cpu);
    FUN_1000_0b25(cpu);
-   cpu->SI = MEM_WORD(0xa4);
-   INST_SHL(cpu->SI, 0x1);
-   cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   cpu->CX = MEM_WORD(cpu->SI + 0x8);
-   cpu->EAX = MEM_DWORD(cpu->SI + 0x42);
-   INST_ADD(cpu->EAX, MEM_DWORD(cpu->SI + 0x46));
-   INST_SAR(cpu->EAX, 0xe);
-   cpu->EBX = MEM_DWORD(cpu->SI + 0x4a);
-   INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
-   INST_SAR(cpu->EBX, 0xe);
-   if(cpu->CX == 0) goto LAB_LOC_2;
-   INST_DEC(cpu->CX);
-   if(cpu->CX == 0) goto LAB_LOC_1;
-   INST_ADD(cpu->EAX, cpu->EBX);
-   INST_SAR(cpu->EAX, 0x1);
-   LAB_LOC_1:
-   cpu->EBX = cpu->EAX;
-   LAB_LOC_2:
-   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_3;
-   INST_NEG(cpu->BX);
-   LAB_LOC_3:
-   INST_ADD(cpu->BX, 0x1030);
-   cpu->CX = MEM_WORD(cpu->SI + 0xc);
-   INST_SAR(cpu->CX, 0x9);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_4;
-   INST_NEG(cpu->CX);
-   LAB_LOC_4:
-   INST_ADD(cpu->CX, 0x2c);
-   cpu->AL = 0x0;
-                              // FWD[2]:     1000:5b01(c),15cd:006f(R)
-   FUN_1000_5831(cpu); //was indirect
+
+   INST_PUSH(MEM_WORD(0xa4));
+   INST_POP(v_snd_parm_a);
+   v_snd_parm_b = 0;
+   f_do_the_sound_thing(cpu);
+
+
    goto LAB_LOC_14;
    LAB_LOC_5:
     //split-screen
@@ -276,37 +253,11 @@ void FUN_main_render(cpu_ctx *cpu){
    FUN_1000_2b98(cpu);
    FUN_1000_1965(cpu);
    FUN_1000_0b25(cpu);
-   cpu->SI = MEM_WORD(0xa4);
-   INST_SHL(cpu->SI, 0x1);
-   cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   cpu->CX = MEM_WORD(cpu->SI + 0x8);
-   cpu->EAX = MEM_DWORD(cpu->SI + 0x42);
-   INST_ADD(cpu->EAX, MEM_DWORD(cpu->SI + 0x46));
-   INST_SAR(cpu->EAX, 0xe);
-   cpu->EBX = MEM_DWORD(cpu->SI + 0x4a);
-   INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
-   INST_SAR(cpu->EBX, 0xe);
-   if(cpu->CX == 0) goto LAB_LOC_7;
-   INST_DEC(cpu->CX);
-   if(cpu->CX == 0) goto LAB_LOC_6;
-   INST_ADD(cpu->EAX, cpu->EBX);
-   INST_SAR(cpu->EAX, 0x1);
-   LAB_LOC_6:
-   cpu->EBX = cpu->EAX;
-   LAB_LOC_7:
-   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_8;
-   INST_NEG(cpu->BX);
-   LAB_LOC_8:
-   INST_ADD(cpu->BX, 0x1030);
-   cpu->CX = MEM_WORD(cpu->SI + 0xc);
-   INST_SAR(cpu->CX, 0x9);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_9;
-   INST_NEG(cpu->CX);
-   LAB_LOC_9:
-   INST_ADD(cpu->CX, 0x2c);
-   cpu->AL = 0x0;
-                              // FWD[2]:     1000:5b01(c),15cd:006f(R)
-   FUN_1000_5831(cpu); //was indirect
+
+   INST_PUSH(MEM_WORD(0xa4));
+   INST_POP(v_snd_parm_a);
+   v_snd_parm_b = 0;
+   f_do_the_sound_thing(cpu);
    MEM_WORD(0xdbc0) = 0x0;
    MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
    MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
@@ -332,37 +283,11 @@ void FUN_main_render(cpu_ctx *cpu){
    FUN_1000_27f1(cpu);
    FUN_1000_1965(cpu);
    FUN_1000_0b25(cpu);
-   cpu->SI = MEM_WORD(0xa6);
-   INST_SHL(cpu->SI, 0x1);
-   cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
-   cpu->CX = MEM_WORD(cpu->SI + 0x8);
-   cpu->EAX = MEM_DWORD(cpu->SI + 0x42);
-   INST_ADD(cpu->EAX, MEM_DWORD(cpu->SI + 0x46));
-   INST_SAR(cpu->EAX, 0xe);
-   cpu->EBX = MEM_DWORD(cpu->SI + 0x4a);
-   INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
-   INST_SAR(cpu->EBX, 0xe);
-   if(cpu->CX == 0) goto LAB_LOC_11;
-   INST_DEC(cpu->CX);
-   if(cpu->CX == 0) goto LAB_LOC_10;
-   INST_ADD(cpu->EAX, cpu->EBX);
-   INST_SAR(cpu->EAX, 0x1);
-   LAB_LOC_10:
-   cpu->EBX = cpu->EAX;
-   LAB_LOC_11:
-   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_12;
-   INST_NEG(cpu->BX);
-   LAB_LOC_12:
-   INST_ADD(cpu->BX, 0x1030);
-   cpu->CX = MEM_WORD(cpu->SI + 0xc);
-   INST_SAR(cpu->CX, 0x9);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_13;
-   INST_NEG(cpu->CX);
-   LAB_LOC_13:
-   INST_ADD(cpu->CX, 0x2c);
-   cpu->AL = 0x1;
-                              // FWD[2]:     1000:5b01(c),15cd:006f(R)
-   FUN_1000_5831(cpu); //was indirect
+
+   INST_PUSH(MEM_WORD(0xa6));
+   INST_POP(v_snd_parm_a);
+   v_snd_parm_b = 1;
+   f_do_the_sound_thing(cpu);
    LAB_LOC_14:
    MEM_WORD(0xdbc0) = 0x0;
    MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
@@ -507,6 +432,42 @@ void FUN_main_render(cpu_ctx *cpu){
 
    LAB_LOC_33:
    cpu->AX = 1;
+   return;
+
+}
+
+void f_do_the_sound_thing(cpu_ctx *cpu){
+   cpu->SI = v_snd_parm_a;
+   INST_SHL(cpu->SI, 0x1);
+   cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
+   cpu->CX = MEM_WORD(cpu->SI + 0x8);
+   cpu->EAX = MEM_DWORD(cpu->SI + 0x42);
+   INST_ADD(cpu->EAX, MEM_DWORD(cpu->SI + 0x46));
+   INST_SAR(cpu->EAX, 0xe);
+   cpu->EBX = MEM_DWORD(cpu->SI + 0x4a);
+   INST_ADD(cpu->EBX, MEM_DWORD(cpu->SI + 0x4e));
+   INST_SAR(cpu->EBX, 0xe);
+   if(cpu->CX == 0) goto LAB_LOC_2;
+   INST_DEC(cpu->CX);
+   if(cpu->CX == 0) goto LAB_LOC_1;
+   INST_ADD(cpu->EAX, cpu->EBX);
+   INST_SAR(cpu->EAX, 0x1);
+   LAB_LOC_1:
+   cpu->EBX = cpu->EAX;
+   LAB_LOC_2:
+   if(SIGNED(cpu->BX) >= 0) goto LAB_LOC_3;
+   INST_NEG(cpu->BX);
+   LAB_LOC_3:
+   INST_ADD(cpu->BX, 0x1030);
+   cpu->CX = MEM_WORD(cpu->SI + 0xc);
+   INST_SAR(cpu->CX, 0x9);
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_4;
+   INST_NEG(cpu->CX);
+   LAB_LOC_4:
+   INST_ADD(cpu->CX, 0x2c);
+   cpu->AL = v_snd_parm_b;
+                              // FWD[2]:     1000:5b01(c),15cd:006f(R)
+   FUN_1000_5831(cpu); //was indirect
    return;
 
  // 1000:0692 [UNDEFINED BYTES REMOVED]
@@ -3633,18 +3594,16 @@ void FUN_1000_2662(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 void FUN_PHYSICS_26dd(cpu_ctx *cpu){
-   SETUP_STACK();
                               //XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               //             1000:2722(c)
-   INST_PUSH(cpu->AX);
-   INST_PUSH(cpu->BX);
+   v_tmp_26dd_a = cpu->AX;
+   v_tmp_26dd_b = cpu->BX;
    FUN_PHYSICS_2b08(cpu);
    if(PARITY(cpu->AH & 0x60)) goto LAB_LOC_1;
    cpu->BX = cpu->AX;
    FUN_PHYSICS_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   DUMMY_POP_WORD();
-   INST_POP(cpu->AX);
+   cpu->AX = v_tmp_26dd_a;
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();
@@ -3654,8 +3613,7 @@ void FUN_PHYSICS_26dd(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    FUN_PHYSICS_2ad8(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   INST_POP(cpu->AX);
-   DUMMY_POP_WORD();
+   cpu->AX = v_tmp_26dd_b;
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();

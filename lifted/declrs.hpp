@@ -5,6 +5,7 @@
 void f_init(cpu_ctx *cpu);
 void f_cam_select(cpu_ctx *cpu);
 void FUN_main_render(cpu_ctx *cpu);
+void f_do_the_sound_thing(cpu_ctx *cpu);
 void F_0693(cpu_ctx *cpu);
 void F_073f(cpu_ctx *cpu);
 void F_0828(cpu_ctx *cpu);
