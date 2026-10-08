@@ -37,6 +37,12 @@ v_snd_parm_b:
 v_tmp_379b:
     dd 0
 
+v_upper_di:
+    dd 0
+
+v_upper_si:
+    dd 0
+
 ;All the data that used to be mixed with  code
 
 CSD_WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),
