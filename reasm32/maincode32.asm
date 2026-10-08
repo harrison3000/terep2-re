@@ -6013,7 +6013,7 @@ FUN_1000_379b:
 .LAB_LOC_2:
     TEST        DI,DI
     JZ          .LAB_LOC_4
-    MOVSX       EDI,DI
+    movsx_m2m   dword [v_tmp_379b], DI
     SUB         CX,AX
     SUB         DX,BX
     PUSH        AX
@@ -6022,18 +6022,18 @@ FUN_1000_379b:
     MOV         AX,CX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         ECX,EAX
     POP         AX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         EDX,EAX
     POP         BX
     POP         AX
     SHL         EAX,0x10
     SHL         EBX,0x10
-    XCHG        ECX,EDI
+    XCHG        ECX, dword [v_tmp_379b]
 .LAB_LOC_3:
     ROR         EAX,0x10
     ROR         EBX,0x10
@@ -6043,7 +6043,7 @@ FUN_1000_379b:
     ADD         SI,0x4
     ROL         EAX,0x10
     ROL         EBX,0x10
-    ADD         EAX,EDI
+    ADD         EAX, dword [v_tmp_379b]
     ADD         EBX,EDX
     L_LOOP      .LAB_LOC_3
     ROR         EAX,0x10
@@ -6106,13 +6106,14 @@ FUN_1000_3827:
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
-    XCHG        EAX,ESI
-    MOVSX       EAX,AX
+    push eax
+    MOVSX       EAX,SI
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
     MOV         EDX,EAX
-    XCHG        ESI,ECX
+    mov SI, CX
+    pop ecx
     MOVZX       EBX,BX
     movzx_m2m   dword [ye_old_bep],word [ye_old_lil_bep]
     SHL         EBX,0x8
@@ -6121,7 +6122,7 @@ FUN_1000_3827:
 .LAB_LOC_3:
     ROR         EBX,0x10
     ROR         dword [ye_old_bep],0x10
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,word [ye_old_lil_bep]
     SHL         SI,0x8
     mk_addr_seg EBP, ptr_seg_FeS, [BX + SI]
@@ -6134,7 +6135,7 @@ FUN_1000_3827:
     MOV         byte [EBP],AL
 .LAB_LOC_4:
     INC         DI
-    ROL         ESI,0x10
+    xchg   word [v_upper_si], SI
     ROL         EBX,0x10
     ROL         dword [ye_old_bep],0x10
     ADD         EBX,ECX
@@ -6189,7 +6190,7 @@ FUN_1000_390a:
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         AX,word [base_mem + 0xdbc0]
@@ -6206,15 +6207,16 @@ FUN_1000_390a:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [base_mem + 0xdbc0]
     JL          .LAB_LOC_4
     POP         CX
@@ -6260,7 +6262,7 @@ FUN_1000_390a:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6315,7 +6317,7 @@ FUN_1000_390a:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6338,15 +6340,16 @@ FUN_1000_390a:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [base_mem + 0xdbc0]
     JGE         .LAB_LOC_3
     POP         CX
@@ -6379,7 +6382,7 @@ FUN_1000_3aa3:
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         AX,word [base_mem + 0xdbc2]
@@ -6396,15 +6399,16 @@ FUN_1000_3aa3:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [base_mem + 0xdbc2]
     JG          .LAB_LOC_4
     POP         CX
@@ -6452,7 +6456,7 @@ FUN_1000_3aa3:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6505,7 +6509,7 @@ FUN_1000_3aa3:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6528,15 +6532,16 @@ FUN_1000_3aa3:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [base_mem + 0xdbc2]
     JLE         .LAB_LOC_3
     POP         CX
@@ -6569,7 +6574,7 @@ FUN_1000_3c3c:
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         BX,word [base_mem + 0xdbbc]
@@ -6586,15 +6591,16 @@ FUN_1000_3c3c:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [base_mem + 0xdbbc]
     JL          .LAB_LOC_4
     POP         CX
@@ -6642,7 +6648,7 @@ FUN_1000_3c3c:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6699,7 +6705,7 @@ FUN_1000_3c3c:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6722,15 +6728,16 @@ FUN_1000_3c3c:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [base_mem + 0xdbbc]
     JGE         .LAB_LOC_3
     POP         CX
@@ -6763,7 +6770,7 @@ FUN_1000_3ddb:
     MOV         word [EBP + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         BX,word [base_mem + 0xdbbe]
@@ -6780,15 +6787,16 @@ FUN_1000_3ddb:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [base_mem + 0xdbbe]
     JG          .LAB_LOC_4
     POP         CX
@@ -6838,7 +6846,7 @@ FUN_1000_3ddb:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6893,7 +6901,7 @@ FUN_1000_3ddb:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6916,15 +6924,16 @@ FUN_1000_3ddb:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         dword [ye_old_bep],0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP]
     MOV         BX,word [EBP + 0x2]
     mov_m2m     word [ye_old_lil_bep],word [EBP + 0x4]
     MOV         DI,word [EBP + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [base_mem + 0xdbbe]
     JLE         .LAB_LOC_3
     POP         CX

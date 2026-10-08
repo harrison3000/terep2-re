@@ -126,7 +126,7 @@ f_init:
 .LAB_LOC_5:
     CALL        FUN_INIT_2b70
     JC          .LAB_LOC_6
-    ;CALL        FUN_INIT_57e0 ;FIXME restore sound!
+    CALL        FUN_INIT_57e0
     MOV         word [0x6f],DX
     MOV         word [0x71],AX
     
@@ -8778,13 +8778,7 @@ FUN_SHARED_58fc:
                               ;             1000:58b8(c),1000:58c0(c),1000:58c8(c),1000:58d0(c),
                               ;             1000:58d8(c),1000:58e0(c),1000:58e8(c),1000:58f0(c),
                               ;             1000:58f8(c)
-    PUSH        AX
-    PUSH BX
-
-    ;TODO actually do something with AX
-
-    POP BX
-    POP         AX
+    call sound_thing
     RET
 
  ; 1000:592b [UNDEFINED BYTES REMOVED]
