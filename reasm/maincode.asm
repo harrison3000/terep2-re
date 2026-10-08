@@ -126,7 +126,7 @@ f_init:
 .LAB_LOC_5:
     CALL        FUN_INIT_2b70
     JC          .LAB_LOC_6
-    ;CALL        FUN_INIT_57e0 ;FIXME restore sound!
+    CALL        FUN_INIT_57e0
     MOV         word [0x6f],DX
     MOV         word [0x71],AX
     
@@ -211,40 +211,13 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_2
-    DEC         CX
-    JZ          .LAB_LOC_1
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_1:
-    MOV         EBX,EAX
-.LAB_LOC_2:
-    AND         BX,BX
-    JGE         .LAB_LOC_3
-    NEG         BX
-.LAB_LOC_3:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_4
-    NEG         CX
-.LAB_LOC_4:
-    ADD         CX,0x2c
-    MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+
+    push  word [0xa4]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 0
+    call f_do_the_sound_thing
+
+
     JMP         .LAB_LOC_14
 .LAB_LOC_5:
     ;split-screen
@@ -275,40 +248,11 @@ FUN_main_render:
     CALL        FUN_1000_2b98
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa4]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_7
-    DEC         CX
-    JZ          .LAB_LOC_6
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_6:
-    MOV         EBX,EAX
-.LAB_LOC_7:
-    AND         BX,BX
-    JGE         .LAB_LOC_8
-    NEG         BX
-.LAB_LOC_8:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_9
-    NEG         CX
-.LAB_LOC_9:
-    ADD         CX,0x2c
-    MOV         AL,0x0
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+
+    push  word [0xa4]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 0
+    call f_do_the_sound_thing
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
     MOV         word [0xdbc2],0x13f   ;= 013Fh
@@ -334,40 +278,11 @@ FUN_main_render:
     CALL        FUN_1000_27f1
     CALL        FUN_1000_1965
     CALL        FUN_1000_0b25
-    MOV         SI,word [0xa6]
-    SHL         SI,0x1
-    MOV         SI,word [SI + 0x5bbc]
-    MOV         CX,word [SI + 0x8]
-    MOV         EAX,dword [SI + 0x42]
-    ADD         EAX,dword [SI + 0x46]
-    SAR         EAX,0xe
-    MOV         EBX,dword [SI + 0x4a]
-    ADD         EBX,dword [SI + 0x4e]
-    SAR         EBX,0xe
-    TEST        CX,CX
-    JZ          .LAB_LOC_11
-    DEC         CX
-    JZ          .LAB_LOC_10
-    ADD         EAX,EBX
-    SAR         EAX,0x1
-.LAB_LOC_10:
-    MOV         EBX,EAX
-.LAB_LOC_11:
-    AND         BX,BX
-    JGE         .LAB_LOC_12
-    NEG         BX
-.LAB_LOC_12:
-    ADD         BX,0x1030
-    MOV         CX,word [SI + 0xc]
-    SAR         CX,0x9
-    AND         CX,CX
-    JGE         .LAB_LOC_13
-    NEG         CX
-.LAB_LOC_13:
-    ADD         CX,0x2c
-    MOV         AL,0x1
-                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
-    CALL        FUN_1000_5831 ;was indirect
+    
+    push  word [0xa6]
+    pop   word [v_snd_parm_a]
+    mov   byte [v_snd_parm_b], 1
+    call f_do_the_sound_thing
 .LAB_LOC_14:
     MOV         word [0xdbc0],0x0
     MOV         word [0xdbb8],0xa0    ;= 00A0h
@@ -537,6 +452,43 @@ FUN_main_render:
 .LAB_LOC_33:
     mov ax, 1
     ret
+
+f_do_the_sound_thing:
+    MOV         SI, word [v_snd_parm_a]
+    SHL         SI,0x1
+    MOV         SI,word [SI + 0x5bbc]
+    MOV         CX,word [SI + 0x8]
+    MOV         EAX,dword [SI + 0x42]
+    ADD         EAX,dword [SI + 0x46]
+    SAR         EAX,0xe
+    MOV         EBX,dword [SI + 0x4a]
+    ADD         EBX,dword [SI + 0x4e]
+    SAR         EBX,0xe
+    TEST        CX,CX
+    JZ          .LAB_LOC_2
+    DEC         CX
+    JZ          .LAB_LOC_1
+    ADD         EAX,EBX
+    SAR         EAX,0x1
+.LAB_LOC_1:
+    MOV         EBX,EAX
+.LAB_LOC_2:
+    TEST        BX, BX
+    JGE         .LAB_LOC_3
+    NEG         BX
+.LAB_LOC_3:
+    ADD         BX,0x1030
+    MOV         CX,word [SI + 0xc]
+    SAR         CX,0x9
+    TEST        CX, CX
+    JGE         .LAB_LOC_4
+    NEG         CX
+.LAB_LOC_4:
+    ADD         CX,0x2c
+    MOV         AL, byte [v_snd_parm_b]
+                              ; FWD[2]:     1000:5b01(c),15cd:006f(R)
+    CALL        FUN_1000_5831 ;was indirect
+    RET
 
  ; 1000:0692 [UNDEFINED BYTES REMOVED]
 
@@ -892,30 +844,28 @@ FUN_PHYSICS_0a3b:
     PUSH        SI
     PUSH        DI
     TEST        byte [CSD_DAT_keys_571e + 2],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_3
 .LAB_LOC_1:
     TEST        byte [CSD_DAT_keys_571e + 3],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_4
 .LAB_LOC_2:
     POP         DI
     POP         SI
     RET
 .LAB_LOC_3:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_2
 ;************************************************************************************************
@@ -923,7 +873,6 @@ FUN_PHYSICS_0a3b:
 ;************************************************************************************************
 FUN_PHYSICS_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
-    PUSHF
     MOV         DI,SI
     ADD         DI,word [SI]
     MOVZX       EAX,word [DI]
@@ -931,8 +880,8 @@ FUN_PHYSICS_0a82:
     SHR         EAX,0x1
     INC         EAX
     IMUL        EAX,dword [0x6a]
-    POPF
-    JP          .LAB_LOC_3
+    CMP    byte [flying_car_tmp], 1
+    JE          .LAB_LOC_3
     INC         DI
     INC         DI
     MOV         DX,DI
@@ -999,7 +948,8 @@ FUN_1000_0b25:
     CALL        FUN_1000_277e
     NEG         BX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_3
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_3
     MOVZX       SI,byte [DI + 0x3e6d]
     SHR         SI,0x4
     SHL         SI,0x1
@@ -1214,7 +1164,7 @@ FUN_PHYSICS_0d2a:
     MOV         BX,word [SI + 0xa]
     MOV         ECX,dword [SI + 0x42]
     ADD         ECX,dword [SI + 0x46]
-    AND         CX,CX
+    TEST        CX, CX
     JGE         .LAB_LOC_7
     NEG         CX
 .LAB_LOC_7:
@@ -1727,7 +1677,8 @@ FUN_1000_13cc:
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_1
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_1
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
 .LAB_LOC_1:
@@ -1795,17 +1746,15 @@ FUN_1000_1408:
     POP         SI
     JMP    .L_1408_START
 .LAB_LOC_4:
-    MOV         AL, byte [0x5ee]
-    SAHF
     LODSW 
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_5:
-    MOV         AL, byte [0x5ee]
-    SAHF
     LODSW 
-    JNS    .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JNE    .L_1408_START
     ADD         SI,AX
     JMP    .L_1408_START
 .LAB_LOC_6:
@@ -1839,8 +1788,7 @@ FUN_1000_1408:
     MOV         AX,word [DI + 0x128]
     LODSW 
     CMP         BX,AX
-    LAHF
-    MOV         byte [0x5ee],AL
+    SETS   byte [some_flag_thing_idk]
     JMP    .L_1408_START
 .LAB_LOC_8:
     XOR         BX,BX
@@ -1883,8 +1831,6 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [0x5ee],AL
     POP         SI
     JMP    .L_1408_START
 .LAB_LOC_9:
@@ -1931,10 +1877,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_2bec
     JMP    .L_1408_START
 .LAB_LOC_11:
@@ -1986,10 +1931,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_14:
@@ -2047,10 +1991,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_30ee
     JMP    .L_1408_START
 .LAB_LOC_16:
@@ -2100,10 +2043,9 @@ FUN_1000_1408:
     PUSH        SI
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    LAHF
-    MOV         byte [0x5ee],AL
     POP         SI
-    JS     .L_1408_START
+    CMP byte [some_flag_thing_idk], 1
+    JE     .L_1408_START
     CALL        FUN_1000_36fe
     JMP    .L_1408_START
 .LAB_LOC_18:
@@ -2333,9 +2275,8 @@ FUN_1000_1408:
     ADD         SI,0xba
     JMP    .L_1408_START
 .LAB_LOC_24:
-    MOV         AL, byte [0x5ee]
-    SAHF
-    JS          .LAB_LOC_25
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_25
     PUSH        SI
     MOV         AX,word [SI]
     ADD         SI,AX
@@ -2735,7 +2676,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_1
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
     LEA         SI,[DI + 0xa]
@@ -2751,7 +2693,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_3
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_3
     MOV         AX, word [0xdb12]
     TEST        AL,0xf
     JZ          .LAB_LOC_2
@@ -2794,7 +2737,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_5
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
     LEA         SI,[DI + 0xa]
@@ -2817,7 +2761,8 @@ FUN_1000_1cde:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JNS         .LAB_LOC_6
+    CMP byte [some_flag_thing_idk], 1
+    JNE         .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
     POP         FS
@@ -2853,7 +2798,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_1
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_1
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_1
     CALL        FUN_1000_2bec
 .LAB_LOC_1:
     LEA         SI,[DI + 0xa]
@@ -2868,7 +2814,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_3
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_3
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_3
     MOV         AX, word [0xdb12]
     TEST        AL,0xf
     JZ          .LAB_LOC_2
@@ -2910,7 +2857,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_5
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_5
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_5
     CALL        FUN_1000_36fe
 .LAB_LOC_5:
     LEA         SI,[DI + 0xa]
@@ -2933,7 +2881,8 @@ FUN_1000_1e3a:
     JL          .LAB_LOC_6
     MOV         SI,0xdb16
     CALL        FUN_1000_2662
-    JS          .LAB_LOC_6
+    CMP byte [some_flag_thing_idk], 1
+    JE          .LAB_LOC_6
     CALL        FUN_1000_36fe
 .LAB_LOC_6:
     POP         FS
@@ -3276,7 +3225,7 @@ FUN_1000_22f0:
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
     NEG         AH
-    AND         AL,AL
+    TEST        AL, AL
     JGE         .LAB_LOC_2
     NEG         AL
 .LAB_LOC_2:
@@ -3317,7 +3266,7 @@ FUN_1000_233b:
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
-    AND         AL,AL
+    TEST        AL, AL
     JGE         .LAB_LOC_2
     NEG         AL
 .LAB_LOC_2:
@@ -3358,7 +3307,7 @@ FUN_1000_2384:
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
-    AND         AH,AH
+    TEST        AH, AH
     JGE         .LAB_LOC_2
     NEG         AH
 .LAB_LOC_2:
@@ -3400,7 +3349,7 @@ FUN_1000_23cf:
     MOV         DX,AX
     SUB         AH,byte [0xb1]
     SUB         AL,byte [0xad]
-    AND         AH,AH
+    TEST        AH, AH
     JGE         .LAB_LOC_2
     NEG         AH
 .LAB_LOC_2:
@@ -3435,10 +3384,10 @@ FUN_1000_2418:
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    CLC
+    MOV word [retval_2418], 0
     RET
 .LAB_LOC_1:
-    STC
+    MOV word [retval_2418], 1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3454,7 +3403,7 @@ FUN_INIT_2431:
     ADD         DI,CX
     MOV         CX,word [DI]
 .LAB_LOC_1:
-    CMP         word [DI + 0x1a],-0x1
+    CMP         word [DI + 0x1a], 0xffff
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1
@@ -3721,6 +3670,9 @@ FUN_1000_2662:
     IMUL        DX
     SUB         AX,CX
     SBB         DX,BX
+    ;change this to SETNS to see some trippy inverted triangle stuff lol
+    TEST  DX,0x8000
+    SETS    byte [some_flag_thing_idk] 
     RET
 
  ; 1000:26dc [UNDEFINED BYTES REMOVED]
@@ -3729,18 +3681,18 @@ FUN_1000_2662:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_PHYSICS_26dd:
+
                               ;XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               ;             1000:2722(c)
-    PUSH        AX
-    PUSH        BX
+    mov word [v_tmp_26dd_a], AX
+    mov word [v_tmp_26dd_b], BX
     CALL        FUN_PHYSICS_2b08
     TEST        AH,0x60
     JP          .LAB_LOC_1
     MOV         BX,AX
     CALL        FUN_PHYSICS_2aad
     MOVSX       EBX,AX
-    ADD         SP,0x2
-    POP         AX
+    MOV         AX, word [v_tmp_26dd_a]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
@@ -3750,8 +3702,7 @@ FUN_PHYSICS_26dd:
     MOV         BX,AX
     CALL        FUN_PHYSICS_2ad8
     MOVSX       EBX,AX
-    POP         AX
-    ADD         SP,0x2
+    MOV         AX, word [v_tmp_26dd_b]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
@@ -4099,7 +4050,7 @@ FUN_PHYSICS_2b08:
                               ;             1000:087c(c),1000:08a5(c),1000:0907(c),1000:09b3(c),
                               ;             1000:0a20(c),1000:1841(c),1000:26df(c),1000:4a43(c),
                               ;             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
-    AND         AX,AX
+    TEST        AX, AX
     JS          .LAB_LOC_2
     JNZ         FUN_PHYSICS_2b1f
     MOV         AX,0x0
@@ -4119,7 +4070,7 @@ FUN_PHYSICS_2b08:
 ;************************************************************************************************
 FUN_PHYSICS_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
-    AND         BX,BX
+    TEST        BX, BX
     JS          .LAB_LOC_1
     JNZ         FUN_PHYSICS_2b2d
     MOV         AX,0x4000
@@ -5592,7 +5543,7 @@ FUN_1000_379b:
 .LAB_LOC_2:
     TEST        DI,DI
     JZ          .LAB_LOC_4
-    MOVSX       EDI,DI
+    movsx_m2m   dword [v_tmp_379b], DI
     SUB         CX,AX
     SUB         DX,BX
     PUSH        AX
@@ -5601,18 +5552,18 @@ FUN_1000_379b:
     MOV         AX,CX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         ECX,EAX
     POP         AX
     SHL         EAX,0x10
     CDQ
-    IDIV        EDI
+    IDIV        dword [v_tmp_379b]
     MOV         EDX,EAX
     POP         BX
     POP         AX
     SHL         EAX,0x10
     SHL         EBX,0x10
-    XCHG        ECX,EDI
+    XCHG        ECX, dword [v_tmp_379b]
 .LAB_LOC_3:
     ROR         EAX,0x10
     ROR         EBX,0x10
@@ -5621,7 +5572,7 @@ FUN_1000_379b:
     ADD         SI,0x4
     ROL         EAX,0x10
     ROL         EBX,0x10
-    ADD         EAX,EDI
+    ADD         EAX, dword [v_tmp_379b]
     ADD         EBX,EDX
     LOOP        .LAB_LOC_3
     ROR         EAX,0x10
@@ -5677,13 +5628,14 @@ FUN_1000_3827:
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
-    XCHG        EAX,ESI
-    MOVSX       EAX,AX
+    push eax
+    MOVSX       EAX,SI
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
     MOV         EDX,EAX
-    XCHG        ESI,ECX
+    mov SI, CX
+    pop ecx
     MOVZX       EBX,BX
     MOVZX       EBP,BP
     SHL         EBX,0x8
@@ -5692,7 +5644,7 @@ FUN_1000_3827:
 .LAB_LOC_3:
     ROR         EBX,0x10
     ROR         EBP,0x10
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,BP
     SHL         SI,0x8
     MOV         AL,byte FS:[BX + SI]
@@ -5703,7 +5655,7 @@ FUN_1000_3827:
     MOV         byte ES:[DI],AL
 .LAB_LOC_4:
     INC         DI
-    ROL         ESI,0x10
+    xchg   word [v_upper_si], SI
     ROL         EBX,0x10
     ROL         EBP,0x10
     ADD         EBX,ECX
@@ -5752,7 +5704,7 @@ FUN_1000_390a:
     MOV         word [DI + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         AX,word [0xdbc0]
@@ -5768,14 +5720,15 @@ FUN_1000_390a:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [0xdbc0]
     JL          .LAB_LOC_4
     POP         CX
@@ -5818,7 +5771,7 @@ FUN_1000_390a:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -5870,7 +5823,7 @@ FUN_1000_390a:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -5892,14 +5845,15 @@ FUN_1000_390a:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [0xdbc0]
     JGE         .LAB_LOC_3
     POP         CX
@@ -5929,7 +5883,7 @@ FUN_1000_3aa3:
     MOV         word [DI + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         AX,word [0xdbc2]
@@ -5945,14 +5899,15 @@ FUN_1000_3aa3:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [0xdbc2]
     JG          .LAB_LOC_4
     POP         CX
@@ -5997,7 +5952,7 @@ FUN_1000_3aa3:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6047,7 +6002,7 @@ FUN_1000_3aa3:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6069,14 +6024,15 @@ FUN_1000_3aa3:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         AX,word [0xdbc2]
     JLE         .LAB_LOC_3
     POP         CX
@@ -6106,7 +6062,7 @@ FUN_1000_3c3c:
     MOV         word [DI + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         BX,word [0xdbbc]
@@ -6122,14 +6078,15 @@ FUN_1000_3c3c:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [0xdbbc]
     JL          .LAB_LOC_4
     POP         CX
@@ -6174,7 +6131,7 @@ FUN_1000_3c3c:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6228,7 +6185,7 @@ FUN_1000_3c3c:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6250,14 +6207,15 @@ FUN_1000_3c3c:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [0xdbbc]
     JGE         .LAB_LOC_3
     POP         CX
@@ -6287,7 +6245,7 @@ FUN_1000_3ddb:
     MOV         word [DI + 0x6],DX
     POP         DI
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     MOV         SI,DI
     MOV         DI,DX
     CMP         BX,word [0xdbbe]
@@ -6303,14 +6261,15 @@ FUN_1000_3ddb:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [0xdbbe]
     JG          .LAB_LOC_4
     POP         CX
@@ -6357,7 +6316,7 @@ FUN_1000_3ddb:
     POP         CX
     POP         AX
     MOV         BX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         DX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6409,7 +6368,7 @@ FUN_1000_3ddb:
     POP         CX
     POP         AX
     MOV         DX,DI
-    ROR         EDI,0x10
+    xchg   word [v_upper_di], DI
     MOV         BX,DI
     SHR         DX,0x1
     SHR         BX,0x1
@@ -6431,14 +6390,15 @@ FUN_1000_3ddb:
     SHL         EAX,0x10
     SHL         EBX,0x10
     SHL         EBP,0x10
-    SHL         EDI,0x10
-    ROR         ESI,0x10
+    mov   word [v_upper_di], DI
+    mov   di, 0  
+    xchg   word [v_upper_si], SI
     MOV         AX,word [SI]
     MOV         BX,word [SI + 0x2]
     MOV         BP,word [SI + 0x4]
     MOV         DI,word [SI + 0x6]
     ADD         SI,0x8
-    ROR         ESI,0x10
+    xchg   word [v_upper_si], SI
     CMP         BX,word [0xdbbe]
     JLE         .LAB_LOC_3
     POP         CX
@@ -7896,11 +7856,11 @@ FUN_PHYSICS_4c68:
                               ;XREF[2]:     1000:4cc3(c),1000:4d0e(c)
     MOV         EAX, dword [0xe9cc]
     MOV         EBX,dword [0xe9d0]
-    AND         EAX,EAX
+    TEST        EAX, EAX
     JGE         .LAB_LOC_1
     NEG         EAX
 .LAB_LOC_1:
-    AND         EBX,EBX
+    TEST        EBX, EBX
     JGE         .LAB_LOC_2
     NEG         EBX
 .LAB_LOC_2:
@@ -8438,19 +8398,19 @@ FUN_PHYSICS_51bd:
     MOV         BP,SI
 .LAB_LOC_4:
     MOV         AX,word [SI + 0x2]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_5
     NEG         AX
 .LAB_LOC_5:
     MOV         BX,AX
     MOV         AX,word [SI + 0x6]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_6
     NEG         AX
 .LAB_LOC_6:
     ADD         BX,AX
     MOV         AX,word [SI + 0xa]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_7
     NEG         AX
 .LAB_LOC_7:
@@ -8817,13 +8777,7 @@ FUN_SHARED_58fc:
                               ;             1000:58b8(c),1000:58c0(c),1000:58c8(c),1000:58d0(c),
                               ;             1000:58d8(c),1000:58e0(c),1000:58e8(c),1000:58f0(c),
                               ;             1000:58f8(c)
-    PUSH        AX
-    PUSH BX
-
-    ;TODO actually do something with AX
-
-    POP BX
-    POP         AX
+    call sound_thing
     RET
 
  ; 1000:592b [UNDEFINED BYTES REMOVED]
@@ -8975,7 +8929,7 @@ FUN_INIT_5acf:
     PUSH        CX
     XOR         CX,CX
 .LAB_LOC_2:
-    AND         AH,AH
+    TEST        AH, AH
     JZ          .LAB_LOC_3
     DEC         AH
     JMP         .LAB_LOC_4
