@@ -43,6 +43,12 @@ v_upper_di:
 v_upper_si:
     dd 0
 
+v_tmp_26dd_a:
+    dw 0
+
+v_tmp_26dd_b:
+    dw 0
+
 ;All the data that used to be mixed with  code
 
 CSD_WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),
