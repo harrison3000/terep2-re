@@ -900,32 +900,30 @@ FUN_PHYSICS_0a3b:
     PUSH        SI
     PUSH        DI
     TEST        byte [CSD_DAT_keys_571e + 2],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_3
 .LAB_LOC_1:
     TEST        byte [CSD_DAT_keys_571e + 3],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_4
 .LAB_LOC_2:
     POP         DI
     POP         SI
     RET
 .LAB_LOC_3:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [base_mem + 0xa4]
     SHL         SI,0x1
     mk_addr     EBP, [SI + 0x5bbc]
     MOV         SI,word [EBP]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [base_mem + 0xa6]
     SHL         SI,0x1
     mk_addr     EBP, [SI + 0x5bbc]
     MOV         SI,word [EBP]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_2
 ;************************************************************************************************
@@ -933,7 +931,6 @@ FUN_PHYSICS_0a3b:
 ;************************************************************************************************
 FUN_PHYSICS_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
-    PUSHF
     MOV         DI,SI
     mk_addr     EBP, [SI]
     ADD         DI,word [EBP]
@@ -943,8 +940,8 @@ FUN_PHYSICS_0a82:
     SHR         EAX,0x1
     INC         EAX
     IMUL        EAX,dword [base_mem + 0x6a]
-    POPF
-    JP          .LAB_LOC_3
+    CMP    byte [flying_car_tmp], 1
+    JE          .LAB_LOC_3
     INC         DI
     INC         DI
     MOV         DX,DI
@@ -1021,7 +1018,8 @@ FUN_1000_0b25:
     CALL        FUN_1000_277e
     NEG         BX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_3
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_3
     mk_addr     EBP, [DI + 0x3e6d]
     MOVZX       SI,byte [EBP]
     SHR         SI,0x4
@@ -1854,7 +1852,8 @@ FUN_1000_13cc:
     MOV         word [EBP + 0x2],BX
     MOV         word [EBP + 0x4],CX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_1
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_1
     mk_addr     EBP, [DI]
     MOV         word [EBP + 0x6],AX
     MOV         word [EBP + 0x8],BX
@@ -3689,10 +3688,10 @@ FUN_1000_2418:
     ADD         AX,word [base_mem + 0xdbb8]
     NEG         BX
     ADD         BX,word [base_mem + 0xdbba]
-    CLC
+    MOV word [retval_2418], 0
     RET
 .LAB_LOC_1:
-    STC
+    MOV word [retval_2418], 1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3712,7 +3711,7 @@ FUN_INIT_2431:
     MOV         CX,word [EBP]
 .LAB_LOC_1:
     mk_addr     EBP, [DI]
-    CMP         word [EBP + 0x1a],-0x1
+    CMP         word [EBP + 0x1a], 0xffff
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     L_LOOP      .LAB_LOC_1
@@ -3999,18 +3998,18 @@ FUN_1000_2662:
 ;*                                           FUNCTION                                           *
 ;************************************************************************************************
 FUN_PHYSICS_26dd:
+
                               ;XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               ;             1000:2722(c)
-    PUSH        AX
-    PUSH        BX
+    mov word [v_tmp_26dd_a], AX
+    mov word [v_tmp_26dd_b], BX
     CALL        FUN_PHYSICS_2b08
     TEST        AH,0x60
     JP          .LAB_LOC_1
     MOV         BX,AX
     CALL        FUN_PHYSICS_2aad
     MOVSX       EBX,AX
-    ADD         ESP,0x2
-    POP         AX
+    MOV         AX, word [v_tmp_26dd_a]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
@@ -4020,8 +4019,7 @@ FUN_PHYSICS_26dd:
     MOV         BX,AX
     CALL        FUN_PHYSICS_2ad8
     MOVSX       EBX,AX
-    POP         AX
-    ADD         ESP,0x2
+    MOV         AX, word [v_tmp_26dd_b]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ

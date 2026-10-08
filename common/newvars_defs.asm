@@ -49,6 +49,12 @@ v_tmp_26dd_a:
 v_tmp_26dd_b:
     dw 0
 
+flying_car_tmp:
+    db 0
+
+retval_2418:
+    dw 0 
+
 ;All the data that used to be mixed with  code
 
 CSD_WORD_1000_0e67:               ;XREF[9]:     1000:0e5f(W),1000:0e8f(R),1000:0e9d(RW),1000:0eb9(R),

@@ -844,30 +844,28 @@ FUN_PHYSICS_0a3b:
     PUSH        SI
     PUSH        DI
     TEST        byte [CSD_DAT_keys_571e + 2],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_3
 .LAB_LOC_1:
     TEST        byte [CSD_DAT_keys_571e + 3],0xc0
+    SETP    byte [flying_car_tmp]
     JNS         .LAB_LOC_4
 .LAB_LOC_2:
     POP         DI
     POP         SI
     RET
 .LAB_LOC_3:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 2],0x3f
     MOV         SI,word [0xa4]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_1
 .LAB_LOC_4:
-    PUSHF
     AND         byte [CSD_DAT_keys_571e + 3],0x3f
     MOV         SI,word [0xa6]
     SHL         SI,0x1
     MOV         SI,word [SI + 0x5bbc]
-    POPF
     CALL        FUN_PHYSICS_0a82
     JMP         .LAB_LOC_2
 ;************************************************************************************************
@@ -875,7 +873,6 @@ FUN_PHYSICS_0a3b:
 ;************************************************************************************************
 FUN_PHYSICS_0a82:
                               ;XREF[2]:     1000:0a66(c),1000:0a7d(c)
-    PUSHF
     MOV         DI,SI
     ADD         DI,word [SI]
     MOVZX       EAX,word [DI]
@@ -883,8 +880,8 @@ FUN_PHYSICS_0a82:
     SHR         EAX,0x1
     INC         EAX
     IMUL        EAX,dword [0x6a]
-    POPF
-    JP          .LAB_LOC_3
+    CMP    byte [flying_car_tmp], 1
+    JE          .LAB_LOC_3
     INC         DI
     INC         DI
     MOV         DX,DI
@@ -951,7 +948,8 @@ FUN_1000_0b25:
     CALL        FUN_1000_277e
     NEG         BX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_3
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_3
     MOVZX       SI,byte [DI + 0x3e6d]
     SHR         SI,0x4
     SHL         SI,0x1
@@ -1679,7 +1677,8 @@ FUN_1000_13cc:
     MOV         word [DI + 0x2],BX
     MOV         word [DI + 0x4],CX
     CALL        FUN_1000_2418
-    JC          .LAB_LOC_1
+    CMP     word [retval_2418], 1
+    JE          .LAB_LOC_1
     MOV         word [DI + 0x6],AX
     MOV         word [DI + 0x8],BX
 .LAB_LOC_1:
@@ -3387,10 +3386,10 @@ FUN_1000_2418:
     ADD         AX,word [0xdbb8]
     NEG         BX
     ADD         BX,word [0xdbba]
-    CLC
+    MOV word [retval_2418], 0
     RET
 .LAB_LOC_1:
-    STC
+    MOV word [retval_2418], 1
     RET
 ;************************************************************************************************
 ;*                                           FUNCTION                                           *
@@ -3406,7 +3405,7 @@ FUN_INIT_2431:
     ADD         DI,CX
     MOV         CX,word [DI]
 .LAB_LOC_1:
-    CMP         word [DI + 0x1a],-0x1
+    CMP         word [DI + 0x1a], 0xffff
     JZ          .LAB_LOC_2
     ADD         DI,0x1c
     LOOP        .LAB_LOC_1
