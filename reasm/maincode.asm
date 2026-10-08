@@ -5629,13 +5629,14 @@ FUN_1000_3827:
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
-    XCHG        EAX,ESI
-    MOVSX       EAX,AX
+    push eax
+    MOVSX       EAX,SI
     SHL         EAX,0x8
     CDQ
     IDIV        ECX
     MOV         EDX,EAX
-    XCHG        ESI,ECX
+    mov SI, CX
+    pop ecx
     MOVZX       EBX,BX
     MOVZX       EBP,BP
     SHL         EBX,0x8
