@@ -487,7 +487,7 @@ f_do_the_sound_thing:
 .LAB_LOC_1:
     MOV         EBX,EAX
 .LAB_LOC_2:
-    AND         BX,BX
+    TEST        BX, BX
     JGE         .LAB_LOC_3
     NEG         BX
 .LAB_LOC_3:
@@ -495,7 +495,7 @@ f_do_the_sound_thing:
     mk_addr     EBP, [SI]
     MOV         CX,word [EBP + 0xc]
     SAR         CX,0x9
-    AND         CX,CX
+    TEST        CX, CX
     JGE         .LAB_LOC_4
     NEG         CX
 .LAB_LOC_4:
@@ -1282,7 +1282,7 @@ FUN_PHYSICS_0d2a:
     MOV         BX,word [EBP + 0xa]
     MOV         ECX,dword [EBP + 0x42]
     ADD         ECX,dword [EBP + 0x46]
-    AND         CX,CX
+    TEST        CX, CX
     JGE         .LAB_LOC_7
     NEG         CX
 .LAB_LOC_7:
@@ -3514,7 +3514,7 @@ FUN_1000_22f0:
     SUB         AH,byte [base_mem + 0xb1]
     SUB         AL,byte [base_mem + 0xad]
     NEG         AH
-    AND         AL,AL
+    TEST        AL, AL
     JGE         .LAB_LOC_2
     NEG         AL
 .LAB_LOC_2:
@@ -3559,7 +3559,7 @@ FUN_1000_233b:
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
     SUB         AL,byte [base_mem + 0xad]
-    AND         AL,AL
+    TEST        AL, AL
     JGE         .LAB_LOC_2
     NEG         AL
 .LAB_LOC_2:
@@ -3604,7 +3604,7 @@ FUN_1000_2384:
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
     SUB         AL,byte [base_mem + 0xad]
-    AND         AH,AH
+    TEST        AH, AH
     JGE         .LAB_LOC_2
     NEG         AH
 .LAB_LOC_2:
@@ -3650,7 +3650,7 @@ FUN_1000_23cf:
     MOV         DX,AX
     SUB         AH,byte [base_mem + 0xb1]
     SUB         AL,byte [base_mem + 0xad]
-    AND         AH,AH
+    TEST        AH, AH
     JGE         .LAB_LOC_2
     NEG         AH
 .LAB_LOC_2:
@@ -4392,7 +4392,7 @@ FUN_PHYSICS_2b08:
                               ;             1000:087c(c),1000:08a5(c),1000:0907(c),1000:09b3(c),
                               ;             1000:0a20(c),1000:1841(c),1000:26df(c),1000:4a43(c),
                               ;             1000:4a5a(c),1000:4c64(c),1000:57c7(c)
-    AND         AX,AX
+    TEST        AX, AX
     JS          .LAB_LOC_2
     JNZ         FUN_PHYSICS_2b1f
     MOV         AX,0x0
@@ -4412,7 +4412,7 @@ FUN_PHYSICS_2b08:
 ;************************************************************************************************
 FUN_PHYSICS_2b1f:
                               ;XREF[2]:     1000:2b0e(j),1000:2b63(c)
-    AND         BX,BX
+    TEST        BX, BX
     JS          .LAB_LOC_1
     JNZ         FUN_PHYSICS_2b2d
     MOV         AX,0x4000
@@ -8532,11 +8532,11 @@ FUN_PHYSICS_4c68:
                               ;XREF[2]:     1000:4cc3(c),1000:4d0e(c)
     MOV         EAX, dword [base_mem + 0xe9cc]
     MOV         EBX,dword [base_mem + 0xe9d0]
-    AND         EAX,EAX
+    TEST        EAX, EAX
     JGE         .LAB_LOC_1
     NEG         EAX
 .LAB_LOC_1:
-    AND         EBX,EBX
+    TEST        EBX, EBX
     JGE         .LAB_LOC_2
     NEG         EBX
 .LAB_LOC_2:
@@ -9190,21 +9190,21 @@ FUN_PHYSICS_51bd:
 .LAB_LOC_4:
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x2]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_5
     NEG         AX
 .LAB_LOC_5:
     MOV         BX,AX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0x6]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_6
     NEG         AX
 .LAB_LOC_6:
     ADD         BX,AX
     mk_addr     EBP, [SI]
     MOV         AX,word [EBP + 0xa]
-    AND         AX,AX
+    TEST        AX, AX
     JGE         .LAB_LOC_7
     NEG         AX
 .LAB_LOC_7:
@@ -9747,7 +9747,7 @@ FUN_INIT_5acf:
     PUSH        CX
     XOR         CX,CX
 .LAB_LOC_2:
-    AND         AH,AH
+    TEST        AH, AH
     JZ          .LAB_LOC_3
     DEC         AH
     JMP         .LAB_LOC_4
