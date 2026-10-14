@@ -1,3 +1,4 @@
+#include "insulator.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -5,6 +6,7 @@
 #include <fcntl.h>
 
 #include "../lifted/gpu/types.hpp"
+#include "../lifted/public_declrs.hpp"
 
 std::string basedir;
 
@@ -78,4 +80,15 @@ void DOS3Call(cpu_ctx *cpu){
 
 void sound_thing(cpu_ctx *cpu){
     //TODO implement sound
+}
+
+struct GameSession{
+    cpu_ctx *cpu;
+};
+
+void new_session(GameSession **d){
+    auto g = new GameSession;
+    *d = g;
+
+    g->cpu = initCPU();
 }

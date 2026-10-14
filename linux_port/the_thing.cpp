@@ -1,15 +1,10 @@
-#include <SDL3/SDL_events.h>
-#include <errno.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <cstdlib>
-#include <cstdio>
-#include <cstdint>
-#include <fcntl.h>
-#include <cstring>
-#include <string>
-
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_events.h>
+#include <cstdio>
+#include <stdint.h>
+
+
+
 
 #include "keys.hpp"
 
@@ -23,14 +18,15 @@
 
 
 int main(int argc, char **argv){
+    GameSession *g;
+
+    new_session(&g);
+
+    printf("phase 1 ok\n");
 
 }
 /*
-    auto cpu = new cpu_ctx;
-    auto memory = malloc(2 * 1024 * 1024);
-    cpu->mem_base = (uintptr_t)memory;
 
-    memcpy(memory, initialdata, sizeof(initialdata));
 
     if(argc > 1){
         basedir = argv[1];
