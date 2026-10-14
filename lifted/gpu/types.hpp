@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <vector>
 
+struct otherVars;
+
 struct cpu_ctx {
     // GPRs
     union {uint32_t EAX;  uint16_t AX;  struct { uint8_t AL, AH; }; };
@@ -27,4 +29,6 @@ struct cpu_ctx {
     uint16_t ES, FS, GS;
 
     uint8_t CF;
+
+    otherVars *vars;
 };

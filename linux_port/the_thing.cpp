@@ -22,10 +22,6 @@
 
 std::string basedir("./");
 
-const uint8_t initialdata[] = {
-    #embed "../memdumps/data.bin"
-};
-
 void DOS3Call(cpu_ctx *cpu){
     int op = cpu->AX & 0xff00;
     switch(op){
