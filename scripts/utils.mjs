@@ -23,9 +23,9 @@ const map_comparisions = {
     "TEST_S":  (a, b) => siszzs(a,b) + " != 0",
     "TEST_NS": (a, b) => siszzs(a,b) + " == 0",
 
-    "TEST_GE_IG": a => `SIGNED(${a}) >= 0`,
+    "TEST_GE_IG": a => `${signedeitor(a)} >= 0`,
 
-    "TEST_L_IG" : a => `SIGNED(${a}) < 0`,
+    "TEST_L_IG" : a => `${signedeitor(a)} < 0`,
 
     "TEST_P" :  (a, b) => `PARITY(${a} & ${b})`,
     "TEST_NP" : (a, b) => `PARITY(${a} & ${b}) == 0`,
@@ -60,18 +60,18 @@ function condicionadorSig (op, a, b){
         if(unsig >= t[1]/2){
             b = unsig - t[1];
         }
-        return `SIGNED(${a}) ${op} ${b}`;
+        return `${signedeitor(a)} ${op} ${b}`;
     }
 
-    return `SIGNED(${a}) ${op} SIGNED(${b})`;
+    return `${signedeitor(a)} ${op} ${signedeitor(b)}`;
 }
 
 function comps(op, a, b){
     if(b === "0"){
         //TODO enter here for other ints?
-        return `SIGNED(${a}) ${op} 0`;
+        return `${signedeitor(a)} ${op} 0`;
     }
-    return `SIGNED(${a}) ${op} SIGNED(${b})`;
+    return `${signedeitor(a)} ${op} ${signedeitor(b)}`;
 }
 
 function siszzs(a, b){
@@ -143,4 +143,16 @@ export function replacetron(array, regex, f){
             array[i] = f(m);
         }
     }
+}
+
+function signedeitor(v){
+    v = v + "";
+    if(v.startsWith("MEM")){
+        return "SIGN_" + v;
+    }
+    if(v.startsWith("SMEM")){
+        return "SIGN_" + v;
+    }
+
+    return `SIGNED(${v})`;
 }

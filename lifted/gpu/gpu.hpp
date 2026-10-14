@@ -73,6 +73,14 @@ struct stackItem {
 #define SMEM_WORD(seg, addr)  GEN_SMEM(uint16_t, seg, addr)
 #define SMEM_DWORD(seg, addr) GEN_SMEM(uint32_t, seg, addr)
 
+#define SIGN_MEM_BYTE(addr)  GEN_MEM(int8_t,  addr)
+#define SIGN_MEM_WORD(addr)  GEN_MEM(int16_t, addr)
+#define SIGN_MEM_DWORD(addr) GEN_MEM(int32_t, addr)
+
+#define SIGN_SMEM_BYTE(seg, addr)  GEN_SMEM(int8_t,  seg, addr)
+#define SIGN_SMEM_WORD(seg, addr)  GEN_SMEM(int16_t, seg, addr)
+#define SIGN_SMEM_DWORD(seg, addr) GEN_SMEM(int32_t, seg, addr)
+
 
 inline int8_t SIGNED(uint8_t v) { return v; }
 inline int16_t SIGNED(uint16_t v) { return v; }
