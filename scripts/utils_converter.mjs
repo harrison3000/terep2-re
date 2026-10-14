@@ -128,7 +128,7 @@ export function doTheThingInst(a){
     if(opcode === "JCXZ"){
         return `if (cpu->CX == 0) goto ${tiraponto(ops[0])};`;
     }
-    if(opcode === "LOOP" || opcode === "L_LOOP"){
+    if(opcode === "LOOP"){
         return `if (--cpu->CX != 0) goto ${tiraponto(ops[0])};`;
     }
     if(opcode === "LEA"){
