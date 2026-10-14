@@ -1,10 +1,9 @@
 #pragma once
 
 #include "gpu/types.hpp"
+#include "public_declrs.hpp"
 
-void f_init(cpu_ctx *cpu);
 void f_cam_select(cpu_ctx *cpu);
-void FUN_main_render(cpu_ctx *cpu);
 void F_0693(cpu_ctx *cpu);
 void F_073f(cpu_ctx *cpu);
 void F_0828(cpu_ctx *cpu);
@@ -113,8 +112,6 @@ void FUN_PHYSICS_5091(cpu_ctx *cpu);
 void FUN_PHYSICS_51bd(cpu_ctx *cpu);
 void FUN_PHYSICS_52d4(cpu_ctx *cpu);
 void FUN_PHYSICS_532e(cpu_ctx *cpu);
-void FUN_timer_5680(cpu_ctx *cpu);
-void FUN_keyboard_56df(cpu_ctx *cpu);
 void FUN_INIT_57e0(cpu_ctx *cpu);
 void FUN_1000_5831(cpu_ctx *cpu);
 void FUN_PHYSICS_5864(cpu_ctx *cpu);
@@ -125,3 +122,5 @@ void FUN_INIT_5a60(cpu_ctx *cpu);
 void FUN_INIT_5a95(cpu_ctx *cpu);
 void FUN_INIT_5acf(cpu_ctx *cpu);
 void FUN_INIT_5b26(cpu_ctx *cpu);
+
+void sound_thing(cpu_ctx *cpu);

@@ -13,107 +13,19 @@
 
 #include "keys.hpp"
 
+#include "../insulator/insulator.hpp"
 
 #define W 320
 #define H 200
 
 
-std::string basedir("./");
 
-void DOS3Call(cpu_ctx *cpu){
-    int op = cpu->AX & 0xff00;
-    switch(op){
-        case 0x3d00:{
-            //open
-            auto addr = cpu->mem_base + cpu->DX;
-            std::string filename((char*)addr);
-            if(filename == ""){
-                printf("Tried to load a empty filename, probably better to bail out\n");
-                cpu->CF = 1;
-                return;
-            }
-
-            auto fullpath = basedir + filename;
-
-            auto fd = open(fullpath.c_str(), O_RDONLY);
-            printf("* trying to open: %s, returned: %d\n", filename.c_str(), fd);
-            cpu->CF = fd < 0;
-            cpu->AX = fd;
-            return;
-        }
-        case 0x4800:{
-            //memory alocation
-            static int current_seg = 0;
-            current_seg += 68; // a bit more for safety
-            printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
-            cpu->AX = current_seg;
-            cpu->CF=0;
-            return;
-        }
-        case 0x3f00:{
-            auto fd = cpu->BX;
-            if(cpu->DS != 0){
-                printf("Something wrong isnt right\n");
-                exit(2);
-            }
-            auto addr = cpu->mem_base + cpu->DX;
-            auto r = read(fd, (void *)addr, cpu->CX);
-            cpu->CF = r < 0;
-            cpu->AX = r;
-            printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, cpu->DX);
-            return;
-        }
-        case 0x4200:{
-            int off = cpu->CX;
-            off <<= 16;
-            off += cpu->DX;
-
-            auto offset = lseek(cpu->BX, off, cpu->AL);
-            cpu->CF = offset < 0;
-            cpu->DX = offset >> 16;
-            cpu->AX = offset;
-            return;
-        }
-        case 0x3e00:{
-            auto ok = close(cpu->BX);
-            cpu->CF = ok != 0;
-            return;
-        }
-    }
-
-    printf("\nunhandled Dos call: %04x\n", cpu->AX);
-
-    exit(6);
-
-    return;
-}
-
-void mem_dumper(void *mem, const char *desc){
-    static int counter = 0;
-    counter++;
-    char tmp[512];
-
-    sprintf(tmp, "dump_%d.txt", counter);
-
-    auto o = open(tmp,O_WRONLY|O_CREAT, 0644);
-
-    auto uintp = (uint8_t*) mem;
-    for(int i = 0; i < 4096;i++){
-        int slp = sprintf(tmp, "%04X:   %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
-            i*16,
-            uintp[0x0], uintp[0x1], uintp[0x2], uintp[0x3], uintp[0x4], uintp[0x5], uintp[0x6], uintp[0x7],
-            uintp[0x8], uintp[0x9], uintp[0xa], uintp[0xb], uintp[0xc], uintp[0xd], uintp[0xe], uintp[0xf]
-        );
-        write(o, tmp, slp);
-
-        uintp += 16;
-    }
-
-    close(o);
-}
 
 
 int main(int argc, char **argv){
+
+}
+/*
     auto cpu = new cpu_ctx;
     auto memory = malloc(2 * 1024 * 1024);
     cpu->mem_base = (uintptr_t)memory;
@@ -223,3 +135,4 @@ void _adlib_callback(){
     //sound thing goes here
     printf("ADLIB callback called: %04x\n", ax);
 }
+    */
