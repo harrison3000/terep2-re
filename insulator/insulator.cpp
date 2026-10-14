@@ -10,10 +10,11 @@
 
 struct d3c_enviroment {
     FILE *f;
-    char lastRP[512];
+    std::string lastRP;
     int current_seg = 0;
     const char* basedir;
     bool superbad = false;
+    int totalrd;
 };
 
 
@@ -31,10 +32,14 @@ void DOS3Call(cpu_ctx *cpu){
                 cpu->CF = 1;
                 return;
             }
+            if(e->f != NULL){
+                printf("WARN: trying to open 2 files at once\n");
+                e->superbad = true;
+            }
 
             auto fullpath = e->basedir + filename;
 
-            auto fd = fopen(fullpath.c_str(), "r");
+            auto fd = fopen(fullpath.c_str(), "rb");
             auto ok = fd != 0 ? "OK" : "BAD";
             printf("* trying to open: %s, returned: %s\n", filename.c_str(), ok);
             e->f = fd;
@@ -52,6 +57,7 @@ void DOS3Call(cpu_ctx *cpu){
         }
         case 0x3f00:{
             if(cpu->BX != 97){
+                printf("* WAT?\n");
                 e->superbad = true;
                 cpu->CF = 1;
                 return;
@@ -62,9 +68,25 @@ void DOS3Call(cpu_ctx *cpu){
             }
             auto addr = cpu->mem_base + cpu->DX;
             auto r = fread((void *)addr, 1, cpu->CX, e->f);
+
+            char currRP[256];
+            snprintf(currRP, 256, "Read %ld bytes from file into DS:%04x", r, cpu->DX);
+            if(e->lastRP != currRP){
+                e->lastRP = currRP;
+                printf("%s\n", currRP);
+            }else{
+                //read msg same as the last, just print a single period
+                printf(".");
+            }
+
+            if(r != cpu->CX){
+                //short read
+                printf("!");
+            }
+
+            e->totalrd += r;
             cpu->CF = r < 0;
             cpu->AX = r;
-            printf("Read %ld bytes from file into address: %04x (relative to DS)\n", r, cpu->DX);
             return;
         }
         case 0x4200:{
@@ -72,9 +94,11 @@ void DOS3Call(cpu_ctx *cpu){
             off <<= 16;
             off += cpu->DX;
             int32_t soff = off;
+            int w = cpu->AX & 0xf;
 
-            uint32_t fsok = fseek(e->f, soff, cpu->AL);
+            uint32_t fsok = fseek(e->f, soff, w);
             uint32_t offset = ftell(e->f);
+            printf("* SEEK: whence: %d, offset: %d, ftell result: %d\n", w, soff, offset);
 
             cpu->CF = fsok != 0;
             cpu->DX = offset >> 16;
@@ -84,9 +108,9 @@ void DOS3Call(cpu_ctx *cpu){
         case 0x3e00:{
             int ok = fclose(e->f);
             e->f = NULL;
-            e->lastRP[0] = 0;
-            //printf("* File closed\n* Total read: %ld\n=====================\n", totalrd);
-            //totalrd = 0;
+            e->lastRP = "";
+            printf("* File closed\n* Total read: %d\n=====================\n", e->totalrd);
+            e->totalrd = 0;
             cpu->CF = ok != 0;
             return;
         }
@@ -121,6 +145,7 @@ bool init_game(GameSession *g, const char* basedir){
 
     g->cpu->extra_data = (uintptr_t)(&e);
     f_init(g->cpu);
+    //TODO actually send the superbad value to the caller
     g->cpu->extra_data = 0;
     return g->cpu->AX == 0;
 }
