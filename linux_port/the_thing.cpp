@@ -223,3 +223,9 @@ int main(int argc, char **argv){
 
     return 0;
 }
+
+void _adlib_callback(){
+    uint16_t ax = call_portal->ax;
+    //sound thing goes here
+    printf("ADLIB callback called: %04x\n", ax);
+}

@@ -8,6 +8,17 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "E&xit",  T2_APP_EXIT
     END
+    POPUP "&Graphics"
+    BEGIN
+        POPUP "&Scale"
+        BEGIN
+            MENUITEM "1x", T2_SCALE_P1
+            MENUITEM "2x", T2_SCALE_P2
+            MENUITEM SEPARATOR
+            MENUITEM "800x600", T2_SCALE_S2
+            MENUITEM "1600x1200", T2_SCALE_S3
+        END
+    END
 #ifdef DEBUGMENU
     POPUP "&Visualisation"
     BEGIN
@@ -19,6 +30,10 @@ BEGIN
         MENUITEM "Single ste&p (space)", T2_APP_PHYS_STEP
     END
 #endif // DEBUGMENU
+    POPUP "&Sound"
+    BEGIN
+        MENUITEM "&Enable sound", T2_APP_SOUND
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&About", T2_APP_ABOUT
