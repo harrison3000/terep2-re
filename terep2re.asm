@@ -78,3 +78,9 @@ nova_linha:
     db "GAMBIARRA FOREVER!", 0
 giracor:
     db 0
+
+v_double_int_max:
+    dq 2147483647.0
+
+v_double_int_min:
+    dq -2147483648.0
