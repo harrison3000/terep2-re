@@ -2,6 +2,7 @@
 #include <SDL3/SDL_events.h>
 #include <cstdio>
 #include <stdint.h>
+#include <string>
 
 
 
@@ -22,26 +23,18 @@ int main(int argc, char **argv){
 
     new_session(&g);
 
-    printf("phase 1 ok\n");
-
-}
-/*
-
-
+    std::string basedir("./");
     if(argc > 1){
         basedir = argv[1];
     }
 
-    strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER 32!");
+    auto ok = init_game(g, basedir.c_str());
 
-    printf("lets go\n");
+    printf("phase 1 ok, %d\n", ok);
 
-    mem_dumper(memory, "before init");
+}
+/*
 
-    f_init(cpu);
-    printf("AX after init: %04x\n", cpu->AX);
-
-    mem_dumper(memory, "after init");
 
     FUN_main_render(cpu);
 

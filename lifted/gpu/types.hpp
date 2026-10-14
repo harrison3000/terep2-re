@@ -31,4 +31,6 @@ struct cpu_ctx {
     uint8_t CF;
 
     otherVars *vars;
+
+    uintptr_t extra_data;
 };

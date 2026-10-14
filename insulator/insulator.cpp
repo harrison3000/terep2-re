@@ -1,4 +1,5 @@
 #include "insulator.hpp"
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -8,9 +9,9 @@
 #include "../lifted/gpu/types.hpp"
 #include "../lifted/public_declrs.hpp"
 
-std::string basedir;
-
 void DOS3Call(cpu_ctx *cpu){
+    auto bd = (const char*)cpu->extra_data;
+
     int op = cpu->AX & 0xff00;
     switch(op){
         case 0x3d00:{
@@ -23,7 +24,7 @@ void DOS3Call(cpu_ctx *cpu){
                 return;
             }
 
-            auto fullpath = basedir + filename;
+            auto fullpath = bd + filename;
 
             auto fd = open(fullpath.c_str(), O_RDONLY);
             printf("* trying to open: %s, returned: %d\n", filename.c_str(), fd);
@@ -92,3 +93,12 @@ void new_session(GameSession **d){
 
     g->cpu = initCPU();
 }
+
+bool init_game(GameSession *g, const char* basedir){
+    g->cpu->extra_data = (uintptr_t)basedir;
+    f_init(g->cpu);
+    g->cpu->extra_data = 0;
+    return g->cpu->AX == 0;
+}
+
+//TODO deleter
