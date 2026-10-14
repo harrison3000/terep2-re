@@ -34,4 +34,11 @@ cpu_ctx *initCPU(){
     return cpu;
 }
 
+void finalizeCpu(cpu_ctx *cpu){
+    delete cpu->vars;
+    auto mem = (uint8_t *)cpu->mem_base;
+    delete mem;
+    delete cpu;
+}
+
 //TODO deleter

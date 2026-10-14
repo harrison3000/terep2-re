@@ -77,6 +77,4 @@ struct otherVars {
     uint16_t v_upper_di;
 
     uint32_t v_tmp_379b;
-
-    void init();
 };

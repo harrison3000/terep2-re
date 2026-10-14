@@ -150,4 +150,7 @@ bool init_game(GameSession *g, const char* basedir){
     return g->cpu->AX == 0;
 }
 
-//TODO deleter
+void finalize_game(GameSession *g){
+    finalizeCpu(g->cpu);
+    delete g;
+}

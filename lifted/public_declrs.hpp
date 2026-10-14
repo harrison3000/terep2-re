@@ -8,3 +8,4 @@ void f_init(cpu_ctx *cpu);
 void FUN_main_render(cpu_ctx *cpu);
 
 cpu_ctx *initCPU();
+void finalizeCpu(cpu_ctx *cpu);

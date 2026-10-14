@@ -32,6 +32,8 @@ int main(int argc, char **argv){
 
     printf("phase 1 ok, %d\n", ok);
 
+    finalize_game(g);
+    g = NULL;
 }
 /*
 
