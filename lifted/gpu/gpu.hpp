@@ -50,44 +50,29 @@ struct stackItem {
     reg = it.value;             \
 })
 
-#define MEM_BYTE(addr) ({    \
-    uint16_t displ = (addr); \
+#define GEN_MEM(_type, _addr) ({ \
+    uint16_t displ = (_addr);    \
     uintptr_t finalAddr = cpu->mem_base + displ; \
-    (uint8_t *)finalAddr; \
+    (_type *)finalAddr;          \
 })[0]
 
-#define MEM_WORD(addr) ({    \
-    uint16_t displ = (addr); \
-    uintptr_t finalAddr = cpu->mem_base + displ; \
-    (uint16_t *)finalAddr;   \
-})[0]
-
-#define MEM_DWORD(addr) ({   \
-    uint16_t displ = (addr); \
-    uintptr_t finalAddr = cpu->mem_base + displ; \
-    (uint32_t *)finalAddr;   \
-})[0]
-
-#define SMEM_BYTE(seg, addr) ({    \
-    uint16_t displ = (addr); \
-    uintptr_t _seg = (seg);  \
+#define GEN_SMEM(_type, __seg, _addr) ({    \
+    uint16_t displ = (_addr); \
+    uintptr_t _seg = (__seg);  \
     uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
-    (uint8_t *)finalAddr; \
+    (_type *)finalAddr; \
 })[0]
 
-#define SMEM_WORD(seg, addr) ({    \
-    uint16_t displ = (addr); \
-    uintptr_t _seg = (seg);  \
-    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
-    (uint16_t *)finalAddr;   \
-})[0]
 
-#define SMEM_DWORD(seg, addr) ({   \
-    uint16_t displ = (addr); \
-    uintptr_t _seg = (seg);  \
-    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
-    (uint32_t *)finalAddr;   \
-})[0]
+
+#define MEM_BYTE(addr)  GEN_MEM(uint8_t,  addr)
+#define MEM_WORD(addr)  GEN_MEM(uint16_t, addr)
+#define MEM_DWORD(addr) GEN_MEM(uint32_t, addr)
+
+#define SMEM_BYTE(seg, addr)  GEN_SMEM(uint8_t,  seg, addr)
+#define SMEM_WORD(seg, addr)  GEN_SMEM(uint16_t, seg, addr)
+#define SMEM_DWORD(seg, addr) GEN_SMEM(uint32_t, seg, addr)
+
 
 inline int8_t SIGNED(uint8_t v) { return v; }
 inline int16_t SIGNED(uint16_t v) { return v; }
