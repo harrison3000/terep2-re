@@ -1,195 +1,326 @@
+#include "common.h"
+#include "resource.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <windows.h>
 #include <shlobj.h>
-#include <process.h>
-#include <stdint.h>
 
 #define DEFAULT_LEN (1 << 16)
 
-#define ID_BTN_FOLDER 101
-#define ID_CHK_BLINKEN 102
-
 typedef struct {
-    uint16_t msg, ax, bx, cx, dx, cf;
+    uint16_t ax, bx, cx, dx, ok;
+    uint16_t _alignment;
+    uint32_t caller;
 } call_portal_t;
 
-extern void asm_f_init();
-extern void asm_render();
-extern void asm_physics();
-extern void asm_keys(uint16_t);
+TCHAR szAppName[] = "Terep2Win32";
+
+extern void asm_f_init(void);
+extern void asm_render(void);
+extern void asm_physics(void);
+extern void asm_keys(void);
+
+void mydoscall(void);
+int innermydoscall(char path[]);
+void call_init(HWND hwnd, char path[], int complain);
 
 extern volatile uintptr_t all_segments[];
 extern volatile call_portal_t call_portal[];
 extern volatile uint8_t  base_mem[];
 
-void call_init(HWND hwnd, char path[]);
+HWND hBlinken;
 
 #define HZ_PHYSICS 120 //TODO check if this is right
+#define USECS_PER_TICK (1000000/HZ_PHYSICS)
 #define HZ_DISPLAY 60
 
-typedef struct {
-    BITMAPINFOHEADER info;
-    RGBQUAD palette[256];
-} st_image;
-
 st_image gameImg;
-st_image blinkenImg;
 
-#pragma aux ReadTSCHigh = "rdtsc" value [edx] modify exact [eax edx];
-uint32_t ReadTSCHigh();
+LARGE_INTEGER tickfreq;
 
 int started = 0;
+int run_physics = 1;
+int64_t last_p_update = -1;
+
+//get system uptime in uSecs
+int64_t GetTimeee(void){
+    LARGE_INTEGER t;
+    QueryPerformanceCounter(&t);
+
+    int64_t ret = (t.QuadPart * 1000000LL) / tickfreq.QuadPart;
+    return ret;
+}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    static int showblinken = 0;
-    static HWND hCheckblk = NULL;
+    HMENU hMenu;
 
-    if (msg == WM_CREATE) {
-        CreateWindow("BUTTON", "Select track", 
-                     WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-                     10, 10, 120, 30, hwnd, (HMENU)ID_BTN_FOLDER, NULL, NULL);
-        
-        hCheckblk = CreateWindow("BUTTON", "Show blinkenlights",
-                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-                     140, 10, 180, 30, hwnd, (HMENU)ID_CHK_BLINKEN, NULL, NULL);
-    } 
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_BTN_FOLDER) {
-        if(started){
-            //TODO a way to cleanup the specific parts of the memory to restart the game with another track
-            MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
-            goto end; //behold the root of all evil!
-        }
+    switch (msg) {
+        case WM_CREATE: {
+            hMenu = GetMenu(hwnd);
 
-        char path[MAX_PATH];
-        BROWSEINFO bi = {0};
-        LPITEMIDLIST pidl;
-
-        bi.hwndOwner = hwnd;
-        bi.lpszTitle = "Select a track directory:";
-        bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_USENEWUI | BIF_NONEWFOLDERBUTTON;
-
-        pidl = SHBrowseForFolder(&bi);
-        if (pidl) {
-            if (SHGetPathFromIDList(pidl, path)) {
-                call_init(hwnd, path);
+            if (run_physics) {
+                CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_CHECKED) ;
+            } else {
+                CheckMenuItem (hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED) ;
             }
-            CoTaskMemFree(pidl); /* Frees da memory */
+
+            call_init(hwnd, ".", 0);
         }
-    } 
-    else if (msg == WM_COMMAND && LOWORD(wParam) == ID_CHK_BLINKEN) {
-        showblinken = (SendMessage(hCheckblk, BM_GETCHECK, 0, 0) == BST_CHECKED);
-        if(!showblinken){
-            InvalidateRect(hwnd, 0, TRUE);
-        }
-        SetFocus(hwnd);
-    }
-    else if (msg == WM_PAINT && started){
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
+        break;
 
-        int videoSegSel = base_mem[0xdb10];
-        char *video = all_segments[videoSegSel];
+        case WM_COMMAND: {
+            hMenu = GetMenu(hwnd);
 
-        StretchDIBits(hdc,
-            0, 50, 320*2, 200*2,
-            0,  0, 320, 200,
-            video, (void *)&gameImg,
-            DIB_RGB_COLORS, SRCCOPY
-        );
+            switch (LOWORD(wParam)) {
+                case T2_APP_OPEN: {
+                    if(started){
+                        //TODO a way to cleanup the specific parts of the memory to restart the game with another track
+                        MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
+                        goto end; //behold the root of all evil!
+                    }
 
-        if(showblinken){
-            SetBkMode(hdc, TRANSPARENT);
-            SetTextColor(hdc, RGB(0, 0, 0));
-            char text[256];
+                    char path[MAX_PATH];
+                    BROWSEINFO bi = {0};
+                    LPITEMIDLIST pidl;
 
-            for(int i = 0; i < 256; i++){
-                char* isds = (i == 0) ? " (DS)" : "";
-                uintptr_t ptr = all_segments[i];
-                if(ptr == 0){
-                    break;
+                    bi.hwndOwner = hwnd;
+                    bi.lpszTitle = "Select a track directory:";
+                    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_USENEWUI | BIF_NONEWFOLDERBUTTON;
+
+                    pidl = SHBrowseForFolder(&bi);
+                    if (pidl) {
+                        if (SHGetPathFromIDList(pidl, path)) {
+                            call_init(hwnd, path, 1);
+                        }
+                        CoTaskMemFree(pidl); /* Frees da memory */
+                    }
                 }
+                break;
 
+                case T2_APP_BLINKEN: {
+                    ShowWindow(hBlinken, SW_SHOW);
+                    UpdateWindow(hBlinken);
+                }
+                break;
+
+                case T2_APP_PHYS_RUN: {
+                    run_physics = !run_physics;
+
+                    if (run_physics) {
+                        CheckMenuItem(hMenu, T2_APP_PHYS_RUN, MF_CHECKED);
+                    } else {
+                        CheckMenuItem(hMenu, T2_APP_PHYS_RUN, MF_UNCHECKED);
+                    }
+
+                    last_p_update = -1; //pretends we just started
+                }
+                break;
+
+                case T2_APP_PHYS_STEP: {
+                    if (started){
+                        if (run_physics) {
+                            MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
+                        } else {
+                           asm_physics();
+                        }
+                    }
+                }
+                break;
+
+                case T2_APP_EXIT: {
+                    SendMessage (hwnd, WM_CLOSE, 0, 0) ;
+                    return 0 ;
+                } break;
+
+                case T2_APP_ABOUT: {
+                    MessageBox (hwnd, "TeREp2\n"
+                                      "(c) Harrison, 2026\n"
+                                      "(c) gmb, 2026\n"
+                                      "(c) Nagymathe Denes, 1996-1997",
+                                "About", MB_ICONINFORMATION | MB_OK) ;
+                    return 0;
+                } break;
+            }
+        }
+        break;
+
+        case WM_PAINT: {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+
+            if (!started) {
                 RECT rc;
-                rc.left = (i % 4) * 280 + 680;
-                rc.top  = (i / 4) * 300 + 40;
-                rc.right = rc.left + 250;
-                rc.bottom = rc.top + 30;
+                GetClientRect(hwnd, &rc);
 
-                snprintf(text, sizeof(text), "Segment: %02d%s, Addr: %08x", i, isds, ptr);
-                DrawText(hdc, text, -1, &rc, DT_LEFT);
+                SetBkMode(hdc, TRANSPARENT);
+                SetTextColor(hdc, RGB(0, 0, 0));
 
-                SetDIBitsToDevice(hdc,
-                    rc.left, rc.top + 25, 256, 256,
-                    0, 0, 0, 256,
-                    ptr, (void *)&blinkenImg,
-                    DIB_RGB_COLORS
+                DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            } else {
+                int videoSegSel = base_mem[0xdb10];
+                char *video = (char*)all_segments[videoSegSel];
+
+                StretchDIBits(hdc,
+                    0,  0, 320*2, 200*2,
+                    0,  0, 320, 200,
+                    (void *)video, (void *)&gameImg,
+                    DIB_RGB_COLORS, SRCCOPY
                 );
             }
-        }
 
-        EndPaint(hwnd, &ps);
-    }
-    else if (msg == WM_TIMER){
-        if(wParam == 120 && started){
-            asm_physics();
+            EndPaint(hwnd, &ps);
         }
-        if(wParam == 122 && started){
-            InvalidateRect(hwnd, 0, FALSE);
-            asm_render();
+        break;
+
+        case WM_TIMER: {
+            if (wParam == 122 && started) {
+                if(run_physics){
+                    int64_t agora = GetTimeee();
+                    if(last_p_update < 0){
+                        last_p_update = agora;
+                    }
+                    int64_t diff = agora - last_p_update;
+
+                    int64_t ticks = diff / USECS_PER_TICK;
+                    int64_t sobra = diff % USECS_PER_TICK;
+
+                    for(int i = 0; i < ticks; i++){
+                        if(i > 5){
+                            //nah, something isnt right here
+                            //maybe the timer was delayed, lets bail
+                            break;
+                        }
+                        asm_physics();
+                    }
+                    last_p_update = agora - sobra;
+                }
+
+                InvalidateRect(hwnd, 0, FALSE);
+                asm_render();
+
+#ifdef DEBUGMENU
+                InvalidateRect(hBlinken, 0, FALSE);
+#endif
+            }
         }
-    }
-    else if (msg == WM_KEYDOWN || msg == WM_KEYUP ||msg == WM_SYSKEYDOWN ||msg == WM_SYSKEYUP) {
-        WORD keyFlags = HIWORD(lParam);
-        WORD scanCode = keyFlags & 0x7f ;            
-        if(keyFlags & KF_UP){
-            //key released
-            scanCode += 0x80;
-        }else if(scanCode == 1){
-            //esc pressed
+        break;
+
+        case WM_KEYDOWN:
+        {
+            if(wParam == VK_SPACE && !run_physics){
+                asm_physics();
+            }
+            if(wParam == '3'){
+                run_physics = !run_physics;
+            }
+            
+            //no break here, intentional fallthrou
+        }
+        case WM_KEYUP:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
+        {
+            WORD keyFlags = HIWORD(lParam);
+            WORD scanCode = keyFlags & 0x7f;
+            if(keyFlags & KF_UP){
+                //key released
+                scanCode += 0x80;
+            }else if(scanCode == 1){
+                //esc pressed
+                PostQuitMessage(0);
+            }
+
+            if(started){
+                call_portal->ax = scanCode;
+                asm_keys();
+            }
+        }
+        break;
+
+        case WM_DESTROY:
+        {
             PostQuitMessage(0);
         }
+    }
 
-        if(started){
-            asm_keys(scanCode);
-        }
-    }
-    else if (msg == WM_DESTROY) {
-        PostQuitMessage(0);
-    }
-    end:
+end:
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-void blinkenInit();
-
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
-    WNDCLASS wc = {0};
+    (void)hPrev;
+    (void)lpCmd;
+
+    WNDCLASS wndclassMain = {0};
+    WNDCLASS wndclassBlinken = {0};
     MSG msg;
     HWND hwnd;
 
-    wc.lpfnWndProc = WndProc;
-    wc.hInstance = hInst;
-    wc.lpszClassName = "Terep2Win32";
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wndclassMain.lpfnWndProc = WndProc;
+    wndclassMain.hInstance = hInst;
+    wndclassMain.lpszClassName = szAppName;
+    wndclassMain.lpszMenuName = szAppName;
+    wndclassMain.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
-    RegisterClass(&wc);
+    if (!RegisterClass (&wndclassMain)){
+        MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR) ;
+        return 0;
+    }
 
-    RECT rc = {0, 0, 640, 400 + 50}; /* Tamanho interno desejado */
-    DWORD dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
+#ifdef DEBUGMENU
+    wndclassBlinken.lpfnWndProc = BlinkenWndProc;
+    wndclassBlinken.hInstance = hInst;
+    wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
+    wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+    if (!RegisterClass (&wndclassBlinken)){
+        MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR);
+        return 0;
+    }
+#endif // DEBUGMENU
+
+    QueryPerformanceFrequency(&tickfreq);
+
+    // TODO(gmb): get height of the menubar (20?)
+    RECT rc = {0, 0, 640, 400+20}; /* Tamanho interno desejado */
+    DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
     AdjustWindowRect(&rc, dwStyle, FALSE);
 
     /* Janela aproximada de 800x600 */
-    hwnd = CreateWindow("Terep2Win32", "TeREp2", 
+    hwnd = CreateWindow(szAppName, "TeREp2",
                         dwStyle,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         rc.right - rc.left,
                         rc.bottom - rc.top,
                         NULL, NULL, hInst, NULL);
+    if (hwnd == NULL) {
+        MessageBox(NULL, "Unable to create main window.", szAppName, MB_ICONERROR);
+        return 0;
+    }
 
+#ifdef DEBUGMENU
     blinkenInit();
+    rc.right = 1130;
+    rc.bottom = 600;
+    dwStyle = WS_OVERLAPPEDWINDOW;
+    AdjustWindowRect(&rc, dwStyle, FALSE);
+
+    hBlinken = CreateWindow("Terep2Win32Blinken", "TeREp2 - Blinkenlights",
+                        dwStyle,
+                        CW_USEDEFAULT, CW_USEDEFAULT,
+                        rc.right - rc.left,
+                        rc.bottom - rc.top,
+                        NULL, NULL, hInst, NULL);
+                        
+    if (hBlinken == NULL) {
+        MessageBox(NULL, "Unable to create blinken window.", szAppName, MB_ICONERROR);
+        return 0;
+    }
+#endif // DEBUGMENU
+
+    ShowWindow(hwnd, nShow);
+    UpdateWindow(hwnd);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -212,6 +343,10 @@ void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette){
 
     bminfo->info = bih;
 
+    if(palette == NULL){
+        return;
+    }
+
     uint8_t *ptr = palette;
     for(int i =0; i<256;i++){
         bminfo->palette[i].rgbRed   = ptr[0];
@@ -221,53 +356,28 @@ void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette){
     }
 }
 
-int mydoscall(HWND hwnd, char path[]);
+char *tmp_g_path;
 
-void __watcall GameInitThread(void *param) {
-    asm_f_init();
-    _endthread();
-}
-
-void call_init(HWND hwnd, char path[]){
+void call_init(HWND hwnd, char path[], int complain){
     {
         char ultrapath[MAX_PATH];
         snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
         FILE * f = fopen(ultrapath, "rb");
         if(f == NULL){
-            MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            if(complain){
+                MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+            }
             return;
         }
         fclose(f);
     }
 
-    uintptr_t handle = _beginthread(GameInitThread, 0, 0);
-
-    if (handle == (uintptr_t)-1) {
-        MessageBox(NULL, "Error initializing", "Error", MB_ICONERROR);
-        exit(1);
-    }
+    tmp_g_path = path;
+    asm_f_init();
+    tmp_g_path = 0;
 
     started = 1;
-    uint32_t ini = ReadTSCHigh();
-
-    while(1){
-        if(call_portal->msg == 0xd3ca){
-            int ok = mydoscall(hwnd, path);
-
-            call_portal->cf = ok ? 3 : 1;
-            call_portal->msg = 0x1234;
-            continue;
-        }
-        if(call_portal->msg == 0xbeef){
-            break;
-        }
-
-        uint32_t end = ReadTSCHigh();
-        if(end - ini > 2){ //timeout, 2 here should be about 3~4 seconds on modern CPUs, at least it is on my 5825U :)
-            MessageBox(NULL, "Loading took too long", "Error", MB_ICONERROR);
-            exit(1);
-        }
-    }
+    
 
     if(call_portal->ax){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
@@ -280,14 +390,19 @@ void call_init(HWND hwnd, char path[]){
         exit(1);
     }
 
-    prepare_bitmap_info(320, 200, &gameImg,&base_mem[0x1a4d]);
+    prepare_bitmap_info(320, 200, &gameImg, (uint8_t *)&base_mem[0x1a4d]);
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
-    SetTimer(hwnd, 120, 1000/HZ_PHYSICS, NULL);
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
 
-int mydoscall(HWND hwnd, char path[]){
+void mydoscall(){
+    char *path = tmp_g_path;
+    int ok = innermydoscall(path);
+    call_portal->ok = ok;
+}
+
+int innermydoscall(char path[]){
     uint16_t ax = call_portal->ax;
     uint16_t bx = call_portal->bx;
     uint16_t cx = call_portal->cx;
@@ -301,6 +416,8 @@ int mydoscall(HWND hwnd, char path[]){
     
     if (op == 0x3d00){
         //open
+        printf("* OPEN syscall called at EIP: %08x  \n", call_portal->caller);
+
         volatile char *filename = &base_mem[dx];
         if(filename[0] == 0){
             //empty file name, happens when track has 5 cars
@@ -331,19 +448,23 @@ int mydoscall(HWND hwnd, char path[]){
         seletor++;
         void* mem = malloc(DEFAULT_LEN);
         all_segments[seletor] = (uintptr_t)mem;
-        printf("* Aloc: %d, %08x\n", seletor, mem);
+        printf("* Aloc: %d, %08x, called at EIP: %08x\n", seletor, mem, call_portal->caller);
         printf("* game asked for %d paragraphs (%d bytes), we gave it a %d bytes block anyway\n", bx, bx * 16, DEFAULT_LEN);
         call_portal->ax = seletor;
         return 1;
     }
     if (op == 0x3f00){
         if(bx != fidx){
-            printf(" * WAT?\n");
+            printf("* WAT?\n");
             return 0;
         }
         volatile char *addr = &base_mem[dx];
-
-        int32_t r = fread(addr, 1, cx, f);
+        int32_t r = fread((void*)addr, 1, cx, f);
+        if(dx != 0xf008){
+            //show this message only for carX.dat loading
+            printf("* READ syscall called at EIP: %08x  \n", call_portal->caller);
+            printf("* Read %ld bytes into address: %08x (%04x relative to DS)!\n", r, addr, dx);
+        }
         if(r != cx){
             printf("* Short read, %d, %d\n", r, cx);
         }
@@ -365,7 +486,7 @@ int mydoscall(HWND hwnd, char path[]){
     if (op == 0x3e00){
         int ok = fclose(f);
         f = NULL;
-        printf("* Total read: %ld\n", totalrd);
+        printf("* Total read: %ld\n=====================\n", totalrd);
         totalrd = 0;
         return ok == 0;
     }
@@ -373,6 +494,7 @@ int mydoscall(HWND hwnd, char path[]){
     char error[256];
 
     snprintf(error, 256, "\nERROR: unhandled call: %04x\n", ax);
+    printf("* UNKNOWN syscall called at EIP: %08x  \n", call_portal->caller);
 
     printf("\n%s\n", error);
     MessageBox(NULL, error, "Error", MB_ICONERROR);
@@ -380,29 +502,4 @@ int mydoscall(HWND hwnd, char path[]){
     return 0;
 }
 
-#define SETCOLORR(i, r,g,b) {     \
-    RGBQUAD tmp = {.rgbRed = r, .rgbGreen = g, .rgbBlue = b,};\
-    blinkenImg.palette[i] = tmp;  \
-}
 
-void blinkenInit(){
-    uint8_t pRandom[256*3];
-    for(int i =0; i < 256*3; i++){
-        pRandom[i] = rand();
-    }
-
-    prepare_bitmap_info(256, 256, &blinkenImg, pRandom);
-
-    SETCOLORR(0, 0,     0,   0);
-    SETCOLORR(1, 255,   0,   0);
-    SETCOLORR(2, 255, 128,   0);
-    SETCOLORR(3, 0,   255, 255);
-
-    SETCOLORR(126, 255, 255,   0);
-    SETCOLORR(127,   0,   0, 255);
-    SETCOLORR(128,   0, 255,   0);
-    SETCOLORR(129, 128,   0, 255);
-
-    SETCOLORR(254, 255,   0, 255);
-    SETCOLORR(255, 255, 255, 255);
-}

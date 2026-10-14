@@ -1,7 +1,30 @@
-#openwatcom needs to be correctly set up for this to run
-#this include is necessary for the github build
-INCLUDE=/opt/watcom/h/nt:/opt/watcom/h
+#!/bin/bash
+
+mkdir -p build
+
+DEBUG_DEF=""
+BLINKEN_SRC=""
+
+if [ "$1" = "-debug" ]; then
+    echo "Debug menu enabled"
+    DEBUG_DEF="-DDEBUGMENU" 
+    BLINKEN_SRC="win32/blinken.c"
+else
+    echo "Tip: you can pass a parameter '-debug' to this command to enable the debug menus"
+fi
+
+echo "It has begun!!!"
+
 cd reasm32
     nasm -f win32 -DWIN32 the_thing.asm
 cd ..
-wcl386 -6 -os -zastd=c99 -bt=nt -l=nt_win reasm32/the_thing.obj win32/terep2re.c shell32.lib user32.lib ole32.lib -fe=terep2re32.exe
+
+i686-w64-mingw32-windres ${DEBUG_DEF} win32/menu.rc -o win32/menu.o
+i686-w64-mingw32-gcc \
+    ${DEBUG_DEF}     \
+    -O1 -g --std=gnu23 -mwindows \
+    reasm32/the_thing.obj \
+    win32/terep2re.c      \
+    ${BLINKEN_SRC}        \
+    win32/menu.o          \
+    -lole32 -o build/terep2re32.exe

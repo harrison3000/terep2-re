@@ -16,12 +16,31 @@ const fixed = codigos
     .replaceAll(/dw( +)\./g,"dd$1.")
     .replaceAll("ADD         SP,0x2", "ADD         ESP,0x2")
     .replace("nova_linha", "nova_linha - base_mem")
+    .replaceAll("XOR         BP,BP","MOV         BP, 0")
+    .replaceAll(/(EBP|BP)/g, function(m){
+        if(m === "EBP"){
+            return "dword [ye_old_bep]";
+        }
+        return "word [ye_old_lil_bep]";
+    })
+    .replace("MOVSX       dword", "movsx_m2m   dword")
     ;
 
-//TODO also remove mov segment register
 
 
 const linhas = fixed.split("\n");
+
+for(let i = 0 ;i < linhas.length; i++){
+    let li = linhas[i]; 
+    let u = li.match(/^ *((MOV(ZX|SX)?)    )/)
+    if(!u){
+        continue;
+    }
+    let qtd = li.match(/word/g)?.length;
+    if(qtd === 2){
+        linhas[i] = li.replace(u[1], (u[2] + "_m2m").toLowerCase());
+    }
+}
 
 /**
  * 

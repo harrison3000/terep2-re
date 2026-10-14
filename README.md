@@ -17,3 +17,6 @@ For now I made it into a win32 app, it should run on normal Window, but I only t
 
 ![](https://github.com/user-attachments/assets/5c3be341-af07-4a9e-9e34-23a75b006979)
 
+## AI/LLM usage
+
+Limited AI usage, for things like boilerplate or small corrections to the GUI is acceptable, but touching the ASM code or other critical parts using AI is a big no-no 
