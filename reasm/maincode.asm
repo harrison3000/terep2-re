@@ -126,7 +126,7 @@ f_init:
 .LAB_LOC_5:
     CALL        FUN_INIT_2b70
     JC          .LAB_LOC_6
-    ;CALL        FUN_INIT_57e0 ;FIXME restore sound!
+    CALL        FUN_INIT_57e0
     MOV         word [0x6f],DX
     MOV         word [0x71],AX
     
@@ -3743,16 +3743,15 @@ FUN_1000_2662:
 FUN_PHYSICS_26dd:
                               ;XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               ;             1000:2722(c)
-    PUSH        AX
-    PUSH        BX
+    mov word [v_tmp_26dd_a], AX
+    mov word [v_tmp_26dd_b], BX
     CALL        FUN_PHYSICS_2b08
     TEST        AH,0x60
     JP          .LAB_LOC_1
     MOV         BX,AX
     CALL        FUN_PHYSICS_2aad
     MOVSX       EBX,AX
-    ADD         SP,0x2
-    POP         AX
+    MOV         AX, word [v_tmp_26dd_a]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
@@ -3762,8 +3761,7 @@ FUN_PHYSICS_26dd:
     MOV         BX,AX
     CALL        FUN_PHYSICS_2ad8
     MOVSX       EBX,AX
-    POP         AX
-    ADD         SP,0x2
+    MOV         AX, word [v_tmp_26dd_b]
     SHL         EAX,0x10
     SAR         EAX,0x1
     CDQ
