@@ -90,11 +90,12 @@ function mem2string(){
     var dmm = this.miolomole.match(/^([a-z]\w{2,})( \+ (.*))?$/i);
     if(dmm){
         //variable
+        const var_prefix = "cpu->vars->";
         if(dmm[2]){
-            return `${dmm[1]}[${dmm[3]}]`;
+            return `${var_prefix}${dmm[1]}[${dmm[3]}]`;
         }
 
-        return this.miolo;
+        return var_prefix + this.miolo;
     }
 
     if(!this.tipo2){
