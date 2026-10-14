@@ -3,14 +3,22 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
-#include <unistd.h>
-#include <fcntl.h>
 
 #include "../lifted/gpu/types.hpp"
 #include "../lifted/public_declrs.hpp"
 
+
+struct d3c_enviroment {
+    FILE *f;
+    char lastRP[512];
+    int current_seg = 0;
+    const char* basedir;
+    bool superbad = false;
+};
+
+
 void DOS3Call(cpu_ctx *cpu){
-    auto bd = (const char*)cpu->extra_data;
+    auto e = (d3c_enviroment*)cpu->extra_data;
 
     int op = cpu->AX & 0xff00;
     switch(op){
@@ -24,49 +32,61 @@ void DOS3Call(cpu_ctx *cpu){
                 return;
             }
 
-            auto fullpath = bd + filename;
+            auto fullpath = e->basedir + filename;
 
-            auto fd = open(fullpath.c_str(), O_RDONLY);
-            printf("* trying to open: %s, returned: %d\n", filename.c_str(), fd);
-            cpu->CF = fd < 0;
-            cpu->AX = fd;
+            auto fd = fopen(fullpath.c_str(), "r");
+            auto ok = fd != 0 ? "OK" : "BAD";
+            printf("* trying to open: %s, returned: %s\n", filename.c_str(), ok);
+            e->f = fd;
+            cpu->CF = fd == 0;
+            cpu->AX = 97;
             return;
         }
         case 0x4800:{
             //memory alocation
-            static int current_seg = 0;
-            current_seg += 68; // a bit more for safety
+            e->current_seg += 68; // a bit more for safety
             printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
-            cpu->AX = current_seg;
+            cpu->AX = e->current_seg;
             cpu->CF=0;
             return;
         }
         case 0x3f00:{
-            auto fd = cpu->BX;
+            if(cpu->BX != 97){
+                e->superbad = true;
+                cpu->CF = 1;
+                return;
+            }
             if(cpu->DS != 0){
                 printf("Something wrong isnt right\n");
                 exit(2);
             }
             auto addr = cpu->mem_base + cpu->DX;
-            auto r = read(fd, (void *)addr, cpu->CX);
+            auto r = fread((void *)addr, 1, cpu->CX, e->f);
             cpu->CF = r < 0;
             cpu->AX = r;
-            printf("Read %ld bytes from handle: %d into address: %04x (relative to DS)\n", r, fd, cpu->DX);
+            printf("Read %ld bytes from file into address: %04x (relative to DS)\n", r, cpu->DX);
             return;
         }
         case 0x4200:{
-            int off = cpu->CX;
+            uint32_t off = cpu->CX;
             off <<= 16;
             off += cpu->DX;
+            int32_t soff = off;
 
-            auto offset = lseek(cpu->BX, off, cpu->AL);
-            cpu->CF = offset < 0;
+            uint32_t fsok = fseek(e->f, soff, cpu->AL);
+            uint32_t offset = ftell(e->f);
+
+            cpu->CF = fsok != 0;
             cpu->DX = offset >> 16;
             cpu->AX = offset;
             return;
         }
         case 0x3e00:{
-            auto ok = close(cpu->BX);
+            int ok = fclose(e->f);
+            e->f = NULL;
+            e->lastRP[0] = 0;
+            //printf("* File closed\n* Total read: %ld\n=====================\n", totalrd);
+            //totalrd = 0;
             cpu->CF = ok != 0;
             return;
         }
@@ -95,7 +115,11 @@ void new_session(GameSession **d){
 }
 
 bool init_game(GameSession *g, const char* basedir){
-    g->cpu->extra_data = (uintptr_t)basedir;
+    auto e = d3c_enviroment{
+        .basedir = basedir,
+    };
+
+    g->cpu->extra_data = (uintptr_t)(&e);
     f_init(g->cpu);
     g->cpu->extra_data = 0;
     return g->cpu->AX == 0;
