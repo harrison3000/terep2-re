@@ -62,7 +62,6 @@ replacetron(f, /^ +REP«(.+)»/, (m) => `   while(cpu->CX){
       INST_${m[1]}();
       cpu->CX--;
    }`);
-replacetron(f, /INST_ADD\(SP/, () => "   DUMMY_POP_WORD();");
 
 replacetron(f, /CVTSI2SS\(xmm([012]),/, (m) => `   float tmp_f${m[1]} = SIGNED(cpu->EAX);`);
 replacetron(f, /CVTSS2SI/, (m) => 

@@ -11,12 +11,13 @@ struct cpu_ctx {
     union {uint32_t EDX;  uint16_t DX;  struct { uint8_t DL, DH; }; };
 
 
-    union {uint32_t ESI;  uint16_t SI; };
-    union {uint32_t EDI;  uint16_t DI; };
+    uint16_t SI;
+    uint16_t DI;
     
     union {uint32_t EBP;  uint16_t BP; };
 
     uint32_t padding;//premature optimization for pushad/popad to be exacly 8*4
+    uint32_t padding2;
 
     uintptr_t mem_base;
 

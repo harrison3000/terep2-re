@@ -50,8 +50,6 @@ struct stackItem {
     reg = it.value;             \
 })
 
-#define DUMMY_POP_WORD() ({ _local_stack_pointer--; })
-
 #define MEM_BYTE(addr) ({    \
     uint16_t displ = (addr); \
     uintptr_t finalAddr = cpu->mem_base + displ; \
