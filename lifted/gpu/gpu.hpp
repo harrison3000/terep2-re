@@ -26,10 +26,6 @@ struct stackItem {
     uint32_t value;  uint16_t line; uint16_t size;
 };
 
-//TODO add a 4k buffer zone so we can fault on writes beyond 64k?
-//or maybe just use the blinkenlights to see rogue writes
-#define SEGM 1024
-
 #define def_datareg 0
 
 //this 16 here is a very conservative value
@@ -58,8 +54,8 @@ struct stackItem {
 
 #define GEN_SMEM(_type, __seg, _addr) ({    \
     uint16_t displ = (_addr); \
-    uintptr_t _seg = (__seg);  \
-    uintptr_t finalAddr = cpu->mem_base + (_seg * SEGM) + displ; \
+    uint16_t _seg  = (__seg); \
+    uintptr_t finalAddr = cpu->segments[_seg] + displ; \
     (_type *)finalAddr; \
 })[0]
 
@@ -82,9 +78,9 @@ struct stackItem {
 #define SIGN_SMEM_DWORD(seg, addr) GEN_SMEM(int32_t, seg, addr)
 
 
-inline int8_t SIGNED(uint8_t v) { return v; }
-inline int16_t SIGNED(uint16_t v) { return v; }
-inline int32_t SIGNED(uint32_t v) { return v; } 
+static inline int8_t SIGNED(uint8_t v) { return v; }
+static inline int16_t SIGNED(uint16_t v) { return v; }
+static inline int32_t SIGNED(uint32_t v) { return v; } 
 
 //the builtin is the oposite of the x86 flag
 #define PARITY(val) (!__builtin_parity(val & 0xff))

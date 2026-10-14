@@ -15,6 +15,7 @@ cpu_ctx *initCPU(){
 
     auto memory = new uint8_t[2 * 1024 * 1024];
     cpu->mem_base = (uintptr_t)memory;
+    cpu->segments[0] = cpu->mem_base;
 
     memcpy(memory, initialdata, sizeof(initialdata));
 

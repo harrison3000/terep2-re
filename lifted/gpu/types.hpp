@@ -22,6 +22,7 @@ struct cpu_ctx {
     uint32_t padding2;
 
     uintptr_t mem_base;
+    uintptr_t segments[16];
 
     //segment registers, will be used with a multiplier to emulate segments
     //(defined below, not exactly 16 like in the original real mode) 

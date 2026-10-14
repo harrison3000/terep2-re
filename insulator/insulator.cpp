@@ -49,7 +49,9 @@ void DOS3Call(cpu_ctx *cpu){
         }
         case 0x4800:{
             //memory alocation
-            e->current_seg += 68; // a bit more for safety
+            e->current_seg++; 
+            uintptr_t offset = e->current_seg * 68 * 1024; //68kb, a bit more than 64 so we have a margin
+            cpu->segments[e->current_seg] = cpu->mem_base + offset;
             printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
             cpu->AX = e->current_seg;
             cpu->CF=0;
