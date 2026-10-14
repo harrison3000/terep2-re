@@ -6,11 +6,9 @@
 #include <stdio.h>
 #include <shlobj.h>
 
-#include <mmsystem.h>
-#include "opl3.h"
-
-
 TCHAR szAppName[] = "Terep2Win32";
+
+char iniFile[] = "TEREP2RE.INI";
 
 extern void asm_f_init(void);
 extern void asm_render(void);
@@ -37,20 +35,11 @@ LARGE_INTEGER tickfreq;
 int started = 0;
 int run_physics = 1;
 int64_t last_p_update = -1;
+int debug_mode = 0;
 
-opl3_chip chip;
-
-#define OPL3_SAMPLE_RATE        49716
-#define SOUND_CHANNELS          2
-#define SOUND_BUFFER_SIZE_CH    2048
-
-HWAVEOUT hWaveOut;
-WAVEHDR waveHeaders[SOUND_CHANNELS] = { 0 };
-int16_t audioBuffers[SOUND_CHANNELS][SOUND_BUFFER_SIZE_CH] = { 0 };
-#define SOUND_VOLUME_MAX    0xFFFFFFFF
-#define SOUND_VOLUME_MIN    0x0
-
+char last_opened_dir[MAX_PATH] = "C://";
 int sound_enabled = 1;
+int selected_scale = T2_SCALE_P2;
 
 //get system uptime in uSecs
 int64_t GetTimeee(void){
@@ -61,57 +50,128 @@ int64_t GetTimeee(void){
     return ret;
 }
 
-#ifdef DEBUGMENU
 static char console_tilte[] = TEXT("TeREp2 - Debug Console");
 static void CreateDebugConsole(void) {
-        BOOL ok;
-        FILE *stream;
+    BOOL ok;
+    FILE *stream;
 
-        ok = AllocConsole();
-        if (!ok)
-            return;
+    ok = AllocConsole();
+    if (!ok)
+        return;
 
-        AttachConsole(GetCurrentProcessId());
-        SetConsoleTitle(console_tilte);
-        freopen_s(&stream, "CON", "w", stdout);
+    AttachConsole(GetCurrentProcessId());
+    SetConsoleTitle(console_tilte);
+    freopen_s(&stream, "CON", "w", stdout);
 
-        printf(" Debug Console for TeREp2\n\n");
+    printf(" Debug Console for TeREp2\n\n");
 }
 
 static void DestroyDebugConsole(void) {
-        FreeConsole();
+    FreeConsole();
 
-        HWND hwnd = FindWindow(NULL, console_tilte);
-        if (hwnd) {
-            PostMessage(hwnd, WM_CLOSE, 0, 0);
-        }
-}
-#endif // DEBUGMENU
-
-void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
-    if (uMsg == WOM_DONE) {
-        WAVEHDR* pHeader = (WAVEHDR*)dwParam1;
-        int16_t* samples = (int16_t*)pHeader->lpData;
-        for (int i = 0; i < SOUND_BUFFER_SIZE_CH / 2; i++) {
-            OPL3_GenerateResampled(&chip, &samples[i * 2]);
-        }
-        waveOutWrite(hwo, pHeader, sizeof(WAVEHDR));
+    HWND hwnd = FindWindow(NULL, console_tilte);
+    if (hwnd) {
+        PostMessage(hwnd, WM_CLOSE, 0, 0);
     }
 }
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    static int selected_scale = T2_SCALE_P2;
-    HMENU hMenu;
+static void LoadConfig(void){
+    DWORD cwd_len = GetCurrentDirectory(0, NULL);
+    char *cwd = calloc(1, cwd_len);
+    if (!cwd) {
+        printf("ERROR: unable to create cwd\n");
+        return;
+    }
+    GetCurrentDirectory(cwd_len, cwd);
+    DWORD path_len = cwd_len + 1 + strlen(iniFile) + 1;
+    char *path = calloc(1, path_len);
+    if (!path) {
+        printf("ERROR: unable to create path\n");
+        free(cwd);
+        return;
+    }
+    snprintf(path, path_len, "%s/%s", cwd, iniFile);
 
+    GetPrivateProfileString("Path", "Directory", "C://", last_opened_dir, sizeof(last_opened_dir), path);
+    sound_enabled = GetPrivateProfileInt("Sound", "Enabled", sound_enabled, path);
+    selected_scale = GetPrivateProfileInt("Graphics", "Scale", selected_scale, path);
+    debug_mode = GetPrivateProfileInt("Debug", "Enabled", debug_mode, path);
+    run_physics = GetPrivateProfileInt("Debug", "RunPhysics", run_physics, path);
+
+    free(cwd);
+    free(path);
+}
+
+static void SaveConfig(void){
+    DWORD cwd_len = GetCurrentDirectory(0, NULL);
+    char *cwd = calloc(1, cwd_len);
+    if (!cwd) {
+        printf("ERROR: unable to create cwd\n");
+        return;
+    }
+    GetCurrentDirectory(cwd_len, cwd);
+    DWORD path_len = cwd_len + 1 + strlen(iniFile) + 1;
+    char *path = calloc(1, path_len);
+    if (!path) {
+        printf("ERROR: unable to create path\n");
+        free(cwd);
+        return;
+    }
+    snprintf(path, path_len, "%s/%s", cwd, iniFile);
+
+    char buf[32];
+
+    WritePrivateProfileString("Path", "Directory", last_opened_dir, path);
+
+    snprintf(buf, sizeof(buf), "%d", sound_enabled);
+    WritePrivateProfileString("Sound", "Enabled", buf, path);
+
+    snprintf(buf, sizeof(buf), "%d", selected_scale);
+    WritePrivateProfileString("Graphics", "Scale", buf, path);
+
+    snprintf(buf, sizeof(buf), "%d", debug_mode);
+    WritePrivateProfileString("Debug", "Enabled", buf, path);
+
+    snprintf(buf, sizeof(buf), "%d", run_physics);
+    WritePrivateProfileString("Debug", "RunPhysics", buf, path);
+
+    free(cwd);
+    free(path);
+}
+
+static void SetGraphicsScale(HWND hwnd){
+    int w,h;
+    getScaleDimension(selected_scale, &w, &h);
+    adjustWindowSize(hwnd, w, h);
+}
+
+static INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
+{
+    if (uMsg == BFFM_INITIALIZED) {
+        SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
+    }
+    return 0;
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    static HMENU hMenu;
     switch (msg) {
         case WM_CREATE: {
-#ifdef DEBUGMENU
-            CreateDebugConsole();
-#endif
-            hMenu = GetMenu(hwnd);
+            if (debug_mode) {
+                CreateDebugConsole();
+            }
 
-            CheckMenuItem(hMenu, T2_APP_PHYS_RUN, run_physics ? MF_CHECKED : MF_UNCHECKED);
-            CheckMenuItem(hMenu, T2_APP_SOUND, sound_enabled ? MF_CHECKED : MF_UNCHECKED);
+            hMenu = GetMenu(hwnd);
+            if (hMenu) {
+                if (!debug_mode) {
+                    // NOTE(gmb): Debug MUST be the 4th menuitem
+                    DeleteMenu(hMenu, 3, MF_BYPOSITION);
+                    DrawMenuBar(hwnd);
+                }
+
+                CheckMenuItem(hMenu, T2_APP_PHYS_RUN, run_physics ? MF_CHECKED : MF_UNCHECKED);
+                CheckMenuItem(hMenu, T2_APP_SOUND, sound_enabled ? MF_CHECKED : MF_UNCHECKED);
+            }
 
             call_init(hwnd, ".", 0);
         }
@@ -134,7 +194,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
                     bi.hwndOwner = hwnd;
                     bi.lpszTitle = "Select a track directory:";
-                    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_USENEWUI | BIF_NONEWFOLDERBUTTON;
+                    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON;
+                    bi.lpfn = BrowseCallbackProc;
+                    bi.lParam = (LPARAM)last_opened_dir;
 
                     pidl = SHBrowseForFolder(&bi);
                     if (pidl) {
@@ -177,11 +239,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
                     CheckMenuItem(hMenu, T2_APP_SOUND, sound_enabled ? MF_CHECKED : MF_UNCHECKED);
 
-                    if (sound_enabled) {
-                        waveOutSetVolume(hWaveOut, SOUND_VOLUME_MAX);
-                    } else {
-                        waveOutSetVolume(hWaveOut, SOUND_VOLUME_MIN);
-                    }
+                        if (sound_enabled) {
+                            sound_on();
+                        } else {
+                            sound_off();
+                        }
                 }
                 break;
 
@@ -202,9 +264,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
             if(LOWORD(wParam)/100 == 401){//gambiarra da boa!
                 selected_scale = LOWORD(wParam);
-                int w,h;
-                getScaleDimension(selected_scale, &w, &h);
-                adjustWindowSize(hwnd, w, h);
+                SetGraphicsScale(hwnd);
             }
         }
         break;
@@ -255,22 +315,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 InvalidateRect(hwnd, 0, FALSE);
                 asm_render();
 
-#ifdef DEBUGMENU
-                InvalidateRect(hBlinken, 0, FALSE);
-#endif
+                if (debug_mode) {
+                    InvalidateRect(hBlinken, 0, FALSE);
+                }
             }
         }
         break;
 
         case WM_KEYDOWN:
         {
-            if(wParam == VK_SPACE && !run_physics){
+            if(wParam == VK_F7){
+                run_physics = !run_physics;
+                if (debug_mode) {
+                    CheckMenuItem(hMenu, T2_APP_PHYS_RUN, run_physics ? MF_CHECKED : MF_UNCHECKED);
+                }
+            }
+            if(wParam == VK_F8 && !run_physics){
                 asm_physics();
             }
-            if(wParam == '3'){
-                run_physics = !run_physics;
-            }
-
             //no break here, intentional fallthrou
         }
         case WM_KEYUP:
@@ -291,6 +353,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 call_portal->ax = scanCode;
                 asm_keys();
             }
+
+            // NOTE(gmb): F10 activates the menu bar by default,
+            //            we do not need that
+            if(wParam == VK_F10){
+                return 0;
+            }
         }
         break;
 
@@ -298,17 +366,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         {
             // TODO (gmb): application does not terminates when this is here
             //             find a place for cleanup
-/*
-            waveOutReset(hWaveOut);
-            for (int i = 0; i < SOUND_CHANNELS; i++) {
-                waveOutUnprepareHeader(hWaveOut, &waveHeaders[i], sizeof(WAVEHDR));
-            }
-            waveOutClose(hWaveOut);
-*/
+            // sound_deinit();
 
-#ifdef DEBUGMENU
-            DestroyDebugConsole();
-#endif
+            SaveConfig();
+
+            if (debug_mode) {
+                DestroyDebugConsole();
+            }
+
             PostQuitMessage(0);
         }
     }
@@ -321,38 +386,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     (void)hPrev;
     (void)lpCmd;
 
-    // init sound
-    OPL3_Reset(&chip, OPL3_SAMPLE_RATE);
+    LoadConfig();
+    // to be sure
+    if (!debug_mode) {
+        run_physics = 1;
+    }
 
-    WAVEFORMATEX wfx;
-    wfx.wFormatTag = WAVE_FORMAT_PCM;
-    wfx.nChannels = SOUND_CHANNELS;
-    wfx.nSamplesPerSec = OPL3_SAMPLE_RATE;
-    wfx.wBitsPerSample = 16;
-    wfx.nBlockAlign = wfx.nChannels * (wfx.wBitsPerSample / 8);
-    wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;
-    wfx.cbSize = 0;
-
-    MMRESULT mmerr = waveOutOpen(&hWaveOut, WAVE_MAPPER, &wfx, (DWORD_PTR)waveOutProc, 0, CALLBACK_FUNCTION);
-    if (mmerr != MMSYSERR_NOERROR) {
-        MessageBox(NULL, "Failed to open waveOut audio device!", szAppName, MB_ICONERROR);
+    BOOL sound_ok = sound_init();
+    if (!sound_ok) {
+        MessageBox(NULL, "Failed to initialise sound!", szAppName, MB_ICONERROR);
         return 0;
     }
 
     if (sound_enabled) {
-        waveOutSetVolume(hWaveOut, SOUND_VOLUME_MAX);
+        sound_on();
     } else {
-        waveOutSetVolume(hWaveOut, SOUND_VOLUME_MIN);
-    }
-
-    for (int i = 0; i < SOUND_CHANNELS; i++) {
-        waveHeaders[i].lpData = (LPSTR)audioBuffers[i];
-        waveHeaders[i].dwBufferLength = sizeof(audioBuffers[i]);
-        waveHeaders[i].dwFlags = 0;
-        waveHeaders[i].dwLoops = 0;
-
-        waveOutPrepareHeader(hWaveOut, &waveHeaders[i], sizeof(WAVEHDR));
-        waveOutWrite(hWaveOut, &waveHeaders[i], sizeof(WAVEHDR));
+        sound_off();
     }
 
     // init windows
@@ -372,17 +421,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
         return 0;
     }
 
-#ifdef DEBUGMENU
-    wndclassBlinken.lpfnWndProc = BlinkenWndProc;
-    wndclassBlinken.hInstance = hInst;
-    wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
-    wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    if (debug_mode) {
+        wndclassBlinken.lpfnWndProc = BlinkenWndProc;
+        wndclassBlinken.hInstance = hInst;
+        wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
+        wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
-    if (!RegisterClass (&wndclassBlinken)){
-        MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR);
-        return 0;
+        if (!RegisterClass (&wndclassBlinken)){
+            MessageBox(NULL, "This program requires Windows NT!", szAppName, MB_ICONERROR);
+            return 0;
+        }
     }
-#endif // DEBUGMENU
 
     QueryPerformanceFrequency(&tickfreq);
 
@@ -399,29 +448,30 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
         return 0;
     }
 
-#ifdef DEBUGMENU
-    blinkenInit();
-    RECT rc = {0, 0, 1130, 600};
-    dwStyle = WS_OVERLAPPEDWINDOW;
-    AdjustWindowRect(&rc, dwStyle, FALSE);
+    if (debug_mode) {
+        blinkenInit();
+        RECT rc = {0, 0, 1130, 600};
+        dwStyle = WS_OVERLAPPEDWINDOW;
+        AdjustWindowRect(&rc, dwStyle, FALSE);
 
-    hBlinken = CreateWindow("Terep2Win32Blinken", "TeREp2 - Blinkenlights",
-                        dwStyle,
-                        CW_USEDEFAULT, CW_USEDEFAULT,
-                        rc.right - rc.left,
-                        rc.bottom - rc.top,
-                        NULL, NULL, hInst, NULL);
+        hBlinken = CreateWindow("Terep2Win32Blinken", "TeREp2 - Blinkenlights",
+                            dwStyle,
+                            CW_USEDEFAULT, CW_USEDEFAULT,
+                            rc.right - rc.left,
+                            rc.bottom - rc.top,
+                            NULL, NULL, hInst, NULL);
 
-    if (hBlinken == NULL) {
-        MessageBox(NULL, "Unable to create blinken window.", szAppName, MB_ICONERROR);
-        return 0;
+        if (hBlinken == NULL) {
+            MessageBox(NULL, "Unable to create blinken window.", szAppName, MB_ICONERROR);
+            return 0;
+        }
     }
-#endif // DEBUGMENU
 
     ShowWindow(hwnd, nShow);
     UpdateWindow(hwnd);
 
     adjustWindowSize(hwnd, 640, 400);
+    SetGraphicsScale(hwnd);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -436,7 +486,7 @@ void adjustWindowSize(HWND hwnd, int w, int h){
     DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
     AdjustWindowRect(&rc, dwStyle, TRUE);
-    SetWindowPos(hwnd, NULL, 
+    SetWindowPos(hwnd, NULL,
         0,0,
         rc.right - rc.left, rc.bottom - rc.top,
         SWP_NOMOVE | SWP_NOREPOSITION | SWP_NOZORDER
@@ -460,12 +510,12 @@ void call_init(HWND hwnd, char path[], int complain){
         fclose(f);
     }
 
+    strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     tmp_g_path = path;
     asm_f_init();
     tmp_g_path = 0;
 
     started = 1;
-
 
     if(call_portal->ax){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
@@ -482,12 +532,4 @@ void call_init(HWND hwnd, char path[], int complain){
     asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
-}
-
-void adlib_callback(){
-    uint16_t ax = call_portal->ax;
-    uint8_t reg = ax >> 8;
-    uint8_t val = ax & 0xFF;
-
-    OPL3_WriteReg(&chip, reg, val);
 }

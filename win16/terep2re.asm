@@ -62,6 +62,10 @@ handlekey_:
 
     %include "reasm/maincode.asm"
 
+sound_thing:
+    ;only works on win32
+    nop
+    ret
 
 segment _DATA2 class=DATA align=16
     incbin "memdumps/data.bin"
