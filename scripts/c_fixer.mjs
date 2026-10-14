@@ -63,13 +63,16 @@ replacetron(f, /^ +REP«(.+)»/, (m) => `   while(cpu->CX){
       cpu->CX--;
    }`);
 
-replacetron(f, /CVTSI2SS\(xmm([012]),/, (m) => `   float tmp_f${m[1]} = SIGNED(cpu->EAX);`);
+replacetron(f, /CVTSI2SS\(xmm([012]),/, (m) => `   double tmp_f${m[1]} = SIGNED(cpu->EAX);`);
 replacetron(f, /CVTSS2SI/, (m) => 
 `   tmp_f0 *= tmp_f0;
    tmp_f1 *= tmp_f1;
    tmp_f2 *= tmp_f2;
 
-   float ressq = __builtin_sqrtf(tmp_f0 + tmp_f1 + tmp_f2);
+   double ressq = __builtin_sqrt(tmp_f0 + tmp_f1 + tmp_f2);
+   ressq = __builtin_fmin(ressq,  2147483647.0);
+   ressq = __builtin_fmax(ressq, -2147483648.0);
+
    cpu->EAX = (int32_t)ressq;`);
 
 replacetron(f, /XMM[0-3]/i, () => "//REMOVEME");
