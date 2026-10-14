@@ -13,8 +13,6 @@
 
 #include "keys.hpp"
 
-#include "../lifted/declrs.hpp"
-#include "../lifted/gpu/types.hpp"
 
 #define W 320
 #define H 200
