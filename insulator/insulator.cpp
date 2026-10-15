@@ -39,6 +39,7 @@ void DOS3Call(cpu_ctx *cpu){
 
             auto fullpath = e->basedir + filename;
 
+            //FIXME needs to be case insensitive!
             auto fd = fopen(fullpath.c_str(), "rb");
             auto ok = fd != 0 ? "OK" : "BAD";
             printf("* trying to open: %s, returned: %s\n", filename.c_str(), ok);

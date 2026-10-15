@@ -94,13 +94,13 @@ function siszzs(a, b){
 export function tamanhador(val){
     var st = val.slice(0, 6);
     if(st === "cpu->E" || st === "MEM_DW"){
-        return ["int32_t",0x100000000];
+        return ["int32_t", 2**32];
     }
     if(st === "MEM_BY" || /cpu->[A-D][LH]$/.test(val)){
-        return ["int8_t",0x100];
+        return ["int8_t",  2**8];
     }
     if(st === "MEM_WO" || /cpu->[A-D]X$/.test(val) ){
-        return ["int16_t", 0x10000];
+        return ["int16_t", 2**16];
     }
 
     throw "unreq size";
