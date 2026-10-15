@@ -53,14 +53,14 @@ void do_the_render_roll(HDC hdc){
         fprintf(recordOut, "frame_fnv1a_64: 0x%0llx\n", fnv);
     }
 
-    if(frame % 32768 == 0){
+    if(frame % 16000 == 0){
         char fname[64];
-        sprintf(fname, "D:\\terep2-re\\recordings\\frame_%d.pgm", frame);
+        sprintf(fname, "D:\\terep2-re\\recordings\\frame_%ld.pgm", frame);
 
-        fprintf(recordOut, "frame: frame_%d.pgm\n", frame);
+        fprintf(recordOut, "frame: frame_%ld.pgm\n", frame);
 
         FILE *pic = fopen(fname, "wb");
-        fprintf(pic, "P5\n#frame %d\n320 200\n255\n", frame);
+        fprintf(pic, "P5\n#frame %ld\n320 200\n255\n", frame);
         fwrite(video, 1, 320*200, pic);
         fclose(pic);
     }
