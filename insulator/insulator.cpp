@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <dirent.h>
+#include <strings.h>
 
 #include "../lifted/gpu/types.hpp"
 #include "../lifted/public_declrs.hpp"
@@ -17,6 +19,7 @@ struct d3c_enviroment {
     int totalrd;
 };
 
+FILE * insensitive_fopen(const char *basedir, const char* fname);
 
 void DOS3Call(cpu_ctx *cpu){
     auto e = (d3c_enviroment*)cpu->extra_data;
@@ -37,10 +40,7 @@ void DOS3Call(cpu_ctx *cpu){
                 e->superbad = true;
             }
 
-            auto fullpath = e->basedir + filename;
-
-            //FIXME needs to be case insensitive!
-            auto fd = fopen(fullpath.c_str(), "rb");
+            auto fd = insensitive_fopen(e->basedir, (char*)addr);
             auto ok = fd != 0 ? "OK" : "BAD";
             printf("* trying to open: %s, returned: %s\n", filename.c_str(), ok);
             e->f = fd;
@@ -181,4 +181,36 @@ uintptr_t get_memory(GameSession *g, uintptr_t offset){
 
 uintptr_t get_segment(GameSession *g, uintptr_t seletor){
     return g->cpu->segments[seletor];
+}
+
+
+FILE * insensitive_fopen(const char *basedir, const char* fname){
+    //insensitive fopen, the function that doesn`t care about your feelings
+
+    std::string dir(basedir);
+    auto fullpath = dir + fname;
+    auto f = fopen(fullpath.c_str(), "rb");
+    if(f){
+        return f;
+    }
+    
+    struct dirent *de;  // Pointer for directory entry
+    DIR *dr = opendir(basedir);
+    if(!dr){
+        return NULL;
+    }
+    while ((de = readdir(dr)) != NULL){
+        if(strcasecmp(de->d_name, fname) != 0){
+            continue;
+        }
+
+        auto fullpath = dir + de->d_name;
+        f = fopen(fullpath.c_str(), "rb");
+        if(f){
+            break;
+        }
+    }
+
+    closedir(dr);
+    return f;
 }
