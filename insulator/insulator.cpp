@@ -3,7 +3,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
-#include <dirent.h>
+#ifndef _WIN32
+    #include <dirent.h>
+#endif
 #include <strings.h>
 
 #include "../lifted/gpu/types.hpp"
@@ -190,6 +192,8 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
     std::string dir(basedir);
     auto fullpath = dir + fname;
     auto f = fopen(fullpath.c_str(), "rb");
+
+#ifndef _WIN32
     if(f){
         return f;
     }
@@ -212,5 +216,7 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
     }
 
     closedir(dr);
+#endif
+
     return f;
 }
