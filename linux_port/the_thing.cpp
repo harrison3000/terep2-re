@@ -32,20 +32,10 @@ int main(int argc, char **argv){
 
     printf("phase 1 ok, %d\n", ok);
 
-    finalize_game(g);
-    g = NULL;
-}
-/*
-
-
-    FUN_main_render(cpu);
-
-    mem_dumper(memory, "after first render");
-
-    auto videoSegSel = ((uint16_t *)memory)[0xdb10 / 2];
-    auto videoSeg = (uint8_t*)(cpu->mem_base + videoSegSel * 1024);
+    auto videoSegSel = ((uint16_t *)get_memory(g, 0xdb10))[0];
+    auto videoSeg = (uint8_t*)(get_segment(g, videoSegSel));
     printf("video data: %04x, %08x\n", videoSegSel, videoSeg);
-    
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);
     SDL_Renderer *ren = SDL_CreateRenderer(win, NULL);
@@ -55,7 +45,7 @@ int main(int argc, char **argv){
 
     // Paleta de 256 cores (exemplo: 0 = Preto, 1 = Vermelho, 2 = Verde...)
     SDL_Color colors[256];
-    uint8_t *ptr = &((uint8_t*)memory)[0x1a4d];
+    uint8_t *ptr = (uint8_t*)get_memory(g, 0x1a4d);
     for(int i = 0;i<256;i++){
         colors[i].r = ptr[0];
         colors[i].g = ptr[1];
@@ -85,13 +75,12 @@ int main(int argc, char **argv){
             if(e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP){
                 auto ec = get_pc_scancode(e);
                 if(ec != 0){
-                    cpu->AX = ec;
-                    FUN_keyboard_56df(cpu);
+                    send_key_event(g, ec);
                 }
             }
         }
 
-        FUN_main_render(cpu);
+        render_frame(g);
         for(int i = 0; i < W*H; i++){
             pixels[i] = videoSeg[i];
         }
@@ -102,8 +91,8 @@ int main(int argc, char **argv){
         SDL_RenderPresent(ren);
 
         //physics run at 120 ticks per sec
-        FUN_timer_5680(cpu);
-        FUN_timer_5680(cpu);
+        calculate_physics(g);
+        calculate_physics(g);
 
         // Limita a 60 FPS
         Uint64 elapsed = SDL_GetTicksNS() - start;
@@ -118,12 +107,8 @@ int main(int argc, char **argv){
     SDL_DestroyWindow(win);
     SDL_Quit();    
 
+    finalize_game(g);
+
+
     return 0;
 }
-
-void _adlib_callback(){
-    uint16_t ax = call_portal->ax;
-    //sound thing goes here
-    printf("ADLIB callback called: %04x\n", ax);
-}
-    */

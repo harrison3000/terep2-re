@@ -156,3 +156,28 @@ void finalize_game(GameSession *g){
     finalizeCpu(g->cpu);
     delete g;
 }
+
+
+void send_key_event(GameSession *g, uint8_t key){
+    g->cpu->AX = key;
+    FUN_keyboard_56df(g->cpu);
+}
+
+void calculate_physics(GameSession *g){
+    FUN_timer_5680(g->cpu);
+
+}
+
+void render_frame(GameSession *g){
+    FUN_main_render(g->cpu);
+}
+
+
+//these will be deleted ASAP!
+uintptr_t get_memory(GameSession *g, uintptr_t offset){
+    return g->cpu->mem_base + offset;
+}
+
+uintptr_t get_segment(GameSession *g, uintptr_t seletor){
+    return g->cpu->segments[seletor];
+}
