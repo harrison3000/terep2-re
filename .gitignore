@@ -8,3 +8,4 @@ sim.cfg
 raw_c.cpp
 recordings/
 .vscode
+build/
