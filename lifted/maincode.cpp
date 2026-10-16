@@ -8062,7 +8062,7 @@ void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    ressq = __builtin_fmin(ressq,  2147483647.0);
    ressq = __builtin_fmax(ressq, -2147483648.0);
 
-   cpu->EAX = (int32_t)ressq;
+   cpu->EAX = __builtin_rint(ressq);
 
    INST_SAR(cpu->EAX, 0xa);
    INST_MOVSX(cpu->vars->mitemp_BeX, MEM_WORD(cpu->BX + 0x4));

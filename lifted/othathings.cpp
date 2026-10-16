@@ -19,7 +19,7 @@ cpu_ctx *initCPU(){
 
     memcpy(memory, initialdata, sizeof(initialdata));
 
-    strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!!");
+    strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!");
 
     cpu->vars = new otherVars;
 

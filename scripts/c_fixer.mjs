@@ -73,7 +73,7 @@ replacetron(f, /CVTSS2SI/, (m) =>
    ressq = __builtin_fmin(ressq,  2147483647.0);
    ressq = __builtin_fmax(ressq, -2147483648.0);
 
-   cpu->EAX = (int32_t)ressq;`);
+   cpu->EAX = __builtin_rint(ressq);`);
 
 replacetron(f, /XMM[0-3]/i, () => "//REMOVEME");
 

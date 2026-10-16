@@ -176,7 +176,7 @@ void render_frame(GameSession *g){
 }
 
 int n_loaded_cars(GameSession *g){
-    auto lc = (uint16_t *)(g->cpu->mem_base + 0x5bba);
+    auto lc = (int16_t *)(g->cpu->mem_base + 0x5bba);
     return lc[0];
 }
 
