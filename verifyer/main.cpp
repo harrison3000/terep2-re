@@ -34,6 +34,7 @@ int main(int argc, char **argv){
     FILE *o = fopen(argv[2], "r");
     char l[1024];
     int ln = 0;
+    int hashok = 0;
     while(fgets(l, 1024, o)){
         ln++;
         if(l[0] == 0 || l[0] == '#'){
@@ -74,7 +75,9 @@ int main(int argc, char **argv){
             uint64_t hash;
             sscanf(l, "frame_fnv1a_64: %lx", &hash);
 
-            if(hash != fnv){
+            if(hash == fnv){
+                hashok++;
+            }else{
                 printf("hash mismatch in line %d\n",ln-1);
             }
 
@@ -90,6 +93,8 @@ int main(int argc, char **argv){
         printf("unhandled line:%s\n", l);
         exit(2);
     }
+
+    printf("%d hashes ok\n",hashok);
 
 }
 
