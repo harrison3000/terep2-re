@@ -175,14 +175,16 @@ void render_frame(GameSession *g){
     FUN_main_render(g->cpu);
 }
 
-
-//these will be deleted ASAP!
-uintptr_t get_memory(GameSession *g, uintptr_t offset){
-    return g->cpu->mem_base + offset;
+int n_loaded_cars(GameSession *g){
+    auto lc = (uint16_t *)(g->cpu->mem_base + 0x5bba);
+    return lc[0];
 }
 
-uintptr_t get_segment(GameSession *g, uintptr_t seletor){
-    return g->cpu->segments[seletor];
+void *get_raw_fb(GameSession *g){
+    auto fbs = (uint16_t *)(g->cpu->mem_base + 0xdb10);
+    auto fb = g->cpu->segments[fbs[0]];
+
+    return (void*)fb;
 }
 
 
