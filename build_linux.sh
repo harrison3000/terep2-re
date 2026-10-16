@@ -2,7 +2,7 @@
 
 
 g++ -Og -g -lSDL3 \
-    linux_port/the_thing.cpp \
+    sdl_port/the_thing.cpp \
     lifted/maincode.cpp \
     lifted/othathings.cpp \
     insulator/insulator.cpp \
