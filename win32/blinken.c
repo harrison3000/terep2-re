@@ -9,8 +9,8 @@
 }
 
 st_image blinkenImg;
-//extern volatile uintptr_t all_segments[];
-uintptr_t all_segments[10] = {0};//FIXME this is just gonna crash lol
+//FIXME make this point to the segments of the C conversion
+uintptr_t all_segments[10] = {0};
 extern int started;
 
 void blinkenInit(void){
