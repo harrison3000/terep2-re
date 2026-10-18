@@ -6,4 +6,4 @@ g++ -Og -g -lSDL3 \
     lifted/maincode.cpp \
     lifted/othathings.cpp \
     insulator/insulator.cpp \
-    -o build/terep2re_linux
+    -o build/terep2re_sdl
