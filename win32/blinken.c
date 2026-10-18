@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include <stdint.h>
 #include <stdio.h>
 
 #define SETCOLORR(i,r,g,b) {                                            \
@@ -8,7 +9,8 @@
 }
 
 st_image blinkenImg;
-extern volatile uintptr_t all_segments[];
+//extern volatile uintptr_t all_segments[];
+uintptr_t all_segments[10] = {0};//FIXME this is just gonna crash lol
 extern int started;
 
 void blinkenInit(void){

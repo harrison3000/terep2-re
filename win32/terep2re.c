@@ -503,6 +503,8 @@ void call_init(HWND hwnd, char path[], int complain){
         fclose(f);
     }
 
+    new_session(&g);
+
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
 
