@@ -4,12 +4,6 @@
 #include <stdint.h>
 
 typedef struct {
-    uint16_t ax, bx, cx, dx, ok;
-    uint16_t _alignment;
-    uint32_t caller;
-} call_portal_t;
-
-typedef struct {
     BITMAPINFOHEADER info;
     RGBQUAD palette[256];
 } st_image;
@@ -25,11 +19,11 @@ void blinkenInit(void);
 
 LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void drawTheFramebuffer(HDC hdc,int scale);
+void drawTheFramebuffer(HDC hdc,int scale, void *);
 void getScaleDimension(int scale, int *w, int *h);
 
 BOOL sound_init(void);
 void sound_deinit(void);
 void sound_on(void);
 void sound_off(void);
-void adlib_callback(void);
+void adlib_callback(uint16_t);

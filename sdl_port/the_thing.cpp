@@ -9,7 +9,7 @@
 
 #include "keys.hpp"
 
-#include "../insulator/insulator.hpp"
+#include "../insulator/insulator.h"
 
 #define W 320
 #define H 200

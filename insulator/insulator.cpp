@@ -1,4 +1,4 @@
-#include "insulator.hpp"
+#include "insulator.h"
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
