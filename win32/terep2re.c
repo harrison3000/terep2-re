@@ -381,6 +381,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     (void)hPrev;
     (void)lpCmd;
 
+    set_snd_callback(adlib_callback);
+
     LoadConfig();
     // to be sure
     if (!debug_mode) {
@@ -506,10 +508,7 @@ void call_init(HWND hwnd, char path[], int complain){
     new_session(&g);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
-    //TODO find a better way, dont do this concatenation here
-    char path_2[MAX_PATH];
-    snprintf(path_2, MAX_PATH, "%s\\", path);
-    int ok = init_game(g, path_2);
+    int ok = init_game(g, path);
 
     started = 1;
 

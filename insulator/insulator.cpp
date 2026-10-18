@@ -128,8 +128,17 @@ void DOS3Call(cpu_ctx *cpu){
     return;
 }
 
+void (*snd_callback)(uint16_t) = NULL;
+
+
 void sound_thing(cpu_ctx *cpu){
-    //TODO implement sound
+    if(snd_callback){
+        snd_callback(cpu->AX);
+    }
+}
+
+void set_snd_callback(void (*cb)(uint16_t)){
+    snd_callback = cb;
 }
 
 struct GameSession{
@@ -196,6 +205,16 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
     //insensitive fopen, the function that doesn`t care about your feelings
 
     std::string dir(basedir);
+    auto l = dir.length();
+    if(dir[l-1] == '\\' || dir[l-1] == '/'){
+        dir.resize(l-1);
+    }
+    #ifdef _WIN32
+        dir += "\\";
+    #else
+        dir += "/";
+    #endif
+
     auto fullpath = dir + fname;
     auto f = fopen(fullpath.c_str(), "rb");
 

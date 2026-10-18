@@ -12,7 +12,6 @@ struct cpu_ctx {
     union {uint32_t ECX;  uint16_t CX;  struct { uint8_t CL, CH; }; };
     union {uint32_t EDX;  uint16_t DX;  struct { uint8_t DL, DH; }; };
 
-
     uint16_t SI;
     uint16_t DI;
     
@@ -24,8 +23,7 @@ struct cpu_ctx {
     uintptr_t mem_base;
     uintptr_t segments[16] = {0};
 
-    //segment registers, will be used with a multiplier to emulate segments
-    //(defined below, not exactly 16 like in the original real mode) 
+    //segment registers, will be a index in the segments array above
     uint16_t DS = 0; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
