@@ -22,3 +22,5 @@ EXTC int n_loaded_cars(GameSession *g);
 EXTC void *get_raw_fb(GameSession *g);
 EXTC uint8_t *get_palette(GameSession *g);
 EXTC void set_snd_callback(void (*cb)(uint16_t));
+
+EXTC uintptr_t* get_all_segments(GameSession *g);

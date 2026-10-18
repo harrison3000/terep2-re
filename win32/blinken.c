@@ -3,15 +3,17 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "../insulator/insulator.h"
+
 #define SETCOLORR(i,r,g,b) {                                            \
     RGBQUAD tmp = {.rgbRed = (r), .rgbGreen = (g), .rgbBlue = (b),};    \
     blinkenImg.palette[(i)] = tmp;                                      \
 }
 
 st_image blinkenImg;
-//FIXME make this point to the segments of the C conversion
-uintptr_t all_segments[10] = {0};
 extern int started;
+
+extern GameSession *g;
 
 void blinkenInit(void){
     prepare_bitmap_info(256, 256, &blinkenImg, NULL);
@@ -46,6 +48,8 @@ LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
                 char text[256];
+
+                uintptr_t *all_segments = get_all_segments(g);
 
                 for(int i = 0; i < 256; i++){
                     char* isds = (i == 0) ? " (DS)" : "";

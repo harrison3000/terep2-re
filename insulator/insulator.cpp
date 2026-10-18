@@ -147,9 +147,8 @@ struct GameSession{
 
 void new_session(GameSession **d){
     auto g = new GameSession;
-    *d = g;
-
     g->cpu = initCPU();
+    *d = g;
 }
 
 bool init_game(GameSession *g, const char* basedir){
@@ -244,4 +243,13 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
 #endif
 
     return f;
+}
+
+uintptr_t fakesegs[] = {0,0,0};
+
+uintptr_t* get_all_segments(GameSession *g){
+    if(g == NULL){
+        return fakesegs;
+    }
+    return g->cpu->segments;
 }
