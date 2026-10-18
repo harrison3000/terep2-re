@@ -22,11 +22,11 @@ struct cpu_ctx {
     uint32_t padding2;
 
     uintptr_t mem_base;
-    uintptr_t segments[16];
+    uintptr_t segments[16] = {0};
 
     //segment registers, will be used with a multiplier to emulate segments
     //(defined below, not exactly 16 like in the original real mode) 
-    uint16_t DS; //should ALWAYS be zero
+    uint16_t DS = 0; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
     uint8_t CF;

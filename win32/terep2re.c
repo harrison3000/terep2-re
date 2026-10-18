@@ -506,7 +506,10 @@ void call_init(HWND hwnd, char path[], int complain){
     new_session(&g);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
-    int ok = init_game(g, path);
+    //TODO find a better way, dont do this concatenation here
+    char path_2[MAX_PATH];
+    snprintf(path_2, MAX_PATH, "%s\\", path);
+    int ok = init_game(g, path_2);
 
     started = 1;
 
