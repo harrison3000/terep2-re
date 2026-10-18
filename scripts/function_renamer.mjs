@@ -1,8 +1,5 @@
 //@ts-check
 
-//This thing helps transform the ghidra generated label "LAB_1000_XXXX" into local labels
-//its not foolproof, needs some manual fixing
-
 
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -31,7 +28,7 @@ const renames = {};
 function entrancia(func, mark){
     var f = funcs.find(x => x[0].startsWith(func));
     if(!f){
-        console.log("func not found somehow");
+        console.log(`func "${func}" not found somehow`);
         return;
     }
 

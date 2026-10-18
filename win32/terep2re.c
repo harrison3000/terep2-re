@@ -6,21 +6,16 @@
 #include <stdio.h>
 #include <shlobj.h>
 
+#include "../insulator/insulator.h"
+
 TCHAR szAppName[] = "Terep2Win32";
 
 char iniFile[] = "TEREP2RE.INI";
 
-extern void asm_f_init(void);
-extern void asm_render(void);
-extern void asm_physics(void);
-extern void asm_keys(void);
+GameSession *g;
 
 void call_init(HWND hwnd, char path[], int complain);
 void adjustWindowSize(HWND hwnd, int w, int h);
-
-extern volatile uintptr_t all_segments[];
-extern volatile call_portal_t call_portal[];
-extern volatile uint8_t  base_mem[];
 
 HWND hBlinken;
 
@@ -228,7 +223,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                         if (run_physics) {
                             MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
                         } else {
-                           asm_physics();
+                           calculate_physics(g);
                         }
                     }
                 }
@@ -282,7 +277,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
                 DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
-                drawTheFramebuffer(hdc, selected_scale);
+                void *v = get_raw_fb(g);
+                drawTheFramebuffer(hdc, selected_scale, v);
             }
 
             EndPaint(hwnd, &ps);
@@ -307,13 +303,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                             //maybe the timer was delayed, lets bail
                             break;
                         }
-                        asm_physics();
+                        calculate_physics(g);
                     }
                     last_p_update = agora - sobra;
                 }
 
                 InvalidateRect(hwnd, 0, FALSE);
-                asm_render();
+                render_frame(g);
 
                 if (debug_mode) {
                     InvalidateRect(hBlinken, 0, FALSE);
@@ -331,7 +327,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 }
             }
             if(wParam == VK_F8 && !run_physics){
-                asm_physics();
+                calculate_physics(g);
             }
             //no break here, intentional fallthrou
         }
@@ -350,8 +346,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
 
             if(started){
-                call_portal->ax = scanCode;
-                asm_keys();
+                send_key_event(g, scanCode);
             }
 
             // NOTE(gmb): F10 activates the menu bar by default,
@@ -385,6 +380,8 @@ end:
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     (void)hPrev;
     (void)lpCmd;
+
+    set_snd_callback(adlib_callback);
 
     LoadConfig();
     // to be sure
@@ -494,8 +491,6 @@ void adjustWindowSize(HWND hwnd, int w, int h){
     InvalidateRect(hwnd, 0, TRUE);
 }
 
-char *tmp_g_path;
-
 void call_init(HWND hwnd, char path[], int complain){
     {
         char ultrapath[MAX_PATH];
@@ -510,26 +505,25 @@ void call_init(HWND hwnd, char path[], int complain){
         fclose(f);
     }
 
+    new_session(&g);
+
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
-    tmp_g_path = path;
-    asm_f_init();
-    tmp_g_path = 0;
+    int ok = init_game(g, path);
 
     started = 1;
 
-    if(call_portal->ax){
+    if(!ok){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
         exit(55);
     }
 
-    int ncars = base_mem[0x5bba];
+    int ncars = n_loaded_cars(g);
     if(ncars <= 0){
         MessageBox(NULL, "Error initializing... no cars loaded", "Fail", MB_ICONSTOP);
         exit(1);
     }
 
-    prepare_bitmap_info(320, 200, &gameImg, (uint8_t *)&base_mem[0x1a4d]);
-    asm_render(); //just to avoid garbage in the framebuffer, maybe not even necessary
+    prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }

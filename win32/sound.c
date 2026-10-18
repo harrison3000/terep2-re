@@ -9,8 +9,6 @@
 #define SOUND_VOLUME_MAX        0xFFFFFFFF
 #define SOUND_VOLUME_MIN        0x0
 
-extern volatile call_portal_t call_portal[];
-
 static opl3_chip chip;
 HWAVEOUT hWaveOut;
 WAVEHDR waveHeaders[SOUND_CHANNELS] = { 0 };
@@ -73,8 +71,7 @@ void sound_off(void){
     waveOutSetVolume(hWaveOut, SOUND_VOLUME_MIN);
 }
 
-void adlib_callback(void){
-    uint16_t ax = call_portal->ax;
+void adlib_callback(uint16_t ax){
     uint8_t reg = ax >> 8;
     uint8_t val = ax & 0xFF;
 
