@@ -30,11 +30,16 @@ int main(int argc, char **argv){
 
     auto ok = init_game(g, basedir.c_str());
 
+    if(n_loaded_cars(g) <= 0){
+        printf("no cars loaded\n");
+        exit(3);
+    }
+
+    //TODO check n loaded cars
     printf("phase 1 ok, %d\n", ok);
 
-    auto videoSegSel = ((uint16_t *)get_memory(g, 0xdb10))[0];
-    auto videoSeg = (uint8_t*)(get_segment(g, videoSegSel));
-    printf("video data: %04x, %08x\n", videoSegSel, videoSeg);
+    auto videoSeg = (uint8_t*)get_raw_fb(g);
+    printf("video data: %08x\n", videoSeg);
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *win = SDL_CreateWindow("SDL3 Palette", W, H, 0);
@@ -45,7 +50,7 @@ int main(int argc, char **argv){
 
     // Paleta de 256 cores (exemplo: 0 = Preto, 1 = Vermelho, 2 = Verde...)
     SDL_Color colors[256];
-    uint8_t *ptr = (uint8_t*)get_memory(g, 0x1a4d);
+    uint8_t *ptr = get_palette(g);
     for(int i = 0;i<256;i++){
         colors[i].r = ptr[0];
         colors[i].g = ptr[1];

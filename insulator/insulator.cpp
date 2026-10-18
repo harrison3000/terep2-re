@@ -187,6 +187,10 @@ void *get_raw_fb(GameSession *g){
     return (void*)fb;
 }
 
+uint8_t *get_palette(GameSession *g){
+    auto p = (uint8_t *)(g->cpu->mem_base + 0x1a4d);
+    return p;
+}
 
 FILE * insensitive_fopen(const char *basedir, const char* fname){
     //insensitive fopen, the function that doesn`t care about your feelings

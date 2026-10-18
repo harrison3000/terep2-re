@@ -13,3 +13,4 @@ void render_frame(GameSession *g);
 
 int n_loaded_cars(GameSession *g);
 void *get_raw_fb(GameSession *g);
+uint8_t *get_palette(GameSession *g);
