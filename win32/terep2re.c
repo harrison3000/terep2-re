@@ -39,7 +39,7 @@ int sound_enabled = 1;
 int selected_scale = T2_SCALE_P2;
 
 //get system uptime in uSecs
-int64_t GetTimeee(void){
+static inline int64_t GetTimeee(void){
     LARGE_INTEGER t;
     QueryPerformanceCounter(&t);
 
@@ -179,12 +179,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
             switch (LOWORD(wParam)) {
                 case T2_APP_OPEN: {
-                    if(started){
-                        //TODO a way to cleanup the specific parts of the memory to restart the game with another track
-                        MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
-                        goto end; //behold the root of all evil!
-                    }
-
                     char path[MAX_PATH];
                     BROWSEINFO bi = {0};
                     LPITEMIDLIST pidl;
@@ -376,7 +370,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
     }
 
-end:
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -494,27 +487,45 @@ void adjustWindowSize(HWND hwnd, int w, int h){
     InvalidateRect(hwnd, 0, TRUE);
 }
 
+int check_file(char path[], char name[]){
+    char ultrapath[MAX_PATH];
+    snprintf(ultrapath, MAX_PATH, "%s\\%s", path, name);
+    FILE * f = fopen(ultrapath, "rb");
+    if(f == NULL){
+        return 0;
+    }
+    fclose(f);
+    return 1;
+}
+
+
+
 void call_init(HWND hwnd, char path[], int complain){
-    {
-        char ultrapath[MAX_PATH];
-        snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
-        FILE * f = fopen(ultrapath, "rb");
-        if(f == NULL){
+    char *ntc[] = {"car1.dat", "col.pcx", "map.pcx", 0};
+
+    for(int i = 0 ; i < 99; i++) {
+        if(!ntc[i]){
+            break;
+        }
+        int ok = check_file(path, ntc[i]);
+        if(!ok){
             if(complain){
-                MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+                char ultraerror[256];
+                snprintf(ultraerror, 256, "File %s not found, try another folder", ntc[i]);
+                MessageBox(NULL, ultraerror, "Are you sure this a track folder?", MB_ICONSTOP);
             }
             return;
         }
-        fclose(f);
+    }
+
+    if(started){
+        end_session();
     }
 
     new_session(&g);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
-
-    started = 1;
-
     if(!ok){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
         exit(55);
@@ -526,6 +537,8 @@ void call_init(HWND hwnd, char path[], int complain){
         exit(1);
     }
 
+    started = 1;
+
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
@@ -533,7 +546,9 @@ void call_init(HWND hwnd, char path[], int complain){
 
 void end_session(){
     sound_reset();
-    finalize_game(g);
     started = 0;
+    if(g){
+        finalize_game(g);
+    }
     g = NULL;
 }
