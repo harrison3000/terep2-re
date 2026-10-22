@@ -3,7 +3,7 @@
 #include <mmsystem.h>
 #include "opl3.h"
 
-#define SOUND_SAMPLE_RATE       49716
+#define SOUND_SAMPLE_RATE       48000
 #define SOUND_CHANNELS          2
 #define SOUND_BUFFER_SIZE_CH    2048
 #define SOUND_VOLUME_MAX        0xFFFFFFFF
