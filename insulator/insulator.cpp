@@ -203,7 +203,7 @@ uint8_t *get_palette(GameSession *g){
 FILE * insensitive_fopen(const char *basedir, const char* fname){
     //insensitive fopen, the function that doesn`t care about your feelings
 
-    std::string dir(basedir);
+    std::string dir = basedir;
     auto l = dir.length();
     if(dir[l-1] == '\\' || dir[l-1] == '/'){
         dir.resize(l-1);
@@ -221,8 +221,8 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
     if(f){
         return f;
     }
-    
-    struct dirent *de;  // Pointer for directory entry
+
+    struct dirent *de;
     DIR *dr = opendir(basedir);
     if(!dr){
         return NULL;
