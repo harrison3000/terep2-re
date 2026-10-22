@@ -17,6 +17,8 @@ GameSession *g;
 void call_init(HWND hwnd, char path[], int complain);
 void adjustWindowSize(HWND hwnd, int w, int h);
 
+void end_session();
+
 HWND hBlinken;
 
 #define HZ_PHYSICS 120 //TODO check if this is right
@@ -275,7 +277,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "Please open a track to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 void *v = get_raw_fb(g);
                 drawTheFramebuffer(hdc, selected_scale, v);
@@ -329,6 +331,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if(wParam == VK_F8 && !run_physics){
                 calculate_physics(g);
             }
+            if(wParam == VK_ESCAPE && started){
+                end_session();
+                InvalidateRect(hwnd, 0, TRUE);
+            }
             //no break here, intentional fallthrou
         }
         case WM_KEYUP:
@@ -340,9 +346,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if(keyFlags & KF_UP){
                 //key released
                 scanCode += 0x80;
-            }else if(scanCode == 1){
-                //esc pressed
-                PostQuitMessage(0);
             }
 
             if(started){
@@ -526,4 +529,11 @@ void call_init(HWND hwnd, char path[], int complain){
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
+}
+
+void end_session(){
+    sound_reset();
+    finalize_game(g);
+    started = 0;
+    g = NULL;
 }

@@ -25,6 +25,10 @@ static void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, 
     }
 }
 
+void sound_reset(void){
+    OPL3_Reset(&chip, SOUND_SAMPLE_RATE);
+}
+
 BOOL sound_init(void){
     OPL3_Reset(&chip, SOUND_SAMPLE_RATE);
 
