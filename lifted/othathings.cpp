@@ -6,7 +6,7 @@
 
 
 const uint8_t initialdata[] = {
-    #embed "../memdumps/data.bin"
+    #embed "../memdumps/data_compact.bin"
 };
 
 
@@ -17,7 +17,21 @@ cpu_ctx *initCPU(){
     cpu->mem_base = (uintptr_t)memory;
     cpu->segments[0] = cpu->mem_base;
 
-    memcpy(memory, initialdata, sizeof(initialdata));
+    int oi = 0;
+    for(int i =0; i < sizeof(initialdata); i++){
+        uint8_t data = initialdata[i];
+        if(data != 0){
+            memory[oi] = data;
+            oi++;
+            continue;
+        }
+        i++;
+        uint8_t qtd = initialdata[i];
+        for(int j = 0; j<qtd; j++){
+            memory[oi] = 0;
+            oi++;
+        }
+    }
 
     strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!");
 
