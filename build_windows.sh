@@ -31,14 +31,16 @@ compile(){
         -o build/w_${item}.o &
   done
 
-  $1-w64-mingw32-g++ ${OPTIMIZATIONS} -c lifted/maincode.cpp -o build/w_maincode.o &
+  $1-w64-mingw32-g++ ${OPTIMIZATIONS} -fno-exceptions -c lifted/maincode.cpp -o build/w_maincode.o &
 
   wait
   echo "Linking everything"
 
   $1-w64-mingw32-g++         \
     ${OPTIMIZATIONS}         \
-    -mwindows -static        \
+    -mwindows                \
+    -fno-exceptions  -flto   \
+    -fno-rtti -nostdlib++    \
     build/w_*.o              \
     insulator/insulator.cpp  \
     lifted/othathings.cpp    \

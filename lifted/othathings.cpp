@@ -2,6 +2,7 @@
 #include "public_declrs.hpp"
 #include "variables.hpp"
 #include <cstdint>
+#include <cstdlib>
 #include <cstring>
 
 
@@ -11,9 +12,10 @@ const uint8_t initialdata[] = {
 
 
 cpu_ctx *initCPU(){
-    auto cpu = new cpu_ctx;
+    auto cpu = (cpu_ctx*)malloc(sizeof(cpu_ctx));
+    *cpu = {0};
 
-    auto memory = new uint8_t[2 * 1024 * 1024];
+    auto memory = (uint8_t*)calloc(1,2 * 1024 * 1024);
     cpu->mem_base = (uintptr_t)memory;
     cpu->segments[0] = cpu->mem_base;
 
@@ -35,7 +37,8 @@ cpu_ctx *initCPU(){
 
     strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!");
 
-    cpu->vars = new otherVars;
+    cpu->vars = (otherVars*)malloc(sizeof(otherVars));
+    cpu->vars[0] = {0};
 
 
     for(int i = 0; i < 128; i++){
@@ -50,10 +53,8 @@ cpu_ctx *initCPU(){
 }
 
 void finalizeCpu(cpu_ctx *cpu){
-    delete cpu->vars;
+    free(cpu->vars);
     auto mem = (uint8_t *)cpu->mem_base;
-    delete mem;
-    delete cpu;
+    free(mem);
+    free(cpu);
 }
-
-//TODO deleter

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 
 struct otherVars;
 
@@ -21,10 +20,10 @@ struct cpu_ctx {
     uint32_t padding2;
 
     uintptr_t mem_base;
-    uintptr_t segments[16] = {0};
+    uintptr_t segments[16];
 
     //segment registers, will be a index in the segments array above
-    uint16_t DS = 0; //should ALWAYS be zero
+    uint16_t DS; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
     uint8_t CF;
