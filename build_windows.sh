@@ -38,7 +38,7 @@ compile(){
 
   $1-w64-mingw32-g++         \
     ${OPTIMIZATIONS}         \
-    -mwindows                \
+    -mwindows -static-libgcc \
     -fno-exceptions  -flto   \
     -fno-rtti -nostdlib++    \
     build/w_*.o              \
