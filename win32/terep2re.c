@@ -29,7 +29,6 @@ st_image gameImg;
 
 LARGE_INTEGER tickfreq;
 
-int started = 0;
 int run_physics = 1;
 int64_t last_p_update = -1;
 int debug_mode = 0;
@@ -215,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 break;
 
                 case T2_APP_PHYS_STEP: {
-                    if (started){
+                    if (g != NULL){
                         if (run_physics) {
                             MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
                         } else {
@@ -264,7 +263,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
 
-            if (!started) {
+            if (g == NULL) {
                 RECT rc;
                 GetClientRect(hwnd, &rc);
 
@@ -282,7 +281,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         break;
 
         case WM_TIMER: {
-            if (wParam == 122 && started) {
+            if (wParam == 122 && g != NULL) {
                 if(run_physics){
                     int64_t agora = GetTimeee();
                     if(last_p_update < 0){
@@ -325,7 +324,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if(wParam == VK_F8 && !run_physics){
                 calculate_physics(g);
             }
-            if(wParam == VK_ESCAPE && started){
+            if(wParam == VK_ESCAPE && g != NULL){
                 end_session();
                 InvalidateRect(hwnd, 0, TRUE);
             }
@@ -342,7 +341,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 scanCode += 0x80;
             }
 
-            if(started){
+            if(g != NULL){
                 send_key_event(g, scanCode);
             }
 
@@ -518,7 +517,7 @@ void call_init(HWND hwnd, char path[], int complain){
         }
     }
 
-    if(started){
+    if(g != NULL){
         end_session();
     }
 
@@ -537,8 +536,6 @@ void call_init(HWND hwnd, char path[], int complain){
         exit(1);
     }
 
-    started = 1;
-
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
@@ -546,7 +543,6 @@ void call_init(HWND hwnd, char path[], int complain){
 
 void end_session(){
     sound_reset();
-    started = 0;
     if(g){
         finalize_game(g);
     }
