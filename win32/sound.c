@@ -14,6 +14,8 @@ HWAVEOUT hWaveOut;
 WAVEHDR waveHeaders[SOUND_CHANNELS] = { 0 };
 int16_t audioBuffers[SOUND_CHANNELS][SOUND_BUFFER_SIZE_CH] = { 0 };
 
+static int shouldReset = 0;
+
 static void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
     if (uMsg == WOM_DONE) {
         WAVEHDR* pHeader = (WAVEHDR*)dwParam1;
@@ -22,11 +24,18 @@ static void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, 
             OPL3_GenerateResampled(&chip, &samples[i * 2]);
         }
         waveOutWrite(hwo, pHeader, sizeof(WAVEHDR));
+
+        //done here to avoid the chip being reset right in the middle of a write
+        //it was rare but when it happened it caused a crash
+        if(shouldReset){
+            OPL3_Reset(&chip, SOUND_SAMPLE_RATE);
+            shouldReset = 0;
+        }
     }
 }
 
 void sound_reset(void){
-    OPL3_Reset(&chip, SOUND_SAMPLE_RATE);
+    shouldReset = 1;
 }
 
 BOOL sound_init(void){
