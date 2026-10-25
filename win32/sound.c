@@ -5,14 +5,15 @@
 
 #define SOUND_SAMPLE_RATE       48000
 #define SOUND_CHANNELS          2
+#define SOUND_N_BUFFERS         2
 #define SOUND_BUFFER_SIZE_CH    2048
 #define SOUND_VOLUME_MAX        0xFFFFFFFF
 #define SOUND_VOLUME_MIN        0x0
 
 static opl3_chip chip;
 HWAVEOUT hWaveOut;
-WAVEHDR waveHeaders[SOUND_CHANNELS] = { 0 };
-int16_t audioBuffers[SOUND_CHANNELS][SOUND_BUFFER_SIZE_CH] = { 0 };
+WAVEHDR waveHeaders[SOUND_N_BUFFERS] = { 0 };
+int16_t audioBuffers[SOUND_N_BUFFERS][SOUND_BUFFER_SIZE_CH] = { 0 };
 
 static int shouldReset = 0;
 
@@ -27,6 +28,7 @@ static void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, 
 
         //done here to avoid the chip being reset right in the middle of a write
         //it was rare but when it happened it caused a crash
+        //turns out this callback is called from another thread, the more you know
         if(shouldReset){
             OPL3_Reset(&chip, SOUND_SAMPLE_RATE);
             shouldReset = 0;
@@ -55,7 +57,7 @@ BOOL sound_init(void){
         return FALSE;
     }
 
-    for (int i = 0; i < SOUND_CHANNELS; i++) {
+    for (int i = 0; i < SOUND_N_BUFFERS; i++) {
         waveHeaders[i].lpData = (LPSTR)audioBuffers[i];
         waveHeaders[i].dwBufferLength = sizeof(audioBuffers[i]);
         waveHeaders[i].dwFlags = 0;
