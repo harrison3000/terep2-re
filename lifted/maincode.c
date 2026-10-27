@@ -1,6 +1,6 @@
-#include "gpu/gpu.hpp"
-#include "declrs.hpp"
-#include "variables.hpp"
+#include "gpu/gpu.h"
+#include "declrs.h"
+#include "variables.h"
 
 
 void f_init(cpu_ctx *cpu){

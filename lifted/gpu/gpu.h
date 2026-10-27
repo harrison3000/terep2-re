@@ -1,12 +1,11 @@
 //GPU stands for Gambiarra Processing Unit :)
 #pragma once
 
-#include <cstdint>
-#include <cstring>
-#include <bit>
-#include <cstdio>
+#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
 
-#include "types.hpp"
+#include "types.h"
 
 struct encangado_t {
     union {
