@@ -32,7 +32,7 @@ typedef struct {
 #define SETUP_STACK() stackItem _local_stack[16]; unsigned int _local_stack_pointer = 0;
 
 #define INST_PUSH(reg) ({   \
-    _local_stack[_local_stack_pointer] = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    _local_stack[_local_stack_pointer] = (stackItem){.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
     _local_stack_pointer++; \
 })
 
@@ -107,8 +107,8 @@ void DOS3Call(cpu_ctx*);
     ds >>= src; \
     dest = ds;  \
 })
-#define INST_ROL(dest, src) ({dest = std::rotl(dest, src);})
-#define INST_ROR(dest, src) ({dest = std::rotr(dest, src);})
+#define INST_ROL(dest, src) ({dest = __builtin_stdc_rotate_left (dest, src);})
+#define INST_ROR(dest, src) ({dest = __builtin_stdc_rotate_right(dest, src);})
 
 #define INST_INC(dest) ({dest += 1;})
 #define INST_DEC(dest) ({dest -= 1;})

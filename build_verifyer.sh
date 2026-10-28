@@ -6,4 +6,5 @@ gcc -Og -g -lSDL3 --std=gnu23 \
     lifted/maincode.c \
     lifted/othathings.c \
     insulator/insulator.c \
+    -lm \
     -o build/terep2_verifyer

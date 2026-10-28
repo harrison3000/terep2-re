@@ -12,8 +12,7 @@ const uint8_t initialdata[] = {
 
 
 cpu_ctx *initCPU(){
-    auto cpu = (cpu_ctx*)malloc(sizeof(cpu_ctx));
-    *cpu = {0};
+    auto cpu = (cpu_ctx*)calloc(1,sizeof(cpu_ctx));
 
     auto memory = (uint8_t*)calloc(1,2 * 1024 * 1024);
     cpu->mem_base = (uintptr_t)memory;
@@ -37,8 +36,7 @@ cpu_ctx *initCPU(){
 
     strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!");
 
-    cpu->vars = (otherVars*)malloc(sizeof(otherVars));
-    cpu->vars[0] = {0};
+    cpu->vars = (otherVars*)calloc(1,sizeof(otherVars));
 
     cpu->vars->CSD_DWORD_1000_12a3 = 0x7FFF0000;
     cpu->vars->CSD_BYTE_1000_59c1 = 0xf;

@@ -1,25 +1,25 @@
 #include "insulator.h"
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #ifndef _WIN32
     #include <dirent.h>
 #endif
 #include <strings.h>
 
-#include "../lifted/gpu/types.hpp"
-#include "../lifted/public_declrs.hpp"
+#include "../lifted/gpu/types.h"
+#include "../lifted/public_declrs.h"
 
 
-struct d3c_enviroment {
+typedef struct {
     FILE *f;
     char lastRP[256];
-    int current_seg = 0;
+    int current_seg;
     const char* basedir;
     bool superbad;
     int totalrd;
-};
+} d3c_enviroment;
 
 FILE * insensitive_fopen(const char *basedir, const char* fname);
 
@@ -146,13 +146,13 @@ struct GameSession{
 };
 
 void new_session(GameSession **d){
-    auto g = (GameSession*)malloc(sizeof(GameSession));
+    auto g = (GameSession*)calloc(1,sizeof(GameSession));
     g->cpu = initCPU();
     *d = g;
 }
 
 bool init_game(GameSession *g, const char* basedir){
-    auto e = d3c_enviroment{
+    auto e = (d3c_enviroment){
         .basedir = basedir,
     };
 

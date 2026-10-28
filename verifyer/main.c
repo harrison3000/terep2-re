@@ -1,14 +1,9 @@
-#include <cstdlib>
-#include <cstdio>
-#include <string_view>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "../insulator/insulator.h"
-
-#define W 320
-#define H 200
-
-
 
 
 
@@ -56,13 +51,13 @@ int main(int argc, char **argv){
             send_key_event(g, k);
             continue;
         }
-        std::string_view linha(l);
 
-        if(linha.starts_with("init")){
+        if(l[0] == 'i' && l[1] == 'n'){
             printf("Init!\n");
             continue;
         }
-        if(linha.starts_with("frame_fnv")){
+        uint64_t hash = 0;
+        if(sscanf(l, "frame_fnv1a_64: %lx", &hash) == 1){
             auto fb = (uint8_t*)get_raw_fb(g);
             uint64_t fnv = 0xcbf29ce484222325ULL;
 
@@ -72,9 +67,6 @@ int main(int argc, char **argv){
                 fnv *= 0x100000001b3ULL;
             }
 
-            uint64_t hash;
-            sscanf(l, "frame_fnv1a_64: %lx", &hash);
-
             if(hash == fnv){
                 hashok++;
             }else{
@@ -83,10 +75,10 @@ int main(int argc, char **argv){
 
             continue;
         }
-        if(linha == "\r\n"){
+        if(strcmp(l, "\r\n") == 0){
             continue;
         }
-        if(linha.starts_with("frame:")){
+        if(l[0] == 'f' && l[5] == ':'){
             continue;
         }
 
