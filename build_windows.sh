@@ -20,7 +20,7 @@ compile(){
 
   echo "Building components"
 
-  CFLAGS="${OPTIMIZATIONS} -mcrtdll=msvcrt-os -D__USE_MINGW_ANSI_STDIO=0 -fno-asynchronous-unwind-tables -fno-unwind-tables"
+  CFLAGS="${OPTIMIZATIONS} -mcrtdll=msvcrt-os -D__USE_MINGW_ANSI_STDIO=0 -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-math-errno -ffinite-math-only -fno-signed-zeros"
 
   $1-w64-mingw32-gcc ${CFLAGS} -DOPL_WF_TABLE_RUNTIME -c 3rd-party/Nuked-OPL3/opl3.c -o build/w_opl3.o &
 
