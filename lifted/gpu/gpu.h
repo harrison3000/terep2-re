@@ -32,7 +32,8 @@ typedef struct {
 #define SETUP_STACK() stackItem _local_stack[16]; unsigned int _local_stack_pointer = 0;
 
 #define INST_PUSH(reg) ({   \
-    _local_stack[_local_stack_pointer] = (stackItem){.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    stackItem i = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    _local_stack[_local_stack_pointer] = i; \
     _local_stack_pointer++; \
 })
 
