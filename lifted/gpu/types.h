@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 
-struct otherVars;
+typedef struct otherVars otherVars;
 
-struct cpu_ctx {
+typedef struct {
     // GPRs
     union {uint32_t EAX;  uint16_t AX;  struct { uint8_t AL, AH; }; };
     union {uint32_t EBX;  uint16_t BX;  struct { uint8_t BL, BH; }; };
@@ -31,4 +31,4 @@ struct cpu_ctx {
     otherVars *vars;
 
     uintptr_t extra_data;
-};
+} cpu_ctx;

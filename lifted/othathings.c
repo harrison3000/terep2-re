@@ -1,9 +1,9 @@
-#include "gpu/types.hpp"
-#include "public_declrs.hpp"
-#include "variables.hpp"
-#include <cstdint>
-#include <cstdlib>
-#include <cstring>
+#include "gpu/types.h"
+#include "public_declrs.h"
+#include "variables.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 const uint8_t initialdata[] = {
@@ -40,6 +40,8 @@ cpu_ctx *initCPU(){
     cpu->vars = (otherVars*)malloc(sizeof(otherVars));
     cpu->vars[0] = {0};
 
+    cpu->vars->CSD_DWORD_1000_12a3 = 0x7FFF0000;
+    cpu->vars->CSD_BYTE_1000_59c1 = 0xf;
 
     for(int i = 0; i < 128; i++){
         cpu->vars->CSD_DAT_keys_571e[i] = 0xff;

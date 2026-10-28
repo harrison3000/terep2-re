@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gpu/types.hpp"
-#include "public_declrs.hpp"
+#include "gpu/types.h"
+#include "public_declrs.h"
 
 void f_cam_select(cpu_ctx *cpu);
 void F_0693(cpu_ctx *cpu);
