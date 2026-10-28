@@ -11,6 +11,8 @@ if [ "$1" = "-debug" ]; then
     OPTIMIZATIONS="-Og -g"
 fi
 
+rm -f build/terep2re*.exe
+
 compile(){ 
   echo "Building $1 executable"
 
@@ -31,20 +33,18 @@ compile(){
         -o build/w_${item}.o &
   done
 
-  $1-w64-mingw32-g++ ${OPTIMIZATIONS} -fno-exceptions -c lifted/maincode.cpp -o build/w_maincode.o &
+  $1-w64-mingw32-gcc ${OPTIMIZATIONS} -c lifted/maincode.c -o build/w_maincode.o &
 
   wait
   echo "Linking everything"
 
-  $1-w64-mingw32-g++         \
+  $1-w64-mingw32-gcc         \
     ${OPTIMIZATIONS}         \
     -mwindows -static-libgcc \
-    -fno-exceptions  -flto   \
-    -fno-rtti -nostdlib++    \
     build/w_*.o              \
-    insulator/insulator.cpp  \
-    lifted/othathings.cpp    \
-    -lole32 -lwinmm          \
+    insulator/insulator.c    \
+    lifted/othathings.c      \
+    -lole32 -lwinmm  -flto   \
     -o build/terep2re$2.exe
 
   if [ "${OPTIMIZATIONS}" = "-O2" ]; then
