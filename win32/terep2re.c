@@ -57,7 +57,7 @@ static void CreateDebugConsole(void) {
 
     AttachConsole(GetCurrentProcessId());
     SetConsoleTitle(console_tilte);
-    freopen_s(&stream, "CON", "w", stdout);
+    freopen("CONOUT$", "w", stdout);
 
     printf(" Debug Console for TeREp2\n\n");
 }
