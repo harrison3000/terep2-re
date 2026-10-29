@@ -1,34 +1,27 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_events.h>
-#include <cstdio>
+#include <stdio.h>
 #include <stdint.h>
-#include <string>
+#include <stdlib.h>
 
-
-
-
-#include "keys.hpp"
+#include "keys.h"
 
 #include "../insulator/insulator.h"
 
 #define W 320
 #define H 200
 
-
-
-
-
 int main(int argc, char **argv){
     GameSession *g;
 
     new_session(&g);
 
-    std::string basedir("./");
+    const char *basedir = "./";
     if(argc > 1){
         basedir = argv[1];
     }
 
-    auto ok = init_game(g, basedir.c_str());
+    auto ok = init_game(g, basedir);
 
     if(n_loaded_cars(g) <= 0){
         printf("no cars loaded\n");
@@ -78,7 +71,7 @@ int main(int argc, char **argv){
                 //TODO do the keys thing
             }
             if(e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP){
-                auto ec = get_pc_scancode(e);
+                auto ec = get_pc_scancode(&e);
                 if(ec != 0){
                     send_key_event(g, ec);
                 }
