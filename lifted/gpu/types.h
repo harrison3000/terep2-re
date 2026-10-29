@@ -30,5 +30,7 @@ typedef struct {
 
     otherVars *vars;
 
+    uint8_t *framebuffer;
+
     uintptr_t extra_data;
 } cpu_ctx;

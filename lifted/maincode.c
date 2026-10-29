@@ -4077,15 +4077,11 @@ static void FUN_PHYSICS_2b3b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-//MODIFIED: now it only alocates and doesnt set vga to mode 13h
+//MODIFIED: now it does nothing
 static void FUN_INIT_2b70(cpu_ctx *cpu){
                               //XREF[1]:     1000:021c(c)
-   cpu->AH = 0x48;
-   cpu->BX = 0xfa0;
-   DOS3Call(cpu);
-   if(CHECK_CFLAG()) goto LAB_LOC_1;
-   MEM_WORD(0xdb10) = cpu->AX;
-   LAB_LOC_1:
+   INST_CLC();
+   MEM_WORD(0xdb10) = 15;
    return;
 
  // 1000:2b97 [UNDEFINED BYTES REMOVED]
@@ -4097,20 +4093,7 @@ static void FUN_INIT_2b70(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: this clears the framebuffer
 static void FUN_1000_2b98(cpu_ctx *cpu){
-   SETUP_STACK();
-                              //XREF[2]:     1000:02c6(c),1000:0392(c)
-   INST_PUSH(cpu->ES);
-   INST_PUSH(cpu->DI);
-   cpu->ES = MEM_WORD(0xdb10);
-   cpu->DI = 0; //was a XOR
-   cpu->CX = 0x7D00;
-   INST_CLD();
-   while(cpu->CX){
-      INST_STOSW();
-      cpu->CX--;
-   }
-   INST_POP(cpu->DI);
-   INST_POP(cpu->ES);
+   memset(cpu->framebuffer, cpu->AL, 320*200*4);
    return;
 }
 
@@ -4249,7 +4232,7 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_INC(cpu->DX);
    INST_SHL(cpu->BX, 0x2);
    INST_PUSH(cpu->ES);
-   cpu->ES = MEM_WORD(0xdb10);
+   cpu->ES = 15;
    cpu->SI = cpu->BX;
    if(MEM_WORD(0xdb12) >= 0xf0f0) goto LAB_LOC_5;
    LAB_LOC_1:
@@ -4269,7 +4252,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    while(cpu->CX){
-      INST_STOSB();
+      cpu->framebuffer[cpu->DI] = cpu->AL;
+      cpu->DI++;
       cpu->CX--;
    }
 
@@ -4298,9 +4282,10 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    LAB_LOC_8:
-   cpu->BL = SMEM_BYTE(cpu->ES,cpu->DI);
+   cpu->BL = cpu->framebuffer[cpu->DI];
    cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
-   INST_STOSB();
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   cpu->DI++;
    if (--cpu->CX != 0) goto LAB_LOC_8;
    INST_ADD(cpu->SI, 0x4);
    INST_DEC(cpu->DX);
@@ -4848,7 +4833,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_INC(cpu->DX);
    INST_SHL(cpu->BX, 0x2);
    INST_PUSH(cpu->ES);
-   cpu->ES = MEM_WORD(0xdb10);
+   cpu->ES = 15;
    LAB_LOC_1:
    cpu->DI = cpu->BX;
    INST_SHL(cpu->DI, 0x2);
@@ -4883,7 +4868,8 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_CLD();
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
-   INST_STOSB();
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   cpu->DI++;
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EBX);
    if (--cpu->CX != 0) goto LAB_LOC_3;
@@ -5578,7 +5564,7 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    INST_INC(cpu->DI);
    INST_SHL(cpu->SI, 0x2);
    INST_PUSH(cpu->ES);
-   cpu->ES = MEM_WORD(0xdb10);
+   cpu->ES = 15;
    LAB_LOC_1:
    INST_PUSH(cpu->DI);
    cpu->DI = cpu->SI;
@@ -5632,7 +5618,7 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->AL = SMEM_BYTE(cpu->FS,cpu->BX + cpu->SI);
    if(cpu->AL == 0xff) goto LAB_LOC_4;
    if(cpu->AL >= 0xf0) goto LAB_LOC_6;
-   SMEM_BYTE(cpu->ES,cpu->DI) = cpu->AL;
+   cpu->framebuffer[cpu->DI] = cpu->AL;
    LAB_LOC_4:
    INST_INC(cpu->DI);
    INST_XCHG(cpu->vars->v_upper_si, cpu->SI);
@@ -5653,11 +5639,11 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    LAB_LOC_6:
    INST_SUB(cpu->AL, 0xf0);
    cpu->AH = cpu->AL;
-   cpu->AL = SMEM_BYTE(cpu->ES,cpu->DI);
+   cpu->AL = cpu->framebuffer[cpu->DI];
    INST_XCHG(cpu->AX, cpu->BX);
    cpu->BL = MEM_BYTE(cpu->BX + 0x2e51);
    INST_XCHG(cpu->AX, cpu->BX);
-   SMEM_BYTE(cpu->ES,cpu->DI) = cpu->AL;
+   cpu->framebuffer[cpu->DI] = cpu->AL;
    goto LAB_LOC_4;
 }
 
@@ -6433,8 +6419,8 @@ static void FUN_1000_3f98(cpu_ctx *cpu){
    INST_SHR(cpu->BX, 0x1);
    INST_SHR(cpu->BX, 0x1);
    INST_ADD(cpu->BX, cpu->AX);
-   cpu->ES = MEM_WORD(0xdb10);
-   SMEM_BYTE(cpu->ES,cpu->BX) = cpu->CL;
+   cpu->ES = 15;
+   cpu->framebuffer[cpu->BX] = cpu->CL;
    INST_POP(cpu->ES);
    LAB_LOC_1:
    return;

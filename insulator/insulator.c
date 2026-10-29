@@ -189,8 +189,7 @@ int n_loaded_cars(GameSession *g){
 }
 
 void *get_raw_fb(GameSession *g){
-    auto fbs = (uint16_t *)(g->cpu->mem_base + 0xdb10);
-    auto fb = g->cpu->segments[fbs[0]];
+    auto fb = g->cpu->framebuffer;
 
     return (void*)fb;
 }
