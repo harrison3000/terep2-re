@@ -11,6 +11,8 @@ typedef struct {
 })[0]
 
 //the functions here were made by analysing the ghidra decompiler and the ASM and rewritten by hand
+//the terep2vb project was consulted for some very high level info
+//for example, what each span is, but no code was copied
 
 
 //draws flat polygons
@@ -95,15 +97,33 @@ void draw_textured(cpu_ctx *cpu){
 
   for(int l = ini; l <= end; l++){
     auto p = prs[l];
-    auto col = prsb[l];
+    auto u = prsa[l];
+    auto v = prsb[l];
+
     if(p.b < p.a){
       INST_XCHG(p.a, p.b);
+      INST_XCHG(u.a, u.b);
+      INST_XCHG(v.a, v.b);
     }
 
+    int len = p.b - p.a;
+    if(len == 0){
+      continue;
+    }
+    int us  = ((int)u.b - (int)u.a) / len;
+    int vs  = ((int)v.b - (int)v.a) / len;
+
+    int uu = u.a;
+    int vv = v.a;
+
+
     for(int c = p.a; c < p.b; c++){
-      //FIXME this is very wrong!
-      //I`ll fix later
-      FB_ACCESS(l, c) = col.a >> 8;
+      uint16_t ti = (vv & 0xff00) + ((uu & 0xff00) >> 8);
+
+      FB_ACCESS(l, c) = texture[ti];
+
+      uu += us;
+      vv += vs;
     }
   }
 
