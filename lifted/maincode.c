@@ -4757,63 +4757,7 @@ static void FUN_1000_317d(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 static void FUN_1000_31d1(cpu_ctx *cpu){
-   SETUP_STACK();
-                              //XREF[1]:     1000:3177(c)
-   cpu->BX = MEM_WORD(0xdbc4);
-   cpu->DX = MEM_WORD(0xdbc6);
-   INST_SUB(cpu->DX, cpu->BX);
-   if(cpu->DX == 0) goto LAB_LOC_4;
-   INST_INC(cpu->DX);
-   INST_SHL(cpu->BX, 0x2);
-   INST_PUSH(cpu->ES);
-   cpu->ES = 15;
-   LAB_LOC_1:
-   cpu->DI = cpu->BX;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->BX);
-   INST_SHL(cpu->DI, 0x4);
-   INST_PUSH(cpu->BX);
-   INST_PUSH(cpu->DX);
-   cpu->AX = MEM_WORD(cpu->BX + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->BX + 0xdbca);
-   cpu->BP = MEM_WORD(cpu->BX + 0xdee8);
-   cpu->DX = MEM_WORD(cpu->BX + 0xdeea);
-   INST_SUB(cpu->DX, cpu->BP);
-   INST_SUB(cpu->CX, cpu->AX);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
-   INST_ADD(cpu->AX, cpu->CX);
-   INST_NEG(cpu->CX);
-   INST_ADD(cpu->BP, cpu->DX);
-   INST_NEG(cpu->DX);
-   LAB_LOC_2:
-   INST_PUSH(cpu->BP);
-   INST_INC(cpu->CX);
-   INST_ADD(cpu->DI, cpu->AX);
-   INST_MOVSX(cpu->EAX, cpu->DX);
-   INST_SHL(cpu->EAX, 0x8);
-   INST_CDQ();
-   INST_MOVZX(cpu->ECX, cpu->CX);
-   INST_IDIV(cpu->ECX);
-   cpu->EBX = cpu->EAX;
-   INST_POP(cpu->AX);
-   INST_MOVSX(cpu->EAX, cpu->AX);
-   INST_SHL(cpu->EAX, 0x8);
-   INST_CLD();
-   LAB_LOC_3:
-   INST_ROR(cpu->EAX, 0x10);
-   cpu->framebuffer[cpu->DI] = cpu->AL;
-   cpu->DI++;
-   INST_ROL(cpu->EAX, 0x10);
-   INST_ADD(cpu->EAX, cpu->EBX);
-   if (--cpu->CX != 0) goto LAB_LOC_3;
-   INST_POP(cpu->DX);
-   INST_POP(cpu->BX);
-   INST_ADD(cpu->BX, 0x4);
-   INST_DEC(cpu->DX);
-   if(cpu->DX != 0) goto LAB_LOC_1;
-   INST_POP(cpu->ES);
-   LAB_LOC_4:
-   return;
+   draw_gradient(cpu);
 }
 
 //************************************************************************************************

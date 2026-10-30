@@ -10,6 +10,8 @@ typedef struct {
    &cpu->framebuffer[idx]; \
 })[0]
 
+//the functions here were made by analysing the ghidra decompiler and the ASM and rewritten by hand
+
 
 //draws flat polygons
 //does the same thing as 2d61
@@ -47,4 +49,32 @@ void draw_flat(cpu_ctx *cpu){
 
 
   return;
+}
+
+//31d1 reimplementation
+void draw_gradient(cpu_ctx *cpu){
+  int ini = MEM_WORD(0xdbc4);
+  int end = MEM_WORD(0xdbc6);
+  if(ini == end){
+    return;
+  }
+
+  intpair *prs  = (intpair*)&MEM_WORD(0xdbc8);
+  intpair *cprs = (intpair*)&MEM_WORD(0xdee8);
+
+  for(int l = ini; l <= end; l++){
+    auto p = prs[l];
+    auto col = cprs[l];
+    if(p.b < p.a){
+      INST_XCHG(p.a, p.b);
+      INST_XCHG(col.a, col.b);
+    }
+
+    for(int c = p.a; c < p.b; c++){
+      //FIXME this is very wrong!
+      //I`ll fix later
+      FB_ACCESS(l, c) = col.a >> 8;
+    }
+  }
+
 }
