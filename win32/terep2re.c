@@ -387,7 +387,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     BOOL sound_ok = sound_init();
     if (!sound_ok) {
         MessageBox(NULL, "Failed to initialise sound!", szAppName, MB_ICONERROR);
-        return 0;
     }
 
     if (sound_enabled) {
