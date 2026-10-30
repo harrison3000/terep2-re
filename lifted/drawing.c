@@ -21,11 +21,13 @@ void draw_flat(cpu_ctx *cpu){
     return;
   }
 
-  uint16_t color16 = MEM_WORD(0xdb12);
+  uint16_t color = MEM_WORD(0xdb12);
   intpair *prs = (intpair*)&MEM_WORD(0xdbc8);
-  bool transp = color16 >= 0xf0f0;
+  bool transp = color >= 0xf0f0;
   uint8_t *transp_tbl = &MEM_BYTE(0x2e51);
-  uint8_t color = color16 & 0xff;
+  if(transp){
+    color -= 0xf000;
+  }
 
   for(int l = ini; l <= end; l++){
     auto p = prs[l];
@@ -38,7 +40,7 @@ void draw_flat(cpu_ctx *cpu){
         uint8_t col = FB_ACCESS(l, c);
         FB_ACCESS(l, c) = transp_tbl[col];
       }else{
-        FB_ACCESS(l, c) = color;
+        FB_ACCESS(l, c) = color & 0xff;
       }
     }
   }
