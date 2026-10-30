@@ -14,10 +14,11 @@ typedef struct {
 //the terep2vb project was consulted for some very high level info
 //for example, what each span is, but no code was copied
 
+//BUG: some seams are leaking, textures of polygons near the camera go crazy
+
 
 //draws flat polygons
 //does the same thing as 2d61
-//BUG: some seams are leaking... oh well, we will fix it later
 void draw_flat(cpu_ctx *cpu){
   int ini = MEM_WORD(0xdbc4);
   int end = MEM_WORD(0xdbc6);
