@@ -3,6 +3,8 @@
 #include "variables.h"
 
 
+#define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) + (_b)]
+
 void f_init(cpu_ctx *cpu){
    SETUP_STACK();
    MEM_WORD(0x5bba) = -2; //just to be sure
@@ -4229,6 +4231,7 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_2d61(cpu_ctx *cpu){
    SETUP_STACK();
+   int line = 0;
                               //XREF[1]:     1000:2c45(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4241,10 +4244,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    cpu->SI = cpu->BX;
    if(MEM_WORD(0xdb12) >= 0xf0f0) goto LAB_LOC_5;
    LAB_LOC_1:
-   cpu->DI = cpu->SI;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->SI);
-   INST_SHL(cpu->DI, 0x4);
+   cpu->DI = 0;
+   line = cpu->SI;
    cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
    INST_SUB(cpu->CX, cpu->AX);
@@ -4257,7 +4258,7 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    while(cpu->CX){
-      cpu->framebuffer[cpu->DI] = cpu->AL;
+      FB_ACCESS(line*80, cpu->DI) = cpu->AL;
       cpu->DI++;
       cpu->CX--;
    }
@@ -4272,10 +4273,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    cpu->BX = MEM_WORD(0xdb12);
    INST_SUB(cpu->BH, 0xf0);
    LAB_LOC_6:
-   cpu->DI = cpu->SI;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->SI);
-   INST_SHL(cpu->DI, 0x4);
+   cpu->DI = 0;
+   line = cpu->SI;
    cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
    INST_SUB(cpu->CX, cpu->AX);
@@ -4287,15 +4286,16 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    LAB_LOC_8:
-   cpu->BL = cpu->framebuffer[cpu->DI];
+   cpu->BL = FB_ACCESS(line*80, cpu->DI);
    cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
-   cpu->framebuffer[cpu->DI] = cpu->AL;
+   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
    cpu->DI++;
    if (--cpu->CX != 0) goto LAB_LOC_8;
    INST_ADD(cpu->SI, 0x4);
    INST_DEC(cpu->DX);
    if(cpu->DX != 0) goto LAB_LOC_6;
    INST_POP(cpu->ES);
+   cpu->DI = 0;
    return;
 }
 
@@ -4830,6 +4830,7 @@ static void FUN_1000_317d(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_31d1(cpu_ctx *cpu){
    SETUP_STACK();
+   int line = 0;
                               //XREF[1]:     1000:3177(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4840,10 +4841,8 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_PUSH(cpu->ES);
    cpu->ES = 15;
    LAB_LOC_1:
-   cpu->DI = cpu->BX;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->BX);
-   INST_SHL(cpu->DI, 0x4);
+   cpu->DI = 0;
+   line = cpu->BX;
    INST_PUSH(cpu->BX);
    INST_PUSH(cpu->DX);
    cpu->AX = MEM_WORD(cpu->BX + 0xdbc8);
@@ -4873,7 +4872,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_CLD();
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
-   cpu->framebuffer[cpu->DI] = cpu->AL;
+   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
    cpu->DI++;
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EBX);
@@ -4885,6 +4884,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    if(cpu->DX != 0) goto LAB_LOC_1;
    INST_POP(cpu->ES);
    LAB_LOC_4:
+   cpu->DI = 0;
    return;
 }
 
@@ -5561,6 +5561,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
 static void FUN_1000_3827(cpu_ctx *cpu){
    SETUP_STACK();
+   int line = 0;
                               //XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
    cpu->DI = MEM_WORD(0xdbc6);
@@ -5572,10 +5573,8 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->ES = 15;
    LAB_LOC_1:
    INST_PUSH(cpu->DI);
-   cpu->DI = cpu->SI;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->SI);
-   INST_SHL(cpu->DI, 0x4);
+   cpu->DI = 0;
+   line = cpu->SI;
    INST_PUSH(cpu->SI);
    cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
    cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
@@ -5623,7 +5622,7 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->AL = SMEM_BYTE(cpu->FS,cpu->BX + cpu->SI);
    if(cpu->AL == 0xff) goto LAB_LOC_4;
    if(cpu->AL >= 0xf0) goto LAB_LOC_6;
-   cpu->framebuffer[cpu->DI] = cpu->AL;
+   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
    LAB_LOC_4:
    INST_INC(cpu->DI);
    INST_XCHG(cpu->vars->v_upper_si, cpu->SI);
@@ -5640,15 +5639,16 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    if(cpu->DI != 0) goto LAB_LOC_1;
    INST_POP(cpu->ES);
    LAB_LOC_5:
+   cpu->DI = 0;
    return;
    LAB_LOC_6:
    INST_SUB(cpu->AL, 0xf0);
    cpu->AH = cpu->AL;
-   cpu->AL = cpu->framebuffer[cpu->DI];
+   cpu->AL = FB_ACCESS(line*80, cpu->DI);
    INST_XCHG(cpu->AX, cpu->BX);
    cpu->BL = MEM_BYTE(cpu->BX + 0x2e51);
    INST_XCHG(cpu->AX, cpu->BX);
-   cpu->framebuffer[cpu->DI] = cpu->AL;
+   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
    goto LAB_LOC_4;
 }
 
