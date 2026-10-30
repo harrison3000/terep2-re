@@ -13,6 +13,7 @@ typedef struct {
 
 //draws flat polygons
 //does the same thing as 2d61
+//BUG: some seams are leaking... oh well, we will fix it later
 void draw_flat(cpu_ctx *cpu){
   int ini = MEM_WORD(0xdbc4);
   int end = MEM_WORD(0xdbc6);
@@ -20,8 +21,11 @@ void draw_flat(cpu_ctx *cpu){
     return;
   }
 
-  uint16_t color = MEM_WORD(0xdb12);
+  uint16_t color16 = MEM_WORD(0xdb12);
   intpair *prs = (intpair*)&MEM_WORD(0xdbc8);
+  bool transp = color16 >= 0xf0f0;
+  uint8_t *transp_tbl = &MEM_BYTE(0x2e51);
+  uint8_t color = color16 & 0xff;
 
   for(int l = ini; l <= end; l++){
     auto p = prs[l];
@@ -30,7 +34,12 @@ void draw_flat(cpu_ctx *cpu){
     }
       
     for(int c = p.a; c < p.b; c++){
-      FB_ACCESS(l, c) = color & 0xff;
+      if(transp){
+        uint8_t col = FB_ACCESS(l, c);
+        FB_ACCESS(l, c) = transp_tbl[col];
+      }else{
+        FB_ACCESS(l, c) = color;
+      }
     }
   }
 
