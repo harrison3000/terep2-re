@@ -1,30 +1,29 @@
 //GPU stands for Gambiarra Processing Unit :)
 #pragma once
 
-#include <cstdint>
-#include <cstring>
-#include <bit>
-#include <cstdio>
+#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
 
-#include "types.hpp"
+#include "types.h"
 
-struct encangado_t {
+typedef struct {
     union {
         uint32_t big; int32_t sign_big;
         struct { uint16_t lo_word, hi_word; }; 
     };
-};
+} encangado_t;
 
-struct encangado64_t {
+typedef struct {
     union {
         uint64_t big; int64_t sign_big;
         struct { uint32_t lo, hi; }; 
     };
-};
+} encangado64_t;
 
-struct stackItem {
+typedef struct {
     uint32_t value;  uint16_t line; uint16_t size;
-};
+} stackItem;
 
 #define def_datareg 0
 
@@ -33,7 +32,8 @@ struct stackItem {
 #define SETUP_STACK() stackItem _local_stack[16]; unsigned int _local_stack_pointer = 0;
 
 #define INST_PUSH(reg) ({   \
-    _local_stack[_local_stack_pointer] = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    stackItem i = {.value = reg, .line = __LINE__, .size = sizeof(reg)}; \
+    _local_stack[_local_stack_pointer] = i; \
     _local_stack_pointer++; \
 })
 
@@ -77,10 +77,11 @@ struct stackItem {
 #define SIGN_SMEM_WORD(seg, addr)  GEN_SMEM(int16_t, seg, addr)
 #define SIGN_SMEM_DWORD(seg, addr) GEN_SMEM(int32_t, seg, addr)
 
-
-static inline int8_t SIGNED(uint8_t v) { return v; }
-static inline int16_t SIGNED(uint16_t v) { return v; }
-static inline int32_t SIGNED(uint32_t v) { return v; } 
+#define SIGNED(_val) _Generic((_val), \
+    uint8_t  : ((int8_t )(_val)),     \
+    uint16_t : ((int16_t)(_val)),     \
+    uint32_t : ((int32_t)(_val))      \
+)
 
 //the builtin is the oposite of the x86 flag
 #define PARITY(val) (!__builtin_parity(val & 0xff))
@@ -107,8 +108,8 @@ void DOS3Call(cpu_ctx*);
     ds >>= src; \
     dest = ds;  \
 })
-#define INST_ROL(dest, src) ({dest = std::rotl(dest, src);})
-#define INST_ROR(dest, src) ({dest = std::rotr(dest, src);})
+#define INST_ROL(dest, src) ({dest = __builtin_stdc_rotate_left (dest, src);})
+#define INST_ROR(dest, src) ({dest = __builtin_stdc_rotate_right(dest, src);})
 
 #define INST_INC(dest) ({dest += 1;})
 #define INST_DEC(dest) ({dest -= 1;})
@@ -193,7 +194,7 @@ void DOS3Call(cpu_ctx*);
 })
 
 
-static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
+static inline void inner_imul16(cpu_ctx *cpu, uint16_t a){
     auto as = SIGNED(a);
     auto sax = SIGNED(cpu->AX);
 
@@ -202,7 +203,7 @@ static inline void inner_imul(cpu_ctx *cpu, uint16_t a){
     cpu->AX = res.lo_word;
     cpu->DX = res.hi_word;
 }
-static inline void inner_imul(cpu_ctx *cpu, uint32_t a){
+static inline void inner_imul32(cpu_ctx *cpu, uint32_t a){
     auto as = SIGNED(a);
     auto bs = SIGNED(cpu->EAX);
 
@@ -212,7 +213,10 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a){
     cpu->EDX = res.hi;
 }
 
-#define INST_IMUL(op) inner_imul(cpu, op)
+#define INST_IMUL(op) _Generic((op),  \
+    uint16_t : inner_imul16(cpu, op), \
+    uint32_t : inner_imul32(cpu, op)  \
+)
 
 #define INST_IMUL2(dest, src) ({ \
     static_assert(sizeof(dest) == 4, "We only support 32bit for this instruction"); \
@@ -222,7 +226,7 @@ static inline void inner_imul(cpu_ctx *cpu, uint32_t a){
     dest = res;                  \
 })
 
-static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
+static inline void inner_idiv16(cpu_ctx *cpu, uint16_t a){
     encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
     int32_t num = numm.sign_big;
     int32_t den = SIGNED(a);
@@ -231,7 +235,7 @@ static inline void inner_idiv(cpu_ctx *cpu, uint16_t a){
     cpu->DX = (uint16_t)(num % den);
 }
 
-static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
+static inline void inner_idiv32(cpu_ctx *cpu, uint32_t a){
     encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
     int64_t num = numm.sign_big;
     int64_t den = SIGNED(a);
@@ -240,7 +244,10 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
     cpu->EDX = (uint32_t)(num % den);
 }
 
-#define INST_IDIV(a) inner_idiv(cpu, a);
+#define INST_IDIV(a) _Generic((a),   \
+    uint16_t : inner_idiv16(cpu, a), \
+    uint32_t : inner_idiv32(cpu, a)  \
+)
 
 
 #define INST_CLC() ({cpu->CF = 0;})
@@ -277,23 +284,24 @@ static inline void inner_idiv(cpu_ctx *cpu, uint32_t a){
 
 
 
-static inline void inner_div(cpu_ctx *cpu, uint16_t a) {
+static inline void inner_div16(cpu_ctx *cpu, uint16_t a) {
     encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
     uint32_t num = numm.big;
     cpu->AX = (uint16_t)(num / a);
     cpu->DX = (uint16_t)(num % a);
 }
 
-static inline void inner_div(cpu_ctx *cpu, uint32_t a) {
+static inline void inner_div32(cpu_ctx *cpu, uint32_t a) {
     encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
     uint64_t num = numm.big;
     cpu->EAX = (uint32_t)(num / a);
     cpu->EDX = (uint32_t)(num % a);
 }
 
-#define INST_DIV(op) inner_div(cpu, op)
-
-
+#define INST_DIV(op) _Generic((op),  \
+    uint16_t : inner_div16(cpu, op), \
+    uint32_t : inner_div32(cpu, op)  \
+)
 
 
 #define INST_CLC() ({cpu->CF = 0;})

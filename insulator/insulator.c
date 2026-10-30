@@ -1,25 +1,25 @@
 #include "insulator.h"
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <string>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #ifndef _WIN32
     #include <dirent.h>
 #endif
 #include <strings.h>
 
-#include "../lifted/gpu/types.hpp"
-#include "../lifted/public_declrs.hpp"
+#include "../lifted/gpu/types.h"
+#include "../lifted/public_declrs.h"
 
 
-struct d3c_enviroment {
+typedef struct {
     FILE *f;
-    std::string lastRP;
-    int current_seg = 0;
+    char lastRP[256];
+    int current_seg;
     const char* basedir;
-    bool superbad = false;
+    bool superbad;
     int totalrd;
-};
+} d3c_enviroment;
 
 FILE * insensitive_fopen(const char *basedir, const char* fname);
 
@@ -31,8 +31,8 @@ void DOS3Call(cpu_ctx *cpu){
         case 0x3d00:{
             //open
             auto addr = cpu->mem_base + cpu->DX;
-            std::string filename((char*)addr);
-            if(filename == ""){
+            auto filename = (char*)addr;
+            if(filename[0] == 0){
                 printf("Tried to load a empty filename, probably better to bail out\n");
                 cpu->CF = 1;
                 return;
@@ -42,9 +42,9 @@ void DOS3Call(cpu_ctx *cpu){
                 e->superbad = true;
             }
 
-            auto fd = insensitive_fopen(e->basedir, (char*)addr);
+            auto fd = insensitive_fopen(e->basedir, filename);
             auto ok = fd != 0 ? "OK" : "BAD";
-            printf("* trying to open: %s, returned: %s\n", filename.c_str(), ok);
+            printf("* trying to open: %s, returned: %s\n", filename, ok);
             e->f = fd;
             cpu->CF = fd == 0;
             cpu->AX = 97;
@@ -76,8 +76,8 @@ void DOS3Call(cpu_ctx *cpu){
 
             char currRP[256];
             snprintf(currRP, 256, "Read %ld bytes from file into DS:%04x", r, cpu->DX);
-            if(e->lastRP != currRP){
-                e->lastRP = currRP;
+            if(strcmp(e->lastRP, currRP) != 0){
+                strncpy(e->lastRP, currRP, 256);
                 printf("%s\n", currRP);
             }else{
                 //read msg same as the last, just print a single period
@@ -113,7 +113,7 @@ void DOS3Call(cpu_ctx *cpu){
         case 0x3e00:{
             int ok = fclose(e->f);
             e->f = NULL;
-            e->lastRP = "";
+            e->lastRP[0] = 0;
             printf("* File closed\n* Total read: %d\n=====================\n", e->totalrd);
             e->totalrd = 0;
             cpu->CF = ok != 0;
@@ -146,13 +146,13 @@ struct GameSession{
 };
 
 void new_session(GameSession **d){
-    auto g = new GameSession;
+    auto g = (GameSession*)calloc(1,sizeof(GameSession));
     g->cpu = initCPU();
     *d = g;
 }
 
 bool init_game(GameSession *g, const char* basedir){
-    auto e = d3c_enviroment{
+    auto e = (d3c_enviroment){
         .basedir = basedir,
     };
 
@@ -165,7 +165,7 @@ bool init_game(GameSession *g, const char* basedir){
 
 void finalize_game(GameSession *g){
     finalizeCpu(g->cpu);
-    delete g;
+    free(g);
 }
 
 
@@ -203,26 +203,23 @@ uint8_t *get_palette(GameSession *g){
 FILE * insensitive_fopen(const char *basedir, const char* fname){
     //insensitive fopen, the function that doesn`t care about your feelings
 
-    std::string dir(basedir);
-    auto l = dir.length();
-    if(dir[l-1] == '\\' || dir[l-1] == '/'){
-        dir.resize(l-1);
-    }
-    #ifdef _WIN32
-        dir += "\\";
-    #else
-        dir += "/";
-    #endif
+    char fullpath[512] = {0};
 
-    auto fullpath = dir + fname;
-    auto f = fopen(fullpath.c_str(), "rb");
+#ifdef _WIN32
+    snprintf(fullpath, 512, "%s\\%s", basedir, fname);
 
-#ifndef _WIN32
+    return fopen(fullpath, "rb");
+
+#else
+    snprintf(fullpath, 512, "%s/%s", basedir, fname);
+
+    auto f = fopen(fullpath, "rb");
+
     if(f){
         return f;
     }
-    
-    struct dirent *de;  // Pointer for directory entry
+
+    struct dirent *de;
     DIR *dr = opendir(basedir);
     if(!dr){
         return NULL;
@@ -232,17 +229,14 @@ FILE * insensitive_fopen(const char *basedir, const char* fname){
             continue;
         }
 
-        auto fullpath = dir + de->d_name;
-        f = fopen(fullpath.c_str(), "rb");
-        if(f){
-            break;
-        }
+        snprintf(fullpath, 512, "%s/%s", basedir, de->d_name);
+        f = fopen(fullpath, "rb");
+        break;
     }
 
     closedir(dr);
-#endif
-
     return f;
+#endif
 }
 
 uintptr_t fakesegs[] = {0,0,0};

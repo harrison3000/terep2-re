@@ -1,9 +1,10 @@
 #!/bin/bash
 
 
-g++ -Og -g -lSDL3 \
-    verifyer/main.cpp \
-    lifted/maincode.cpp \
-    lifted/othathings.cpp \
-    insulator/insulator.cpp \
+gcc -Og -g -lSDL3 --std=gnu23 \
+    verifyer/main.c \
+    lifted/maincode.c \
+    lifted/othathings.c \
+    insulator/insulator.c \
+    -lm \
     -o build/terep2_verifyer

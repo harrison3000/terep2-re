@@ -3,6 +3,13 @@
 import {readFile, writeFile} from "node:fs/promises";
 import { classifyRegs, classifyLit, classifyMem, debugIntermediaries, preclassifier, splitabom, doTheThingInst, processProlog } from "./utils_converter.mjs";
 
+const public_funcs = {
+    "FUN_timer_5680": true,
+    "FUN_keyboard_56df": true,
+    "f_init": true,
+    "FUN_main_render": true,
+};
+
 /**
  * @type {string[]}
  */
@@ -78,7 +85,8 @@ const u = ops.map(function(a){
     }
     if(c === "FUNC_LABEL"){
         const f = a.command.slice(0,-1);
-        let r = `void ${f}(cpu_ctx *cpu){`;
+        const st = public_funcs[f] ? "" : "static ";
+        let r = `${st}void ${f}(cpu_ctx *cpu){`;
         if(a.usesStack){
             r += "\n   SETUP_STACK();";
         }

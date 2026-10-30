@@ -1,11 +1,10 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
+#include <stdint.h>
 
-struct otherVars;
+typedef struct otherVars otherVars;
 
-struct cpu_ctx {
+typedef struct {
     // GPRs
     union {uint32_t EAX;  uint16_t AX;  struct { uint8_t AL, AH; }; };
     union {uint32_t EBX;  uint16_t BX;  struct { uint8_t BL, BH; }; };
@@ -21,10 +20,10 @@ struct cpu_ctx {
     uint32_t padding2;
 
     uintptr_t mem_base;
-    uintptr_t segments[16] = {0};
+    uintptr_t segments[16];
 
     //segment registers, will be a index in the segments array above
-    uint16_t DS = 0; //should ALWAYS be zero
+    uint16_t DS; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
     uint8_t CF;
@@ -32,4 +31,4 @@ struct cpu_ctx {
     otherVars *vars;
 
     uintptr_t extra_data;
-};
+} cpu_ctx;

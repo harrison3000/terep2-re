@@ -108,12 +108,12 @@ mergetron(f, "SHL", "RCL");
 const filtratada = f.filter(x => x !== "//REMOVEME");
 
 filtratada.splice(0,0,
-    `#include "gpu/gpu.hpp"`,
-    `#include "declrs.hpp"`,
-    `#include "variables.hpp"`,
+    `#include "gpu/gpu.h"`,
+    `#include "declrs.h"`,
+    `#include "variables.h"`,
     "");
 
 
-await writeFile("lifted/maincode.cpp", filtratada.join("\n"));
+await writeFile("lifted/maincode.c", filtratada.join("\n"));
 
 debugger;

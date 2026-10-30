@@ -24,6 +24,7 @@ void getScaleDimension(int scale, int *w, int *h);
 
 BOOL sound_init(void);
 void sound_deinit(void);
+void sound_reset(void);
 void sound_on(void);
 void sound_off(void);
 void adlib_callback(uint16_t);

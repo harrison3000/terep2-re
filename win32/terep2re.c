@@ -17,6 +17,8 @@ GameSession *g;
 void call_init(HWND hwnd, char path[], int complain);
 void adjustWindowSize(HWND hwnd, int w, int h);
 
+void end_session();
+
 HWND hBlinken;
 
 #define HZ_PHYSICS 120 //TODO check if this is right
@@ -27,7 +29,6 @@ st_image gameImg;
 
 LARGE_INTEGER tickfreq;
 
-int started = 0;
 int run_physics = 1;
 int64_t last_p_update = -1;
 int debug_mode = 0;
@@ -37,7 +38,7 @@ int sound_enabled = 1;
 int selected_scale = T2_SCALE_P2;
 
 //get system uptime in uSecs
-int64_t GetTimeee(void){
+static inline int64_t GetTimeee(void){
     LARGE_INTEGER t;
     QueryPerformanceCounter(&t);
 
@@ -56,7 +57,7 @@ static void CreateDebugConsole(void) {
 
     AttachConsole(GetCurrentProcessId());
     SetConsoleTitle(console_tilte);
-    freopen_s(&stream, "CON", "w", stdout);
+    freopen("CONOUT$", "w", stdout);
 
     printf(" Debug Console for TeREp2\n\n");
 }
@@ -177,12 +178,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
             switch (LOWORD(wParam)) {
                 case T2_APP_OPEN: {
-                    if(started){
-                        //TODO a way to cleanup the specific parts of the memory to restart the game with another track
-                        MessageBox(hwnd, "The game already started!", "Error", MB_ICONSTOP);
-                        goto end; //behold the root of all evil!
-                    }
-
                     char path[MAX_PATH];
                     BROWSEINFO bi = {0};
                     LPITEMIDLIST pidl;
@@ -219,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 break;
 
                 case T2_APP_PHYS_STEP: {
-                    if (started){
+                    if (g != NULL){
                         if (run_physics) {
                             MessageBox(NULL, "Simulation is running, please stop it to use single-step mode!", "Error", MB_ICONSTOP);
                         } else {
@@ -268,14 +263,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
 
-            if (!started) {
+            if (g == NULL) {
                 RECT rc;
                 GetClientRect(hwnd, &rc);
 
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "Please open a track to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 void *v = get_raw_fb(g);
                 drawTheFramebuffer(hdc, selected_scale, v);
@@ -286,7 +281,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         break;
 
         case WM_TIMER: {
-            if (wParam == 122 && started) {
+            if (wParam == 122 && g != NULL) {
                 if(run_physics){
                     int64_t agora = GetTimeee();
                     if(last_p_update < 0){
@@ -329,6 +324,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if(wParam == VK_F8 && !run_physics){
                 calculate_physics(g);
             }
+            if(wParam == VK_ESCAPE && g != NULL){
+                end_session();
+                InvalidateRect(hwnd, 0, TRUE);
+            }
             //no break here, intentional fallthrou
         }
         case WM_KEYUP:
@@ -340,12 +339,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if(keyFlags & KF_UP){
                 //key released
                 scanCode += 0x80;
-            }else if(scanCode == 1){
-                //esc pressed
-                PostQuitMessage(0);
             }
 
-            if(started){
+            if(g != NULL){
                 send_key_event(g, scanCode);
             }
 
@@ -373,7 +369,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
     }
 
-end:
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -491,27 +486,45 @@ void adjustWindowSize(HWND hwnd, int w, int h){
     InvalidateRect(hwnd, 0, TRUE);
 }
 
+int check_file(char path[], char name[]){
+    char ultrapath[MAX_PATH];
+    snprintf(ultrapath, MAX_PATH, "%s\\%s", path, name);
+    FILE * f = fopen(ultrapath, "rb");
+    if(f == NULL){
+        return 0;
+    }
+    fclose(f);
+    return 1;
+}
+
+
+
 void call_init(HWND hwnd, char path[], int complain){
-    {
-        char ultrapath[MAX_PATH];
-        snprintf(ultrapath, MAX_PATH, "%s\\car1.dat", path);
-        FILE * f = fopen(ultrapath, "rb");
-        if(f == NULL){
+    char *ntc[] = {"car1.dat", "col.pcx", "map.pcx", 0};
+
+    for(int i = 0 ; i < 99; i++) {
+        if(!ntc[i]){
+            break;
+        }
+        int ok = check_file(path, ntc[i]);
+        if(!ok){
             if(complain){
-                MessageBox(NULL, "The selected directory doesn't seem to contain a track.", "Huh, car1.dat not found, try again!", MB_ICONSTOP);
+                char ultraerror[256];
+                snprintf(ultraerror, 256, "File %s not found, try another folder", ntc[i]);
+                MessageBox(NULL, ultraerror, "Are you sure this a track folder?", MB_ICONSTOP);
             }
             return;
         }
-        fclose(f);
+    }
+
+    if(g != NULL){
+        end_session();
     }
 
     new_session(&g);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
-
-    started = 1;
-
     if(!ok){
         MessageBox(NULL, "Init reported some kind of error", "Bad", MB_ICONERROR);
         exit(55);
@@ -526,4 +539,12 @@ void call_init(HWND hwnd, char path[], int complain){
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
+}
+
+void end_session(){
+    sound_reset();
+    if(g){
+        finalize_game(g);
+    }
+    g = NULL;
 }

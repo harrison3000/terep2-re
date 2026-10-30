@@ -1,14 +1,14 @@
 #pragma once
 
-#include "gpu/types.hpp"
-#include <cstdint>
+#include "gpu/types.h"
+#include <stdint.h>
 
-struct otherVars {
+typedef struct otherVars{
     uint16_t CSD_WORD_1000_0e67;
 
     uint32_t CSD_DWORD_1000_129f;
         
-    uint32_t CSD_DWORD_1000_12a3 = 0x7FFF0000;
+    uint32_t CSD_DWORD_1000_12a3;
     uint32_t CSD_DWORD_1000_12a7;
     uint32_t CSD_DWORD_1000_12ab;
     uint32_t CSD_DWORD_1000_12af;
@@ -26,7 +26,7 @@ struct otherVars {
     uint8_t giracor;
     uint8_t CSD_DAT_keys_571e[128];
 
-    uint8_t CSD_BYTE_1000_59c1 = 0xf;
+    uint8_t CSD_BYTE_1000_59c1;
 
     uint16_t pseudolocal_a;
     uint16_t pseudolocal_b;
@@ -77,4 +77,4 @@ struct otherVars {
     uint16_t v_upper_di;
 
     uint32_t v_tmp_379b;
-};
+} otherVars;
