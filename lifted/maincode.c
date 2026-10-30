@@ -1,6 +1,7 @@
 #include "gpu/gpu.h"
 #include "declrs.h"
 #include "variables.h"
+#include "drawing.h"
 
 
 void f_init(cpu_ctx *cpu){
@@ -4219,111 +4220,11 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
 
 }
 
-typedef struct {
-   uint16_t a, b;
-} intpair;
-
-#define FB_ACCESS(_line, _col) ({ \
-   unsigned int idx = _line * 320 + _col; \
-   &cpu->framebuffer[idx]; \
-})[0]
-
-
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 static void FUN_1000_2d61(cpu_ctx *cpu){
-   int ini = MEM_WORD(0xdbc4);
-   int end = MEM_WORD(0xdbc6);
-   if(ini == end){
-      return;
-   }
-
-   uint16_t color = MEM_WORD(0xdb12);
-   intpair *prs = (intpair*)&MEM_WORD(0xdbc8);
-
-   for(int l = ini; l <= end; l++){
-      auto p = prs[l];
-      if(p.b < p.a){
-         INST_XCHG(p.a, p.b);
-      }
-      
-      for(int c = p.a; c < p.b; c++){
-         FB_ACCESS(l, c) = color & 0xff;
-      }
-   }
-
-
-   return;
-   SETUP_STACK();
-                              //XREF[1]:     1000:2c45(c)
-   cpu->BX = MEM_WORD(0xdbc4);
-   cpu->DX = MEM_WORD(0xdbc6);
-   INST_SUB(cpu->DX, cpu->BX);
-   if(cpu->DX == 0) goto LAB_LOC_4;
-   INST_INC(cpu->DX);
-   INST_SHL(cpu->BX, 0x2);
-   INST_PUSH(cpu->ES);
-   cpu->ES = 15;
-   cpu->SI = cpu->BX;
-   if(MEM_WORD(0xdb12) >= 0xf0f0) goto LAB_LOC_5;
-   LAB_LOC_1:
-   cpu->DI = cpu->SI;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->SI);
-   INST_SHL(cpu->DI, 0x4);
-   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
-   INST_SUB(cpu->CX, cpu->AX);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
-   INST_ADD(cpu->AX, cpu->CX);
-   INST_NEG(cpu->CX);
-   LAB_LOC_2:
-   INST_INC(cpu->CX);
-   INST_ADD(cpu->DI, cpu->AX);
-   INST_CLD();
-   cpu->AX = MEM_WORD(0xdb12);
-   while(cpu->CX){
-      cpu->framebuffer[cpu->DI] = cpu->AL;
-      cpu->DI++;
-      cpu->CX--;
-   }
-
-   INST_ADD(cpu->SI, 0x4);
-   INST_DEC(cpu->DX);
-   if(cpu->DX != 0) goto LAB_LOC_1;
-   INST_POP(cpu->ES);
-   LAB_LOC_4:
-   return;
-   LAB_LOC_5:
-   cpu->BX = MEM_WORD(0xdb12);
-   INST_SUB(cpu->BH, 0xf0);
-   LAB_LOC_6:
-   cpu->DI = cpu->SI;
-   INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, cpu->SI);
-   INST_SHL(cpu->DI, 0x4);
-   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
-   INST_SUB(cpu->CX, cpu->AX);
-   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
-   INST_ADD(cpu->AX, cpu->CX);
-   INST_NEG(cpu->CX);
-   LAB_LOC_7:
-   INST_INC(cpu->CX);
-   INST_ADD(cpu->DI, cpu->AX);
-   INST_CLD();
-   LAB_LOC_8:
-   cpu->BL = cpu->framebuffer[cpu->DI];
-   cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
-   cpu->framebuffer[cpu->DI] = cpu->AL;
-   cpu->DI++;
-   if (--cpu->CX != 0) goto LAB_LOC_8;
-   INST_ADD(cpu->SI, 0x4);
-   INST_DEC(cpu->DX);
-   if(cpu->DX != 0) goto LAB_LOC_6;
-   INST_POP(cpu->ES);
-   return;
+   draw_flat(cpu);
 }
 
 //************************************************************************************************
