@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-gcc -Og -g -lSDL3 --std=gnu23 \
+gcc -Og -g --std=gnu23 \
     verifyer/main.c \
     lifted/maincode.c \
     lifted/othathings.c \
