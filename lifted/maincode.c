@@ -4077,7 +4077,7 @@ static void FUN_PHYSICS_2b3b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-//MODIFIED: now it does nothing
+//MODIFIED: now it just marks the old FB segment to fail
 static void FUN_INIT_2b70(cpu_ctx *cpu){
                               //XREF[1]:     1000:021c(c)
    INST_CLC();
@@ -4093,7 +4093,12 @@ static void FUN_INIT_2b70(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: this clears the framebuffer
 static void FUN_1000_2b98(cpu_ctx *cpu){
-   memset(cpu->framebuffer, cpu->AL, 320*200*4);
+   int amm = 320*200;
+   if(cpu->double_res){
+      amm =  320*200 * 4;
+   }
+
+   memset(cpu->framebuffer, cpu->AL, amm);
    return;
 }
 
