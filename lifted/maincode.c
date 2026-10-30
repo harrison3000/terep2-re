@@ -4078,7 +4078,7 @@ static void FUN_PHYSICS_2b3b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-//MODIFIED: now it does nothing
+//MODIFIED: now it just marks the old FB segment to fail
 static void FUN_INIT_2b70(cpu_ctx *cpu){
                               //XREF[1]:     1000:021c(c)
    INST_CLC();
@@ -4094,7 +4094,12 @@ static void FUN_INIT_2b70(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: this clears the framebuffer
 static void FUN_1000_2b98(cpu_ctx *cpu){
-   memset(cpu->framebuffer, cpu->AL, 320*200*4);
+   int amm = 320*200;
+   if(cpu->double_res){
+      amm =  320*200 * 4;
+   }
+
+   memset(cpu->framebuffer, cpu->AL, amm);
    return;
 }
 
@@ -4224,7 +4229,80 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 static void FUN_1000_2d61(cpu_ctx *cpu){
-   draw_flat(cpu);
+   if(cpu->double_res){
+      draw_flat(cpu);
+      return;
+   }
+
+   SETUP_STACK();
+                              //XREF[1]:     1000:2c45(c)
+   cpu->BX = MEM_WORD(0xdbc4);
+   cpu->DX = MEM_WORD(0xdbc6);
+   INST_SUB(cpu->DX, cpu->BX);
+   if(cpu->DX == 0) goto LAB_LOC_4;
+   INST_INC(cpu->DX);
+   INST_SHL(cpu->BX, 0x2);
+   INST_PUSH(cpu->ES);
+   cpu->ES = 15;
+   cpu->SI = cpu->BX;
+   if(MEM_WORD(0xdb12) >= 0xf0f0) goto LAB_LOC_5;
+   LAB_LOC_1:
+   cpu->DI = cpu->SI;
+   INST_SHL(cpu->DI, 0x2);
+   INST_ADD(cpu->DI, cpu->SI);
+   INST_SHL(cpu->DI, 0x4);
+   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
+   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
+   INST_SUB(cpu->CX, cpu->AX);
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
+   INST_ADD(cpu->AX, cpu->CX);
+   INST_NEG(cpu->CX);
+   LAB_LOC_2:
+   INST_INC(cpu->CX);
+   INST_ADD(cpu->DI, cpu->AX);
+   INST_CLD();
+   cpu->AX = MEM_WORD(0xdb12);
+   while(cpu->CX){
+      cpu->framebuffer[cpu->DI] = cpu->AL;
+      cpu->DI++;
+      cpu->CX--;
+   }
+
+   INST_ADD(cpu->SI, 0x4);
+   INST_DEC(cpu->DX);
+   if(cpu->DX != 0) goto LAB_LOC_1;
+   INST_POP(cpu->ES);
+   LAB_LOC_4:
+   return;
+   LAB_LOC_5:
+   cpu->BX = MEM_WORD(0xdb12);
+   INST_SUB(cpu->BH, 0xf0);
+   LAB_LOC_6:
+   cpu->DI = cpu->SI;
+   INST_SHL(cpu->DI, 0x2);
+   INST_ADD(cpu->DI, cpu->SI);
+   INST_SHL(cpu->DI, 0x4);
+   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
+   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
+   INST_SUB(cpu->CX, cpu->AX);
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
+   INST_ADD(cpu->AX, cpu->CX);
+   INST_NEG(cpu->CX);
+   LAB_LOC_7:
+   INST_INC(cpu->CX);
+   INST_ADD(cpu->DI, cpu->AX);
+   INST_CLD();
+   LAB_LOC_8:
+   cpu->BL = cpu->framebuffer[cpu->DI];
+   cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   cpu->DI++;
+   if (--cpu->CX != 0) goto LAB_LOC_8;
+   INST_ADD(cpu->SI, 0x4);
+   INST_DEC(cpu->DX);
+   if(cpu->DX != 0) goto LAB_LOC_6;
+   INST_POP(cpu->ES);
+   return;
 }
 
 //************************************************************************************************
@@ -4757,7 +4835,68 @@ static void FUN_1000_317d(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 static void FUN_1000_31d1(cpu_ctx *cpu){
-   draw_gradient(cpu);
+   if(cpu->double_res){
+      draw_gradient(cpu);
+      return;
+   }
+
+   SETUP_STACK();
+                              //XREF[1]:     1000:3177(c)
+   cpu->BX = MEM_WORD(0xdbc4);
+   cpu->DX = MEM_WORD(0xdbc6);
+   INST_SUB(cpu->DX, cpu->BX);
+   if(cpu->DX == 0) goto LAB_LOC_4;
+   INST_INC(cpu->DX);
+   INST_SHL(cpu->BX, 0x2);
+   INST_PUSH(cpu->ES);
+   cpu->ES = 15;
+   LAB_LOC_1:
+   cpu->DI = cpu->BX;
+   INST_SHL(cpu->DI, 0x2);
+   INST_ADD(cpu->DI, cpu->BX);
+   INST_SHL(cpu->DI, 0x4);
+   INST_PUSH(cpu->BX);
+   INST_PUSH(cpu->DX);
+   cpu->AX = MEM_WORD(cpu->BX + 0xdbc8);
+   cpu->CX = MEM_WORD(cpu->BX + 0xdbca);
+   cpu->BP = MEM_WORD(cpu->BX + 0xdee8);
+   cpu->DX = MEM_WORD(cpu->BX + 0xdeea);
+   INST_SUB(cpu->DX, cpu->BP);
+   INST_SUB(cpu->CX, cpu->AX);
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
+   INST_ADD(cpu->AX, cpu->CX);
+   INST_NEG(cpu->CX);
+   INST_ADD(cpu->BP, cpu->DX);
+   INST_NEG(cpu->DX);
+   LAB_LOC_2:
+   INST_PUSH(cpu->BP);
+   INST_INC(cpu->CX);
+   INST_ADD(cpu->DI, cpu->AX);
+   INST_MOVSX(cpu->EAX, cpu->DX);
+   INST_SHL(cpu->EAX, 0x8);
+   INST_CDQ();
+   INST_MOVZX(cpu->ECX, cpu->CX);
+   INST_IDIV(cpu->ECX);
+   cpu->EBX = cpu->EAX;
+   INST_POP(cpu->AX);
+   INST_MOVSX(cpu->EAX, cpu->AX);
+   INST_SHL(cpu->EAX, 0x8);
+   INST_CLD();
+   LAB_LOC_3:
+   INST_ROR(cpu->EAX, 0x10);
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   cpu->DI++;
+   INST_ROL(cpu->EAX, 0x10);
+   INST_ADD(cpu->EAX, cpu->EBX);
+   if (--cpu->CX != 0) goto LAB_LOC_3;
+   INST_POP(cpu->DX);
+   INST_POP(cpu->BX);
+   INST_ADD(cpu->BX, 0x4);
+   INST_DEC(cpu->DX);
+   if(cpu->DX != 0) goto LAB_LOC_1;
+   INST_POP(cpu->ES);
+   LAB_LOC_4:
+   return;
 }
 
 //************************************************************************************************
@@ -5432,7 +5571,101 @@ static void FUN_1000_379b(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
 static void FUN_1000_3827(cpu_ctx *cpu){
-   draw_textured(cpu);
+   if(cpu->double_res){
+      draw_textured(cpu);
+      return;
+   }
+
+   SETUP_STACK();
+                              //XREF[1]:     1000:3795(c)
+   cpu->SI = MEM_WORD(0xdbc4);
+   cpu->DI = MEM_WORD(0xdbc6);
+   INST_SUB(cpu->DI, cpu->SI);
+   if(cpu->DI == 0) goto LAB_LOC_5;
+   INST_INC(cpu->DI);
+   INST_SHL(cpu->SI, 0x2);
+   INST_PUSH(cpu->ES);
+   cpu->ES = 15;
+   LAB_LOC_1:
+   INST_PUSH(cpu->DI);
+   cpu->DI = cpu->SI;
+   INST_SHL(cpu->DI, 0x2);
+   INST_ADD(cpu->DI, cpu->SI);
+   INST_SHL(cpu->DI, 0x4);
+   INST_PUSH(cpu->SI);
+   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
+   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
+   cpu->BX = MEM_WORD(cpu->SI + 0xdee8);
+   cpu->DX = MEM_WORD(cpu->SI + 0xdeea);
+   cpu->BP = MEM_WORD(cpu->SI + 0xe208);
+   cpu->SI = MEM_WORD(cpu->SI + 0xe20a);
+   INST_SUB(cpu->SI, cpu->BP);
+   INST_SUB(cpu->DX, cpu->BX);
+   INST_SUB(cpu->CX, cpu->AX);
+   if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
+   INST_ADD(cpu->AX, cpu->CX);
+   INST_NEG(cpu->CX);
+   INST_ADD(cpu->BX, cpu->DX);
+   INST_NEG(cpu->DX);
+   INST_ADD(cpu->BP, cpu->SI);
+   INST_NEG(cpu->SI);
+   LAB_LOC_2:
+   INST_ADD(cpu->DI, cpu->AX);
+   INST_INC(cpu->CX);
+   INST_MOVZX(cpu->ECX, cpu->CX);
+   INST_MOVSX(cpu->EAX, cpu->DX);
+   INST_SHL(cpu->EAX, 0x8);
+   INST_CDQ();
+   INST_IDIV(cpu->ECX);
+   INST_PUSH(cpu->EAX);
+   INST_MOVSX(cpu->EAX, cpu->SI);
+   INST_SHL(cpu->EAX, 0x8);
+   INST_CDQ();
+   INST_IDIV(cpu->ECX);
+   cpu->EDX = cpu->EAX;
+   cpu->SI = cpu->CX;
+   INST_POP(cpu->ECX);
+   INST_MOVZX(cpu->EBX, cpu->BX);
+   INST_MOVZX(cpu->EBP, cpu->BP);
+   INST_SHL(cpu->EBX, 0x8);
+   INST_SHL(cpu->EBP, 0x8);
+   INST_CLD();
+   LAB_LOC_3:
+   INST_ROR(cpu->EBX, 0x10);
+   INST_ROR(cpu->EBP, 0x10);
+   INST_XCHG(cpu->vars->v_upper_si, cpu->SI);
+   cpu->SI = cpu->BP;
+   INST_SHL(cpu->SI, 0x8);
+   cpu->AL = SMEM_BYTE(cpu->FS,cpu->BX + cpu->SI);
+   if(cpu->AL == 0xff) goto LAB_LOC_4;
+   if(cpu->AL >= 0xf0) goto LAB_LOC_6;
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   LAB_LOC_4:
+   INST_INC(cpu->DI);
+   INST_XCHG(cpu->vars->v_upper_si, cpu->SI);
+   INST_ROL(cpu->EBX, 0x10);
+   INST_ROL(cpu->EBP, 0x10);
+   INST_ADD(cpu->EBX, cpu->ECX);
+   INST_ADD(cpu->EBP, cpu->EDX);
+   INST_DEC(cpu->SI);
+   if(cpu->SI != 0) goto LAB_LOC_3;
+   INST_POP(cpu->SI);
+   INST_POP(cpu->DI);
+   INST_ADD(cpu->SI, 0x4);
+   INST_DEC(cpu->DI);
+   if(cpu->DI != 0) goto LAB_LOC_1;
+   INST_POP(cpu->ES);
+   LAB_LOC_5:
+   return;
+   LAB_LOC_6:
+   INST_SUB(cpu->AL, 0xf0);
+   cpu->AH = cpu->AL;
+   cpu->AL = cpu->framebuffer[cpu->DI];
+   INST_XCHG(cpu->AX, cpu->BX);
+   cpu->BL = MEM_BYTE(cpu->BX + 0x2e51);
+   INST_XCHG(cpu->AX, cpu->BX);
+   cpu->framebuffer[cpu->DI] = cpu->AL;
+   goto LAB_LOC_4;
 }
 
 //************************************************************************************************
