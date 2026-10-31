@@ -3732,7 +3732,7 @@ static void FUN_1000_2760(cpu_ctx *cpu){
 
    cpu->AX = resA;
    cpu->BX = resB;
-   cpu->CX = (bxx * mult)/256;
+   cpu->CX = (bxx * 256)/mult;
    cpu->DX = 0;
    return;
 
