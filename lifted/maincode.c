@@ -4238,7 +4238,7 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_2d61(cpu_ctx *cpu){
    SETUP_STACK();
-   int line = 0;
+   uint8_t *linep;
                               //XREF[1]:     1000:2c45(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4252,7 +4252,7 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    if(MEM_WORD(0xdb12) >= 0xf0f0) goto LAB_LOC_5;
    LAB_LOC_1:
    cpu->DI = 0;
-   line = cpu->SI;
+   linep = &FB_ACCESS(cpu->SI/4, 0);
    cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
    cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
@@ -4263,9 +4263,9 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_INC(cpu->CX);
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
-   cpu->AX = MEM_WORD(0xdb12);
+   uint16_t c = MEM_WORD(0xdb12);
    while(cpu->CX){
-      FB_ACCESS(line/4, cpu->DI) = cpu->AL;
+      linep[cpu->DI] = c & 0xff;
       cpu->DI++;
       cpu->CX--;
    }
@@ -4281,7 +4281,7 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_SUB(cpu->BH, 0xf0);
    LAB_LOC_6:
    cpu->DI = 0;
-   line = cpu->SI;
+   linep = &FB_ACCESS(cpu->SI/4, 0);
    cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
    cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
@@ -4293,9 +4293,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    LAB_LOC_8:
-   cpu->BL = FB_ACCESS(line/4, cpu->DI);
-   cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
-   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
+   cpu->BL = linep[cpu->DI];
+   linep[cpu->DI] = MEM_BYTE(cpu->BX + 0x2e51);
    cpu->DI++;
    if (--cpu->CX != 0) goto LAB_LOC_8;
    INST_ADD(cpu->SI, 0x4);
@@ -4837,7 +4836,7 @@ static void FUN_1000_317d(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_31d1(cpu_ctx *cpu){
    SETUP_STACK();
-   int line = 0;
+   uint8_t *linep;
                               //XREF[1]:     1000:3177(c)
    cpu->BX = MEM_WORD(0xdbc4);
    cpu->DX = MEM_WORD(0xdbc6);
@@ -4849,7 +4848,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    cpu->ES = 15;
    LAB_LOC_1:
    cpu->DI = 0;
-   line = cpu->BX;
+   linep = &FB_ACCESS(cpu->BX/4, 0);
    INST_PUSH(cpu->BX);
    INST_PUSH(cpu->DX);
    cpu->AX = SP_ACCESS(cpu->BX + SPAN_BUF_X);
@@ -4879,7 +4878,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_CLD();
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
-   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
+   linep[cpu->DI] = cpu->AL;
    cpu->DI++;
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EBX);
@@ -5568,7 +5567,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
 static void FUN_1000_3827(cpu_ctx *restrict cpu){
    SETUP_STACK();
-   int line = 0;
+   uint8_t *linep;
    uint8_t *textPtr = (uint8_t*)cpu->segments[cpu->FS];
                               //XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
@@ -5582,7 +5581,7 @@ static void FUN_1000_3827(cpu_ctx *restrict cpu){
    LAB_LOC_1:
    INST_PUSH(cpu->DI);
    cpu->DI = 0;
-   line = cpu->SI;
+   linep = &FB_ACCESS(cpu->SI/4, 0);
    INST_PUSH(cpu->SI);
    cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
    cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
@@ -5633,11 +5632,11 @@ static void FUN_1000_3827(cpu_ctx *restrict cpu){
          if(texel >= 0xf0) {
             texel -= 0xf0;
             uint16_t texel16 = texel << 8;
-            uint8_t v = FB_ACCESS(line/4, cpu->DI);
-            texel16 += v;
+            uint8_t v = linep[cpu->DI];
+            texel16 |= v;
             texel = MEM_BYTE(texel16 + 0x2e51);
          };
-         FB_ACCESS(line/4, cpu->DI) = texel;
+         linep[cpu->DI] = texel;
       }
    }
    LAB_LOC_4:
