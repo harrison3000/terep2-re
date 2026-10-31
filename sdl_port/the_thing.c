@@ -9,8 +9,8 @@
 
 #include "../insulator/insulator.h"
 
-#define W 800
-#define H 600
+#define W 1440
+#define H 900
 
 int main(int argc, char **argv){
     GameSession *g;
@@ -65,6 +65,7 @@ int main(int argc, char **argv){
 
     uint64_t total_time = 0;
     uint64_t frame = 0;
+    double ftavg = 0;
 
     const Uint64 ns_per_frame = 1000000000 / 60; // ~16.6 ms em nanossegundos
     while (running) {
@@ -90,9 +91,10 @@ int main(int argc, char **argv){
         total_time += (b -a);
         frame++;
         if(frame % 64 == 0){
-            double tt = total_time; 
+            double tt = total_time;
             tt *= 0.000001;
-            printf("\rFrame time: %.04f      ", tt);
+            ftavg = ftavg * 0.9 + tt * 0.1;
+            printf("\rFrame time: %.03f, \tavg: %.03f     ", tt, ftavg);
             fflush(stdout);
             total_time = 0;
         }
