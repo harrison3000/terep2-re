@@ -46,9 +46,8 @@ cpu_ctx *initCPU(){
         cpu->vars.CSD_DAT_unk_592c[i] = something[i];
     }
 
-    //TODO configurable
-    cpu->vp_w = 320*3;
-    cpu->vp_h = 200*3;
+    cpu->vp_w = 320;
+    cpu->vp_h = 200;
 
     cpu->framebuffer = malloc(2000*1500);
 

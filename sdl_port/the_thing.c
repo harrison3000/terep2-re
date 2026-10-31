@@ -8,8 +8,8 @@
 
 #include "../insulator/insulator.h"
 
-#define W 320*3
-#define H 200*3
+#define W 800
+#define H 600
 
 int main(int argc, char **argv){
     GameSession *g;
@@ -27,6 +27,8 @@ int main(int argc, char **argv){
         printf("no cars loaded\n");
         exit(3);
     }
+
+    set_resolution(g, W, H);
 
     //TODO check n loaded cars
     printf("phase 1 ok, %d\n", ok);

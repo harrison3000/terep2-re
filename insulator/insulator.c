@@ -168,6 +168,11 @@ void finalize_game(GameSession *g){
     free(g);
 }
 
+void set_resolution(GameSession *g, int w, int h){
+    g->cpu->vp_w = w;
+    g->cpu->vp_h = h;
+}
+
 
 void send_key_event(GameSession *g, uint8_t key){
     g->cpu->AX = key;
