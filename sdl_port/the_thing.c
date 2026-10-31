@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <x86intrin.h> 
 
 #include "keys.h"
 
@@ -58,10 +59,12 @@ int main(int argc, char **argv){
     SDL_SetPaletteColors(pal, colors, 0, 256);
     SDL_SetTexturePalette(tex, pal);
 
-    uint8_t pixels[W * H] = {0}; // Pixeldata 8-bit
 
     bool running = true;
     SDL_Event e;
+
+    uint64_t total_time = 0;
+    uint64_t frame = 0;
 
     const Uint64 ns_per_frame = 1000000000 / 60; // ~16.6 ms em nanossegundos
     while (running) {
@@ -80,12 +83,21 @@ int main(int argc, char **argv){
             }
         }
 
+        uint64_t a = __rdtsc();
         render_frame(g);
-        for(int i = 0; i < W*H; i++){
-            pixels[i] = videoSeg[i];
+        uint64_t b = __rdtsc();
+
+        total_time += (b -a);
+        frame++;
+        if(frame % 64 == 0){
+            double tt = total_time; 
+            tt *= 0.000001;
+            printf("\rFrame time: %.04f      ", tt);
+            fflush(stdout);
+            total_time = 0;
         }
 
-        SDL_UpdateTexture(tex, NULL, pixels, W);
+        SDL_UpdateTexture(tex, NULL, videoSeg, W);
         SDL_RenderClear(ren);
         SDL_RenderTexture(ren, tex, NULL, NULL);
         SDL_RenderPresent(ren);
