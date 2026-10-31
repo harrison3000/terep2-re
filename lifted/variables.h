@@ -3,7 +3,7 @@
 #include "gpu/types.h"
 #include <stdint.h>
 
-typedef struct otherVars{
+struct otherVars{
     uint16_t CSD_WORD_1000_0e67;
 
     uint32_t CSD_DWORD_1000_129f;
@@ -77,4 +77,4 @@ typedef struct otherVars{
     uint16_t v_upper_di;
 
     uint32_t v_tmp_379b;
-} otherVars;
+};

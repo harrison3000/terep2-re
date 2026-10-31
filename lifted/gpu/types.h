@@ -1,8 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-
-typedef struct otherVars otherVars;
+#include "../variables.h"
 
 typedef struct {
     // GPRs
@@ -28,7 +27,7 @@ typedef struct {
 
     uint8_t CF;
 
-    otherVars *vars;
+    struct otherVars vars;
 
     uint8_t *framebuffer;
 
