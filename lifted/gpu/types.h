@@ -35,4 +35,5 @@ typedef struct {
     uintptr_t extra_data;
 
     uint32_t vp_w, vp_h;
+    uint16_t bunchOfInts[0x3f00];
 } cpu_ctx;

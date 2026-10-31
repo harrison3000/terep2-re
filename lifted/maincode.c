@@ -3,12 +3,11 @@
 #include "gpu/types.h"
 #include "variables.h"
 
-#define SPAN_BUF_X 0xdbc8
-//FIXME these will conflict with cars in tracks with 5 cars!
-#define SPAN_BUF_A 0xb000
-#define SPAN_BUF_B 0xc000
+#define SPAN_BUF_X 0x0004
+#define SPAN_BUF_A 0x2004
+#define SPAN_BUF_B 0x4004
 
-
+#define SP_ACCESS(_offset) cpu->bunchOfInts[(_offset) >> 1]
 #define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) * cpu->vp_w + (_b)]
 
 void setup_viewport(cpu_ctx *cpu, int type){
@@ -4213,13 +4212,13 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
    INST_SHL(cpu->EAX, 0x10);
    LAB_LOC_7:
    INST_ROR(cpu->EAX, 0x10);
-   MEM_WORD(cpu->BX) = cpu->AX;
+   SP_ACCESS(cpu->BX) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EDX);
    if (--cpu->CX != 0) goto LAB_LOC_7;
    INST_ROR(cpu->EAX, 0x10);
-   MEM_WORD(cpu->BX) = cpu->AX;
+   SP_ACCESS(cpu->BX) = cpu->AX;
    LAB_LOC_8:
    return;
 
@@ -4247,8 +4246,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    LAB_LOC_1:
    cpu->DI = 0;
    line = cpu->SI;
-   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
-   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
+   cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
+   cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
    INST_ADD(cpu->AX, cpu->CX);
@@ -4276,8 +4275,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    LAB_LOC_6:
    cpu->DI = 0;
    line = cpu->SI;
-   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
-   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
+   cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
+   cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
    INST_ADD(cpu->AX, cpu->CX);
@@ -4815,13 +4814,13 @@ static void FUN_1000_317d(cpu_ctx *cpu){
    INST_SHL(cpu->EAX, 0x10);
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
-   MEM_WORD(cpu->BX) = cpu->AX;
+   SP_ACCESS(cpu->BX) = cpu->AX;
    INST_ADD(cpu->BX, 0x4);
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EDX);
    if (--cpu->CX != 0) goto LAB_LOC_3;
    INST_ROR(cpu->EAX, 0x10);
-   MEM_WORD(cpu->BX) = cpu->AX;
+   SP_ACCESS(cpu->BX) = cpu->AX;
    LAB_LOC_4:
    return;
 }
@@ -4846,10 +4845,10 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    line = cpu->BX;
    INST_PUSH(cpu->BX);
    INST_PUSH(cpu->DX);
-   cpu->AX = MEM_WORD(cpu->BX + SPAN_BUF_X);
-   cpu->CX = MEM_WORD(cpu->BX + SPAN_BUF_X + 2);
-   cpu->BP = MEM_WORD(cpu->BX + SPAN_BUF_A);
-   cpu->DX = MEM_WORD(cpu->BX + SPAN_BUF_A + 2);
+   cpu->AX = SP_ACCESS(cpu->BX + SPAN_BUF_X);
+   cpu->CX = SP_ACCESS(cpu->BX + SPAN_BUF_X + 2);
+   cpu->BP = SP_ACCESS(cpu->BX + SPAN_BUF_A);
+   cpu->DX = SP_ACCESS(cpu->BX + SPAN_BUF_A + 2);
    INST_SUB(cpu->DX, cpu->BP);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
@@ -5538,8 +5537,8 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   MEM_WORD(cpu->SI) = cpu->AX;
-   MEM_WORD(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
+   SP_ACCESS(cpu->SI) = cpu->AX;
+   SP_ACCESS(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
    INST_ADD(cpu->SI, 0x4);
    INST_ROL(cpu->EAX, 0x10);
    INST_ROL(cpu->EBX, 0x10);
@@ -5548,8 +5547,8 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_3;
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
-   MEM_WORD(cpu->SI) = cpu->AX;
-   MEM_WORD(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
+   SP_ACCESS(cpu->SI) = cpu->AX;
+   SP_ACCESS(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
    LAB_LOC_4:
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
@@ -5577,12 +5576,12 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->DI = 0;
    line = cpu->SI;
    INST_PUSH(cpu->SI);
-   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
-   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
-   cpu->BX = MEM_WORD(cpu->SI + SPAN_BUF_A);
-   cpu->DX = MEM_WORD(cpu->SI + SPAN_BUF_A + 2);
-   cpu->BP = MEM_WORD(cpu->SI + SPAN_BUF_B);
-   cpu->SI = MEM_WORD(cpu->SI + SPAN_BUF_B + 2);
+   cpu->AX = SP_ACCESS(cpu->SI + SPAN_BUF_X);
+   cpu->CX = SP_ACCESS(cpu->SI + SPAN_BUF_X + 2);
+   cpu->BX = SP_ACCESS(cpu->SI + SPAN_BUF_A);
+   cpu->DX = SP_ACCESS(cpu->SI + SPAN_BUF_A + 2);
+   cpu->BP = SP_ACCESS(cpu->SI + SPAN_BUF_B);
+   cpu->SI = SP_ACCESS(cpu->SI + SPAN_BUF_B + 2);
    INST_SUB(cpu->SI, cpu->BP);
    INST_SUB(cpu->DX, cpu->BX);
    INST_SUB(cpu->CX, cpu->AX);
