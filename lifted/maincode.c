@@ -3,8 +3,13 @@
 #include "gpu/types.h"
 #include "variables.h"
 
+#define SPAN_BUF_X 0xdbc8
+//FIXME these will conflict with cars in tracks with 5 cars!
+#define SPAN_BUF_A 0xb000
+#define SPAN_BUF_B 0xc000
 
-#define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) + (_b)]
+
+#define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) * cpu->vp_w + (_b)]
 
 void setup_viewport(cpu_ctx *cpu, int type){
    MEM_WORD(0xdbc0) = 0x0;
@@ -4185,7 +4190,7 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_SUB(cpu->CX, cpu->BX);
    INST_SHL(cpu->BX, 0x2);
-   INST_ADD(cpu->BX, 0xdbca);
+   INST_ADD(cpu->BX, SPAN_BUF_X + 2);
    goto LAB_LOC_6;
    LAB_LOC_3:
    if(SIGNED(cpu->BX) >= SIGN_MEM_WORD(0xdbc4)) goto LAB_LOC_4;
@@ -4196,7 +4201,7 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
    LAB_LOC_5:
    INST_SUB(cpu->CX, cpu->BX);
    INST_SHL(cpu->BX, 0x2);
-   INST_ADD(cpu->BX, 0xdbc8);
+   INST_ADD(cpu->BX, SPAN_BUF_X);
    LAB_LOC_6:
    if (cpu->CX == 0) goto LAB_LOC_8;
    INST_PUSH(cpu->AX);
@@ -4245,8 +4250,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    LAB_LOC_1:
    cpu->DI = 0;
    line = cpu->SI;
-   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
+   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
+   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
    INST_ADD(cpu->AX, cpu->CX);
@@ -4257,7 +4262,7 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_CLD();
    cpu->AX = MEM_WORD(0xdb12);
    while(cpu->CX){
-      FB_ACCESS(line*80, cpu->DI) = cpu->AL;
+      FB_ACCESS(line/4, cpu->DI) = cpu->AL;
       cpu->DI++;
       cpu->CX--;
    }
@@ -4274,8 +4279,8 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    LAB_LOC_6:
    cpu->DI = 0;
    line = cpu->SI;
-   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
+   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
+   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_7;
    INST_ADD(cpu->AX, cpu->CX);
@@ -4285,9 +4290,9 @@ static void FUN_1000_2d61(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
    LAB_LOC_8:
-   cpu->BL = FB_ACCESS(line*80, cpu->DI);
+   cpu->BL = FB_ACCESS(line/4, cpu->DI);
    cpu->AL = MEM_BYTE(cpu->BX + 0x2e51);
-   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
+   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
    cpu->DI++;
    if (--cpu->CX != 0) goto LAB_LOC_8;
    INST_ADD(cpu->SI, 0x4);
@@ -4793,12 +4798,12 @@ static void FUN_1000_317d(cpu_ctx *cpu){
    INST_XCHG(cpu->CX, cpu->BX);
    INST_SUB(cpu->CX, cpu->BX);
    INST_SHL(cpu->BX, 0x2);
-   INST_ADD(cpu->BX, 0xdeea);
+   INST_ADD(cpu->BX, SPAN_BUF_A + 2);
    goto LAB_LOC_2;
    LAB_LOC_1:
    INST_SUB(cpu->CX, cpu->BX);
    INST_SHL(cpu->BX, 0x2);
-   INST_ADD(cpu->BX, 0xdee8);
+   INST_ADD(cpu->BX, SPAN_BUF_A);
    LAB_LOC_2:
    if (cpu->CX == 0) goto LAB_LOC_4;
    INST_PUSH(cpu->AX);
@@ -4844,10 +4849,10 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    line = cpu->BX;
    INST_PUSH(cpu->BX);
    INST_PUSH(cpu->DX);
-   cpu->AX = MEM_WORD(cpu->BX + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->BX + 0xdbca);
-   cpu->BP = MEM_WORD(cpu->BX + 0xdee8);
-   cpu->DX = MEM_WORD(cpu->BX + 0xdeea);
+   cpu->AX = MEM_WORD(cpu->BX + SPAN_BUF_X);
+   cpu->CX = MEM_WORD(cpu->BX + SPAN_BUF_X + 2);
+   cpu->BP = MEM_WORD(cpu->BX + SPAN_BUF_A);
+   cpu->DX = MEM_WORD(cpu->BX + SPAN_BUF_A + 2);
    INST_SUB(cpu->DX, cpu->BP);
    INST_SUB(cpu->CX, cpu->AX);
    if(SIGNED(cpu->CX) >= 0) goto LAB_LOC_2;
@@ -4871,7 +4876,7 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    INST_CLD();
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
-   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
+   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
    cpu->DI++;
    INST_ROL(cpu->EAX, 0x10);
    INST_ADD(cpu->EAX, cpu->EBX);
@@ -5504,12 +5509,12 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    INST_XCHG(cpu->DX, cpu->BX);
    INST_SUB(cpu->DI, cpu->SI);
    INST_SHL(cpu->SI, 0x2);
-   INST_ADD(cpu->SI, 0xdeea);
+   INST_ADD(cpu->SI, SPAN_BUF_A + 2);
    goto LAB_LOC_2;
    LAB_LOC_1:
    INST_SUB(cpu->DI, cpu->SI);
    INST_SHL(cpu->SI, 0x2);
-   INST_ADD(cpu->SI, 0xdee8);
+   INST_ADD(cpu->SI, SPAN_BUF_A);
    LAB_LOC_2:
    if(cpu->DI == 0) goto LAB_LOC_4;
    INST_MOVSX(cpu->vars->v_tmp_379b, cpu->DI);
@@ -5537,7 +5542,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
    MEM_WORD(cpu->SI) = cpu->AX;
-   MEM_WORD(cpu->SI + 0x320) = cpu->BX;
+   MEM_WORD(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
    INST_ADD(cpu->SI, 0x4);
    INST_ROL(cpu->EAX, 0x10);
    INST_ROL(cpu->EBX, 0x10);
@@ -5547,7 +5552,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
    MEM_WORD(cpu->SI) = cpu->AX;
-   MEM_WORD(cpu->SI + 0x320) = cpu->BX;
+   MEM_WORD(cpu->SI + (SPAN_BUF_B - SPAN_BUF_A)) = cpu->BX;
    LAB_LOC_4:
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
@@ -5575,12 +5580,12 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->DI = 0;
    line = cpu->SI;
    INST_PUSH(cpu->SI);
-   cpu->AX = MEM_WORD(cpu->SI + 0xdbc8);
-   cpu->CX = MEM_WORD(cpu->SI + 0xdbca);
-   cpu->BX = MEM_WORD(cpu->SI + 0xdee8);
-   cpu->DX = MEM_WORD(cpu->SI + 0xdeea);
-   cpu->BP = MEM_WORD(cpu->SI + 0xe208);
-   cpu->SI = MEM_WORD(cpu->SI + 0xe20a);
+   cpu->AX = MEM_WORD(cpu->SI + SPAN_BUF_X);
+   cpu->CX = MEM_WORD(cpu->SI + SPAN_BUF_X + 2);
+   cpu->BX = MEM_WORD(cpu->SI + SPAN_BUF_A);
+   cpu->DX = MEM_WORD(cpu->SI + SPAN_BUF_A + 2);
+   cpu->BP = MEM_WORD(cpu->SI + SPAN_BUF_B);
+   cpu->SI = MEM_WORD(cpu->SI + SPAN_BUF_B + 2);
    INST_SUB(cpu->SI, cpu->BP);
    INST_SUB(cpu->DX, cpu->BX);
    INST_SUB(cpu->CX, cpu->AX);
@@ -5621,7 +5626,7 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    cpu->AL = SMEM_BYTE(cpu->FS,cpu->BX + cpu->SI);
    if(cpu->AL == 0xff) goto LAB_LOC_4;
    if(cpu->AL >= 0xf0) goto LAB_LOC_6;
-   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
+   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
    LAB_LOC_4:
    INST_INC(cpu->DI);
    INST_XCHG(cpu->vars->v_upper_si, cpu->SI);
@@ -5643,11 +5648,11 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    LAB_LOC_6:
    INST_SUB(cpu->AL, 0xf0);
    cpu->AH = cpu->AL;
-   cpu->AL = FB_ACCESS(line*80, cpu->DI);
+   cpu->AL = FB_ACCESS(line/4, cpu->DI);
    INST_XCHG(cpu->AX, cpu->BX);
    cpu->BL = MEM_BYTE(cpu->BX + 0x2e51);
    INST_XCHG(cpu->AX, cpu->BX);
-   FB_ACCESS(line*80, cpu->DI) = cpu->AL;
+   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
    goto LAB_LOC_4;
 }
 

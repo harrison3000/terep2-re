@@ -8,8 +8,8 @@
 
 #include "../insulator/insulator.h"
 
-#define W 320
-#define H 200
+#define W 320*3
+#define H 200*3
 
 int main(int argc, char **argv){
     GameSession *g;

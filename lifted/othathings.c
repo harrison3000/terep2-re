@@ -49,10 +49,11 @@ cpu_ctx *initCPU(){
         cpu->vars->CSD_DAT_unk_592c[i] = something[i];
     }
 
-    cpu->vp_w = 320;
-    cpu->vp_h = 200;
+    //TODO configurable
+    cpu->vp_w = 320*3;
+    cpu->vp_h = 200*3;
 
-    cpu->framebuffer = malloc(2048*2048);
+    cpu->framebuffer = malloc(2000*1500);
 
     return cpu;
 }
@@ -61,5 +62,6 @@ void finalizeCpu(cpu_ctx *cpu){
     free(cpu->vars);
     auto mem = (uint8_t *)cpu->mem_base;
     free(mem);
+    free(cpu->framebuffer);
     free(cpu);
 }
