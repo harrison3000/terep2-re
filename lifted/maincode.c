@@ -3721,17 +3721,17 @@ static void FUN_1000_2760(cpu_ctx *cpu){
                               //             1000:2420(c),1000:4739(c),1000:47a6(c),1000:4836(c),
                               //             1000:4897(c)
    //TODO precompute this on res change?
-   int mult = (cpu->vp_w << 8)/320;
+   int32_t mult = (cpu->vp_w << 8)/320;
 
-   int axx = (int16_t)cpu->AX;
-   int bxx = (int16_t)cpu->BX;
-   int cxx = (int16_t)cpu->CX;
+   int32_t axx = (int16_t)cpu->AX;
+   int32_t bxx = (int16_t)cpu->BX;
+   int32_t cxx = (int16_t)cpu->CX;
 
-   int resA = (axx * mult) / bxx;
-   int resB = (cxx * mult) / bxx;
+   int32_t resA = (axx * mult) / bxx;
+   int32_t resB = (cxx * mult) / bxx;
 
-   cpu->AX = resA;
-   cpu->BX = resB;
+   cpu->AX = CLAMP16(resA);
+   cpu->BX = CLAMP16(resB);
    cpu->CX = (bxx * 256)/mult;
    cpu->DX = 0;
    return;

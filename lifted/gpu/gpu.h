@@ -310,5 +310,14 @@ static inline void inner_div32(cpu_ctx *cpu, uint32_t a) {
 #define INST_POPAD()  memcpy(cpu, regsave, 8*4)
 
 
-
+#define CLAMP16(_val) ({  \
+    int32_t out = (_val); \
+    if(out > 32000){      \
+        out = 32000;      \
+    }                     \
+    if(out < -32000){     \
+        out = -32000;     \
+    }                     \
+    out;                  \
+})
 
