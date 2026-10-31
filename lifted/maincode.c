@@ -3721,23 +3721,20 @@ static void FUN_1000_2760(cpu_ctx *cpu){
                               //             1000:2016(c),1000:20cd(c),1000:21c0(c),1000:2275(c),
                               //             1000:2420(c),1000:4739(c),1000:47a6(c),1000:4836(c),
                               //             1000:4897(c)
-   cpu->DX = cpu->AX;
-   cpu->AL = cpu->DH;
-   INST_CBW();
-   INST_XCHG(cpu->AX, cpu->DX);
-   cpu->AH = cpu->AL;
-   cpu->AL = 0; //was a XOR
-   INST_IDIV(cpu->BX);
-   INST_XCHG(cpu->AX, cpu->CX);
-   cpu->DX = cpu->AX;
-   cpu->AL = cpu->DH;
-   INST_CBW();
-   INST_XCHG(cpu->AX, cpu->DX);
-   cpu->AH = cpu->AL;
-   cpu->AL = 0; //was a XOR
-   INST_IDIV(cpu->BX);
-   INST_XCHG(cpu->CX, cpu->BX);
-   INST_XCHG(cpu->AX, cpu->BX);
+   //TODO precompute this on res change?
+   int mult = (cpu->vp_w << 8)/320;
+
+   int axx = (int16_t)cpu->AX;
+   int bxx = (int16_t)cpu->BX;
+   int cxx = (int16_t)cpu->CX;
+
+   int resA = (axx * mult) / bxx;
+   int resB = (cxx * mult) / bxx;
+
+   cpu->AX = resA;
+   cpu->BX = resB;
+   cpu->CX = (bxx * mult)/256;
+   cpu->DX = 0;
    return;
 
  // 1000:277d [UNDEFINED BYTES REMOVED]
