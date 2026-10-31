@@ -7368,9 +7368,9 @@ static void FUN_1000_46d3(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    cpu->BX = MEM_WORD(0x120);
    FUN_1000_2760(cpu);
-   INST_ADD(cpu->AX, 0xa0);
+   INST_ADD(cpu->AX, MEM_WORD(0xdbb8));
    INST_NEG(cpu->BX);
-   INST_ADD(cpu->BX, 0x64);
+   INST_ADD(cpu->BX, MEM_WORD(0xdbba));
    MEM_WORD(cpu->DI + 0xdb16) = cpu->AX;
    MEM_WORD(cpu->DI + 0xdb18) = cpu->BX;
    MEM_DWORD(cpu->DI + 0xdb1a) = cpu->EBP;
@@ -7414,9 +7414,9 @@ static void FUN_1000_46d3(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    cpu->BX = MEM_WORD(0x120);
    FUN_1000_2760(cpu);
-   INST_ADD(cpu->AX, 0xa0);
+   INST_ADD(cpu->AX, MEM_WORD(0xdbb8));
    INST_NEG(cpu->BX);
-   INST_ADD(cpu->BX, 0x64);
+   INST_ADD(cpu->BX, MEM_WORD(0xdbba));
    INST_PUSH(cpu->DI);
    cpu->DI = MEM_WORD(0xe996);
    MEM_WORD(cpu->DI + 0xdb16) = cpu->AX;
@@ -7477,9 +7477,9 @@ static void FUN_1000_47ec(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    cpu->BX = MEM_WORD(0x120);
    FUN_1000_2760(cpu);
-   INST_ADD(cpu->AX, 0xa0);
+   INST_ADD(cpu->AX, MEM_WORD(0xdbb8));
    INST_NEG(cpu->BX);
-   INST_ADD(cpu->BX, 0x64);
+   INST_ADD(cpu->BX, MEM_WORD(0xdbba));
    MEM_WORD(cpu->DI + 0xdb16) = cpu->AX;
    MEM_WORD(cpu->DI + 0xdb18) = cpu->BX;
    MEM_DWORD(cpu->DI + 0xdb1a) = cpu->EBP;
@@ -7518,9 +7518,9 @@ static void FUN_1000_47ec(cpu_ctx *cpu){
    INST_POP(cpu->AX);
    cpu->BX = MEM_WORD(0x120);
    FUN_1000_2760(cpu);
-   INST_ADD(cpu->AX, 0xa0);
+   INST_ADD(cpu->AX, MEM_WORD(0xdbb8));
    INST_NEG(cpu->BX);
-   INST_ADD(cpu->BX, 0x64);
+   INST_ADD(cpu->BX, MEM_WORD(0xdbba));
    INST_PUSH(cpu->DI);
    cpu->DI = MEM_WORD(0xe996);
    MEM_WORD(cpu->DI + 0xdb16) = cpu->AX;
