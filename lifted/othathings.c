@@ -49,7 +49,10 @@ cpu_ctx *initCPU(){
         cpu->vars->CSD_DAT_unk_592c[i] = something[i];
     }
 
-    cpu->framebuffer = malloc(320*200*4);
+    cpu->vp_w = 320;
+    cpu->vp_h = 200;
+
+    cpu->framebuffer = malloc(2048*2048);
 
     return cpu;
 }

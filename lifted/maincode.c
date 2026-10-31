@@ -1,9 +1,33 @@
 #include "gpu/gpu.h"
 #include "declrs.h"
+#include "gpu/types.h"
 #include "variables.h"
 
 
 #define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) + (_b)]
+
+void setup_viewport(cpu_ctx *cpu, int type){
+   MEM_WORD(0xdbc0) = 0x0;
+   MEM_WORD(0xdbb8) = cpu->vp_w / 2; //= 00A0h
+   MEM_WORD(0xdbc2) = cpu->vp_w - 1; //= 013Fh
+   if(type == 0){
+      MEM_WORD(0xdbbc) = 0x0;
+      MEM_WORD(0xdbba) = cpu->vp_h * 2 / 5; //originally 0x50
+      MEM_WORD(0xdbbe) = cpu->vp_h - 1;
+      return;
+   }
+   if(type == 1){
+      MEM_WORD(0xdbbc) = 0x0;
+      MEM_WORD(0xdbba) = cpu->vp_h / 4;
+      MEM_WORD(0xdbbe) = cpu->vp_h / 2 - 2;
+      return;
+   }
+   if(type == 2){
+      MEM_WORD(0xdbbc) = cpu->vp_h / 2;
+      MEM_WORD(0xdbba) = cpu->vp_h * 3 / 4;
+      MEM_WORD(0xdbbe) = cpu->vp_h - 1;
+   }
+}
 
 void f_init(cpu_ctx *cpu){
    SETUP_STACK();
@@ -13,12 +37,8 @@ void f_init(cpu_ctx *cpu){
    MEM_DWORD(0x6a) = 0x1800; //= 00000C00h
    MEM_WORD(0xe9e2) = 0x800; //= 0320h
    MEM_WORD(0xe9e4) = 0xf000; //= F000h
-   MEM_WORD(0xdbc0) = 0x0;
-   MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
-   MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
-   MEM_WORD(0xdbbc) = 0x0;
-   MEM_WORD(0xdbba) = 0x50; //= 0064h
-   MEM_WORD(0xdbbe) = 0xc7; //= 00C7h
+   setup_viewport(cpu, 0);
+   
    cpu->DX = 0x1a3d;
    cpu->AL = 0x0;
    cpu->AH = 0x3d;
@@ -190,12 +210,7 @@ void FUN_main_render(cpu_ctx *cpu){
    if((MEM_BYTE(0x7d) & 0xff) != 0) goto LAB_LOC_5;
 
     //singleplayer
-   MEM_WORD(0xdbc0) = 0x0;
-   MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
-   MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
-   MEM_WORD(0xdbbc) = 0x0;
-   MEM_WORD(0xdbba) = 0x50; //= 0064h
-   MEM_WORD(0xdbbe) = 0xc7; //= 00C7h
+   setup_viewport(cpu, 0);
    cpu->SI = MEM_WORD(0xa4);
    INST_SHL(cpu->SI, 0x1);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
@@ -251,12 +266,8 @@ void FUN_main_render(cpu_ctx *cpu){
    goto LAB_LOC_14;
    LAB_LOC_5:
     //split-screen
-   MEM_WORD(0xdbc0) = 0x0;
-   MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
-   MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
-   MEM_WORD(0xdbbc) = 0x0;
-   MEM_WORD(0xdbba) = 0x32; //= 0064h
-   MEM_WORD(0xdbbe) = 0x62; //= 00C7h
+   setup_viewport(cpu, 1);
+   
    cpu->SI = MEM_WORD(0xa4);
    INST_SHL(cpu->SI, 0x1);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
@@ -309,12 +320,8 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->AL = 0x0;
                               // FWD[2]:     1000:5b01(c),15cd:006f(R)
    FUN_1000_5831(cpu); //was indirect
-   MEM_WORD(0xdbc0) = 0x0;
-   MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
-   MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
-   MEM_WORD(0xdbbc) = 0x64;
-   MEM_WORD(0xdbba) = 0x96; //= 0064h
-   MEM_WORD(0xdbbe) = 0xc7; //= 00C7h
+   setup_viewport(cpu, 2);
+   
    cpu->SI = MEM_WORD(0xa6);
    INST_SHL(cpu->SI, 0x1);
    cpu->SI = MEM_WORD(cpu->SI + 0x5bbc);
@@ -366,12 +373,8 @@ void FUN_main_render(cpu_ctx *cpu){
                               // FWD[2]:     1000:5b01(c),15cd:006f(R)
    FUN_1000_5831(cpu); //was indirect
    LAB_LOC_14:
-   MEM_WORD(0xdbc0) = 0x0;
-   MEM_WORD(0xdbb8) = 0xa0; //= 00A0h
-   MEM_WORD(0xdbc2) = 0x13f; //= 013Fh
-   MEM_WORD(0xdbbc) = 0x0;
-   MEM_WORD(0xdbba) = 0x50; //= 0064h
-   MEM_WORD(0xdbbe) = 0xc7; //= 00C7h
+   setup_viewport(cpu, 0);
+
    cpu->SI = 0x0;
    cpu->AX = 0xa;
    cpu->BX = 0xa;
@@ -4095,11 +4098,7 @@ static void FUN_INIT_2b70(cpu_ctx *cpu){
 //************************************************************************************************
 //ANALYSIS: this clears the framebuffer
 static void FUN_1000_2b98(cpu_ctx *cpu){
-   int amm = 320*200;
-   if(cpu->double_res){
-      amm =  320*200 * 4;
-   }
-
+   int amm = cpu->vp_w * cpu->vp_h;
    memset(cpu->framebuffer, cpu->AL, amm);
    return;
 }
