@@ -11,6 +11,9 @@
 #define SP_ACCESS(_offset) cpu->bunchOfInts[(_offset) >> 1]
 #define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) * cpu->vp_w + (_b)]
 
+//use this to optimize only specific functions while keeping the rest of the exe as Oz
+#define OPTM __attribute__((optimize("O2")))
+
 void setup_viewport(cpu_ctx *cpu, int type){
    MEM_WORD(0xdbc0) = 0x0;
    MEM_WORD(0xdbb8) = cpu->vp_w / 2; //= 00A0h
@@ -4177,7 +4180,7 @@ static void FUN_1000_2bec(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-static void FUN_1000_2c4b(cpu_ctx *cpu){
+static OPTM void FUN_1000_2c4b(cpu_ctx *cpu){
    SETUP_STACK();
                               //XREF[6]:     1000:2c2d(c),1000:2c42(c),1000:312f(c),1000:3144(c),
                               //             1000:373f(c),1000:3754(c)
@@ -4236,7 +4239,7 @@ static void FUN_1000_2c4b(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-static void FUN_1000_2d61(cpu_ctx *cpu){
+static OPTM void FUN_1000_2d61(cpu_ctx *cpu){
    SETUP_STACK();
    uint8_t *linep;
                               //XREF[1]:     1000:2c45(c)
@@ -5565,7 +5568,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
-static void FUN_1000_3827(cpu_ctx *restrict cpu){
+static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
    SETUP_STACK();
    uint8_t *linep;
    uint8_t *textPtr = (uint8_t*)cpu->segments[cpu->FS];
