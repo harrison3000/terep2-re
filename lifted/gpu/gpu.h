@@ -226,27 +226,27 @@ static inline void inner_imul32(cpu_ctx *cpu, uint32_t a){
     dest = res;                  \
 })
 
-static inline void inner_idiv16(cpu_ctx *cpu, uint16_t a){
-    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
-    int32_t num = numm.sign_big;
-    int32_t den = SIGNED(a);
-    
-    cpu->AX = (uint16_t)(num / den);
-    cpu->DX = (uint16_t)(num % den);
-}
+#define INNER_IDIV16(a) ({ \
+    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX}; \
+    int32_t num = numm.sign_big; \
+    int32_t den = SIGNED(a);     \
+    \
+    cpu->AX = (uint16_t)(num / den); \
+    cpu->DX = (uint16_t)(num % den); \
+})
 
-static inline void inner_idiv32(cpu_ctx *cpu, uint32_t a){
-    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
-    int64_t num = numm.sign_big;
-    int64_t den = SIGNED(a);
-    
-    cpu->EAX = (uint32_t)(num / den);
-    cpu->EDX = (uint32_t)(num % den);
-}
+#define INNER_IDIV32(a) ({ \
+    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX}; \
+    int64_t num = numm.sign_big; \
+    int64_t den = SIGNED(a);     \
+    \
+    cpu->EAX = (uint32_t)(num / den); \
+    cpu->EDX = (uint32_t)(num % den); \
+})
 
 #define INST_IDIV(a) _Generic((a),   \
-    uint16_t : inner_idiv16(cpu, a), \
-    uint32_t : inner_idiv32(cpu, a)  \
+    uint16_t : INNER_IDIV16(a), \
+    uint32_t : INNER_IDIV32(a)  \
 )
 
 
