@@ -2,6 +2,7 @@
 #include "declrs.h"
 #include "gpu/types.h"
 #include "variables.h"
+#include <stdint.h>
 
 #define SPAN_BUF_X 0
 #define SPAN_BUF_A 4096
@@ -5565,9 +5566,10 @@ static void FUN_1000_379b(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 //ANALYSIS: seems to be related to rendering textured polygons, disabling it makes only flat polygons render, also it show a lot on the profiler
-static void FUN_1000_3827(cpu_ctx *cpu){
+static void FUN_1000_3827(cpu_ctx *restrict cpu){
    SETUP_STACK();
    int line = 0;
+   uint8_t *textPtr = (uint8_t*)cpu->segments[cpu->FS];
                               //XREF[1]:     1000:3795(c)
    cpu->SI = MEM_WORD(0xdbc4);
    cpu->DI = MEM_WORD(0xdbc6);
@@ -5625,10 +5627,19 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    INST_XCHG(cpu->vars.v_upper_si, cpu->SI);
    cpu->SI = cpu->BP;
    INST_SHL(cpu->SI, 0x8);
-   cpu->AL = SMEM_BYTE(cpu->FS,cpu->BX + cpu->SI);
-   if(cpu->AL == 0xff) goto LAB_LOC_4;
-   if(cpu->AL >= 0xf0) goto LAB_LOC_6;
-   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
+   {
+      uint8_t texel = textPtr[cpu->BX + cpu->SI];
+      if(texel != 0xff) {
+         if(texel >= 0xf0) {
+            texel -= 0xf0;
+            uint16_t texel16 = texel << 8;
+            uint8_t v = FB_ACCESS(line/4, cpu->DI);
+            texel16 += v;
+            texel = MEM_BYTE(texel16 + 0x2e51);
+         };
+         FB_ACCESS(line/4, cpu->DI) = texel;
+      }
+   }
    LAB_LOC_4:
    INST_INC(cpu->DI);
    INST_XCHG(cpu->vars.v_upper_si, cpu->SI);
@@ -5647,15 +5658,6 @@ static void FUN_1000_3827(cpu_ctx *cpu){
    LAB_LOC_5:
    cpu->DI = 0;
    return;
-   LAB_LOC_6:
-   INST_SUB(cpu->AL, 0xf0);
-   cpu->AH = cpu->AL;
-   cpu->AL = FB_ACCESS(line/4, cpu->DI);
-   INST_XCHG(cpu->AX, cpu->BX);
-   cpu->BL = MEM_BYTE(cpu->BX + 0x2e51);
-   INST_XCHG(cpu->AX, cpu->BX);
-   FB_ACCESS(line/4, cpu->DI) = cpu->AL;
-   goto LAB_LOC_4;
 }
 
 //************************************************************************************************
