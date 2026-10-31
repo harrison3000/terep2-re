@@ -211,6 +211,8 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->FS = MEM_WORD(0x1a47);
    cpu->GS = MEM_WORD(0x1a45);
 
+   cpu->mult = (cpu->vp_w << 8)/320;
+
    if((MEM_BYTE(0x7d) & 0xff) != 0) goto LAB_LOC_5;
 
     //singleplayer
@@ -2203,6 +2205,11 @@ static void FUN_1000_1408(cpu_ctx *cpu){
    INST_IMUL(cpu->BX);
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
    cpu->AX = cpu->DX;
+   {
+      int32_t dist = cpu->CX;
+      dist = (dist * 256)/cpu->mult;
+      cpu->CX = dist;
+   }
    INST_CWD();
    INST_IDIV(cpu->CX);
    MEM_WORD(0x5d8) = cpu->AX;
@@ -3720,8 +3727,7 @@ static void FUN_1000_2760(cpu_ctx *cpu){
                               //             1000:2016(c),1000:20cd(c),1000:21c0(c),1000:2275(c),
                               //             1000:2420(c),1000:4739(c),1000:47a6(c),1000:4836(c),
                               //             1000:4897(c)
-   //TODO precompute this on res change?
-   int32_t mult = (cpu->vp_w << 8)/320;
+   int32_t mult = cpu->mult;
 
    int32_t axx = (int16_t)cpu->AX;
    int32_t bxx = (int16_t)cpu->BX;
