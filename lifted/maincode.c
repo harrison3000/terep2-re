@@ -3,9 +3,9 @@
 #include "gpu/types.h"
 #include "variables.h"
 
-#define SPAN_BUF_X 0x0004
-#define SPAN_BUF_A 0x2004
-#define SPAN_BUF_B 0x4004
+#define SPAN_BUF_X 0
+#define SPAN_BUF_A 4096
+#define SPAN_BUF_B 8192
 
 #define SP_ACCESS(_offset) cpu->bunchOfInts[(_offset) >> 1]
 #define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) * cpu->vp_w + (_b)]
