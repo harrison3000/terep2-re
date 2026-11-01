@@ -4,9 +4,10 @@
 #include "variables.h"
 #include <stdint.h>
 
+//span offsets in bytes!
 #define SPAN_BUF_X 0
-#define SPAN_BUF_A 4096
-#define SPAN_BUF_B 8192
+#define SPAN_BUF_A T_MAX_H * 4
+#define SPAN_BUF_B T_MAX_H * 8
 
 #define SP_ACCESS(_offset) cpu->bunchOfInts[(_offset) >> 1]
 #define FB_ACCESS(_l, _c) cpu->framebuffer[(_l) * cpu->vp_w + (_c)]

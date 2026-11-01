@@ -148,6 +148,7 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     }
     if(adjust){
         adjustWindowSize(hwnd, w*s, h*s);
+        //TODO check in the menu
     }
 }
 

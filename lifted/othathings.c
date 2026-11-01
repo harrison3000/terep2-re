@@ -13,7 +13,7 @@ const uint8_t initialdata[] = {
 cpu_ctx *initCPU(){
     auto cpu = (cpu_ctx*)calloc(1,sizeof(cpu_ctx));
 
-    auto memory = (uint8_t*)calloc(1,2 * 1024 * 1024);
+    auto memory = (uint8_t*)calloc(1,68 * 1024);
     cpu->mem_base = (uintptr_t)memory;
     cpu->segments[0] = cpu->mem_base;
 
@@ -49,14 +49,19 @@ cpu_ctx *initCPU(){
     cpu->vp_w = 320;
     cpu->vp_h = 200;
 
-    cpu->framebuffer = malloc(2000*1500);
+    cpu->framebuffer = malloc(1500*T_MAX_H);
 
     return cpu;
 }
 
 void finalizeCpu(cpu_ctx *cpu){
-    auto mem = (uint8_t *)cpu->mem_base;
-    free(mem);
+    for(int i = 0; i < 15; i++){
+        uintptr_t addr = cpu->segments[i];
+        if(addr != 0){
+            free((void*)addr);
+        }
+    }
+
     free(cpu->framebuffer);
     free(cpu);
 }
