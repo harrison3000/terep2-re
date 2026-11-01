@@ -55,11 +55,11 @@ static void CreateDebugConsole(void) {
     if (!ok)
         return;
 
-    AttachConsole(GetCurrentProcessId());
     SetConsoleTitle(console_tilte);
     freopen("CONOUT$", "w", stdout);
 
     printf(" Debug Console for TeREp2\n\n");
+    setvbuf(stdout, NULL, _IONBF, 0);
 }
 
 static void DestroyDebugConsole(void) {
