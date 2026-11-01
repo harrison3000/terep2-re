@@ -9,7 +9,7 @@
 #define SPAN_BUF_B 8192
 
 #define SP_ACCESS(_offset) cpu->bunchOfInts[(_offset) >> 1]
-#define FB_ACCESS(_a, _b) cpu->framebuffer[(_a) * cpu->vp_w + (_b)]
+#define FB_ACCESS(_l, _c) cpu->framebuffer[(_l) * cpu->vp_w + (_c)]
 
 //use this to optimize only specific functions while keeping the rest of the exe as Oz
 #define OPTM __attribute__((optimize("O2")))
@@ -1799,6 +1799,10 @@ static void FUN_1000_1408(cpu_ctx *cpu){
    if(cpu->vars.another_quick_temp == 1) goto L_1408_START;
    cpu->AX = MEM_WORD(cpu->DI + 0x6);
    cpu->BX = MEM_WORD(cpu->DI + 0x8);
+   if(cpu->vp_w != 320 || cpu->vp_h != 200){
+      //dont draw car pixels on higher res
+      goto L_1408_START;
+   }
    FUN_1000_3f98(cpu);
    goto L_1408_START;
    LAB_LOC_7:
@@ -6421,22 +6425,30 @@ static void FUN_1000_3f7a(cpu_ctx *cpu){
 //*                                           FUNCTION                                           *
 //************************************************************************************************
 static void FUN_1000_3f98(cpu_ctx *cpu){
-   SETUP_STACK();
                               //XREF[2]:     1000:1482(c),1000:59ad(c)
    if(SIGNED(cpu->AX) < SIGN_MEM_WORD(0xdbc0)) goto LAB_LOC_1;
    if(SIGNED(cpu->AX) > SIGN_MEM_WORD(0xdbc2)) goto LAB_LOC_1;
    if(SIGNED(cpu->BX) < SIGN_MEM_WORD(0xdbbc)) goto LAB_LOC_1;
    if(SIGNED(cpu->BX) > SIGN_MEM_WORD(0xdbbe)) goto LAB_LOC_1;
-   INST_PUSH(cpu->ES);
-   cpu->BH = cpu->BL;
-   cpu->BL = 0; //was a XOR
-   INST_ADD(cpu->AX, cpu->BX);
-   INST_SHR(cpu->BX, 0x1);
-   INST_SHR(cpu->BX, 0x1);
-   INST_ADD(cpu->BX, cpu->AX);
-   cpu->ES = 15;
-   cpu->framebuffer[cpu->BX] = cpu->CL;
-   INST_POP(cpu->ES);
+   
+   if(cpu->vp_w == 320 || cpu->vp_h == 200){
+      FB_ACCESS(cpu->BX, cpu->AX) = cpu->CL;
+   }else{
+      //TODO center text and all that
+      int half_w = cpu->vp_w/2;
+      int mult = cpu->mult >> 8;
+
+      for(int li = 0; li < mult; li++){
+         for(int co = 0; co < mult; co++){
+            int l = cpu->BX * mult + li;
+            int c = cpu->AX * mult + co;
+            FB_ACCESS(l, c) = cpu->CX;
+         }
+      }
+
+
+   }
+   
    LAB_LOC_1:
    return;
 
