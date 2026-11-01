@@ -136,22 +136,18 @@ static void SaveConfig(void){
 }
 
 static void SetGraphicsScale(HWND hwnd, int adjust){
-    int w,h;
-    int bw = 320, bh = 200;
-    getScaleDimension(selected_scale, &w, &h);
-    if(selected_scale > T2_SCALE_P2){
-        bw = w;
-        bh = h;
-    }
-    gameImg.info.biWidth  = bw;
-    gameImg.info.biHeight = -bh;
-    gameImg.info.biSizeImage = bw * bh;
+    int w,h,s;
+    getScaleDimension(selected_scale, &w, &h, &s);
+    
+    gameImg.info.biWidth  = w;
+    gameImg.info.biHeight = -h;
+    gameImg.info.biSizeImage = w * h;
 
     if(g != NULL){
-        set_resolution(g, bw, bh);
+        set_resolution(g, w, h);
     }
     if(adjust){
-        adjustWindowSize(hwnd, w, h);
+        adjustWindowSize(hwnd, w*s, h*s);
     }
 }
 
@@ -537,8 +533,6 @@ void call_init(HWND hwnd, char path[], int complain){
 
     new_session(&g);
 
-    SetGraphicsScale(hwnd, 0);
-
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
     if(!ok){
@@ -553,6 +547,7 @@ void call_init(HWND hwnd, char path[], int complain){
     }
 
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
+    SetGraphicsScale(hwnd, 0);
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }

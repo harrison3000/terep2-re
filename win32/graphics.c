@@ -43,30 +43,26 @@ void drawTheFramebuffer(HDC hdc,int scale, void* video){
     
 }
 
-void getScaleDimension(int scale, int *w, int *h){
-    if(scale == T2_SCALE_P2){
-        *w = 320*2;
-        *h = 200*2;
-        return;
+void getScaleDimension(int scale, int *w, int *h, int *s){
+    #define SC_RES(_id, _w, _h, _s) \
+    if(scale == _id){ \
+        *w = _w; \
+        *h = _h; \
+        *s = _s; \
+        return;  \
     }
-    if(scale == T2_SCALE_S1){
-        *w = 800;
-        *h = 600;
-        return;
-    }
-    if(scale == T2_SCALE_S2){
-        *w = 960;
-        *h = 600;
-        return;
-    }
-    if(scale == T2_SCALE_S3){
-        *w = 1280;
-        *h = 720;
-        return;
-    }
+
+
+    SC_RES(T2_SCALE_P2, 320, 200, 2)
+    SC_RES(T2_SCALE_S1, 640, 400, 1)
+    SC_RES(T2_SCALE_S2, 800, 600, 1)
+    SC_RES(T2_SCALE_S3, 960, 600, 1)
+    SC_RES(T2_SCALE_S4, 1280, 720, 1)
+    SC_RES(T2_SCALE_S5, 1440, 900, 1)
 
     *w = 320;
     *h = 200;
+    *s = 1;
 }
 
 void prepare_bitmap_info(int w, int h, st_image *bminfo, uint8_t *palette){

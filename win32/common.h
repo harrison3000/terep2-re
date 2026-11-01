@@ -14,7 +14,7 @@ void blinkenInit(void);
 LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 void drawTheFramebuffer(HDC hdc,int scale, void *);
-void getScaleDimension(int scale, int *w, int *h);
+void getScaleDimension(int scale, int *w, int *h, int *s);
 
 BOOL sound_init(void);
 void sound_deinit(void);
