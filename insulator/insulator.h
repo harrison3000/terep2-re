@@ -12,6 +12,8 @@ void send_key_event(GameSession *g, uint8_t);
 void calculate_physics(GameSession *g);
 void render_frame(GameSession *g);
 
+void set_resolution(GameSession *g, int w, int h);
+
 int n_loaded_cars(GameSession *g);
 void *get_raw_fb(GameSession *g);
 uint8_t *get_palette(GameSession *g);

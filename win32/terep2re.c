@@ -135,10 +135,21 @@ static void SaveConfig(void){
     free(path);
 }
 
-static void SetGraphicsScale(HWND hwnd){
-    int w,h;
-    getScaleDimension(selected_scale, &w, &h);
-    adjustWindowSize(hwnd, w, h);
+static void SetGraphicsScale(HWND hwnd, int adjust){
+    int w,h,s;
+    getScaleDimension(selected_scale, &w, &h, &s);
+    
+    gameImg.info.biWidth  = w;
+    gameImg.info.biHeight = -h;
+    gameImg.info.biSizeImage = w * h;
+
+    if(g != NULL){
+        set_resolution(g, w, h);
+    }
+    if(adjust){
+        adjustWindowSize(hwnd, w*s, h*s);
+        //TODO check in the menu
+    }
 }
 
 static INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
@@ -254,7 +265,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
             if(LOWORD(wParam)/100 == 401){//gambiarra da boa!
                 selected_scale = LOWORD(wParam);
-                SetGraphicsScale(hwnd);
+                SetGraphicsScale(hwnd, 1);
             }
         }
         break;
@@ -462,7 +473,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     UpdateWindow(hwnd);
 
     adjustWindowSize(hwnd, 640, 400);
-    SetGraphicsScale(hwnd);
+    SetGraphicsScale(hwnd,1);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -536,6 +547,7 @@ void call_init(HWND hwnd, char path[], int complain){
     }
 
     prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
+    SetGraphicsScale(hwnd, 0);
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }

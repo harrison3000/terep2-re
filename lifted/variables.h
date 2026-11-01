@@ -3,7 +3,17 @@
 #include "gpu/types.h"
 #include <stdint.h>
 
-typedef struct otherVars{
+struct otherVars{
+    uint16_t v_tmp_26dd_a;
+    uint16_t v_tmp_26dd_b;
+
+    uint16_t v_upper_si;
+    uint16_t v_upper_di;
+
+    uint32_t v_tmp_379b;
+
+    uint16_t retval_2418;
+
     uint16_t CSD_WORD_1000_0e67;
 
     uint32_t CSD_DWORD_1000_129f;
@@ -37,9 +47,7 @@ typedef struct otherVars{
     uint16_t mu_w_tmp;
     uint32_t mu_d_tmp;
 
-    uint16_t retval_2418;
-
-
+    
     //this used to be at 0x5ee, but it was bugged I think, it stored and loaded to AL, but used SAHF/LAHF (they modify AH), so yeah
     //and only worked because nothing overwrote AH in the meantime? IDK really
     //I will just make something that resembles what was probably intended and hope for the best
@@ -58,11 +66,6 @@ typedef struct otherVars{
     uint32_t mitemp_02;
     uint16_t mitemp_03;
 
-
-    uint16_t v_tmp_26dd_a;
-    uint16_t v_tmp_26dd_b;
-
-
     uint32_t pslc_eb5f;
     uint32_t pslc_ea9b;
     uint32_t pslc_eb63;
@@ -72,9 +75,4 @@ typedef struct otherVars{
     uint32_t pslc_eaa3;
 
     uint32_t mitemp_BeX;
-
-    uint16_t v_upper_si;
-    uint16_t v_upper_di;
-
-    uint32_t v_tmp_379b;
-} otherVars;
+};

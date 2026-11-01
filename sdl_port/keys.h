@@ -1,9 +1,9 @@
 
-int8_t get_pc_scancode(const SDL_Event& event) {
-    bool is_release = (event.type == SDL_EVENT_KEY_UP);
+int8_t get_pc_scancode(SDL_Event *event) {
+    bool is_release = (event->type == SDL_EVENT_KEY_UP);
     uint8_t make_code = 0;
 
-    switch (event.key.key) {
+    switch (event->key.key) {
         case SDLK_F1:  make_code = 0x3B; break;
         case SDLK_F2:  make_code = 0x3C; break;
         case SDLK_F3:  make_code = 0x3D; break;

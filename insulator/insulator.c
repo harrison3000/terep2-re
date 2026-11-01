@@ -53,8 +53,11 @@ void DOS3Call(cpu_ctx *cpu){
         case 0x4800:{
             //memory alocation
             e->current_seg++; 
-            uintptr_t offset = e->current_seg * 68 * 1024; //68kb, a bit more than 64 so we have a margin
-            cpu->segments[e->current_seg] = cpu->mem_base + offset;
+            if(e->current_seg >= (sizeof(cpu->segments)/sizeof(uintptr_t))){
+                exit(4);
+            }
+            void *addr = malloc(68 * 1024); //68kb, a bit more than 64 so we have a safety margin
+            cpu->segments[e->current_seg] = (uintptr_t)addr;
             printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
             cpu->AX = e->current_seg;
             cpu->CF=0;
@@ -168,6 +171,11 @@ void finalize_game(GameSession *g){
     free(g);
 }
 
+void set_resolution(GameSession *g, int w, int h){
+    g->cpu->vp_w = w;
+    g->cpu->vp_h = h;
+}
+
 
 void send_key_event(GameSession *g, uint8_t key){
     g->cpu->AX = key;
@@ -189,8 +197,7 @@ int n_loaded_cars(GameSession *g){
 }
 
 void *get_raw_fb(GameSession *g){
-    auto fbs = (uint16_t *)(g->cpu->mem_base + 0xdb10);
-    auto fb = g->cpu->segments[fbs[0]];
+    auto fb = g->cpu->framebuffer;
 
     return (void*)fb;
 }
