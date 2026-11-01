@@ -19,7 +19,7 @@ BEGIN
             MENUITEM "800x600",  T2_SCALE_S2
             MENUITEM "960x600",  T2_SCALE_S3
             MENUITEM "1280x720", T2_SCALE_S4
-            MENUITEM "1440x900", T2_SCALE_S4
+            MENUITEM "1440x900", T2_SCALE_S5
         END
     END
     POPUP "&Sound"

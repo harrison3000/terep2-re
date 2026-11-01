@@ -148,7 +148,12 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     }
     if(adjust){
         adjustWindowSize(hwnd, w*s, h*s);
-        //TODO check in the menu
+        HMENU hMenu = GetMenu(hwnd);
+        for(int i = 40100; i < 40150; i++){
+            //this is horrible! but it works, cant argue with results
+            int chk = i == selected_scale ? MF_CHECKED : MF_UNCHECKED;
+            CheckMenuItem(hMenu, i, chk);
+        }
     }
 }
 
