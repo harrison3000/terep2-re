@@ -6434,19 +6434,23 @@ static void FUN_1000_3f98(cpu_ctx *cpu){
    if(cpu->vp_w == 320 || cpu->vp_h == 200){
       FB_ACCESS(cpu->BX, cpu->AX) = cpu->CL;
    }else{
-      //TODO center text and all that
-      int half_w = cpu->vp_w/2;
       int mult = cpu->mult >> 8;
+
+      int lll = cpu->BX * mult;
+      if(cpu->BX > 100){
+         int ls = (cpu->BX - 200) * mult;
+         lll = cpu->vp_h + ls;
+      }
+
+      int ccc = (cpu->AX - 160) * mult + cpu->vp_w/2;
 
       for(int li = 0; li < mult; li++){
          for(int co = 0; co < mult; co++){
-            int l = cpu->BX * mult + li;
-            int c = cpu->AX * mult + co;
+            int l = lll + li;
+            int c = ccc + co;
             FB_ACCESS(l, c) = cpu->CX;
          }
       }
-
-
    }
    
    LAB_LOC_1:
