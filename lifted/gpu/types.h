@@ -18,17 +18,15 @@ typedef struct {
     
     union {uint32_t EBP;  uint16_t BP; };
 
-    uint32_t padding;//premature optimization for pushad/popad to be exacly 8*4
-    uint32_t padding2;
-
-    uintptr_t mem_base;
-    uintptr_t segments[16];
+    uint8_t padding[7];//premature optimization for pushad/popad to be exacly 8*4
+    uint8_t CF;
 
     //segment registers, will be a index in the segments array above
     uint16_t DS; //should ALWAYS be zero
     uint16_t ES, FS, GS;
 
-    uint8_t CF;
+    uintptr_t mem_base;
+    uintptr_t segments[11];//10 should be enough for a track with 5 cars with different textures +1 for safety
 
     struct otherVars vars;
 

@@ -55,7 +55,7 @@ cpu_ctx *initCPU(){
 }
 
 void finalizeCpu(cpu_ctx *cpu){
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < 11; i++){
         uintptr_t addr = cpu->segments[i];
         if(addr != 0){
             free((void*)addr);

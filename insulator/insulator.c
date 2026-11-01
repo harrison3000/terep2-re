@@ -53,6 +53,9 @@ void DOS3Call(cpu_ctx *cpu){
         case 0x4800:{
             //memory alocation
             e->current_seg++; 
+            if(e->current_seg >= (sizeof(cpu->segments)/sizeof(uintptr_t))){
+                exit(4);
+            }
             void *addr = malloc(68 * 1024); //68kb, a bit more than 64 so we have a safety margin
             cpu->segments[e->current_seg] = (uintptr_t)addr;
             printf("game asked for %d paragraphs (%d bytes), we gave it a full 64k block anyway\n", cpu->BX, cpu->BX * 16);
