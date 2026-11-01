@@ -135,10 +135,24 @@ static void SaveConfig(void){
     free(path);
 }
 
-static void SetGraphicsScale(HWND hwnd){
+static void SetGraphicsScale(HWND hwnd, int adjust){
     int w,h;
+    int bw = 320, bh = 200;
     getScaleDimension(selected_scale, &w, &h);
-    adjustWindowSize(hwnd, w, h);
+    if(selected_scale > T2_SCALE_P2){
+        bw = w;
+        bh = h;
+    }
+    gameImg.info.biWidth  = bw;
+    gameImg.info.biHeight = -bh;
+    gameImg.info.biSizeImage = bw * bh;
+
+    if(g != NULL){
+        set_resolution(g, bw, bh);
+    }
+    if(adjust){
+        adjustWindowSize(hwnd, w, h);
+    }
 }
 
 static INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
@@ -254,7 +268,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
             if(LOWORD(wParam)/100 == 401){//gambiarra da boa!
                 selected_scale = LOWORD(wParam);
-                SetGraphicsScale(hwnd);
+                SetGraphicsScale(hwnd, 1);
             }
         }
         break;
@@ -463,7 +477,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     UpdateWindow(hwnd);
 
     adjustWindowSize(hwnd, 640, 400);
-    SetGraphicsScale(hwnd);
+    SetGraphicsScale(hwnd,1);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -522,6 +536,8 @@ void call_init(HWND hwnd, char path[], int complain){
     }
 
     new_session(&g);
+
+    SetGraphicsScale(hwnd, 0);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
