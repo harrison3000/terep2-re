@@ -317,10 +317,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if (wParam == 122 && g != NULL) {
                 tickricktick();
 
-                if(!rs.backbuffer_invalid && !rs.gimme_new_data_baby){
-                    printf("DEBUG: overrender prevented\n");
-                }
-
                 if(!rs.backbuffer_invalid && rs.gimme_new_data_baby){
                   render_frame(g);
                   write_backbuffer();
