@@ -37,5 +37,6 @@ typedef struct {
 
     uint32_t vp_w, vp_h;
     int32_t mult; // resolution multiplier
+    bool s_original;
     uint16_t bunchOfInts[T_MAX_H*2*3];
 } cpu_ctx;

@@ -217,6 +217,7 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->GS = MEM_WORD(0x1a45);
 
    cpu->mult = (cpu->vp_w << 8)/320;
+   cpu->s_original = (cpu->vp_w == 320 && cpu->vp_h == 200);
 
    if((MEM_BYTE(0x7d) & 0xff) != 0) goto LAB_LOC_5;
 
@@ -1800,7 +1801,7 @@ static void FUN_1000_1408(cpu_ctx *cpu){
    if(cpu->vars.another_quick_temp == 1) goto L_1408_START;
    cpu->AX = MEM_WORD(cpu->DI + 0x6);
    cpu->BX = MEM_WORD(cpu->DI + 0x8);
-   if(cpu->vp_w != 320 || cpu->vp_h != 200){
+   if(!cpu->s_original){
       //dont draw car pixels on higher res
       goto L_1408_START;
    }
@@ -6443,7 +6444,7 @@ static void FUN_1000_3f98(cpu_ctx *cpu){
    if(SIGNED(cpu->BX) < SIGN_MEM_WORD(0xdbbc)) goto LAB_LOC_1;
    if(SIGNED(cpu->BX) > SIGN_MEM_WORD(0xdbbe)) goto LAB_LOC_1;
    
-   if(cpu->vp_w == 320 || cpu->vp_h == 200){
+   if(cpu->s_original){
       FB_ACCESS(cpu->BX, cpu->AX) = cpu->CL;
    }else{
       int mult = cpu->mult >> 8;
