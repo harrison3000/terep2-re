@@ -5650,8 +5650,8 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
      do{
       uint32_t bxx = EEBX >> 16;
       uint32_t bpp = EEBP;
-      bpp >>= 16;
-      bpp <<= 8;
+      bpp >>= 8;
+      bpp &= 0xff00;
    
       uint8_t texel = textPtr[bxx + bpp];
       if(likely(texel != 0xff)) {
