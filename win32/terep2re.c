@@ -19,6 +19,8 @@ void adjustWindowSize(HWND hwnd, int w, int h);
 
 void end_session();
 
+void tickricktick();
+
 HWND hBlinken;
 
 #define HZ_PHYSICS 120 //TODO check if this is right
@@ -298,26 +300,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
         case WM_TIMER: {
             if (wParam == 122 && g != NULL) {
-                if(run_physics){
-                    int64_t agora = GetTimeee();
-                    if(last_p_update < 0){
-                        last_p_update = agora;
-                    }
-                    int64_t diff = agora - last_p_update;
-
-                    int64_t ticks = diff / USECS_PER_TICK;
-                    int64_t sobra = diff % USECS_PER_TICK;
-
-                    for(int i = 0; i < ticks; i++){
-                        if(i > 5){
-                            //nah, something isnt right here
-                            //maybe the timer was delayed, lets bail
-                            break;
-                        }
-                        calculate_physics(g);
-                    }
-                    last_p_update = agora - sobra;
-                }
+                tickricktick();
 
                 InvalidateRect(hwnd, 0, FALSE);
                 render_frame(g);
@@ -536,6 +519,8 @@ void call_init(HWND hwnd, char path[], int complain){
         end_session();
     }
 
+    last_p_update = -1;
+
     new_session(&g);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
@@ -556,6 +541,36 @@ void call_init(HWND hwnd, char path[], int complain){
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
 }
+
+void tickricktick(){
+    if(g == NULL){
+        return;
+    }
+
+    if(run_physics){
+        int64_t agora = GetTimeee();
+        if(last_p_update < 0){
+            last_p_update = agora;
+        }
+        int64_t diff = agora - last_p_update;
+
+        int64_t ticks = diff / USECS_PER_TICK;
+        int64_t sobra = diff % USECS_PER_TICK;
+
+        for(int i = 0; i < ticks; i++){
+            if(i > 5){
+                //nah, something isnt right here
+                //maybe the timer was delayed, lets bail
+                break;
+            }
+            calculate_physics(g);
+        }
+        if(ticks > 0){
+            last_p_update = agora - sobra;
+        }
+    }
+}
+
 
 void end_session(){
     sound_reset();

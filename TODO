@@ -1,3 +1,4 @@
 A file specifying special addresses to watch in the blinkenlights window
 Merge the deformerz conection branch (redo it?)
-On high-res the car sprites doesnt scale
+On high-res the car sprites doesnt scale, but no known cars use standalone sprites
+Use bitblt for faster presentation on slower systems
