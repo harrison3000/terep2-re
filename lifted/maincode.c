@@ -5635,19 +5635,18 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
    cpu->EDX = cpu->EAX;
    cpu->SI = cpu->CX;
    INST_POP(cpu->ECX);
-   INST_MOVZX(cpu->EBX, cpu->BX);
-   INST_MOVZX(cpu->EBP, cpu->BP);
-   INST_SHL(cpu->EBX, 0x8);
-   INST_SHL(cpu->EBP, 0x8);
-   INST_CLD();
-
    {
+     uint32_t EEBX = cpu->BX;
+     uint32_t EEBP = cpu->BP;
+     EEBX <<= 8;
+     EEBP <<= 8;
+   
      int idx = cpu->DI;
      int cnt = cpu->SI;
      
      do{
-      uint32_t bxx = cpu->EBX >> 16;
-      uint32_t bpp = cpu->EBP;
+      uint32_t bxx = EEBX >> 16;
+      uint32_t bpp = EEBP;
       bpp >>= 16;
       bpp <<= 8;
    
@@ -5665,8 +5664,8 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
    
       idx++;
    
-      INST_ADD(cpu->EBX, cpu->ECX);
-      INST_ADD(cpu->EBP, cpu->EDX);
+      EEBX += cpu->ECX;
+      EEBP += cpu->EDX;
       cnt--;
      }while(cnt !=0);
    }
