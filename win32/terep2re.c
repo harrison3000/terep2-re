@@ -321,12 +321,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     CheckMenuItem(hMenu, T2_APP_PHYS_RUN, run_physics ? MF_CHECKED : MF_UNCHECKED);
                 }
             }
-            if(wParam == VK_F8 && !run_physics){
+            if(g != NULL){
+              if(wParam == VK_F8 && !run_physics){
                 calculate_physics(g);
-            }
-            if(wParam == VK_ESCAPE && g != NULL){
+              }
+              if(wParam == VK_ESCAPE){
                 end_session();
                 InvalidateRect(hwnd, 0, TRUE);
+              }
             }
             //no break here, intentional fallthrou
         }
