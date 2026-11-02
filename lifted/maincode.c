@@ -5640,34 +5640,36 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
    INST_SHL(cpu->EBX, 0x8);
    INST_SHL(cpu->EBP, 0x8);
    INST_CLD();
-   LAB_LOC_3:
-   INST_ROR(cpu->EBX, 0x10);
-   INST_ROR(cpu->EBP, 0x10);
-   INST_XCHG(cpu->vars.v_upper_si, cpu->SI);
-   cpu->SI = cpu->BP;
-   INST_SHL(cpu->SI, 0x8);
+
    {
-      uint8_t texel = textPtr[cpu->BX + cpu->SI];
+     int idx = cpu->DI;
+     int cnt = cpu->SI;
+     
+     do{
+      uint32_t bxx = cpu->EBX >> 16;
+      uint32_t bpp = cpu->EBP;
+      bpp >>= 16;
+      bpp <<= 8;
+   
+      uint8_t texel = textPtr[bxx + bpp];
       if(texel != 0xff) {
          if(texel >= 0xf0) {
             texel -= 0xf0;
             uint16_t texel16 = texel << 8;
-            uint8_t v = linep[cpu->DI];
+            uint8_t v = linep[idx];
             texel16 |= v;
             texel = MEM_BYTE(texel16 + 0x2e51);
          };
-         linep[cpu->DI] = texel;
+         linep[idx] = texel;
       }
+   
+      idx++;
+   
+      INST_ADD(cpu->EBX, cpu->ECX);
+      INST_ADD(cpu->EBP, cpu->EDX);
+      cnt--;
+     }while(cnt !=0);
    }
-   LAB_LOC_4:
-   INST_INC(cpu->DI);
-   INST_XCHG(cpu->vars.v_upper_si, cpu->SI);
-   INST_ROL(cpu->EBX, 0x10);
-   INST_ROL(cpu->EBP, 0x10);
-   INST_ADD(cpu->EBX, cpu->ECX);
-   INST_ADD(cpu->EBP, cpu->EDX);
-   INST_DEC(cpu->SI);
-   if(cpu->SI != 0) goto LAB_LOC_3;
    INST_POP(cpu->SI);
    INST_POP(cpu->DI);
    INST_ADD(cpu->SI, 0x4);
