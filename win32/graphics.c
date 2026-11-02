@@ -6,42 +6,75 @@
 #include "resource.h"
 
 
-extern st_image gameImg;
+extern rend_state rs;
 
-static inline RGBQUAD blend_rgb(RGBQUAD a, RGBQUAD b);
+//double buffering implementation based on this: https://www.robertelder.ca/doublebuffering/
+//if I got something wrong blame him 😂😂😂😂 (actually, dont, I am joking.... or am I?)
 
-void drawTheFramebuffer(HDC hdc,int scale, void* video){
-    uint8_t* ivideo = (uint8_t *)video;
+static void freeResources(){
+    if(rs.Membitmap && rs.Memhdc){
+        SelectObject(rs.Memhdc, rs.Memdefaultbitmap);
+    }
 
-    if(scale == T2_SCALE_P1){
-        SetDIBitsToDevice(hdc,
-        0, 0, 320, 200,
-        0, 0, 0, 200,
-        video, (void *)&gameImg,
-        DIB_RGB_COLORS);
+    if(rs.Membitmap){
+        DeleteObject(rs.Membitmap);
+        rs.Membitmap = NULL;
+    }
+    if(rs.Memhdc){
+        DeleteDC(rs.Memhdc);
+        rs.Memhdc = NULL;
+    }
+    rs.backbuffer_invalid = 1;
+}
+
+void drawTheFramebuffer(HDC hdc){
+    int ws = rs.w * rs.s;
+    int hs = rs.h * rs.s;
+
+    if(rs.backbuffer_invalid || !rs.Memhdc || !rs.Membitmap){
+        printf("DEBUG: recreated the backbuffer\n");
+        freeResources();
+        rs.Memhdc = CreateCompatibleDC(hdc);
+        rs.Membitmap = CreateCompatibleBitmap(hdc, ws, hs);
+        rs.Memdefaultbitmap = SelectObject(rs.Memhdc, rs.Membitmap);
+        rs.backbuffer_invalid = 0;
+    }
+
+    BitBlt(hdc, 
+        0, 0, ws, hs,
+        rs.Memhdc,
+        0,0, SRCCOPY
+    );
+}
+
+void write_backbuffer(){
+    if(rs.backbuffer_invalid){
+        //not touch dat
         return;
     }
 
-    if(scale == T2_SCALE_P2){
-        StretchDIBits(hdc,
-            0,  0, 320*2, 200*2,
-            0,  0, 320, 200,
-            video, (void *)&gameImg,
+    void* fb = rs.framebuffer;
+
+    if(rs.s == 1){
+        //according to microsoft "The bitmap identified by the hbmp parameter must not be selected into a device context when the application calls this function."
+        SelectObject(rs.Memhdc, rs.Memdefaultbitmap);
+        SetDIBits(rs.Memhdc, rs.Membitmap,
+            0, rs.h,
+            fb, (void*)&rs.gameImg,
+            DIB_RGB_COLORS
+        );
+        SelectObject(rs.Memhdc, rs.Membitmap);
+    }else{
+        StretchDIBits(rs.Memhdc,
+            0, 0, rs.w * rs.s, rs.h * rs.s,
+            0, 0, rs.w, rs.h,
+            fb, (void*)&rs.gameImg,
             DIB_RGB_COLORS, SRCCOPY
         );
-        return;
     }
 
-    int w = gameImg.info.biWidth;
-    int h = -gameImg.info.biHeight;
-
-    SetDIBitsToDevice(hdc,
-        0, 0, w, h,
-        0, 0, 0, h,
-        video, (void *)&gameImg,
-        DIB_RGB_COLORS);
-    
 }
+
 
 void getScaleDimension(int scale, int *w, int *h, int *s){
     #define SC_RES(_id, _w, _h, _s) \
