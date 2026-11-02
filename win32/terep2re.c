@@ -27,7 +27,8 @@ HWND hBlinken;
 #define USECS_PER_TICK (1000000/HZ_PHYSICS)
 #define HZ_DISPLAY 60
 
-st_image gameImg;
+
+rend_state rs;
 
 LARGE_INTEGER tickfreq;
 
@@ -141,9 +142,9 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     int w,h,s;
     getScaleDimension(selected_scale, &w, &h, &s);
     
-    gameImg.info.biWidth  = w;
-    gameImg.info.biHeight = -h;
-    gameImg.info.biSizeImage = w * h;
+    rs.gameImg.info.biWidth  = w;
+    rs.gameImg.info.biHeight = -h;
+    rs.gameImg.info.biSizeImage = w * h;
 
     if(g != NULL){
         set_resolution(g, w, h);
@@ -151,6 +152,11 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     if(adjust){
         adjustWindowSize(hwnd, w*s, h*s);
     }
+
+    rs.w = w;
+    rs.h = h;
+    rs.s = s;
+    rs.backbuffer_invalid = 1;
     
     HMENU hMenu = GetMenu(hwnd);
     for(int i = 40100; i < 40150; i++){
@@ -291,20 +297,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
                 DrawText(hdc, "Please open a track to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
-                void *v = get_raw_fb(g);
-                drawTheFramebuffer(hdc, selected_scale, v);
+                drawTheFramebuffer(hdc);
             }
 
             EndPaint(hwnd, &ps);
         }
         break;
 
+        case WM_SIZE:
+        case WM_DISPLAYCHANGE:{
+            rs.backbuffer_invalid = 1;
+            break;
+        }
+
         case WM_TIMER: {
             if (wParam == 122 && g != NULL) {
                 tickricktick();
 
+                if(!rs.backbuffer_invalid){
+                  render_frame(g);
+                  write_backbuffer();
+                }
                 InvalidateRect(hwnd, 0, FALSE);
-                render_frame(g);
 
                 if (debug_mode) {
                     InvalidateRect(hBlinken, 0, FALSE);
@@ -378,6 +392,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     (void)hPrev;
     (void)lpCmd;
 
+    rs.backbuffer_invalid = 1;
     set_snd_callback(adlib_callback);
 
     LoadConfig();
@@ -538,7 +553,8 @@ void call_init(HWND hwnd, char path[], int complain){
         exit(1);
     }
 
-    prepare_bitmap_info(320, 200, &gameImg, get_palette(g));
+    rs.framebuffer = get_raw_fb(g);
+    prepare_bitmap_info(320, 200, &rs.gameImg, get_palette(g));
     SetGraphicsScale(hwnd, 0);
 
     SetTimer(hwnd, 122, 1000/HZ_DISPLAY, NULL);
@@ -579,5 +595,7 @@ void end_session(){
     if(g){
         finalize_game(g);
     }
+    rs.backbuffer_invalid = 1;
+    rs.framebuffer = NULL;
     g = NULL;
 }
