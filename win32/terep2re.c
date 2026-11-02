@@ -150,12 +150,13 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     }
     if(adjust){
         adjustWindowSize(hwnd, w*s, h*s);
-        HMENU hMenu = GetMenu(hwnd);
-        for(int i = 40100; i < 40150; i++){
-            //this is horrible! but it works, cant argue with results
-            int chk = i == selected_scale ? MF_CHECKED : MF_UNCHECKED;
-            CheckMenuItem(hMenu, i, chk);
-        }
+    }
+    
+    HMENU hMenu = GetMenu(hwnd);
+    for(int i = 40100; i < 40150; i++){
+        //this is horrible! but it works, cant argue with results
+        int chk = i == selected_scale ? MF_CHECKED : MF_UNCHECKED;
+        CheckMenuItem(hMenu, i, chk);
     }
 }
 
@@ -460,8 +461,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     ShowWindow(hwnd, nShow);
     UpdateWindow(hwnd);
 
-    adjustWindowSize(hwnd, 640, 400);
-    SetGraphicsScale(hwnd,1);
+    SetGraphicsScale(hwnd, 1);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
