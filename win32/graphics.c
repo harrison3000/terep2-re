@@ -28,17 +28,20 @@ static void freeResources(){
 }
 
 void drawTheFramebuffer(HDC hdc){
+    int ws = rs.w * rs.s;
+    int hs = rs.h * rs.s;
+
     if(rs.backbuffer_invalid || !rs.Memhdc || !rs.Membitmap){
-        printf("DEBUG: recreated the backbuffer");
+        printf("DEBUG: recreated the backbuffer\n");
         freeResources();
         rs.Memhdc = CreateCompatibleDC(hdc);
-        rs.Membitmap = CreateCompatibleBitmap(hdc, rs.w, rs.h);
+        rs.Membitmap = CreateCompatibleBitmap(hdc, ws, hs);
         rs.Memdefaultbitmap = SelectObject(rs.Memhdc, rs.Membitmap);
         rs.backbuffer_invalid = 0;
     }
 
     BitBlt(hdc, 
-        0, 0, rs.w, rs.h,
+        0, 0, ws, hs,
         rs.Memhdc,
         0,0, SRCCOPY
     );
