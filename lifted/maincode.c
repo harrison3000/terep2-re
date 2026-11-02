@@ -4324,7 +4324,6 @@ static OPTM void FUN_1000_2d61(cpu_ctx *cpu){
    INST_DEC(cpu->DX);
    if(cpu->DX != 0) goto LAB_LOC_6;
    INST_POP(cpu->ES);
-   cpu->DI = 0;
    return;
 }
 
@@ -4913,7 +4912,6 @@ static void FUN_1000_31d1(cpu_ctx *cpu){
    if(cpu->DX != 0) goto LAB_LOC_1;
    INST_POP(cpu->ES);
    LAB_LOC_4:
-   cpu->DI = 0;
    return;
 }
 
@@ -5679,7 +5677,6 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
    if(cpu->DI != 0) goto LAB_LOC_1;
    INST_POP(cpu->ES);
    LAB_LOC_5:
-   cpu->DI = 0;
    return;
 }
 
