@@ -366,7 +366,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
 
             if(g != NULL){
-                send_key_event(g, scanCode);
+                if(wParam == VK_F10){
+                    if((lParam & (1LL << 30)) == 0){
+                        cycle_textured_distance(g);
+                    }
+                }else{
+                    send_key_event(g, scanCode);
+                }
             }
 
             // NOTE(gmb): F10 activates the menu bar by default,
