@@ -157,6 +157,7 @@ static void SetGraphicsScale(HWND hwnd, int adjust){
     rs.h = h;
     rs.s = s;
     rs.backbuffer_invalid = 1;
+    rs.gimme_new_data_baby = 1;
     
     HMENU hMenu = GetMenu(hwnd);
     for(int i = 40100; i < 40150; i++){
@@ -301,12 +302,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
 
             EndPaint(hwnd, &ps);
+            rs.gimme_new_data_baby = 1;
         }
         break;
 
         case WM_SIZE:
         case WM_DISPLAYCHANGE:{
             rs.backbuffer_invalid = 1;
+            rs.gimme_new_data_baby = 1;
             break;
         }
 
@@ -314,9 +317,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if (wParam == 122 && g != NULL) {
                 tickricktick();
 
-                if(!rs.backbuffer_invalid){
+                if(!rs.backbuffer_invalid && !rs.gimme_new_data_baby){
+                    printf("DEBUG: overrender prevented\n");
+                }
+
+                if(!rs.backbuffer_invalid && rs.gimme_new_data_baby){
                   render_frame(g);
                   write_backbuffer();
+                  rs.gimme_new_data_baby = 0;
                 }
                 InvalidateRect(hwnd, 0, FALSE);
 

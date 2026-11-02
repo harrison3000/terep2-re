@@ -24,6 +24,7 @@ typedef struct {
     int        w, h, s;
 
     BOOL backbuffer_invalid;
+    BOOL gimme_new_data_baby;
 
     void *framebuffer;
     st_image gameImg;
