@@ -4271,11 +4271,14 @@ static OPTM void FUN_1000_2d61(cpu_ctx *cpu){
    INST_INC(cpu->CX);
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
-   uint16_t c = MEM_WORD(0xdb12);
-   while(cpu->CX){
-      linep[cpu->DI] = c & 0xff;
-      cpu->DI++;
-      cpu->CX--;
+   {
+     uint8_t c = MEM_WORD(0xdb12) & 0xff;
+     int count = cpu->CX;
+     int off = cpu->DI;
+
+     for(int i = 0; i < count; i++){
+      linep[i + off] = c;
+     }
    }
 
    INST_ADD(cpu->SI, 0x4);
@@ -4300,11 +4303,19 @@ static OPTM void FUN_1000_2d61(cpu_ctx *cpu){
    INST_INC(cpu->CX);
    INST_ADD(cpu->DI, cpu->AX);
    INST_CLD();
-   LAB_LOC_8:
-   cpu->BL = linep[cpu->DI];
-   linep[cpu->DI] = MEM_BYTE(cpu->BX + 0x2e51);
-   cpu->DI++;
-   if (--cpu->CX != 0) goto LAB_LOC_8;
+   {
+     int count = cpu->CX;
+     int off = cpu->DI;
+     uint16_t bxx = cpu->BX & 0xff00;
+     do{
+      uint16_t bxxx = bxx | linep[off];
+      linep[off] = MEM_BYTE(bxxx + 0x2e51);
+      off++;
+
+      count--;
+     }while(count !=0);
+   }
+
    INST_ADD(cpu->SI, 0x4);
    INST_DEC(cpu->DX);
    if(cpu->DX != 0) goto LAB_LOC_6;
