@@ -15,6 +15,9 @@
 //use this to optimize only specific functions while keeping the rest of the exe as Oz
 #define OPTM __attribute__((optimize("O2")))
 
+#define likely(x)       __builtin_expect(!!(x), 1)
+#define unlikely(x)     __builtin_expect(!!(x), 0)
+
 void setup_viewport(cpu_ctx *cpu, int type){
    MEM_WORD(0xdbc0) = 0x0;
    MEM_WORD(0xdbb8) = cpu->vp_w / 2; //= 00A0h
@@ -5651,8 +5654,8 @@ static OPTM void FUN_1000_3827(cpu_ctx *restrict cpu){
       bpp <<= 8;
    
       uint8_t texel = textPtr[bxx + bpp];
-      if(texel != 0xff) {
-         if(texel >= 0xf0) {
+      if(likely(texel != 0xff)) {
+         if(unlikely(texel >= 0xf0)) {
             texel -= 0xf0;
             uint16_t texel16 = texel << 8;
             uint8_t v = linep[idx];
