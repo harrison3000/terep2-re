@@ -11,14 +11,9 @@ bits 16
 segment code
     ..start:
 
-    patchPoint 0x1e
-    ;there was a bunch of cleanup here.... but who cares? it will run a a emulator anyway
-    mov ax, 0x4c00
-    int 0x21
-    ud2
 
     patchPoint 0x46
-    mov bx, 0x3000 ;not the best way, but good enough
+    mov bx, 0x3000 ;not the best way, but good enough FIXME put the actual value here
 
     patchPoint 0x52
     mov ax, data
@@ -53,7 +48,7 @@ segment code
     patchPoint 0x590d
     push ecx
     mov ecx, 28
-    ;originally unrolled, but ghidra didnt like it
+    ;originally unrolled, but ghidra didnt like it, and I dont like it either
     eita:
     in al, dx
     loop eita
