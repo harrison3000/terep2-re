@@ -1,3 +1,17 @@
 *.exe
 *.obj
 *.EXE
+*.exe.txt
+*.err
+*.o
+*.res
+sim.cfg
+erros.txt
+terep2re
+.vscode/
+raw_c.cpp
+recordings/
+*.pgm
+dump*.txt
+build/
+*.INI
