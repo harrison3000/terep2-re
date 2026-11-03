@@ -11,6 +11,7 @@ void finalize_game(GameSession *g);
 void send_key_event(GameSession *g, uint8_t);
 void calculate_physics(GameSession *g);
 void render_frame(GameSession *g);
+void cycle_textured_distance(GameSession *g);
 
 void set_resolution(GameSession *g, int w, int h);
 

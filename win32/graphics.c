@@ -32,7 +32,6 @@ void drawTheFramebuffer(HDC hdc){
     int hs = rs.h * rs.s;
 
     if(rs.backbuffer_invalid || !rs.Memhdc || !rs.Membitmap){
-        printf("DEBUG: recreated the backbuffer\n");
         freeResources();
         rs.Memhdc = CreateCompatibleDC(hdc);
         rs.Membitmap = CreateCompatibleBitmap(hdc, ws, hs);

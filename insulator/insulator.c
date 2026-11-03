@@ -146,6 +146,7 @@ void set_snd_callback(void (*cb)(uint16_t)){
 
 struct GameSession{
     cpu_ctx *cpu;
+    int txtDist;
 };
 
 void new_session(GameSession **d){
@@ -253,4 +254,15 @@ uintptr_t* get_all_segments(GameSession *g){
         return fakesegs;
     }
     return g->cpu->segments;
+}
+
+void cycle_textured_distance(GameSession *g){
+    //and here we go, changing default behavior again
+    //the order was made this way so the first press always completely disables terrain textures, like the original did
+
+    uint16_t td[] = {0, 0xca0, 0xa00, 0x600};
+    
+    auto ptr = (uint16_t *)(g->cpu->mem_base + 0x5f5);
+    ptr[0] = td[g->txtDist % 4];
+    g->txtDist++;
 }

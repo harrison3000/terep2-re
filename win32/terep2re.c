@@ -317,10 +317,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if (wParam == 122 && g != NULL) {
                 tickricktick();
 
-                if(!rs.backbuffer_invalid && !rs.gimme_new_data_baby){
-                    printf("DEBUG: overrender prevented\n");
-                }
-
                 if(!rs.backbuffer_invalid && rs.gimme_new_data_baby){
                   render_frame(g);
                   write_backbuffer();
@@ -366,7 +362,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
 
             if(g != NULL){
-                send_key_event(g, scanCode);
+                if(wParam == VK_F10){
+                    if((lParam & (1LL << 30)) == 0){
+                        cycle_textured_distance(g);
+                    }
+                }else{
+                    send_key_event(g, scanCode);
+                }
             }
 
             // NOTE(gmb): F10 activates the menu bar by default,
