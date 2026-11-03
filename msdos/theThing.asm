@@ -4,6 +4,10 @@ bits 16
     incbin "../memdumps/code.bin", ($ - $$), %1 - ($ - $$)
 %endmacro
 
+%macro padUntil 1
+    times (%1 - ($ - $$)) nop
+%endmacro
+
 %macro jumpabs 1
     db 0xe9
     dw (%1 - ($ - $$) - 2)
@@ -13,10 +17,12 @@ segment code
     ..start:
 
     patchPoint 0x46
-    ;not the best way, but good enough for now FIXME put the actual value here
-    mov bx, 0x2700 
-
-    patchPoint 0x52
+    ;sets the program block to around 101KB, enough for our code, data and stack with a bit of slack
+    mov bx, (36+64+1)*64
+    mov ax, 0x4a00
+    int 0x21
+    
+    padUntil 0x52
     mov ax, data
 
     patchPoint 0x57
