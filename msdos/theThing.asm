@@ -1,68 +1,48 @@
 bits 16
 
 %macro patchPoint 1
-    incbin "memdumps/code.bin", ($ - $$), %1 - ($ - $$)
+    incbin "../memdumps/code.bin", ($ - $$), %1 - ($ - $$)
 %endmacro
 
-%macro padUntil 1
-    times (%1 - ($ - $$)) nop
+%macro jumpabs 1
+    db 0xe9
+    dw (%1 - ($ - $$) - 2)
 %endmacro
 
 segment code
     ..start:
 
-
     patchPoint 0x46
-    mov bx, 0x3000 ;not the best way, but good enough FIXME put the actual value here
+    ;not the best way, but good enough for now FIXME put the actual value here
+    mov bx, 0x2700 
 
     patchPoint 0x52
     mov ax, data
 
     patchPoint 0x57
-    jmp afterThings
+    ;jump over the unecessary (an potentially harmful) XMS things
+    ;this is the only reason the game "requires" XMS... well, not anymore
+    jumpabs 0xdc
 
-    patchPoint 0xdc
-    afterThings:
+    ;we used to jump over a runtime code patching here
+    ;but we dont care about that in this branch, we can keep it as is
+    ;we will keep things as pristine as possible
 
-    patchPoint 0x236
-    jmp afterThings2
+    patchPoint 0x4e91
+    call calculate_and_pray
 
-    padUntil 0x252
-    afterThings2:
-
-    patchPoint 0x48d0
-    somefuncc_a:
-
-    patchPoint 0x500b
-    somefuncc_b:
+    jumpabs 0x4eb8
 
     patchPoint 0x5689
     mov ax, data
 
-    patchPoint 0x56ba
-    call somefuncc_a
-
-    patchPoint 0x56c8
-    call somefuncc_b
-
-    patchPoint 0x590d
-    push ecx
-    mov ecx, 28
-    ;originally unrolled, but ghidra didnt like it, and I dont like it either
-    eita:
-    in al, dx
-    loop eita
-
-    pop ecx
-    dec dx
-    pop ax
-    ret
-
     ;includes the rest of the file
-    incbin "memdumps/code.bin", ($ - $$)
+    incbin "../memdumps/code.bin", ($ - $$)
 
-segment data
-    incbin "memdumps/data.bin"
+    %include "veclen.asm"
+
+segment data align=16
+    incbin "../memdumps/data.bin"
 
 segment stack class=stack
     times 128 dd 'TheStack'
