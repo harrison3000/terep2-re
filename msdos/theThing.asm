@@ -21,11 +21,12 @@ segment code
     mov bx, (36+64+1)*64
     mov ax, 0x4a00
     int 0x21
-    
-    padUntil 0x52
-    mov ax, data
 
-    patchPoint 0x57
+    mov ax, data
+    mov ds, ax
+
+    call decompressData    
+
     ;jump over the unecessary (an potentially harmful) XMS things
     ;this is the only reason the game "requires" XMS... well, not anymore
     jumpabs 0xdc
@@ -64,10 +65,21 @@ segment code
     incbin "../memdumps/code.bin", ($ - $$)
 
     %include "veclen.asm"
+    %include "decompressor.asm"
 
 segment data align=16
-    incbin "../memdumps/data.bin"
+    datac_inc 0, 384, 384
+    datac_inc 1440, 96, 480
+    datac_inc 6624, 192, 672
+    datac_inc 23040, 480, 1152
+    datac_inc 53472, 2880, 4032
+    datac_inc 58752, 96, 4128
+    datac_inc 59808, 288, 4416
+    datac_inc 60384, 960, 5376
 
-segment stack class=stack
-    times 128 dd 'TheStack'
+segment dataRest
+    resb 60000
+
+segment stack class=stack align=16
+    resb 2048
 
