@@ -23,17 +23,17 @@ calculate_and_pray:
     mov dword [bp - 8], 0
     mov dword [bp - 4], 0
 
-    mov eax, dword [0xe9ec]
+    mov eax, [bp + 4]
     imul eax
     add dword [bp - 8], eax
     adc dword [bp - 4], edx
 
-    mov eax, dword [0xe9f0]
+    mov eax, [bp + 8]
     imul eax
     add dword [bp - 8], eax
     adc dword [bp - 4], edx
 
-    mov eax, dword [0xe9f4]
+    mov eax, [bp + 12]
     imul eax
     add  eax, dword [bp - 8]
     adc  edx, dword [bp - 4]
@@ -41,7 +41,6 @@ calculate_and_pray:
     shrd eax, edx, 24
 
     ;all the numbers are squared, lets to the square root now
-    push ecx
 
     ;based on: https://github.com/chmike/fpsqrt/blob/master/fpsqrt.c
     ;Original C code
@@ -60,15 +59,12 @@ calculate_and_pray:
             add ebx, ecx
         .nope:
         shr ecx, 2;
-    jecxz .getout
-    jmp .daloop
-    .getout:
+    jnz .daloop
 
     mov eax, ebx
 
     shl eax, 2
 
-    pop ecx
     pop edx
     leave
-    ret
+    ret 4*3
