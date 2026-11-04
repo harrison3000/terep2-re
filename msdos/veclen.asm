@@ -43,19 +43,28 @@ calculate_and_pray:
     ;all the numbers are squared, lets to the square root now
     push ecx
 
-    uint32_t ecx = 1<<30, ebx = 0, eax = v;
-    
-    do {
-        uint32_t edi = ebx + ecx;
-        ebx >>= 1;
-        if( eax >= edi ) {
-            eax -= edi;
-            ebx += ecx;
-        }
-        ecx >>= 2;
-    }while( ecx != 0 );
+    ;based on: https://github.com/chmike/fpsqrt/blob/master/fpsqrt.c
+    ;Original C code
+    ;   MIT licensed
+    ;   Copyright (c) 2019 Christophe Meessen
 
-    return ebx;
+    mov ecx, 1 << 30
+    mov ebx, 0
+    
+    .daloop:
+        lea edx, [ebx + ecx];
+        shr ebx, 1
+        cmp eax, edx
+        jb .nope
+            sub eax, edx
+            add ebx, ecx
+        .nope:
+        shr ecx, 2;
+    jecxz .getout
+    jmp .daloop
+    .getout:
+
+    mov eax, ebx
 
     shl eax, 2
 
