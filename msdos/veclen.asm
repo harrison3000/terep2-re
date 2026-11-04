@@ -38,15 +38,28 @@ calculate_and_pray:
     add  eax, dword [bp - 8]
     adc  edx, dword [bp - 4]
 
-    mov eax, dword [ebp - 8]
-    mov edx, dword [ebp - 4]
     shrd eax, edx, 24
 
     ;all the numbers are squared, lets to the square root now
+    push ecx
+
+    uint32_t ecx = 1<<30, ebx = 0, eax = v;
     
+    do {
+        uint32_t edi = ebx + ecx;
+        ebx >>= 1;
+        if( eax >= edi ) {
+            eax -= edi;
+            ebx += ecx;
+        }
+        ecx >>= 2;
+    }while( ecx != 0 );
 
+    return ebx;
 
+    shl eax, 2
 
+    pop ecx
     pop edx
     leave
     ret
