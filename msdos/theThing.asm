@@ -34,6 +34,10 @@ segment code
     ;but we dont care about that in this branch, we can keep it as is
     ;we will keep things as pristine as possible
 
+    patchPoint 0x25d
+    ;squeeze a hlt here so we can run on fast systems without the camera bug
+    hlt
+
     ;we will patch the function  4e0a now
 
     patchPoint 0x4e57
