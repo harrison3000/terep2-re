@@ -3,25 +3,25 @@ calculate_and_pray:
     enter	8, 0
     ;TODO use registers instead of stack variables!
     push edx
-    mov dword [bp - 8], 0
-    mov dword [bp - 4], 0
+    mov ebx, 0
+    mov ecx, 0
 
     mov eax, [bp + 4]
     imul eax
-    add dword [bp - 8], eax
-    adc dword [bp - 4], edx
+    add  ebx, eax
+    adc  ecx, edx
 
     mov eax, [bp + 8]
     imul eax
-    add dword [bp - 8], eax
-    adc dword [bp - 4], edx
+    add  ebx, eax
+    adc  ecx, edx
 
     mov eax, [bp + 12]
     imul eax
-    add  eax, dword [bp - 8]
-    adc  edx, dword [bp - 4]
+    add  ebx, eax
+    adc  ecx, edx
 
-    shrd eax, edx, 24
+    shrd ebx, ecx, 24
 
     ;all the numbers are squared, lets to the square root now
 
@@ -31,20 +31,18 @@ calculate_and_pray:
     ;   Copyright (c) 2019 Christophe Meessen
 
     mov ecx, 1 << 30
-    mov ebx, 0
+    mov eax, 0
     
     .daloop:
-        lea edx, [ebx + ecx];
-        shr ebx, 1
-        cmp eax, edx
+        lea edx, [eax + ecx];
+        shr eax, 1
+        cmp ebx, edx
         jb .nope
-            sub eax, edx
-            add ebx, ecx
+            sub ebx, edx
+            add eax, ecx
         .nope:
         shr ecx, 2;
     jnz .daloop
-
-    mov eax, ebx
 
     shl eax, 2
 
