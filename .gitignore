@@ -15,3 +15,4 @@ recordings/
 dump*.txt
 build/
 *.INI
+a.out
