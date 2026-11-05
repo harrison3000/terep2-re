@@ -18,13 +18,12 @@ calculate_and_pray:
     adc  ecx, edx
 
     test  ecx, 0xfff00000
-    jz .smol
-        mov ebx, ecx ;equivalent of a right shift by 32 here
-        push word 6
-        jmp .let_it_rip
-    .smol:
-        shrd ebx, ecx, 20
-        push word 0
+    jnz .bigus
+      
+    ;smol number, less pre-shift, no post-shift
+    shrd ebx, ecx, 20
+    push word 0
+    
     .let_it_rip:
     
 
@@ -54,3 +53,9 @@ calculate_and_pray:
 
     pop edx
     ret
+
+    .bigus:
+    ;big number, rarer case, uses only the upper dword and right shift later
+    mov ebx, ecx ;equivalent of a right shift by 32 here
+    push word 6
+    jmp .let_it_rip
