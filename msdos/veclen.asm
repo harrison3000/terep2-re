@@ -17,7 +17,16 @@ calculate_and_pray:
     add  ebx, eax
     adc  ecx, edx
 
-    shrd ebx, ecx, 24
+    test  ecx, 0xfff00000
+    jz .smol
+        mov ebx, ecx ;equivalent of a right shift by 32 here
+        push word 6
+        jmp .let_it_rip
+    .smol:
+        shrd ebx, ecx, 20
+        push word 0
+    .let_it_rip:
+    
 
     ;all the numbers are squared, lets to the square root now
 
@@ -40,7 +49,8 @@ calculate_and_pray:
         shr ecx, 2;
     jnz .daloop
 
-    shl eax, 2
+    pop cx    
+    shl eax, cl
 
     pop edx
     ret
