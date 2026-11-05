@@ -41,18 +41,6 @@ segment code
 
     ;we will patch the function  4e0a now
 
-    patchPoint 0x4e57
-    push eax
-    padUntil 0x4e5b
-
-    patchPoint 0x4e72
-    push eax
-    padUntil 0x4e76
-
-    patchPoint 0x4e8d
-    push eax
-    padUntil 0x4e91
-
     patchPoint 0x4e91
     call calculate_and_pray
 

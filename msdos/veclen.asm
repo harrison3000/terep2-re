@@ -1,22 +1,18 @@
 
 calculate_and_pray:
-    enter	8, 0
-    ;TODO use registers instead of stack variables!
     push edx
-    mov ebx, 0
-    mov ecx, 0
 
-    mov eax, [bp + 4]
+    mov eax, dword [0xe9ec]
+    imul eax
+    mov  ebx, eax
+    mov  ecx, edx
+
+    mov eax, dword [0xe9f0]
     imul eax
     add  ebx, eax
     adc  ecx, edx
 
-    mov eax, [bp + 8]
-    imul eax
-    add  ebx, eax
-    adc  ecx, edx
-
-    mov eax, [bp + 12]
+    mov eax, dword [0xe9f4]
     imul eax
     add  ebx, eax
     adc  ecx, edx
@@ -47,5 +43,4 @@ calculate_and_pray:
     shl eax, 2
 
     pop edx
-    leave
-    ret 4*3
+    ret
