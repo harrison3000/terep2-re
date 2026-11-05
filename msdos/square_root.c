@@ -51,34 +51,43 @@ int32_t theGambiarra(int32_t a, int32_t b, int32_t c){
     as += bs;
     as += cs;
 
-    int64_t u = as >> 24;
-    int32_t uu = u;
+    _Bool biggus = as & (0xfff0L << 48);
 
-    int32_t sqr = sqrt_i32(uu);
+    int32_t val = (as >> 32);
+    if(!biggus){
+        val = (as >> 20);
+    }
 
-    return  sqr << 2;
-}
+    int32_t sqr = sqrt_i32(val);
 
-void compare(int32_t a, int32_t b,int32_t c){
-    double oo;
-    int32_t res = theOriginalKinda(a, b, c, &oo);
-    int32_t res2 = theGambiarra(a, b, c);
+    if(!biggus){
+        return sqr;
+    }
 
-    printf("%d\t%d\t actual: %f\n", res, res2, oo);
+    return sqr << 6;;
 }
 
 
 int main(){
     uint32_t rs; 
-    _rdrand32_step(&rs);
+    while(!_rdrand32_step(&rs)){}
     srand48(rs);
 
-    for(int i = 0x00100000; i< 0x00500000; i++){
-        int32_t a = lrand48() & 0x02ffffff;
-        int32_t b = lrand48() & 0x02ffffff;
-        int32_t c = lrand48() & 0x02ffffff;
+    for(int i = 0; i < 1000; i++){        
+        for(int s = 0; s < 30; s++){
+            uint32_t mask = 0x7fffffff >> s;
+            int32_t a = lrand48() & mask;
+            int32_t b = lrand48() & mask;
+            int32_t c = lrand48() & mask;
 
-        compare(a,b,c);
+            double oo;
+            int32_t res = theOriginalKinda(a, b, c, &oo);
+            int32_t res2 = theGambiarra(a, b, c);
+
+            if(res != res2){
+                printf("%d\t%d\t mask: %08x actual: %.02f\n", res, res2, mask, oo);
+            }
+        }
     }
 
 
