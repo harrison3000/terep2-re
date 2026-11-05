@@ -13,12 +13,18 @@ bits 16
     dw (%1 - ($ - $$) - 2)
 %endmacro
 
+STACK_SIZE  equ 2048
+
+
 segment code
     ..start:
 
     patchPoint 0x46
-    ;sets the program block to around 101KB, enough for our code, data and stack with a bit of slack
-    mov bx, (36+64+1)*64
+    ;calculates the size of the program blocks and sets it
+    ;this assumes the code is always first and the stack always last
+    mov bx, stack
+    sub bx, code
+    add bx, STACK_SIZE/16 + 32  
     mov ax, 0x4a00
     int 0x21
 
@@ -69,5 +75,5 @@ segment dataRest
     resb 60000
 
 segment stack class=stack align=16
-    resb 2048
+    resb STACK_SIZE
 
