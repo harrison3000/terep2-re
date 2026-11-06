@@ -62,14 +62,18 @@ segment code
     %include "decompressor.asm"
 
 segment data align=16
-    datac_inc 0, 384, 384
-    datac_inc 1440, 96, 480
-    datac_inc 6624, 192, 672
-    datac_inc 23040, 480, 1152
-    datac_inc 53472, 2880, 4032
-    datac_inc 58752, 96, 4128
-    datac_inc 59808, 288, 4416
-    datac_inc 60384, 960, 5376
+    datac_inc 0, 208, 208
+    datac_inc 280, 16, 224
+    datac_inc 1496, 32, 256
+    datac_inc 6656, 72, 328
+    datac_inc 23120, 368, 696
+    datac_inc 53512, 2576, 3272
+    datac_inc 56248, 16, 3288
+    datac_inc 58752, 16, 3304
+    datac_inc 59872, 8, 3312
+    datac_inc 59944, 112, 3424
+    datac_inc 60440, 256, 3680
+    datac_inc 60760, 544, 4224
 
 segment dataRest
     resb 60000
