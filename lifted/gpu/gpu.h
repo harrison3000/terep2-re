@@ -194,28 +194,29 @@ void DOS3Call(cpu_ctx*);
 })
 
 
-static inline void inner_imul16(cpu_ctx *cpu, uint16_t a){
-    auto as = SIGNED(a);
-    auto sax = SIGNED(cpu->AX);
+#define INNER_IMUL16(a) ({ \
+    auto as = SIGNED(a);   \
+    auto sax = SIGNED(cpu->AX); \
+    \
+    encangado_t res; \
+    res.sign_big = (int32_t)sax * (int32_t)as; \
+    cpu->AX = res.lo_word; \
+    cpu->DX = res.hi_word; \
+})
 
-    encangado_t res;
-    res.sign_big = (int32_t)sax * (int32_t)as;
-    cpu->AX = res.lo_word;
-    cpu->DX = res.hi_word;
-}
-static inline void inner_imul32(cpu_ctx *cpu, uint32_t a){
-    auto as = SIGNED(a);
-    auto bs = SIGNED(cpu->EAX);
+#define INNER_IMUL32(a) ({ \
+    auto as = SIGNED(a);   \
+    auto bs = SIGNED(cpu->EAX); \
+    \
+    encangado64_t res; \
+    res.sign_big = (int64_t)as * (int64_t)bs; \
+    cpu->EAX = res.lo; \
+    cpu->EDX = res.hi; \
+})
 
-    encangado64_t res;
-    res.sign_big = (int64_t)as * (int64_t)bs;
-    cpu->EAX = res.lo;
-    cpu->EDX = res.hi;
-}
-
-#define INST_IMUL(op) _Generic((op),  \
-    uint16_t : inner_imul16(cpu, op), \
-    uint32_t : inner_imul32(cpu, op)  \
+#define INST_IMUL(op) _Generic((op), \
+    uint16_t : INNER_IMUL16((op)),   \
+    uint32_t : INNER_IMUL32((op))    \
 )
 
 #define INST_IMUL2(dest, src) ({ \
@@ -284,23 +285,23 @@ static inline void inner_imul32(cpu_ctx *cpu, uint32_t a){
 
 
 
-static inline void inner_div16(cpu_ctx *cpu, uint16_t a) {
-    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX};
-    uint32_t num = numm.big;
-    cpu->AX = (uint16_t)(num / a);
-    cpu->DX = (uint16_t)(num % a);
-}
+#define INNER_DIV16(a) ({ \
+    encangado_t numm = {.lo_word = cpu->AX, .hi_word = cpu->DX}; \
+    uint32_t num = numm.big;       \
+    cpu->AX = (uint16_t)(num / a); \
+    cpu->DX = (uint16_t)(num % a); \
+})
 
-static inline void inner_div32(cpu_ctx *cpu, uint32_t a) {
-    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX};
-    uint64_t num = numm.big;
-    cpu->EAX = (uint32_t)(num / a);
-    cpu->EDX = (uint32_t)(num % a);
-}
+#define INNER_DIV32(a) ({ \
+    encangado64_t numm = {.lo = cpu->EAX, .hi = cpu->EDX}; \
+    uint64_t num = numm.big;        \
+    cpu->EAX = (uint32_t)(num / a); \
+    cpu->EDX = (uint32_t)(num % a); \
+})
 
-#define INST_DIV(op) _Generic((op),  \
-    uint16_t : inner_div16(cpu, op), \
-    uint32_t : inner_div32(cpu, op)  \
+#define INST_DIV(op) _Generic((op), \
+    uint16_t : INNER_DIV16((op)),   \
+    uint32_t : INNER_DIV32((op))    \
 )
 
 
