@@ -3,6 +3,7 @@
 #include "gpu/types.h"
 #include "variables.h"
 #include <stdint.h>
+#include "../3rd-party/isqrt/isqrt.h"
 
 //span offsets in bytes!
 #define SPAN_BUF_X 0
@@ -8034,7 +8035,7 @@ static void FUN_PHYSICS_4d96(cpu_ctx *cpu){
 //************************************************************************************************
 //*                                           FUNCTION                                           *
 //************************************************************************************************
-static void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
+static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    SETUP_STACK();
                               //XREF[1]:     1000:48d1(c)
    cpu->AX = cpu->SI;
@@ -8065,7 +8066,7 @@ static void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0xc));
    MEM_DWORD(0xe9f8) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   double tmp_f0 = SIGNED(cpu->EAX);
+   int32_t dim_a = SIGNED(cpu->EAX);
 
    cpu->EAX = MEM_DWORD(cpu->SI + 0x4);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
@@ -8073,7 +8074,7 @@ static void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x10));
    MEM_DWORD(0xe9fc) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   double tmp_f1 = SIGNED(cpu->EAX);
+   int32_t dim_b = SIGNED(cpu->EAX);
 
    cpu->EAX = MEM_DWORD(cpu->SI + 0x8);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
@@ -8081,9 +8082,14 @@ static void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x14));
    MEM_DWORD(0xea00) = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
-   double tmp_f2 = SIGNED(cpu->EAX);
+   int32_t dim_c = SIGNED(cpu->EAX);
 
 
+
+   #ifdef USE_FLOAT
+   double tmp_f0 = dim_a;
+   double tmp_f1 = dim_b;
+   double tmp_f2 = dim_c;
 
    tmp_f0 *= tmp_f0;
    tmp_f1 *= tmp_f1;
@@ -8093,9 +8099,31 @@ static void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    ressq = __builtin_fmin(ressq,  2147483647.0);
    ressq = __builtin_fmax(ressq, -2147483648.0);
 
-   cpu->EAX = __builtin_round(ressq);
+   int32_t resi = __builtin_round(ressq);
+   resi >>= 10;
+   cpu->EAX = resi;
 
-   INST_SAR(cpu->EAX, 0xa);
+   #else
+
+   {
+      int64_t as = (int64_t)dim_a * dim_a;
+      int64_t bs = (int64_t)dim_b * dim_b;
+      int64_t cs = (int64_t)dim_c * dim_c;
+
+      as += bs;
+      as += cs;
+
+      uint64_t val = (uint64_t)as >> 20;
+
+      if(unlikely(val > 0x7fffffff)){
+         cpu->EAX = isqrt64(val);
+      }else{
+         cpu->EAX = isqrt32(val);
+      }
+   }
+
+   #endif
+
    INST_MOVSX(cpu->vars.mitemp_BeX, MEM_WORD(cpu->BX + 0x4));
    if((cpu->vars.mitemp_BeX & 0x80000000) != 0) goto LAB_LOC_10;
    INST_MOVZX(cpu->ECX, MEM_WORD(cpu->BX + 0x8));
