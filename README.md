@@ -9,6 +9,11 @@ It also runs on Linux on a SDL window but this is mostly for testing
 
 Some bugs in the renderer have been fixed, the physics was barely touched and should be identical to the original (except for those pesky floating point LSB differences, these could occur even in different families of CPUs I think), theres a verifyer to run and verify replays recorded in a very old version with more pristine code 
 
+This project has 2 main targets (or rather, will have when I get the github automation thing working again):
+
+ * `terep2re32.exe` and `terep2re64.exe`: Code converted to run natively on Windows, from 98 all the way to 11, include improvements such as pausing physics, higher resolutions, config file, debug mode... you probably want this
+ * `terep2sx.exe`: As close to the original as possible, but modified to not require XMS, x87 (FPU), run on FreeDOS even on fast current computers, be as compact as possible and maybe even fix some bugs along the way 
+
 
 ## AI/LLM usage disclaimer and rules
 
