@@ -35,7 +35,7 @@ calculate_and_pray:
     ;   Copyright (c) 2019 Christophe Meessen
 
     mov ecx, 1 << 30
-    mov eax, 0
+    xor eax, eax
     
     .daloop:
         lea edx, [eax + ecx];
