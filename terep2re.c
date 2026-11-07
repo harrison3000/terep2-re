@@ -1,4 +1,5 @@
 #include <win16.h>
+#include <stdint.h>
 #include <commdlg.h>
 #include <stdio.h>
 #include <i86.h>
@@ -35,13 +36,45 @@ int getMem16(unsigned int offset){
     int *z  = (int*) &gameData[offset];
     return *z;
 }
+FILE *recordOut;
 
 void do_the_render_roll(HDC hdc){
     int seg = getMem16(0xdb10);
+    static DWORD frame = 0;
 
+    fprintf(recordOut, "R\n");
     render();
 
     char *video = MK_FP(seg, 0);
+
+    if(frame % 32 == 0){
+        uint64_t fnv = 0xcbf29ce484222325ULL;
+
+        for(uint16_t i = 0; i < 64000;i++){
+            uint8_t c = video[i];
+            fnv ^= c;
+            fnv *= 0x100000001b3ULL;
+        }
+
+        fprintf(recordOut, "frame_fnv1a_64: 0x%0llx\n", fnv);
+    }
+
+    if(frame % 32768 == 0){
+        char fname[64];
+        sprintf(fname, "D:\\terep2-re\\recordings\\frame_%ld.pgm", frame);
+
+        fprintf(recordOut, "frame: frame_%ld.pgm\n", frame);
+
+        FILE *pic = fopen(fname, "wb");
+        fprintf(pic, "P5\n#frame %ld\n320 200\n255\n", frame);
+        fwrite(video, 1, 320*200, pic);
+        fclose(pic);
+    }
+    if(frame % 2048 == 0){
+        fflush(recordOut);
+    }
+
+    frame++;
 
     StretchDIBits(hdc,
         0,0, 320*2, 200*2,
@@ -81,6 +114,7 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
         }
         case WM_TIMER:
             if(wParam == 100 && started){
+                fprintf(recordOut, "P\n");
                 physics();
             }
             if(wParam == 102){
@@ -106,6 +140,7 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
             }
 
             if(started){
+                fprintf(recordOut, "K: 0x%x\n", scanCode);
                 handlekey(scanCode);
             }
             
@@ -159,13 +194,13 @@ void let_it_rip(HWND hwnd){
         return;
     }
 
+    char path[260];
     OFSTRUCT st;
     int f = OpenFile("CAR1.DAT",&st, OF_EXIST);
     if(f == -1){
         if(hwnd == NULL){
             return;
         }
-        char path[260];
 
         OPENFILENAME ofl = {
             .lStructSize = sizeof(OPENFILENAME),
@@ -182,6 +217,15 @@ void let_it_rip(HWND hwnd){
         //TODO explicitly set the working dir, there is a obscure GetOpenFileName behavior changes the directory, but we better not count on it
     }
 
+    recordOut = fopen("D:\\terep2-re\\recordings\\record.txt", "w");
+    if(recordOut == NULL){
+        MessageBox(NULL, "Error initializing record file... ", "Fail", MB_ICONSTOP);
+        return;
+    }
+
+
+    fprintf(recordOut, "#selected path: %s\n\n", path);
+    fprintf(recordOut, "init\n");
     int err = initgame();
     int ncars = getMem16(0x5bba);
     if(err){
