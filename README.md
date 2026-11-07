@@ -12,7 +12,7 @@ Some bugs in the renderer have been fixed, the physics was barely touched and sh
 This project has 2 main targets (or rather, will have when I get the github automation thing working again):
 
  * `terep2re32.exe` and `terep2re64.exe`: Code converted to run natively on Windows, from 98 all the way to 11, include improvements such as pausing physics, higher resolutions, config file, debug mode... you probably want this
- * `terep2sx.exe`: As close to the original as possible, but modified to not require XMS, x87 (FPU), run on FreeDOS even on fast current computers, be as compact as possible and maybe even fix some bugs along the way 
+ * `terep2sx.exe`: As close to the original as possible, but modified to not require the x87 FPU and also not do the XMS memory test thing (this makes it compatible with FreeDOS out of the box), fix the camera on fast current computers and be as compact as possible... maybe even fix some bugs along the way, who knows
 
 
 ## AI/LLM usage disclaimer and rules

@@ -13,7 +13,6 @@
 %macro zerod 2
     mov cx, %2 / 4
     mov di, %1
-    xor eax, eax
     rep stosd
 %endmacro
 
@@ -44,6 +43,7 @@ decompressData:
     ;data_copy 0, 208, 208
 
     cld
+    xor eax, eax
 
     zerod 208, 72
     zerod 296, 1200

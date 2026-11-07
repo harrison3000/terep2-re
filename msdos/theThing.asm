@@ -56,6 +56,7 @@ segment code
     mov ax, data
 
     ;includes the rest of the file
+    ;TODO we can probably shave off a few bytes by overwriting the old XMS functions
     incbin "../memdumps/code.bin", ($ - $$)
 
     %include "veclen.asm"

@@ -17,12 +17,13 @@ calculate_and_pray:
     add  ebx, eax
     adc  ecx, edx
 
-    test  ecx, 0xfff00000
-    jnz .bigus
+    test  ecx, 0xffffc000
+    jnz .sad_path
       
-    ;smol number, less pre-shift, no post-shift
+    ;smol number, less pre-shift, less iterations, no post-shift
     shrd ebx, ecx, 20
     push word 0
+    mov ecx, 1 << 24
     
     .let_it_rip:
     
@@ -30,11 +31,9 @@ calculate_and_pray:
     ;all the numbers are squared, lets to the square root now
 
     ;based on: https://github.com/chmike/fpsqrt/blob/master/fpsqrt.c
-    ;Original C code
-    ;   MIT licensed
-    ;   Copyright (c) 2019 Christophe Meessen
+    ;also available at: https://github.com/torvalds/linux/blob/master/lib/math/int_sqrt.c
+    ;the original code seems to be older than me!
 
-    mov ecx, 1 << 30
     xor eax, eax
     
     .daloop:
@@ -54,8 +53,19 @@ calculate_and_pray:
     pop edx
     ret
 
+    .sad_path:
+    test  ecx, 0xfff00000
+    jnz .bigus
+
+    ;kinda big numbers
+    shrd ebx, ecx, 20
+    push word 0
+    mov ecx, 1 << 30
+    jmp .let_it_rip
+
     .bigus:
-    ;big number, rarer case, uses only the upper dword and right shift later
+    ;really big numbers, rarer case, uses only the upper dword and right shift later
     mov ebx, ecx ;equivalent of a right shift by 32 here
+    mov ecx, 1 << 30
     push word 6
     jmp .let_it_rip
