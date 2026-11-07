@@ -8056,7 +8056,7 @@ LAB_1000_4e1f:                ;XREF[1]:     1000:4f6d(j)
     FADDP
     FADDP
     FSQRT
-    FISTP       dword [0xe9e8]
+    FISTTP      dword [0xe9e8]
     MOV         EAX,[0xe9e8]
     SAR         EAX,0xa
     MOVSX       EBX,word DS:[BP + 0x4]
