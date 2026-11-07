@@ -1,7 +1,5 @@
 
 calculate_and_pray:
-    push edx
-
     mov eax, dword [0xe9ec]
     imul eax
     mov  ebx, eax
@@ -22,7 +20,6 @@ calculate_and_pray:
       
     ;smol number, less pre-shift, less iterations, no post-shift
     shrd ebx, ecx, 20
-    push word 0
     mov ecx, 1 << 24
     
     .let_it_rip:
@@ -47,10 +44,6 @@ calculate_and_pray:
         shr ecx, 2;
     jnz .daloop
 
-    pop cx    
-    shl eax, cl
-
-    pop edx
     ret
 
     .sad_path:
@@ -59,13 +52,13 @@ calculate_and_pray:
 
     ;kinda big numbers
     shrd ebx, ecx, 20
-    push word 0
     mov ecx, 1 << 30
     jmp .let_it_rip
 
     .bigus:
-    ;really big numbers, rarer case, uses only the upper dword and right shift later
+    ;really big numbers, rarer case, uses only the upper dword and left shift the result
     mov ebx, ecx ;equivalent of a right shift by 32 here
     mov ecx, 1 << 30
-    push word 6
-    jmp .let_it_rip
+    call .let_it_rip
+    shl eax, 6
+    ret
