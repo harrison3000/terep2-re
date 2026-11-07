@@ -21,7 +21,7 @@ extern int far handlekey(int pnp);
 #define HZ_PHYSICS 120 //TODO check if this is right
 #define HZ_DISPLAY 60
 
-char szAppName[] = "Terep Win16";
+char szAppName[] = "TeREp2-re Win16 - replay recorder";
 
 typedef struct imageeee {
     BITMAPINFOHEADER info;
@@ -37,6 +37,7 @@ int getMem16(unsigned int offset){
     return *z;
 }
 FILE *recordOut;
+int writePic = 0;
 
 void do_the_render_roll(HDC hdc){
     int seg = getMem16(0xdb10);
@@ -47,7 +48,7 @@ void do_the_render_roll(HDC hdc){
 
     char *video = MK_FP(seg, 0);
 
-    if(frame % 32 == 0){
+    if(frame % 64 == 0 || writePic){
         uint64_t fnv = 0xcbf29ce484222325ULL;
 
         for(uint16_t i = 0; i < 64000;i++){
@@ -59,7 +60,7 @@ void do_the_render_roll(HDC hdc){
         fprintf(recordOut, "frame_fnv1a_64: 0x%0llx\n", fnv);
     }
 
-    if(frame % 32768 == 0){
+    if(writePic){
         char fname[64];
         sprintf(fname, "D:\\terep2-re\\recordings\\frame_%ld.pgm", frame);
 
@@ -69,6 +70,7 @@ void do_the_render_roll(HDC hdc){
         fprintf(pic, "P5\n#frame %ld\n320 200\n255\n", frame);
         fwrite(video, 1, 320*200, pic);
         fclose(pic);
+        writePic = 0;
     }
     if(frame % 2048 == 0){
         fflush(recordOut);
@@ -137,6 +139,10 @@ long FAR PASCAL _export WndProc(HWND hwnd, UINT message, UINT wParam, LONG lPara
                 //esc pressed
                 PostQuitMessage(0);
                 return 0;
+            }
+
+            if(scanCode == (25|0x80)){
+                writePic = 1;
             }
 
             if(started){
