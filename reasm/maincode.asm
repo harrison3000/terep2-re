@@ -514,9 +514,9 @@ LAB_1000_061e:                ;XREF[1]:     1000:059f(j)
 CYCLE_2ND_CAM:
     INC   byte [0x7f]
     CMP   byte [0x7f], 5
-    JL    LAB_1000_05ac
+    JC    LAB_1000_05ac
     MOV   byte [0x7f], 0
-    JL    LAB_1000_05ac
+    JMP   LAB_1000_05ac
 
  ; 1000:0653 [UNDEFINED BYTES REMOVED]
 
