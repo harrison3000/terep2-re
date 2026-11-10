@@ -35,6 +35,7 @@ LARGE_INTEGER tickfreq;
 int run_physics = 1;
 int64_t last_p_update = -1;
 int debug_mode = 0;
+int enable_gambiarra_banner = 1;
 
 char last_opened_dir[MAX_PATH] = "C://";
 int sound_enabled = 1;
@@ -94,6 +95,7 @@ static void LoadConfig(void){
     GetPrivateProfileString("Path", "Directory", "C://", last_opened_dir, sizeof(last_opened_dir), path);
     sound_enabled = GetPrivateProfileInt("Sound", "Enabled", sound_enabled, path);
     selected_scale = GetPrivateProfileInt("Graphics", "Scale", selected_scale, path);
+    enable_gambiarra_banner = GetPrivateProfileInt("Misc", "GambiarraBanner", enable_gambiarra_banner, path);
     debug_mode = GetPrivateProfileInt("Debug", "Enabled", debug_mode, path);
     run_physics = GetPrivateProfileInt("Debug", "RunPhysics", run_physics, path);
 
@@ -127,6 +129,9 @@ static void SaveConfig(void){
 
     snprintf(buf, sizeof(buf), "%d", selected_scale);
     WritePrivateProfileString("Graphics", "Scale", buf, path);
+
+    snprintf(buf, sizeof(buf), "%d", enable_gambiarra_banner);
+    WritePrivateProfileString("Misc", "GambiarraBanner", buf, path);
 
     snprintf(buf, sizeof(buf), "%d", debug_mode);
     WritePrivateProfileString("Debug", "Enabled", buf, path);
@@ -209,7 +214,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     LPITEMIDLIST pidl;
 
                     bi.hwndOwner = hwnd;
-                    bi.lpszTitle = "Select a track directory:";
+                    bi.lpszTitle = "Select a data directory:";
                     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON;
                     bi.lpfn = BrowseCallbackProc;
                     bi.lParam = (LPARAM)last_opened_dir;
@@ -296,7 +301,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, "Please open a track to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "Please open a valid data directory to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 drawTheFramebuffer(hdc);
             }
@@ -432,6 +437,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     wndclassMain.hInstance = hInst;
     wndclassMain.lpszClassName = szAppName;
     wndclassMain.lpszMenuName = szAppName;
+    wndclassMain.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(T2_ICON));
     wndclassMain.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
     if (!RegisterClass (&wndclassMain)){
@@ -443,6 +449,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
         wndclassBlinken.lpfnWndProc = BlinkenWndProc;
         wndclassBlinken.hInstance = hInst;
         wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
+        wndclassBlinken.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(T2_ICON));
         wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
         if (!RegisterClass (&wndclassBlinken)){
@@ -525,7 +532,14 @@ int check_file(char path[], char name[]){
 
 
 void call_init(HWND hwnd, char path[], int complain){
-    char *ntc[] = {"car1.dat", "col.pcx", "map.pcx", 0};
+    char *ntc[] = { "CAR1.DAT", 
+                    "FOG.DAT",
+                    "SMOKE.DAT",
+                    "COL.PCX",
+                    "MAP.PCX",
+                    "MAPTEX.PCX",
+                    "TEXTURES.PCX",
+                    0};
 
     for(int i = 0 ; i < 99; i++) {
         if(!ntc[i]){
@@ -536,7 +550,7 @@ void call_init(HWND hwnd, char path[], int complain){
             if(complain){
                 char ultraerror[256];
                 snprintf(ultraerror, 256, "File %s not found, try another folder", ntc[i]);
-                MessageBox(NULL, ultraerror, "Are you sure this a track folder?", MB_ICONSTOP);
+                MessageBox(NULL, ultraerror, "Are you sure this a valid data folder?", MB_ICONSTOP);
             }
             return;
         }
@@ -548,7 +562,7 @@ void call_init(HWND hwnd, char path[], int complain){
 
     last_p_update = -1;
 
-    new_session(&g);
+    new_session(&g, enable_gambiarra_banner);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);

@@ -16,3 +16,5 @@
 #define T2_SCALE_S3   40113
 #define T2_SCALE_S4   40114
 #define T2_SCALE_S5   40115
+
+#define T2_ICON       30000

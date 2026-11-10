@@ -1,5 +1,7 @@
 #include "resource.h"
 
+T2_ICON ICON "icon.ico"
+
 Terep2Win32 MENU DISCARDABLE
 BEGIN
     POPUP "&File"
