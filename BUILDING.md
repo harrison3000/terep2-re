@@ -1,6 +1,6 @@
 # Building instructions for terep2-re
 
-## Windows 32 bit
+## On Windows for Windows 32 bit
 
 + Download and install [MSYS2](https://www.msys2.org/).
 
@@ -44,7 +44,7 @@ The compiled executable (`terep2re32.exe`) will be in *C:\terep2\terep2-re\build
 
 > NOTE: You will see errors about `x86_64-w64-mingw32-gcc`, ignore them.
 
-## Windows 64 bit
+## On Windows for Windows 64 bit
 
 + Download and install [MSYS2](https://www.msys2.org/).
 
