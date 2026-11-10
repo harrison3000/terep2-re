@@ -35,6 +35,7 @@ LARGE_INTEGER tickfreq;
 int run_physics = 1;
 int64_t last_p_update = -1;
 int debug_mode = 0;
+int enable_gambiarra_banner = 1;
 
 char last_opened_dir[MAX_PATH] = "C://";
 int sound_enabled = 1;
@@ -94,6 +95,7 @@ static void LoadConfig(void){
     GetPrivateProfileString("Path", "Directory", "C://", last_opened_dir, sizeof(last_opened_dir), path);
     sound_enabled = GetPrivateProfileInt("Sound", "Enabled", sound_enabled, path);
     selected_scale = GetPrivateProfileInt("Graphics", "Scale", selected_scale, path);
+    enable_gambiarra_banner = GetPrivateProfileInt("Misc", "GambiarraBanner", enable_gambiarra_banner, path);
     debug_mode = GetPrivateProfileInt("Debug", "Enabled", debug_mode, path);
     run_physics = GetPrivateProfileInt("Debug", "RunPhysics", run_physics, path);
 
@@ -127,6 +129,9 @@ static void SaveConfig(void){
 
     snprintf(buf, sizeof(buf), "%d", selected_scale);
     WritePrivateProfileString("Graphics", "Scale", buf, path);
+
+    snprintf(buf, sizeof(buf), "%d", enable_gambiarra_banner);
+    WritePrivateProfileString("Misc", "GambiarraBanner", buf, path);
 
     snprintf(buf, sizeof(buf), "%d", debug_mode);
     WritePrivateProfileString("Debug", "Enabled", buf, path);
@@ -555,7 +560,7 @@ void call_init(HWND hwnd, char path[], int complain){
 
     last_p_update = -1;
 
-    new_session(&g);
+    new_session(&g, enable_gambiarra_banner);
 
     strncpy(last_opened_dir, path, sizeof(last_opened_dir));
     int ok = init_game(g, path);
