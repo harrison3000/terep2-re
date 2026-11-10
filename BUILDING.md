@@ -20,7 +20,12 @@ pacman -S --needed \
 cd /mingw32/bin
 ln -sf windres.exe i686-w64-mingw32-windres.exe
 ln -sf strip.exe i686-w64-mingw32-strip.exe
-cd
+```
+
++ Create a directory that is visible on Windows, like *C:\terep2*
+```
+mkdir /c/terep2
+cd /c/terep2
 ```
 
 + Clone the repository:
@@ -35,7 +40,7 @@ git submodule update --init --recursive
 ./build_windows.sh
 ```
 
-The compiled executable (`terep2re32.exe`) will be in *build/*.
+The compiled executable (`terep2re32.exe`) will be in *C:\terep2\terep2-re\build\*.
 
 > NOTE: You will see errors about `x86_64-w64-mingw32-gcc`, ignore them.
 
@@ -59,7 +64,12 @@ pacman -S --needed \
 cd /mingw64/bin
 ln -sf windres.exe x86_64-w64-mingw32-windres.exe
 ln -sf strip.exe x86_64-w64-mingw32-strip.exe
-cd
+```
+
++ Create a directory that is visible on Windows, like *C:\terep2*
+```
+mkdir /c/terep2
+cd /c/terep2
 ```
 
 + Clone the repository:
@@ -74,6 +84,6 @@ git submodule update --init --recursive
 ./build_windows.sh
 ```
 
-The compiled executable (`terep2re64.exe`) will be in *build/*.
+The compiled executable (`terep2re64.exe`) will be in *C:\terep2\terep2-re\build\*.
 
 > NOTE: You will see errors about `i686-w64-mingw32-gcc`, ignore them.
