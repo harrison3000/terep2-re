@@ -42,7 +42,7 @@ LRESULT CALLBACK BlinkenWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, "No game is started, please open a track.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "No game is started, please use a valid data directory.", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));

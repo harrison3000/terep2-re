@@ -209,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     LPITEMIDLIST pidl;
 
                     bi.hwndOwner = hwnd;
-                    bi.lpszTitle = "Select a track directory:";
+                    bi.lpszTitle = "Select a data directory:";
                     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON;
                     bi.lpfn = BrowseCallbackProc;
                     bi.lParam = (LPARAM)last_opened_dir;
@@ -296,7 +296,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 SetBkMode(hdc, TRANSPARENT);
                 SetTextColor(hdc, RGB(0, 0, 0));
 
-                DrawText(hdc, "Please open a track to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                DrawText(hdc, "Please open a valid data directory to start the game", -1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             } else {
                 drawTheFramebuffer(hdc);
             }
@@ -525,7 +525,14 @@ int check_file(char path[], char name[]){
 
 
 void call_init(HWND hwnd, char path[], int complain){
-    char *ntc[] = {"car1.dat", "col.pcx", "map.pcx", 0};
+    char *ntc[] = { "CAR1.DAT", 
+                    "FOG.DAT",
+                    "SMOKE.DAT",
+                    "COL.PCX",
+                    "MAP.PCX",
+                    "MAPTEX.PCX",
+                    "TEXTURES.PCX",
+                    0};
 
     for(int i = 0 ; i < 99; i++) {
         if(!ntc[i]){
@@ -536,7 +543,7 @@ void call_init(HWND hwnd, char path[], int complain){
             if(complain){
                 char ultraerror[256];
                 snprintf(ultraerror, 256, "File %s not found, try another folder", ntc[i]);
-                MessageBox(NULL, ultraerror, "Are you sure this a track folder?", MB_ICONSTOP);
+                MessageBox(NULL, ultraerror, "Are you sure this a valid data folder?", MB_ICONSTOP);
             }
             return;
         }
