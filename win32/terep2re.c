@@ -437,6 +437,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
     wndclassMain.hInstance = hInst;
     wndclassMain.lpszClassName = szAppName;
     wndclassMain.lpszMenuName = szAppName;
+    wndclassMain.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(T2_ICON));
     wndclassMain.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
     if (!RegisterClass (&wndclassMain)){
@@ -448,6 +449,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow) {
         wndclassBlinken.lpfnWndProc = BlinkenWndProc;
         wndclassBlinken.hInstance = hInst;
         wndclassBlinken.lpszClassName = "Terep2Win32Blinken";
+        wndclassBlinken.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(T2_ICON));
         wndclassBlinken.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
         if (!RegisterClass (&wndclassBlinken)){
