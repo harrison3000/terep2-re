@@ -50,7 +50,7 @@ compile(){
     -o build/terep2re$2.exe
 
   if [ "$?" != 0 ]; then
-    exit 1
+    return
   fi
 
   if [ "${OPTIMIZATIONS}" = "-Oz" ]; then
