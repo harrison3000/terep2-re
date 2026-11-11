@@ -2,17 +2,17 @@
 
 **Disassembly/Recompilation of the Terep2 demo to run on modern systems**
 
-The original ASM has been cleaned up a bit and converted to a C file, each instruction implemented as a macro, the innermost loops of the rendering functions have been rewritten in normal C to speed things up a bit, on a modern Ryzen this uses less than 2% of one core (even when rendering at higher resolutions) but who knows? somebody might want to run this in retro systems
+The original ASM has been cleaned up and converted to a C file, each instruction implemented as a macro, the innermost loops of the rendering functions have been rewritten in normal C to speed things up a bit, on a modern Ryzen this uses less than 2% of one core (even when rendering at higher resolutions), so performance optimizations are not really necessary for modern systems, but who knows? somebody might want to run this in retro systems, on a ESP32, a DS or things like that...
 
 The primary target is Win32 (both 32 and 64 bit), surprisingly it runs even on win98 (tested on qemu).
-It also runs on Linux on a SDL window but this is mostly for testing
+It also runs on Linux on a SDL window but this is mostly for testing and debugging, if you are on linux you are better off running the win32 version on wine
 
-Some bugs in the renderer have been fixed, the physics was barely touched and should be identical to the original (except for those pesky floating point LSB differences, these could occur even in different families of CPUs I think), theres a verifyer to run and verify replays recorded in a very old version with more pristine code 
+Some bugs in the renderer have been fixed, the physics was barely touched and should feel identical to the original, the x87 square root has been replaced by a integer algorithm, it gives the same result as floats using floor instead of rounding, theres a verifyer to run and verify replays recorded in a very old version with more pristine code.
 
 This project has 2 main targets (or rather, will have when I get the github automation thing working again):
 
  * `terep2re32.exe` and `terep2re64.exe`: Code converted to run natively on Windows, from 98 all the way to 11, include improvements such as pausing physics, higher resolutions, config file, debug mode... you probably want this
- * `terep2sx.exe`: As close to the original as possible, but modified to not require the x87 FPU and also not do the XMS memory test thing (this makes it compatible with FreeDOS out of the box), fix the camera on fast current computers and be as compact as possible... maybe even fix some bugs along the way, who knows
+ * `terep2sx.exe`: As close to the original as possible, but modified to not require the x87 FPU (integer square root), not do the XMS memory test thing (this makes it compatible with FreeDOS out of the box), fix the camera not turning when running on fast current computers and compacted to be as small as possible (simple zero run compactation, no fancy algorithms)... 
 
 For building instructions see [BUILDING.md](BUILDING.md)
 
@@ -26,7 +26,7 @@ The parallel `terep2vb` project has been consulted for things like discovering s
 
 ## Project history
 
-This project started in 2019 (remember back then? everything was so different somehow), I didn't actually unpack the Guardian Angel obfuscation, I just dumped the memory using the Dosbox debugger after the game was already running instead, I managed to make a unpacked exe that ran and discovered the structure of some of the code using ghidra but quickly lost interest, fast forward 6 years later and I discovered there's a whole community of Terep fans
+This project started in 2019 (remember back then? everything was so different somehow), I didn't actually unpack the Guardian Angel obfuscation, I just dumped the memory using the Dosbox debugger after the game was already running instead, I managed to make a unpacked exe that ran and discovered the structure of some of the code using ghidra but quickly lost interest, fast forward 6 years later and I discovered there's a whole community of Terep fans and this motivated me to start again
 
 
 ## Progress
@@ -46,10 +46,7 @@ Some of the project history in screenshots
 >
 > ![Win32](https://github.com/user-attachments/assets/a2907434-5a9d-458e-b4ac-9c713a4b3a65)
 
-> Current build, look at all those pixels and sharp edges! (higher resolutions available)
+> Current build, look at all those pixels and sharp edges! (higher resolutions are also available)
 >
 > ![640x200 2x rendering](https://github.com/user-attachments/assets/7554ec4a-8735-46ed-8356-f1faacfff6ca)
-
-
-
 
