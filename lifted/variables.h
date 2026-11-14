@@ -38,11 +38,6 @@ struct otherVars{
 
     uint8_t CSD_BYTE_1000_59c1;
 
-    uint16_t pseudolocal_a;
-    uint16_t pseudolocal_b;
-
-    uint16_t pseudolocal_2_a;
-
     uint8_t  mu_b_tmp;
     uint16_t mu_w_tmp;
     uint32_t mu_d_tmp;

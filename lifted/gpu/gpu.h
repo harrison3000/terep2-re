@@ -46,6 +46,8 @@ typedef struct {
     reg = it.value;             \
 })
 
+#define SETUP_LOCALS(_t) _t local_a = 0, local_b = 0, local_c = 0, local_d = 0, local_e = 0, local_f = 0, local_g = 0;
+
 #define GEN_MEM(_type, _addr) ({ \
     uint16_t displ = (_addr);    \
     uintptr_t finalAddr = cpu->mem_base + displ; \

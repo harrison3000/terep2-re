@@ -3768,6 +3768,7 @@ static void FUN_1000_2760(cpu_ctx *cpu){
 //this broke protected mode (the writing to ES part), modified to use globals as locals (leaf function, no problem)
 static void FUN_1000_277e(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[10]:    1000:0b88(c),1000:13ea(c),1000:19ee(c),1000:1aa6(c),
                               //             1000:1b99(c),1000:1c4e(c),1000:2001(c),1000:20b8(c),
                               //             1000:21ab(c),1000:2260(c)
@@ -3775,46 +3776,46 @@ static void FUN_1000_277e(cpu_ctx *cpu){
    INST_XCHG(cpu->AX, cpu->CX);
    INST_PUSH(cpu->DI);
    cpu->DI = cpu->DX;
-   cpu->vars.pseudolocal_a = cpu->AX;
+   local_a = cpu->AX;
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   cpu->vars.pseudolocal_b = cpu->DX;
+   local_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x6));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   cpu->AX = cpu->vars.pseudolocal_a;
+   INST_ADD(local_b, cpu->DX);
+   cpu->AX = local_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0xc));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   INST_PUSH(cpu->vars.pseudolocal_b);
+   INST_ADD(local_b, cpu->DX);
+   INST_PUSH(local_b);
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x2));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   cpu->vars.pseudolocal_b = cpu->DX;
+   local_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x8));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   cpu->AX = cpu->vars.pseudolocal_a;
+   INST_ADD(local_b, cpu->DX);
+   cpu->AX = local_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0xe));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   INST_PUSH(cpu->vars.pseudolocal_b);
+   INST_ADD(local_b, cpu->DX);
+   INST_PUSH(local_b);
    cpu->AX = cpu->BX;
    INST_IMUL(MEM_WORD(cpu->DI + 0x4));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   cpu->vars.pseudolocal_b = cpu->DX;
+   local_b = cpu->DX;
    cpu->AX = cpu->CX;
    INST_IMUL(MEM_WORD(cpu->DI + 0xa));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   cpu->AX = cpu->vars.pseudolocal_a;
+   INST_ADD(local_b, cpu->DX);
+   cpu->AX = local_a;
    INST_IMUL(MEM_WORD(cpu->DI + 0x10));
    MERGED_SHL_RCL(cpu->AX, 0x1, cpu->DX, 0x1);
-   INST_ADD(cpu->vars.pseudolocal_b, cpu->DX);
-   cpu->CX = cpu->vars.pseudolocal_b;
+   INST_ADD(local_b, cpu->DX);
+   cpu->CX = local_b;
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->DI);
@@ -4333,10 +4334,11 @@ static OPTM void FUN_1000_2d61(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_2df2(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[1]:     1000:2bf4(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->vars.pseudolocal_2_a = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4355,7 +4357,7 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->vars.pseudolocal_2_a);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -4367,7 +4369,7 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->vars.pseudolocal_2_a;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -4381,7 +4383,7 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->vars.pseudolocal_2_a);
+   INST_INC(local_a);
    LAB_LOC_4:
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
@@ -4389,7 +4391,7 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->vars.pseudolocal_2_a;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->AX);
@@ -4404,14 +4406,14 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->vars.pseudolocal_2_a);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->vars.pseudolocal_2_a;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_6:
    INST_PUSH(cpu->CX);
@@ -4425,7 +4427,7 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->vars.pseudolocal_2_a;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
