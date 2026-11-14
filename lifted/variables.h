@@ -29,10 +29,6 @@ struct otherVars{
     uint32_t CSD_DWORD_1000_12c3;
     uint32_t CSD_DWORD_1000_12c7;
 
-    uint8_t CSD_BYTE_1000_553e;
-
-    uint8_t CSD_DAT_unk_592c[128];
-
     uint8_t giracor;
     uint8_t CSD_DAT_keys_571e[128];
 
@@ -58,4 +54,6 @@ struct otherVars{
 
 
     uint32_t mitemp_02;
+
+    uint8_t CSD_DAT_unk_592c[16];
 };
