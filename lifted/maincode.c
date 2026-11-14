@@ -4436,10 +4436,11 @@ static void FUN_1000_2df2(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_2eaf(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[1]:     1000:2bf9(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4458,7 +4459,7 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -4470,7 +4471,7 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -4486,7 +4487,7 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    LAB_LOC_4:
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
@@ -4494,7 +4495,7 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->AX);
@@ -4507,14 +4508,14 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_6:
    INST_PUSH(cpu->CX);
@@ -4528,7 +4529,7 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -4537,10 +4538,11 @@ static void FUN_1000_2eaf(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_2f6c(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[1]:     1000:2bfe(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4559,7 +4561,7 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -4571,7 +4573,7 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -4586,7 +4588,7 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    LAB_LOC_4:
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
@@ -4594,7 +4596,7 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->AX);
@@ -4610,14 +4612,14 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_6:
    INST_PUSH(cpu->CX);
@@ -4631,7 +4633,7 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -4640,10 +4642,11 @@ static void FUN_1000_2f6c(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_302d(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[1]:     1000:2c03(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -4662,7 +4665,7 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -4674,7 +4677,7 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -4691,7 +4694,7 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    LAB_LOC_4:
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
@@ -4699,7 +4702,7 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->AX);
@@ -4713,14 +4716,14 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x8);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_6:
    INST_PUSH(cpu->CX);
@@ -4734,7 +4737,7 @@ static void FUN_1000_302d(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_6;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -6906,10 +6909,11 @@ static void FUN_1000_4302(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_4394(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[2]:     1000:40ce(c),1000:42b0(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -6928,7 +6932,7 @@ static void FUN_1000_4394(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -6940,7 +6944,7 @@ static void FUN_1000_4394(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -6953,14 +6957,14 @@ static void FUN_1000_4394(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -6975,14 +6979,14 @@ static void FUN_1000_4394(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->CX);
@@ -6996,7 +7000,7 @@ static void FUN_1000_4394(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -7005,10 +7009,11 @@ static void FUN_1000_4394(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_444d(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[2]:     1000:40d3(c),1000:42b5(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7027,7 +7032,7 @@ static void FUN_1000_444d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -7039,7 +7044,7 @@ static void FUN_1000_444d(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -7054,14 +7059,14 @@ static void FUN_1000_444d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -7074,14 +7079,14 @@ static void FUN_1000_444d(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->CX);
@@ -7095,7 +7100,7 @@ static void FUN_1000_444d(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -7104,10 +7109,11 @@ static void FUN_1000_444d(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_4506(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[2]:     1000:40d8(c),1000:42ba(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7126,7 +7132,7 @@ static void FUN_1000_4506(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -7138,7 +7144,7 @@ static void FUN_1000_4506(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -7152,14 +7158,14 @@ static void FUN_1000_4506(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -7175,14 +7181,14 @@ static void FUN_1000_4506(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->CX);
@@ -7196,7 +7202,7 @@ static void FUN_1000_4506(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -7205,10 +7211,11 @@ static void FUN_1000_4506(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_45c3(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint16_t);
                               //XREF[2]:     1000:40dd(c),1000:42bf(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
-   cpu->BP = 0;
+   local_a = 0;
    cpu->CX = MEM_WORD(cpu->SI + -0x2);
    if (cpu->CX == 0) goto LAB_LOC_2;
    INST_PUSH(cpu->DI);
@@ -7227,7 +7234,7 @@ static void FUN_1000_45c3(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    cpu->CX = cpu->AX;
    cpu->DX = cpu->BX;
    cpu->AX = MEM_WORD(cpu->SI);
@@ -7239,7 +7246,7 @@ static void FUN_1000_45c3(cpu_ctx *cpu){
    LAB_LOC_2:
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_3:
    INST_PUSH(cpu->AX);
@@ -7255,14 +7262,14 @@ static void FUN_1000_45c3(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_4:
    INST_PUSH(cpu->AX);
@@ -7276,14 +7283,14 @@ static void FUN_1000_45c3(cpu_ctx *cpu){
    MEM_WORD(cpu->DI) = cpu->AX;
    MEM_WORD(cpu->DI + 0x2) = cpu->BX;
    INST_ADD(cpu->DI, 0x4);
-   INST_INC(cpu->BP);
+   INST_INC(local_a);
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_POP(cpu->CX);
    if (--cpu->CX != 0) goto LAB_LOC_1;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
    LAB_LOC_5:
    INST_PUSH(cpu->CX);
@@ -7297,7 +7304,7 @@ static void FUN_1000_45c3(cpu_ctx *cpu){
    if (--cpu->CX != 0) goto LAB_LOC_5;
    INST_POP(cpu->DI);
    INST_POP(cpu->SI);
-   MEM_WORD(cpu->DI + -0x2) = cpu->BP;
+   MEM_WORD(cpu->DI + -0x2) = local_a;
    return;
 }
 
@@ -8297,6 +8304,7 @@ static void FUN_PHYSICS_500b(cpu_ctx *cpu){
 //ANALYSIS: related to colision, nop-ing it makes the cars just phase thru one another
 static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    SETUP_STACK();
+   SETUP_LOCALS(uint32_t);
                               //XREF[1]:     1000:501c(c)
    INST_PUSH(cpu->SI);
    cpu->DX = cpu->SI;
@@ -8315,11 +8323,11 @@ static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    INST_SHL(cpu->BX, 0x2);
    INST_ADD(cpu->BX, cpu->DX);
    INST_LODSW();
-   cpu->vars.mitemp_03 = cpu->AX;
-   INST_SHL(cpu->vars.mitemp_03, 0x3);
-   INST_SUB(cpu->vars.mitemp_03, cpu->AX);
-   INST_SHL(cpu->vars.mitemp_03, 0x2);
-   INST_ADD(cpu->vars.mitemp_03, cpu->DX);
+   local_a = cpu->AX;
+   INST_SHL(local_a, 0x3);
+   INST_SUB(local_a, cpu->AX);
+   INST_SHL(local_a, 0x2);
+   INST_ADD(local_a, cpu->DX);
    INST_LODSW();
    cpu->DI = cpu->AX;
    INST_SHL(cpu->DI, 0x3);
@@ -8328,10 +8336,10 @@ static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    INST_ADD(cpu->DI, cpu->DX);
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DX);
-   cpu->SI = cpu->vars.mitemp_03;
+   cpu->SI = local_a;
 
    cpu->EAX = MEM_DWORD(cpu->BX + 0x4);
-   cpu->vars.pslc_eb5f = cpu->EAX;
+   local_b = cpu->EAX; //+ 0xeb5f
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->SI + 0x4));
    cpu->ECX = MEM_DWORD(cpu->BX + 0x8);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x8));
@@ -8347,9 +8355,9 @@ static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    INST_SAR(cpu->ECX, 0xe);
    INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
-   cpu->vars.pslc_ea9b = cpu->EDX;
+   local_c = cpu->EDX; //+ 0xea9b
    cpu->EAX = MEM_DWORD(cpu->BX + 0x8);
-   cpu->vars.pslc_eb63 = cpu->EAX;
+   local_d = cpu->EAX; //+ 0xeb63
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
    cpu->ECX = MEM_DWORD(cpu->BX);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI));
@@ -8366,9 +8374,9 @@ static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
    INST_NEG(cpu->EDX);
-   cpu->vars.pslc_ea9f = cpu->EDX;
+   local_e = cpu->EDX; //+ 0xea9f
    cpu->EAX = MEM_DWORD(cpu->BX);
-   cpu->vars.pslc_eb5b = cpu->EAX;
+   local_f = cpu->EAX; //+ 0xeb5b
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI));
    cpu->ECX = MEM_DWORD(cpu->BX + 0x4);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->SI + 0x4));
@@ -8384,18 +8392,18 @@ static void FUN_PHYSICS_5091(cpu_ctx *cpu){
    INST_SAR(cpu->ECX, 0xe);
    INST_IMUL2(cpu->EAX, cpu->ECX);
    INST_SUB(cpu->EDX, cpu->EAX);
-   cpu->vars.pslc_eaa3 = cpu->EDX;
+   local_g = cpu->EDX; //+ 0xeaa3
    INST_POP(cpu->DX);
    INST_POP(cpu->SI);
 
    cpu->BX = MEM_WORD(0xea99);
-   MEM_DWORD(cpu->BX + 0xeb5f) = cpu->vars.pslc_eb5f;
-   MEM_DWORD(cpu->BX + 0xea9b) = cpu->vars.pslc_ea9b;
-   MEM_DWORD(cpu->BX + 0xeb63) = cpu->vars.pslc_eb63;
+   MEM_DWORD(cpu->BX + 0xeb5f) = local_b;
+   MEM_DWORD(cpu->BX + 0xea9b) = local_c;
+   MEM_DWORD(cpu->BX + 0xeb63) = local_d;
 
-   MEM_DWORD(cpu->BX + 0xea9f) = cpu->vars.pslc_ea9f;
-   MEM_DWORD(cpu->BX + 0xeb5b) = cpu->vars.pslc_eb5b;
-   MEM_DWORD(cpu->BX + 0xeaa3) = cpu->vars.pslc_eaa3;
+   MEM_DWORD(cpu->BX + 0xea9f) = local_e;
+   MEM_DWORD(cpu->BX + 0xeb5b) = local_f;
+   MEM_DWORD(cpu->BX + 0xeaa3) = local_g;
     //no need to restore bx, it will be rewritten next loop
 
    INST_ADD(MEM_WORD(0xea99), 0xc);
@@ -8517,32 +8525,33 @@ static void FUN_PHYSICS_51bd(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_PHYSICS_52d4(cpu_ctx *cpu){
                               //XREF[2]:     1000:5393(c),1000:53e4(c)
+   SETUP_LOCALS(uint16_t);
    cpu->AX = MEM_WORD(0xea0c);
    INST_IMUL(MEM_WORD(0xea14));
-   MEM_WORD(0xea22) = cpu->AX;
+   local_a = cpu->AX;
    cpu->AX = MEM_WORD(0xea0e);
    INST_IMUL(MEM_WORD(0xea12));
-   INST_SUB(MEM_WORD(0xea22), cpu->AX);
+   INST_SUB(local_a, cpu->AX);
    cpu->AX = MEM_WORD(0xea18);
    INST_IMUL(MEM_WORD(0xea14));
-   MEM_WORD(0xea1e) = cpu->AX;
+   local_b = cpu->AX;
    cpu->AX = MEM_WORD(0xea1a);
    INST_IMUL(MEM_WORD(0xea12));
-   INST_SUB(MEM_WORD(0xea1e), cpu->AX);
+   INST_SUB(local_b, cpu->AX);
    cpu->AX = MEM_WORD(0xea1a);
    INST_IMUL(MEM_WORD(0xea0c));
-   MEM_WORD(0xea20) = cpu->AX;
+   local_c = cpu->AX;
    cpu->AX = MEM_WORD(0xea18);
    INST_IMUL(MEM_WORD(0xea0e));
-   INST_SUB(MEM_WORD(0xea20), cpu->AX);
+   INST_SUB(local_c, cpu->AX);
    cpu->AX = MEM_WORD(0xea10);
-   INST_IMUL(MEM_WORD(0xea1e));
+   INST_IMUL(local_b);
    cpu->BX = cpu->AX;
    cpu->CX = cpu->DX;
    cpu->AX = MEM_WORD(0xea16);
-   INST_IMUL(MEM_WORD(0xea20));
+   INST_IMUL(local_c);
    MERGED_ADD_ADC(cpu->AX, cpu->BX, cpu->DX, cpu->CX);
-   INST_IDIV(MEM_WORD(0xea22));
+   INST_IDIV(local_a);
    return;
 }
 

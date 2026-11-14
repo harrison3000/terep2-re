@@ -16,3 +16,4 @@ dump*.txt
 build/
 *.INI
 a.out
+lifted/maincode2.c

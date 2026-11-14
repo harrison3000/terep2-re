@@ -90,7 +90,7 @@ function mem2string(){
     var dmm = this.miolomole.match(/^([a-z]\w{2,})( \+ (.*))?$/i);
     if(dmm){
         //variable
-        const var_prefix = "cpu->vars->";
+        const var_prefix = "cpu->vars.";
         if(dmm[2]){
             return `${var_prefix}${dmm[1]}[${dmm[3]}]`;
         }

@@ -114,6 +114,6 @@ filtratada.splice(0,0,
     "");
 
 
-await writeFile("lifted/maincode.c", filtratada.join("\n"));
+await writeFile("lifted/maincode2.c", filtratada.join("\n"));
 
 debugger;
