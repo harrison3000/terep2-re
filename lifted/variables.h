@@ -57,17 +57,7 @@ struct otherVars{
     uint16_t another_quick_temp_w;
 
 
-    uint32_t mitemp_01;
     uint32_t mitemp_02;
     uint16_t mitemp_03;
 
-    uint32_t pslc_eb5f;
-    uint32_t pslc_ea9b;
-    uint32_t pslc_eb63;
-
-    uint32_t pslc_ea9f;
-    uint32_t pslc_eb5b;
-    uint32_t pslc_eaa3;
-
-    uint32_t mitemp_BeX;
 };

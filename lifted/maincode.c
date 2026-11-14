@@ -8069,11 +8069,12 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->SI, cpu->AX);
    INST_SHL(cpu->SI, 0x2);
    INST_ADD(cpu->SI, MEM_WORD(0xe9d8));
+
    cpu->EAX = MEM_DWORD(cpu->SI);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI));
    cpu->ECX = MEM_DWORD(cpu->SI + 0xc);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0xc));
-   MEM_DWORD(0xe9f8) = cpu->EAX;
+   uint32_t something_a = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
    int32_t dim_a = SIGNED(cpu->EAX);
 
@@ -8081,7 +8082,7 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x4));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x10);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x10));
-   MEM_DWORD(0xe9fc) = cpu->EAX;
+   uint32_t something_b = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
    int32_t dim_b = SIGNED(cpu->EAX);
 
@@ -8089,7 +8090,7 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI + 0x8));
    cpu->ECX = MEM_DWORD(cpu->SI + 0x14);
    INST_SUB(cpu->ECX, MEM_DWORD(cpu->DI + 0x14));
-   MEM_DWORD(0xea00) = cpu->EAX;
+   uint32_t something_c = cpu->EAX;
    INST_ADD(cpu->EAX, cpu->ECX);
    int32_t dim_c = SIGNED(cpu->EAX);
 
@@ -8133,45 +8134,50 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
 
    #endif
 
-   INST_MOVSX(cpu->vars.mitemp_BeX, MEM_WORD(cpu->BX + 0x4));
-   if((cpu->vars.mitemp_BeX & 0x80000000) != 0) goto LAB_LOC_10;
+   uint32_t mitemp_BeX, mitemp_01;
+
+   INST_MOVSX(mitemp_BeX, MEM_WORD(cpu->BX + 0x4));
+   if((mitemp_BeX & 0x80000000) != 0) goto LAB_LOC_10;
    INST_MOVZX(cpu->ECX, MEM_WORD(cpu->BX + 0x8));
    MEM_WORD(0xea04) = cpu->CX;
    INST_AND(cpu->CX, 0xff);
    if((cpu->CX & 0xff) == 0) goto LAB_LOC_5;
    if((cpu->CX & 0xff & 0x8000) != 0) goto LAB_LOC_3;
    if(SIGNED(cpu->CX) > 0x1) goto LAB_LOC_6;
-   cpu->ECX = cpu->vars.mitemp_BeX;
+   cpu->ECX = mitemp_BeX;
    INST_SUB(cpu->ECX, cpu->EAX);
    if(cpu->ECX == 0) goto LAB_LOC_3;
    if(SIGNED(cpu->CX) > SIGN_MEM_WORD(0xe9e2)) goto LAB_LOC_8;
    if(SIGNED(cpu->CX) < SIGN_MEM_WORD(0xe9e4)) goto LAB_LOC_9;
-   cpu->vars.mitemp_BeX = cpu->EAX;
+   mitemp_BeX = cpu->EAX;
    LAB_LOC_2:
    INST_SHL(cpu->ECX, 0x6);
-   INST_SHL(cpu->vars.mitemp_BeX, 0x6);
-   cpu->vars.mitemp_01 = cpu->ECX;
+   INST_SHL(mitemp_BeX, 0x6);
+   mitemp_01 = cpu->ECX;
    cpu->CL = MEM_BYTE(0xea05);
    INST_INC(cpu->CL);
-   cpu->EAX = MEM_DWORD(0xe9f8);
-   INST_IMUL(cpu->vars.mitemp_01);
-   INST_IDIV(cpu->vars.mitemp_BeX);
+   
+   cpu->EAX = something_a;
+   INST_IMUL(mitemp_01);
+   INST_IDIV(mitemp_BeX);
    cpu->EDX = cpu->EAX;
    INST_SAR(cpu->EAX, cpu->CL);
    INST_SUB(cpu->EDX, cpu->EAX);
    INST_ADD(MEM_DWORD(cpu->SI + 0xc), cpu->EAX);
    INST_SUB(MEM_DWORD(cpu->DI + 0xc), cpu->EDX);
-   cpu->EAX = MEM_DWORD(0xe9fc);
-   INST_IMUL(cpu->vars.mitemp_01);
-   INST_IDIV(cpu->vars.mitemp_BeX);
+
+   cpu->EAX = something_b;
+   INST_IMUL(mitemp_01);
+   INST_IDIV(mitemp_BeX);
    cpu->EDX = cpu->EAX;
    INST_SAR(cpu->EAX, cpu->CL);
    INST_SUB(cpu->EDX, cpu->EAX);
    INST_ADD(MEM_DWORD(cpu->SI + 0x10), cpu->EAX);
    INST_SUB(MEM_DWORD(cpu->DI + 0x10), cpu->EDX);
-   cpu->EAX = MEM_DWORD(0xea00);
-   INST_IMUL(cpu->vars.mitemp_01);
-   INST_IDIV(cpu->vars.mitemp_BeX);
+
+   cpu->EAX = something_c;
+   INST_IMUL(mitemp_01);
+   INST_IDIV(mitemp_BeX);
    cpu->EDX = cpu->EAX;
    INST_SAR(cpu->EAX, cpu->CL);
    INST_SUB(cpu->EDX, cpu->EAX);
@@ -8196,18 +8202,18 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    if(SIGNED(cpu->EAX) > SIGNED(cpu->EDX)) goto LAB_LOC_7;
    INST_MOVZX(cpu->EDX, MEM_WORD(cpu->BX + 0xa));
    if(SIGNED(cpu->EAX) < SIGNED(cpu->EDX)) goto LAB_LOC_7;
-   INST_XCHG(cpu->EAX, cpu->vars.mitemp_BeX);
-   INST_SUB(cpu->EAX, cpu->vars.mitemp_BeX);
+   INST_XCHG(cpu->EAX, mitemp_BeX);
+   INST_SUB(cpu->EAX, mitemp_BeX);
    INST_CDQ();
    INST_SHR(cpu->ECX, 0x1);
    INST_IDIV(cpu->ECX);
    cpu->ECX = cpu->EAX;
    INST_MOVZX(cpu->EAX, MEM_WORD(cpu->BX + 0x6));
-   INST_SUB(cpu->EAX, cpu->vars.mitemp_BeX);
+   INST_SUB(cpu->EAX, mitemp_BeX);
    INST_SAR(cpu->EAX, 0x1);
    INST_ADD(cpu->ECX, cpu->EAX);
    INST_PUSH(cpu->EAX);
-   cpu->EAX = cpu->vars.mitemp_BeX;
+   cpu->EAX = mitemp_BeX;
    MEM_WORD(cpu->BX + 0x6) = cpu->AX;
    INST_POP(cpu->EAX);
    goto LAB_LOC_2;
@@ -8216,12 +8222,12 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SUB(cpu->ECX, cpu->EAX);
    INST_SAR(cpu->ECX, 0x1);
    if(cpu->ECX == 0) goto LAB_LOC_3;
-   cpu->vars.mitemp_BeX = cpu->EAX;
+   mitemp_BeX = cpu->EAX;
    MEM_WORD(cpu->BX + 0x6) = cpu->AX;
    goto LAB_LOC_2;
    LAB_LOC_8:
    INST_SAR(cpu->ECX, 0x4);
-   INST_XCHG(cpu->EAX, cpu->vars.mitemp_BeX);
+   INST_XCHG(cpu->EAX, mitemp_BeX);
    INST_SUB(cpu->EAX, cpu->ECX);
    MEM_WORD(cpu->BX + 0x4) = cpu->AX;
    MEM_WORD(cpu->BX + 0x6) = cpu->AX;
