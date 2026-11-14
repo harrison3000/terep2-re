@@ -8050,10 +8050,10 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    cpu->AX = cpu->SI;
    INST_ADD(cpu->AX, MEM_WORD(cpu->SI));
    INST_ADD(cpu->AX, 0x2);
-   MEM_WORD(0xe9d8) = cpu->AX;
+   uint16_t something16_a = cpu->AX;
    INST_ADD(cpu->SI, MEM_WORD(cpu->SI + 0x2));
    cpu->AX = MEM_WORD(cpu->SI);
-   MEM_WORD(0xe9e6) = cpu->AX;
+   uint16_t something16_b = cpu->AX;
    INST_ADD(cpu->SI, 0x2);
    LAB_LOC_1:
    cpu->BX = cpu->SI;
@@ -8062,13 +8062,13 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    INST_SHL(cpu->DI, 0x3);
    INST_SUB(cpu->DI, cpu->AX);
    INST_SHL(cpu->DI, 0x2);
-   INST_ADD(cpu->DI, MEM_WORD(0xe9d8));
+   INST_ADD(cpu->DI, something16_a);
    cpu->SI = MEM_WORD(cpu->SI);
    cpu->AX = cpu->SI;
    INST_SHL(cpu->SI, 0x3);
    INST_SUB(cpu->SI, cpu->AX);
    INST_SHL(cpu->SI, 0x2);
-   INST_ADD(cpu->SI, MEM_WORD(0xe9d8));
+   INST_ADD(cpu->SI, something16_a);
 
    cpu->EAX = MEM_DWORD(cpu->SI);
    INST_SUB(cpu->EAX, MEM_DWORD(cpu->DI));
@@ -8156,7 +8156,7 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    mitemp_01 = cpu->ECX;
    cpu->CL = MEM_BYTE(0xea05);
    INST_INC(cpu->CL);
-   
+
    cpu->EAX = something_a;
    INST_IMUL(mitemp_01);
    INST_IDIV(mitemp_BeX);
@@ -8188,8 +8188,8 @@ static OPTM void FUN_PHYSICS_4e0a(cpu_ctx *cpu){
    cpu->SI = cpu->BX;
    LAB_LOC_4:
    INST_ADD(cpu->SI, 0xe);
-   INST_DEC(MEM_WORD(0xe9e6));
-   if(MEM_WORD(0xe9e6) != 0) goto LAB_LOC_1;
+   INST_DEC(something16_b);
+   if(something16_b != 0) goto LAB_LOC_1;
    return;
    LAB_LOC_5:
    INST_MOVZX(cpu->EDX, MEM_WORD(cpu->BX + 0xc));

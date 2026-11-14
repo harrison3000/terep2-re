@@ -58,6 +58,4 @@ struct otherVars{
 
 
     uint32_t mitemp_02;
-    uint16_t mitemp_03;
-
 };
