@@ -9,5 +9,5 @@ void FUN_main_render(cpu_ctx *cpu);
 
 void sound_thing(cpu_ctx *cpu);
 
-cpu_ctx *initCPU(int enable_gambiarra_banner);
+cpu_ctx *initCPU();
 void finalizeCpu(cpu_ctx *cpu);

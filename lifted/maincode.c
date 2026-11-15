@@ -402,14 +402,6 @@ void FUN_main_render(cpu_ctx *cpu){
    cpu->CL = 0xf;
    FUN_1000_5940_render_text(cpu);
 
-   cpu->SI = 0xf700; //string
-   cpu->AX = 5; //X
-   cpu->BX = 190; //Y
-   cpu->CL = cpu->vars.giracor; //color
-   INST_SHR(cpu->CL, 2);
-   FUN_1000_5940_render_text(cpu);
-   INST_INC(cpu->vars.giracor);
-
    FUN_1000_2baa(cpu);
    if((cpu->vars.CSD_DAT_keys_571e[78] & 0x80) != 0) goto LAB_LOC_15;
    if(SIGN_MEM_WORD(0x11c) > 0x3e8) goto LAB_LOC_15;

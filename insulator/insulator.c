@@ -149,9 +149,9 @@ struct GameSession{
     int txtDist;
 };
 
-void new_session(GameSession **d, int enable_gambiarra_banner){
+void new_session(GameSession **d){
     auto g = (GameSession*)calloc(1,sizeof(GameSession));
-    g->cpu = initCPU(enable_gambiarra_banner);
+    g->cpu = initCPU();
     *d = g;
 }
 

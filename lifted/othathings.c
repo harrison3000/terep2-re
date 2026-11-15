@@ -9,8 +9,7 @@ const uint8_t initialdata[] = {
     #embed "../memdumps/data_compact.bin"
 };
 
-
-cpu_ctx *initCPU(int enable_gambiarra_banner){
+cpu_ctx *initCPU(){
     auto cpu = (cpu_ctx*)calloc(1,sizeof(cpu_ctx));
 
     auto memory = (uint8_t*)calloc(1,68 * 1024);
@@ -33,9 +32,6 @@ cpu_ctx *initCPU(int enable_gambiarra_banner){
         }
     }
 
-    if (enable_gambiarra_banner) {
-        strcpy(&((char*)memory)[0xf700], "GAMBIARRA FOREVER!");
-    }
 
     cpu->vars.CSD_DWORD_1000_12a3 = 0x7FFF0000;
     cpu->vars.CSD_BYTE_1000_59c1 = 0xf;

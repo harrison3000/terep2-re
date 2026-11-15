@@ -5,7 +5,7 @@
 typedef struct GameSession GameSession;
 
 
-void new_session(GameSession **d, int);
+void new_session(GameSession **d);
 bool init_game(GameSession *, const char*);
 void finalize_game(GameSession *g);
 void send_key_event(GameSession *g, uint8_t);
