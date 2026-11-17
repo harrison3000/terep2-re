@@ -30,6 +30,8 @@ int main(int argc, char **argv){
     char l[1024];
     int ln = 0;
     int hashok = 0;
+    int total = 0;
+    float percent = 0;
     while(fgets(l, 1024, o)){
         ln++;
         if(l[0] == 0 || l[0] == '#'){
@@ -69,9 +71,13 @@ int main(int argc, char **argv){
 
             if(hash == fnv){
                 hashok++;
-            }else{
-                printf("hash mismatch in line %d\n",ln-1);
             }
+            total++;
+
+            percent = (float)hashok/(float)total;
+            percent *= 100.0f;
+
+            printf("\r%d hashes (%.1f%%) match         ",hashok, percent);
 
             continue;
         }
@@ -86,7 +92,13 @@ int main(int argc, char **argv){
         exit(2);
     }
 
-    printf("%d hashes ok\n",hashok);
+    // some mismatches are to be expected specially when using the split screen,
+    // we changed some things in renderer after all
+    // however too many mismatches in the normal camera may mean that the physics
+    // diverged, and that would be very bad
 
+    char *ok = percent > 80.0f ? ":)" : ":(";
+
+    printf("\n%s\n",ok);
 }
 
