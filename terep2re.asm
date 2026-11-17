@@ -68,10 +68,6 @@ segment _DATA2 class=DATA align=16
 
     %include "reasm/cs_data.asm"
 
-nova_linha:
-    db "GAMBIARRA FOREVER!", 0
-giracor:
-    db 0
 
 
 ;pad to the limit
