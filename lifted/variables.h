@@ -4,13 +4,8 @@
 #include <stdint.h>
 
 struct otherVars{
-    uint16_t v_tmp_26dd_a;
-    uint16_t v_tmp_26dd_b;
-
     uint16_t v_upper_si;
     uint16_t v_upper_di;
-
-    uint32_t v_tmp_379b;
 
     uint16_t retval_2418;
 

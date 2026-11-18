@@ -3658,14 +3658,14 @@ static void FUN_1000_2662(cpu_ctx *cpu){
 static void FUN_PHYSICS_26dd(cpu_ctx *cpu){
                               //XREF[5]:     1000:06f3(c),1000:072a(c),1000:0870(c),1000:271d(c),
                               //             1000:2722(c)
-   cpu->vars.v_tmp_26dd_a = cpu->AX;
-   cpu->vars.v_tmp_26dd_b = cpu->BX;
+   uint16_t v_tmp_26dd_a = cpu->AX;
+   uint16_t v_tmp_26dd_b = cpu->BX;
    FUN_PHYSICS_2b08(cpu);
    if(PARITY(cpu->AH & 0x60)) goto LAB_LOC_1;
    cpu->BX = cpu->AX;
    FUN_PHYSICS_2aad(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   cpu->AX = cpu->vars.v_tmp_26dd_a;
+   cpu->AX = v_tmp_26dd_a;
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();
@@ -3675,7 +3675,7 @@ static void FUN_PHYSICS_26dd(cpu_ctx *cpu){
    cpu->BX = cpu->AX;
    FUN_PHYSICS_2ad8(cpu);
    INST_MOVSX(cpu->EBX, cpu->AX);
-   cpu->AX = cpu->vars.v_tmp_26dd_b;
+   cpu->AX = v_tmp_26dd_b;
    INST_SHL(cpu->EAX, 0x10);
    INST_SAR(cpu->EAX, 0x1);
    INST_CDQ();
@@ -5521,6 +5521,7 @@ static void FUN_1000_36fe(cpu_ctx *cpu){
 //************************************************************************************************
 static void FUN_1000_379b(cpu_ctx *cpu){
    SETUP_STACK();
+   uint32_t v_tmp_379b;
                               //XREF[2]:     1000:3773(c),1000:3792(c)
    INST_PUSH(cpu->SI);
    INST_PUSH(cpu->DI);
@@ -5538,7 +5539,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    INST_ADD(cpu->SI, SPAN_BUF_A);
    LAB_LOC_2:
    if(cpu->DI == 0) goto LAB_LOC_4;
-   INST_MOVSX(cpu->vars.v_tmp_379b, cpu->DI);
+   INST_MOVSX(v_tmp_379b, cpu->DI);
    INST_SUB(cpu->CX, cpu->AX);
    INST_SUB(cpu->DX, cpu->BX);
    INST_PUSH(cpu->AX);
@@ -5547,18 +5548,18 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    cpu->AX = cpu->CX;
    INST_SHL(cpu->EAX, 0x10);
    INST_CDQ();
-   INST_IDIV(cpu->vars.v_tmp_379b);
+   INST_IDIV(v_tmp_379b);
    cpu->ECX = cpu->EAX;
    INST_POP(cpu->AX);
    INST_SHL(cpu->EAX, 0x10);
    INST_CDQ();
-   INST_IDIV(cpu->vars.v_tmp_379b);
+   INST_IDIV(v_tmp_379b);
    cpu->EDX = cpu->EAX;
    INST_POP(cpu->BX);
    INST_POP(cpu->AX);
    INST_SHL(cpu->EAX, 0x10);
    INST_SHL(cpu->EBX, 0x10);
-   INST_XCHG(cpu->ECX, cpu->vars.v_tmp_379b);
+   INST_XCHG(cpu->ECX, v_tmp_379b);
    LAB_LOC_3:
    INST_ROR(cpu->EAX, 0x10);
    INST_ROR(cpu->EBX, 0x10);
@@ -5567,7 +5568,7 @@ static void FUN_1000_379b(cpu_ctx *cpu){
    INST_ADD(cpu->SI, 0x4);
    INST_ROL(cpu->EAX, 0x10);
    INST_ROL(cpu->EBX, 0x10);
-   INST_ADD(cpu->EAX, cpu->vars.v_tmp_379b);
+   INST_ADD(cpu->EAX, v_tmp_379b);
    INST_ADD(cpu->EBX, cpu->EDX);
    if (--cpu->CX != 0) goto LAB_LOC_3;
    INST_ROR(cpu->EAX, 0x10);
